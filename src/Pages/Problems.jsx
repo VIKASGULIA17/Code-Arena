@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../components/Navbar";
-import { ArrowRightIcon, CircleCheck } from "lucide-react";
 import {
   MoveRight,
   ArrowLeft,
@@ -11,26 +10,29 @@ import {
   Aperture,
   Clock10,
 } from "lucide-react";
-import ProblemList from "../components/problem/SearchInterface";
-import { Progress } from "@/components/ui/progress";
-import { CircularProgress } from "@heroui/progress";
+import SearchInterface from "../components/problem/SearchInterface";
 import SessionCard from "../components/others/CircularProgress";
 import ResultSection from "../components/problem/ResultSection";
 
 const Problems = () => {
-  
-
   const Problem_Progress = [
     { id: 1, title: "Easy", progress: 56 },
     { id: 2, title: "Medium", progress: 78 },
     { id: 3, title: "hard", progress: 34 },
   ];
 
+  const [filters, setfilters] = useState({
+    search: "",
+    difficulty: "",
+    tags: [],
+    topics:""
+  });
+
   return (
-    <div className="px-10 overflow-hidden">
+    <div className=" bg-gray-100 overflow-hidden">
       <Navbar />
 
-      <div className=" pt-16 w-screen flex gap-20">
+      <div className="pl-20 pt-16 w-screen flex gap-20">
         <div className="w-[70%] my-6 ">
           <div>
             {/* left div  */}
@@ -45,9 +47,9 @@ const Problems = () => {
             </h4>
           </div>
           {/* <ProblemList /> */}
-          <ProblemList />
+          <SearchInterface setfilters={setfilters} filters={filters} />
 
-          <ResultSection />
+          <ResultSection filters={filters} />
         </div>
 
         <div className="w-[20%] flex flex-col">

@@ -22,7 +22,7 @@ const BottomWave = () => (
 
 const HeroSection = () => {
   return (
-    <div className="absolute left-0 top-20 min-h-screen w-full bg-linear-to-br from-blue-600 via-purple-600 to-pink-600 ">
+    <div className="absolute left-0 top-16 min-h-screen w-full bg-linear-to-br from-blue-600 via-purple-600 to-pink-600 ">
       <div className="absolute inset-0 opacity-30 overflow-clip ">
         <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
         <div
