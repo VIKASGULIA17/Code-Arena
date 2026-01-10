@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { Search, Shuffle, ChevronDown } from "lucide-react";
 
-const SearchInterface = ({ filters, setfilters }) => {
+const SearchInterface = ({ filters, setfilters, onShuffle }) => {
   const FILTER_OPTIONS = {
     Difficulty: ["All", "Easy", "Medium", "Hard"],
     Topic: ["All", "Algorithms", "Data Structures", "Database", "Shell"],
@@ -19,12 +19,12 @@ const SearchInterface = ({ filters, setfilters }) => {
       backgroundColor: "bg-purple-200",
     },
     {
-      label: "Dynamic Programming",
+      label: "DP",
       textColor: "text-pink-700",
       backgroundColor: "bg-pink-200",
     },
     {
-      label: "HashMap",
+      label: "Hash Table",
       textColor: "text-indigo-700",
       backgroundColor: "bg-indigo-200",
     },
@@ -55,7 +55,9 @@ const SearchInterface = ({ filters, setfilters }) => {
   };
 
   return (
-    <div className="bg-white w-full shadow-2xl rounded-2xl my-5 px-10 py-8">
+    <div className="bg-white w-full shadow-2xl rounded-2xl my-5 
+    px-5
+    lg:px-10 py-8">
       {/* 1. Search Bar */}
       <div className="relative group">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -73,7 +75,7 @@ const SearchInterface = ({ filters, setfilters }) => {
 
       {/* 2. Dropdowns Row */}
       <div ref={dropDownOpenRef} className="flex justify-between items-center">
-        <div className="flex py-7 gap-3">
+        <div className="lg:flex grid grid-rows-2 grid-cols-2 py-7 gap-3">
           {Object.keys(FILTER_OPTIONS).map((obj) => {
             // obj is 'difficulty' or 'tags'
             const selectedValue = filters[obj];
@@ -97,9 +99,7 @@ const SearchInterface = ({ filters, setfilters }) => {
                   }`}
                 >
                   <p className="text-md px-2 font-medium capitalize">
-                    {hasActiveFilter && !Array.isArray(selectedValue)
-                      ? selectedValue
-                      : obj}
+                    {hasActiveFilter ? selectedValue : obj}
                   </p>
 
                   <ChevronDown
@@ -135,6 +135,7 @@ const SearchInterface = ({ filters, setfilters }) => {
           })}
         </div>
         <Shuffle
+          onClick={onShuffle}
           size={36}
           className="border border-gray-500 p-2 rounded-lg text-gray-600 cursor-pointer"
         />
@@ -145,18 +146,18 @@ const SearchInterface = ({ filters, setfilters }) => {
         <h1 className="text-gray-500 font-semibold uppercase text-xs tracking-wider">
           Popular :
         </h1>
-        <div className="flex gap-2">
+        <div className="lg:flex gap-2 grid grid-cols-2">
           {popularTags.map((obj) => {
-            const isSelected = filters.search === obj.label;
+            const isSelected = filters.Tags === obj.label;
             return (
               <div
                 key={obj.label}
                 onClick={() =>
-                  updateQuery("search", isSelected ? "" : obj.label)
+                  updateQuery("Tags", isSelected ? "" : obj.label)
                 }
                 className={`${obj.backgroundColor} ${
                   obj.textColor
-                } px-3 py-1 rounded-full text-sm cursor-pointer transition-all border-2 ${
+                } px-3 text-center py-1 rounded-full text-sm cursor-pointer transition-all border-2 ${
                   isSelected ? "border-blue-600" : "border-transparent"
                 }`}
               >

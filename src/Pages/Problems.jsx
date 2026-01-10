@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import {
   MoveRight,
@@ -13,6 +13,10 @@ import {
 import SearchInterface from "../components/problem/SearchInterface";
 import SessionCard from "../components/others/CircularProgress";
 import ResultSection from "../components/problem/ResultSection";
+import { useNavigate } from "react-router-dom";
+import { dsaProblems } from "../data/dsaProblem";
+import Countdown from "../components/others/CountDown";
+import Footer from "../components/Footer";
 
 const Problems = () => {
   const Problem_Progress = [
@@ -23,20 +27,53 @@ const Problems = () => {
 
   const [filters, setfilters] = useState({
     search: "",
-    difficulty: "",
-    tags: [],
-    topics:""
+    Difficulty: "All",
+    Tags: "All",
+    topics: "All",
   });
+
+  const filteredProblems = useMemo(() => {
+    return dsaProblems.filter((problem) => {
+      //checking searches
+      const matchSearches = problem.title
+        .toLowerCase()
+        .includes(filters.search.toLowerCase());
+
+      const matchedDifficulty =
+        filters.Difficulty === "All" ||
+        problem.difficulty === filters.Difficulty ||
+        !filters.Difficulty;
+
+      const matchedTags =
+        filters.Tags === "All" ||
+        !filters.Tags ||
+        problem.tags.includes(filters.Tags);
+
+      return matchSearches && matchedDifficulty && matchedTags;
+    });
+  }, [filters]);
+  const navigate = useNavigate();
+  const handleShuffle = (filteredResults) => {
+    if (filteredResults.length > 0) {
+      const randomIndex = Math.floor(Math.random() * filteredResults.length);
+      const randomProblem = filteredResults[randomIndex];
+      navigate(`/problem/${randomProblem.id}`);
+    } else {
+      alert("No problems found to shuffle from!");
+    }
+  };
 
   return (
     <div className=" bg-gray-100 overflow-hidden">
       <Navbar />
 
-      <div className="pl-20 pt-16 w-screen flex gap-20">
-        <div className="w-[70%] my-6 ">
+      <div className="lg:pl-20 pt-16 w-screen lg:flex lg:gap-20">
+        <div className="w-full lg:w-[70%] px-5 lg:px-0 my-6 ">
           <div>
             {/* left div  */}
-            <span className="font-bold  bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent text-5xl ">
+            <span className="
+            
+            font-bold  bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent text-5xl ">
               Problem Set
             </span>
             <h4 className="text-xl pt-3 text-gray-700  ">
@@ -47,12 +84,21 @@ const Problems = () => {
             </h4>
           </div>
           {/* <ProblemList /> */}
-          <SearchInterface setfilters={setfilters} filters={filters} />
+          <SearchInterface
+            setfilters={setfilters}
+            filters={filters}
+            onShuffle={() => handleShuffle(filteredProblems)}
+          />
 
-          <ResultSection filters={filters} />
+          <ResultSection
+            filters={filters}
+            filteredProblems={filteredProblems}
+          />
         </div>
 
-        <div className="w-[20%] flex flex-col">
+        <div className="
+        px-6 lg:px-0 my-10
+        lg:w-[20%] flex flex-col">
           <div className=" shadow-2xl bg-linear-to-br rounded-2xl from-blue-500 via-purple-500 to-pink-600 ">
             {/* right div  */}
             <div className="px-5 py-8 flex flex-col gap-4">
@@ -86,22 +132,22 @@ const Problems = () => {
 
           <div className="w-full  py-6 rounded-2xl shadow-2xl mt-60">
             <h1 className="text-2xl text-gray-600 px-10">Trending Companies</h1>
-            <div className="flex gap-7 pt-5 px-10">
-              <div className="border border-black/30 rounded-2xl flex gap-2 px-2 py-1 text-black/80">
+            <div className="grid grid-cols-2 gap-7 pt-5 px-10">
+              <div className="border border-black/30 rounded-lg font-semibold flex gap-2 px-3 py-2 text-black/80">
                 <ShoppingCart className="text-sm" size={20} />
                 <p>Amazon</p>
               </div>
-              <div className="border border-black/30 rounded-2xl flex gap-2 px-2 py-1 text-black/80">
+              <div className="border border-black/30 rounded-lg font-semibold flex gap-2 px-3 py-2 text-black/80">
                 <Airplay className="text-sm" size={20} />
                 <p>Microsoft</p>
               </div>
             </div>
-            <div className="flex gap-7 pt-5 px-10">
-              <div className="border border-black/30 rounded-2xl flex gap-2 px-2 py-1 text-black/80">
+            <div className="grid grid-cols-2 gap-7 pt-5 px-10">
+              <div className="border border-black/30 rounded-lg font-semibold flex gap-2 px-3 py-2 text-black/80">
                 <CircleStar className="text-sm" size={20} />
                 <p>Meta</p>
               </div>
-              <div className="border border-black/30 rounded-2xl flex gap-2 px-2 py-1 text-black/80">
+              <div className="border border-black/30 rounded-lg font-semibold flex gap-2 px-3 py-2 text-black/80">
                 <Aperture className="text-sm" size={20} />
                 <p>Google</p>
               </div>
@@ -122,12 +168,16 @@ const Problems = () => {
 
               <div className="flex items-center justify-center gap-2 mt-2 px-4 py-1 rounded-full bg-white/20 text-lg font-semibold animate-pulse">
                 <Clock10 className="w-5 h-5" />
-                <p>Starts in 04:23:05</p>
+                <p>
+                  Starts in {<Countdown targetTime="2026-06-18T22:30:00" />}
+                </p>
               </div>
             </div>
           </div>
         </div>
+
       </div>
+      <Footer />
     </div>
   );
 };

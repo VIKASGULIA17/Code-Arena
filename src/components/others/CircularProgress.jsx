@@ -79,8 +79,8 @@ export default function SessionCard() {
           {Data.map((obj, idx) => {
             const progressWidth = (obj.solved / obj.total) * 100;
             return (
-              <>
-                <div key={idx} className={`flex justify-between text-xs `}>
+              <div  key={idx} >
+                <div className={`flex justify-between text-xs `}>
                   <span className={`${obj.textColor}`}>{obj.difficulty}</span>
                   <span>
                     {obj.solved}/{obj.total}
@@ -92,7 +92,7 @@ export default function SessionCard() {
                     style={{ width: `${progressWidth}%` }}
                   ></div>
                 </div>
-              </>
+              </div>
             );
           })}
         </div>
