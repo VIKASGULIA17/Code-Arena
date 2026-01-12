@@ -27,6 +27,8 @@ import { useState } from "react";
 
 const Contest = () => {
 
+  
+
   return (
     <div className="w-full  bg-gray-100 overflow-x-hidden">
       <Navbar />

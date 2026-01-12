@@ -143,3 +143,20 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+@layer utilities {
+  /* The Background Gradient Logic */
+  .bg-brand-gradient {
+    @apply bg-linear-to-r from-blue-500 via-purple-600 to-pink-500 text-white;
+  }
+
+  /* The Text Gradient Logic */
+  .text-brand-gradient {
+    @apply text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-purple-600 to-pink-600;
+  }
+
+  /* Standard Gray Background for Cards */
+  .bg-card-gray {
+    @apply bg-gray-100;
+  }
+}
