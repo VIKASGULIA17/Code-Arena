@@ -1,6 +1,4 @@
-import React from "react";
 import { CodeXml, UsersRound, Github, Linkedin, Instagram } from "lucide-react";
-
 const Footer = () => {
   return (
     <div className="flex flex-col w-full bg-gray-800 text-white/80 px-6 lg:px-0">

@@ -1,5 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { Search, Shuffle, ChevronDown } from "lucide-react";
+import SearchBar from "../others/SearchBar";
+
 
 const SearchInterface = ({ filters, setfilters, onShuffle }) => {
   const FILTER_OPTIONS = {
@@ -59,19 +61,10 @@ const SearchInterface = ({ filters, setfilters, onShuffle }) => {
     px-5
     lg:px-10 py-8">
       {/* 1. Search Bar */}
-      <div className="relative group">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search questions..."
-          className="w-full pl-12 pr-16 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500/20 text-gray-600 outline-none"
-          onChange={(e) => updateQuery("search", e.target.value)}
-          value={filters.search}
-        />
-        <kbd className="absolute right-4 top-1/2 -translate-y-1/2 px-2 py-1 bg-white border rounded text-xs text-gray-400 font-sans shadow-sm">
-          ⌘ K
-        </kbd>
-      </div>
+      <SearchBar 
+      value={filters.search} 
+      onChange={(val) => updateQuery("search", val)} 
+    />
 
       {/* 2. Dropdowns Row */}
       <div ref={dropDownOpenRef} className="flex justify-between items-center">

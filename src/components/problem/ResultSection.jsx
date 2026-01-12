@@ -92,13 +92,13 @@ const ResultSection = ({ filters, filteredProblems }) => {
           </div>
         ))
       ) : (
-        <div className="flex text-start px-10 flex-col py-20 min-w-[500px] bg-white">
+        <div className="flex text-start lg:text-center px-10 flex-col py-20 min-w-[500px] bg-white">
           <p className="text-gray-500 text-xl font-medium">
             No problems match your filters.
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-4 text-start px-20 text-blue-600 hover:underline"
+            className="mt-4 text-start px-20 lg:text-center text-blue-600 hover:underline"
           >
             Clear all filters
           </button>

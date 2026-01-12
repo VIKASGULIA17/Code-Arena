@@ -52,7 +52,10 @@ const Problems = () => {
       return matchSearches && matchedDifficulty && matchedTags;
     });
   }, [filters]);
+
+
   const navigate = useNavigate();
+  
   const handleShuffle = (filteredResults) => {
     if (filteredResults.length > 0) {
       const randomIndex = Math.floor(Math.random() * filteredResults.length);

@@ -1,26 +1,40 @@
 import {
   AlarmClock,
-  AlertCircle,
-  Clock10,
+  ArrowRight,
   TrendingUp,
-  Triangle,
   TrophyIcon,
+  Zap,
 } from "lucide-react";
-import React from "react";
 import Countdown from "../components/others/CountDown";
 import { Button } from "../components/ui/button";
 import Navbar from "../components/Navbar";
 import { BsTriangleFill } from "react-icons/bs";
+import { topSolvers } from "../data/ContestData";
+
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import ContestList from "../components/Contest/ContestList";
+import { useState } from "react";
+
+
+  
 
 const Contest = () => {
+
   return (
-    <div className="w-full  bg-gray-100 h-screen overflow-hidden">
+    <div className="w-full  bg-gray-100 overflow-x-hidden">
       <Navbar />
       <div className="w-full h-full flex mt-26 mx-10">
         <div className="w-[70%]  ">
           {/* left div -  */}
 
-          <div className="flex  w-full rounded-2xl bg-white overflow-hidden">
+          <div className="flex  w-full rounded-2xl shadow-xl bg-white overflow-hidden">
             {/* card div  */}
             <div className="w-[25%] relative">
               {/* imgage  */}
@@ -72,28 +86,95 @@ const Contest = () => {
               {/* content  */}
             </div>
           </div>
+
+          <ContestList />
         </div>
 
-        <div className="w-[28%] px-10 ">
+        <div className="w-[28%] px-10 h-auto  overflow-hidden">
           {/* right  */}
-          <div className="bg-white p-5">
+          <div className="bg-white p-5 rounded-xl border border-gray shadow-2xl">
             {/* card  */}
             <div className="flex gap-2">
-              <TrendingUp className="bg-blue-100 text-blue-600  rounded-full px-2 " size={40}/>
+              <TrendingUp
+                className="bg-blue-100 text-blue-600  rounded-full px-2 "
+                size={40}
+              />
               <div>
-
-              <h1 className="text-gray-500 text-sm font-semibold uppercase">Your rating</h1>
-              <div className="flex items-center gap-3">
-               <p className="text-2xl font-semibold">
-                1,540 
-                </p> 
-              <Button className="h-7 text-sm bg-green-50 text-green-600"> <BsTriangleFill /> 
-               
-               <p>12</p>
-                </Button>
-              </div>
+                <h1 className="text-gray-500 text-sm font-semibold uppercase">
+                  Your rating
+                </h1>
+                <div className="flex items-center gap-3">
+                  <p className="text-2xl font-semibold">1,540</p>
+                  <Button className="h-7 text-sm bg-green-50 text-green-600">
+                    {" "}
+                    <BsTriangleFill />
+                    <p>12</p>
+                  </Button>
+                </div>
               </div>
             </div>
+            <div className="flex gap-7 w-full my-3 text-center">
+              <Card className="w-1/2 bg-gray-50">
+                <CardHeader>
+                  <CardTitle className="text-gray-700 font-medium">
+                    Global Rank
+                  </CardTitle>
+                  <CardDescription className="font-bold text-black">
+                    #14,023
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+              <Card className="w-1/2 bg-gray-50">
+                <CardHeader>
+                  <CardTitle className="text-gray-700 font-medium">
+                    Contest
+                  </CardTitle>
+                  <CardDescription className="font-bold text-black">
+                    24
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
+            <Button className="mt-5 flex w-full">
+              <p className="text-center">View Full History</p>
+              <ArrowRight />
+            </Button>
+            {/* ... */}
+          </div>
+
+          <div className="my-8 shadow-xl">
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Solver</CardTitle>
+                <CardAction>Last Contest</CardAction>
+              </CardHeader>
+
+              {topSolvers.map((obj, idx) => {
+                return (
+                  <CardContent
+                    key={idx}
+                    className="flex items-center gap-6 border-b border-gray-50 last:border-0"
+                  >
+                    <p className="w-5 font-bold text-gray-400">{obj.rank}</p>
+                    <img
+                      src={obj.avatar}
+                      alt=""
+                      className="w-10 h-10 rounded-full bg-gray-100"
+                    />
+                    <h1 className="font-medium flex-1 text-gray-800">
+                      {obj.name}
+                    </h1>
+                    <div className="flex items-center gap-1 text-gray-400 font-semibold">
+                      <Zap
+                        size={16}
+                        className="fill-green-500 text-green-500"
+                      />
+                      <p>{obj.duration}</p>
+                    </div>
+                  </CardContent>
+                );
+              })}
+            </Card>
           </div>
         </div>
       </div>
