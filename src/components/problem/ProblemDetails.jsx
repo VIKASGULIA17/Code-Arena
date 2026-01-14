@@ -11,6 +11,7 @@ import {
 import { dsaProblems } from "../../data/dsaProblem";
 import { problemInfo } from "../../data/dsaProblem";
 import { Button } from "../ui/button";
+import CodeEditor from "./CodeEditor";
 
 const ProblemDetails = () => {
   const { id } = useParams();
@@ -46,7 +47,7 @@ const ProblemDetails = () => {
       <div className="w-1/2 h-screen overflow-scroll px-5 ">
         {/* left  */}
         <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-2 min-h-10">
-          <div className="flex items-center gap-1 duration-500">
+          <div className="flex items-center gap-1 duration-500d">
             <TabButton label="Description" icon={FileText} />
             <TabButton label="Solution" icon={Lightbulb} />
             <TabButton label="Discussion" icon={MessagesSquare} />
@@ -122,7 +123,14 @@ const ProblemDetails = () => {
           </div>
         </div>
       </div>
-      <div className="w-1/2 bg-red-800 h-screen">{/* right  */}</div>
+
+
+
+
+      <div className="w-1/2 border-l h-screen">
+      {/* right  */}
+      <CodeEditor />
+      </div>
     </div>
   );
 };
