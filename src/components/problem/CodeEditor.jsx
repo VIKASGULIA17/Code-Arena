@@ -3,6 +3,7 @@ import Editor from "@monaco-editor/react";
 import LanguageSelector from "./LanguageSelector";
 import { LANGUAGE_VERSIONS } from "../../data/constants";
 import { CODE_SNIPPETS } from "../../data/constants";
+import TestCases from "./TestCases";
 
 const CodeEditor = () => {
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);
@@ -23,16 +24,19 @@ const CodeEditor = () => {
         setCode={setCode}
       />
       <Editor
-        height="90vh"
+        
+        height="70vh"
         language={Language[0]}
         // defaultValue={CODE_SNIPPETS[Language[0]]}
-        theme="vs-dark"
+        theme="vs-light"
         onMount={onMount}
         value={Code}
         onChange={(e) => {
           setCode(e);
         }}
       />
+
+      <TestCases Language={Language} value={Code}/>
     </div>
   );
 };
