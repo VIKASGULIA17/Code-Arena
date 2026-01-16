@@ -22,27 +22,21 @@ import {
 import ContestList from "../components/Contest/ContestList";
 import { useState } from "react";
 
-
-  
-
 const Contest = () => {
-
-  
-
   return (
     <div className="w-full  bg-gray-100 overflow-x-hidden">
       <Navbar />
-      <div className="w-full h-full flex mt-26 mx-10">
-        <div className="w-[70%]  ">
+      <div className="w-full h-full lg:flex mt-26 px-4 lg:mx-10">
+        <div className="w-full lg:w-[70%]  ">
           {/* left div -  */}
 
-          <div className="flex  w-full rounded-2xl shadow-xl bg-white overflow-hidden">
+          <div className="flex flex-col lg:flex-row w-full rounded-2xl shadow-xl bg-white overflow-hidden">
             {/* card div  */}
-            <div className="w-[25%] relative">
+            <div className="lg:w-[25%]  relative">
               {/* imgage  */}
               <img
                 src="https://images.unsplash.com/photo-1757101782354-d7988295617c"
-                className=""
+                className="h-60 w-full object-cover "
                 alt=""
               />
               <p className="absolute bottom-7 left-13 bg-linear-to-r from-blue-400 via-purple-500 to-pink-600 text-white  px-3 py-1 rounded-2xl">
@@ -92,7 +86,7 @@ const Contest = () => {
           <ContestList />
         </div>
 
-        <div className="w-[28%] px-10 h-auto  overflow-hidden">
+        <div className="w-full lg:w-[28%] lg:px-10 h-auto  overflow-hidden">
           {/* right  */}
           <div className="bg-white p-5 rounded-xl border border-gray shadow-2xl">
             {/* card  */}

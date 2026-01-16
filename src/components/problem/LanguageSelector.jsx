@@ -1,22 +1,22 @@
-import React,{useState} from "react";
+import {useState} from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { PiDropDuotone } from "react-icons/pi";
 import { ChevronDown, Rotate3D, RotateCcw, RotateCw } from "lucide-react";
 import Stopwatch from "../others/StopWatch";
-import { CODE_SNIPPETS } from "../../data/constants";
+import { getProblemTemplate } from "../../data/problemTemplates";
 
-const LanguageSelector = ({ Language, setLanguage, LanguageList, setCode }) => {
+
+const LanguageSelector = ({ Language, setLanguage, LanguageList, setCode ,problemId ,setOutput}) => {
+
   const handleCodeReset = () => {
-    setCode(CODE_SNIPPETS[Language[0]]);
+    setCode(getProblemTemplate(problemId,Language[0]));
     setcodeResetFlag(true);
+    setOutput(null)
 
     setTimeout(() => {
       setcodeResetFlag(false)
@@ -49,7 +49,7 @@ const LanguageSelector = ({ Language, setLanguage, LanguageList, setCode }) => {
                   key={i}
                     onClick={() => {
                       setLanguage([lang, version]);
-                      setCode(CODE_SNIPPETS[lang])
+                      setCode(getProblemTemplate(problemId,lang))
                     }}
                   >
                     <DropdownMenuItem>

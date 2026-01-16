@@ -12,24 +12,25 @@ import { dsaProblems } from "../../data/dsaProblem";
 import { problemInfo } from "../../data/dsaProblem";
 import { Button } from "../ui/button";
 import CodeEditor from "./CodeEditor";
+import Navbar from "../Navbar";
 
 const ProblemDetails = () => {
   const { id } = useParams();
 
   const problem = problemInfo[id];
-  const [currentTopBar, setcurrentTopBar] = useState('Description')
+  const [currentTopBar, setcurrentTopBar] = useState("Description");
 
   if (!problem) {
     return <div className="p-10 text-center">Problem not found!</div>;
   }
-   const TabButton = ({ label, icon: Icon }) => {
+  const TabButton = ({ label, icon: Icon }) => {
     const isActive = currentTopBar === label;
     return (
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         onClick={() => setcurrentTopBar(label)}
         className={`relative rounded-none h-10 px-4 font-semibold hover:bg-transparent transition-all gap-2 ${
-          isActive ? 'text-gray-900' : 'text-gray-500'
+          isActive ? "text-gray-900" : "text-gray-500"
         }`}
       >
         <Icon size={16} />
@@ -43,8 +44,8 @@ const ProblemDetails = () => {
   };
 
   return (
-    <div className="flex ">
-      <div className="w-1/2 h-screen overflow-scroll px-5 ">
+    <div className="flex h-screen">
+      <div className="w-1/2  px-5 ">
         {/* left  */}
         <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-2 min-h-10">
           <div className="flex items-center gap-1 duration-500d">
@@ -99,37 +100,38 @@ const ProblemDetails = () => {
                   </h3>
                   <p className="font-medium"> {obj.output}</p>
                 </div>
-                {obj.explanation&&
-                <div className="flex gap-2">
-                  <h3 className="capitalize text-gray-600 font-light">
-                    Explanation:
-                  </h3>
-                  <p className=""> {obj.explanation}</p>
-                </div>
-                }
+                {obj.explanation && (
+                  <div className="flex gap-2">
+                    <h3 className="capitalize text-gray-600 font-light">
+                      Explanation:
+                    </h3>
+                    <p className=""> {obj.explanation}</p>
+                  </div>
+                )}
               </div>
             </div>
           );
         })}
 
         <div className="py-5 mx-4">
-          <h3 className="font-semibold text-lg text-zinc-700 pb-3">Constraints</h3>
+          <h3 className="font-semibold text-lg text-zinc-700 pb-3">
+            Constraints
+          </h3>
           <div className="mx-4 flex flex-col gap-2">
-
-          {problem.constraints.map((obj,idx)=>{
-            return  <li key={idx} className="marker:text-purple-500 text-gray-500 ">{obj}</li>
-             
-          })}
+            {problem.constraints.map((obj, idx) => {
+              return (
+                <li key={idx} className="marker:text-purple-500 text-gray-500 ">
+                  {obj}
+                </li>
+              );
+            })}
           </div>
         </div>
       </div>
 
-
-
-
-      <div className="w-1/2 border-l h-screen">
-      {/* right  */}
-      <CodeEditor />
+      <div className="w-1/2  border-l h-screen overflow-scroll">
+        {/* right  */}
+        <CodeEditor problemId={id} />
       </div>
     </div>
   );
