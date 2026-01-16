@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 import { CloudUpload, Play } from "lucide-react";
 import { executeCode } from "../../api/api";
 import { testCases } from "../../data/testCases";
-import { driverCode_Template } from "../../data/driveCodeTemplate";
+import { driverCode_Template } from "../../data/driverCodeTemplate";
 
 const TestCases = ({ Language, value, problemId,Output ,setOutput }) => {
   // data variables

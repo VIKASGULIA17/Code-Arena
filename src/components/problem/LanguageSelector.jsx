@@ -11,10 +11,12 @@ import Stopwatch from "../others/StopWatch";
 import { getProblemTemplate } from "../../data/problemTemplates";
 
 
-const LanguageSelector = ({ Language, setLanguage, LanguageList, setCode ,problemId ,setOutput}) => {
+const LanguageSelector = ({ Language, setLanguage, LanguageList, setCode ,problemId ,setOutput,onReset}) => {
 
   const handleCodeReset = () => {
-    setCode(getProblemTemplate(problemId,Language[0]));
+    if (onReset) {
+      onReset();
+    }
     setcodeResetFlag(true);
     setOutput(null)
 

@@ -5,46 +5,36 @@ export const driverCode_Template = {
   // =========================================================
   // PROBLEM 1: TWOSUM
   // =========================================================
-  1: {
+ 1: {
     javascript: {
-      boilerplate: `function twoSum(nums, target) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+const twoSum = function(nums, target) {
     // Write your code here
     
-}`,
+};`,
       driverCode: (userCode, cases) => `
 // 1. User Code
 ${userCode}
 
-// 2. Hidden Driver Code
+// 2. Driver Code
 const testCases = ${JSON.stringify(cases)};
 const results = [];
 
 testCases.forEach((t, index) => {
     const resultEntry = { id: index + 1 };
     try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
+        const result = twoSum(t.input.nums, t.input.target);
+        resultEntry.actual = result;
+        resultEntry.expected = t.expected;
+        
+        if (JSON.stringify(result) === JSON.stringify(t.expected)) {
+            resultEntry.status = "Passed";
         } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
+            resultEntry.status = "Failed";
         }
     } catch (error) {
         resultEntry.status = "Error";
@@ -52,163 +42,89 @@ testCases.forEach((t, index) => {
     }
     results.push(resultEntry);
 });
-
 console.log(JSON.stringify(results));
 `,
     },
+
+    typescript: {
+      boilerplate: `function twoSum(nums: number[], target: number): number[] {
+    // Write your code here
+    return [];
+}`,
+      driverCode: (userCode, cases) => `
+// 1. User Code
+${userCode}
+
+// 2. Driver Code
+const testCases = ${JSON.stringify(cases)};
+const results: any[] = [];
+
+testCases.forEach((t: any, index: number) => {
+    const resultEntry: any = { id: index + 1 };
+    try {
+        const result = twoSum(t.input.nums, t.input.target);
+        resultEntry.actual = result;
+        resultEntry.expected = t.expected;
+        
+        if (JSON.stringify(result) === JSON.stringify(t.expected)) {
+            resultEntry.status = "Passed";
+        } else {
+            resultEntry.status = "Failed";
+        }
+    } catch (error: any) {
+        resultEntry.status = "Error";
+        resultEntry.error = error.message;
+    }
+    results.push(resultEntry);
+});
+console.log(JSON.stringify(results));
+`,
+    },
+
     python: {
-      boilerplate: `def twoSum(nums, target):
-    # Write your code here
-    pass`,
+      boilerplate: `class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        # Write your code here
+        pass`,
       driverCode: (userCode, cases) => `
 import json
-import re
+from typing import List
 
 # 1. User Code
 ${userCode}
 
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
+# 2. Driver Code
+cases_json = '${JSON.stringify(cases)}'
 test_cases = json.loads(cases_json)
 results = []
+solution = Solution()
 
 for i, t in enumerate(test_cases):
     result_entry = {"id": i + 1}
     try:
-        input_data = t["input"]
+        nums = t["input"]["nums"]
+        target = t["input"]["target"]
         expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
+        
+        result = solution.twoSum(nums, target)
+        
         result_entry["actual"] = result
         result_entry["expected"] = expected
-
-        # Compare results
+        
         if result == expected:
             result_entry["status"] = "Passed"
         else:
             result_entry["status"] = "Failed"
-
     except Exception as e:
         result_entry["status"] = "Error"
         result_entry["error"] = str(e)
-
+    
     results.append(result_entry)
 
 print(json.dumps(results))
 `,
     },
-    typescript: {
-      boilerplate: `function twoSum(nums: number[], target: number): number[] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
 
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
-    },
-    java: {
-      boilerplate: `class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int[] TwoSum(int[] nums, int target) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
     php: {
       boilerplate: `function twoSum($nums, $target) {
     // Write your code here
@@ -219,30 +135,28 @@ public class MainClass {
 // 1. User Code
 ${userCode}
 
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
+// 2. Driver Code
+$cases_json = '${JSON.stringify(cases)}';
 $test_cases = json_decode($cases_json, true);
 $results = [];
 
 foreach ($test_cases as $index => $t) {
     $result_entry = ['id' => $index + 1];
     try {
-        $input = $t['input'];
+        $nums = $t['input']['nums'];
+        $target = $t['input']['target'];
         $expected = $t['expected'];
 
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
+        $result = twoSum($nums, $target);
 
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
+        $result_entry['actual'] = $result;
+        $result_entry['expected'] = $expected;
+        
+        // PHP array comparison
+        if ($result == $expected) {
+            $result_entry['status'] = 'Passed';
         } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
+            $result_entry['status'] = 'Failed';
         }
     } catch (Exception $e) {
         $result_entry['status'] = 'Error';
@@ -250,11 +164,105 @@ foreach ($test_cases as $index => $t) {
     }
     $results[] = $result_entry;
 }
-
 echo json_encode($results);
 ?>
 `,
     },
+
+    // --- COMPILED LANGUAGES (Using Code Injection instead of JSON) ---
+
+   java: {
+      boilerplate: `class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        // Write your code here
+        return new int[]{};
+    }
+}`,
+      driverCode: (userCode, cases) => `
+import java.util.*;
+import java.util.stream.*;
+
+// 1. DRIVER CLASS (Must come FIRST so it runs)
+public class Solution {
+    public static void main(String[] args) {
+        List<String> results = new ArrayList<>();
+        UserLogic solution = new UserLogic(); // Instantiate the renamed user class
+
+        ${cases.map((t, i) => `
+        try {
+            int[] nums = {${t.input.nums.join(',')}};
+            int target = ${t.input.target};
+            int[] expected = {${t.expected.join(',')}};
+            
+            int[] result = solution.twoSum(nums, target);
+            
+            boolean passed = Arrays.equals(result, expected);
+            
+            String status = passed ? "Passed" : "Failed";
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": %s, \\"expected\\": %s}", 
+                ${i + 1}, status, Arrays.toString(result), Arrays.toString(expected));
+            
+            results.add(json);
+        } catch (Exception e) {
+            results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
+        }
+        `).join('\n')}
+
+        System.out.println("[" + String.join(",", results) + "]");
+    }
+}
+
+// 2. USER CODE (Renamed & Moved to bottom)
+// We strip 'public' to avoid conflict, and rename Solution -> UserLogic
+${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
+`,
+    },
+
+    csharp: {
+      boilerplate: `public class Solution {
+    public int[] TwoSum(int[] nums, int target) {
+        // Write your code here
+        return new int[]{};
+    }
+}`,
+      driverCode: (userCode, cases) => `
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class MainClass {
+    ${userCode}
+
+    public static void Main(string[] args) {
+        List<string> results = new List<string>();
+        Solution solution = new Solution();
+
+        ${cases.map((t, i) => `
+        try {
+            int[] nums = new int[] {${t.input.nums.join(',')}};
+            int target = ${t.input.target};
+            int[] expected = new int[] {${t.expected.join(',')}};
+            
+            int[] result = solution.TwoSum(nums, target);
+            
+            bool passed = Enumerable.SequenceEqual(result, expected);
+            string status = passed ? "Passed" : "Failed";
+            
+            string resStr = "[" + string.Join(",", result) + "]";
+            string expStr = "[" + string.Join(",", expected) + "]";
+            
+            results.Add($"{{\\"id\\": ${i + 1}, \\"status\\": \\"{status}\\", \\"actual\\": {resStr}, \\"expected\\": {expStr}}}");
+        } catch (Exception e) {
+             results.Add($"{{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"{e.Message}\\"}}");
+        }
+        `).join('\n')}
+
+        Console.WriteLine("[" + string.Join(",", results) + "]");
+    }
+}
+`,
+    },
+
     cpp: {
       boilerplate: `class Solution {
 public:
@@ -265,17 +273,54 @@ public:
 };`,
       driverCode: (userCode, cases) => `
 #include <iostream>
-#include <vector>
-#include <string>
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Helper to print vector
+string vecToStr(const vector<int>& v) {
+    stringstream ss;
+    ss << "[";
+    for(size_t i=0; i<v.size(); ++i) {
+        ss << v[i];
+        if(i < v.size()-1) ss << ",";
+    }
+    ss << "]";
+    return ss.str();
+}
+
+${userCode}
 
 int main() {
+    vector<string> results;
+    Solution solution;
+
+    ${cases.map((t, i) => `
     try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+        vector<int> nums = {${t.input.nums.join(',')}};
+        int target = ${t.input.target};
+        vector<int> expected = {${t.expected.join(',')}};
+        
+        vector<int> result = solution.twoSum(nums, target);
+        
+        bool passed = (result == expected);
+        string status = passed ? "Passed" : "Failed";
+        
+        stringstream json;
+        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << vecToStr(result) << ", \\"expected\\": " << vecToStr(expected) << "}";
+        results.push_back(json.str());
+    } catch (const exception& e) {
+        results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
     }
+    `).join('\n')}
+
+    cout << "[";
+    for(size_t i=0; i<results.size(); ++i) {
+        cout << results[i];
+        if(i < results.size()-1) cout << ",";
+    }
+    cout << "]" << endl;
+    
     return 0;
 }
 `,
@@ -283,48 +328,69 @@ int main() {
   },
 
   // =========================================================
-  // PROBLEM 2: ADDTWONUMBERS
+  // PROBLEM 2: ADD TWO NUMBERS
   // =========================================================
   2: {
     javascript: {
-      boilerplate: `function addTwoNumbers(l1, l2) {
-    // Write your code here
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ * this.val = (val===undefined ? 0 : val)
+ * this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+var addTwoNumbers = function(l1, l2) {
     
-}`,
+};`,
       driverCode: (userCode, cases) => `
-// 1. User Code
+function ListNode(val, next) {
+    this.val = (val===undefined ? 0 : val)
+    this.next = (next===undefined ? null : next)
+}
+function createList(arr) {
+    let dummy = new ListNode(0);
+    let curr = dummy;
+    for(let val of arr) {
+        curr.next = new ListNode(val);
+        curr = curr.next;
+    }
+    return dummy.next;
+}
+function toArray(node) {
+    let arr = [];
+    while(node) {
+        arr.push(node.val);
+        node = node.next;
+    }
+    return arr;
+}
+
 ${userCode}
 
-// 2. Hidden Driver Code
 const testCases = ${JSON.stringify(cases)};
 const results = [];
 
 testCases.forEach((t, index) => {
     const resultEntry = { id: index + 1 };
     try {
-        const input = t.input;
-        const expected = t.expected;
+        const l1 = createList(t.input.l1);
+        const l2 = createList(t.input.l2);
+        
+        const resNode = addTwoNumbers(l1, l2);
+        const resArr = toArray(resNode);
+        
+        resultEntry.actual = resArr;
+        resultEntry.expected = t.expected;
 
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
+        if (JSON.stringify(resArr) === JSON.stringify(t.expected)) {
+            resultEntry.status = "Passed";
         } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
+            resultEntry.status = "Failed";
         }
     } catch (error) {
         resultEntry.status = "Error";
@@ -332,197 +398,222 @@ testCases.forEach((t, index) => {
     }
     results.push(resultEntry);
 });
-
 console.log(JSON.stringify(results));
 `,
     },
+
+    typescript: {
+      boilerplate: `class ListNode {
+    val: number
+    next: ListNode | null
+    constructor(val?: number, next?: ListNode | null) {
+        this.val = (val===undefined ? 0 : val)
+        this.next = (next===undefined ? null : next)
+    }
+}
+
+function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
+    // Write your code here
+    return null;
+}`,
+      driverCode: (userCode, cases) => `
+// We re-declare class inside driver for safety in case user deletes it
+class ListNode {
+    val: number
+    next: ListNode | null
+    constructor(val?: number, next?: ListNode | null) {
+        this.val = (val===undefined ? 0 : val)
+        this.next = (next===undefined ? null : next)
+    }
+}
+
+function createList(arr: number[]): ListNode | null {
+    let dummy = new ListNode(0);
+    let curr = dummy;
+    for(let val of arr) {
+        curr.next = new ListNode(val);
+        curr = curr.next!;
+    }
+    return dummy.next;
+}
+
+function toArray(node: ListNode | null): number[] {
+    let arr: number[] = [];
+    while(node) {
+        arr.push(node.val);
+        node = node.next;
+    }
+    return arr;
+}
+
+// User Code injection
+${userCode.replace(/class ListNode[\s\S]*?}/, "")} 
+
+const testCases = ${JSON.stringify(cases)};
+const results: any[] = [];
+
+testCases.forEach((t: any, index: number) => {
+    const resultEntry: any = { id: index + 1 };
+    try {
+        const l1 = createList(t.input.l1);
+        const l2 = createList(t.input.l2);
+        
+        const resNode = addTwoNumbers(l1, l2);
+        const resArr = toArray(resNode);
+        
+        resultEntry.actual = resArr;
+        resultEntry.expected = t.expected;
+
+        if (JSON.stringify(resArr) === JSON.stringify(t.expected)) {
+            resultEntry.status = "Passed";
+        } else {
+            resultEntry.status = "Failed";
+        }
+    } catch (error: any) {
+        resultEntry.status = "Error";
+        resultEntry.error = error.message;
+    }
+    results.push(resultEntry);
+});
+console.log(JSON.stringify(results));
+`,
+    },
+
     python: {
-      boilerplate: `def addTwoNumbers(l1, l2):
-    # Write your code here
-    pass`,
+      boilerplate: `
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        pass`,
       driverCode: (userCode, cases) => `
 import json
-import re
+from typing import Optional, List
 
-# 1. User Code
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def to_list(arr):
+    dummy = ListNode(0)
+    curr = dummy
+    for x in arr:
+        curr.next = ListNode(x)
+        curr = curr.next
+    return dummy.next
+
+def to_arr(node):
+    arr = []
+    while node:
+        arr.append(node.val)
+        node = node.next
+    return arr
+
 ${userCode}
 
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
+cases_json = '${JSON.stringify(cases)}'
 test_cases = json.loads(cases_json)
 results = []
+solution = Solution()
 
 for i, t in enumerate(test_cases):
     result_entry = {"id": i + 1}
     try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
+        l1 = to_list(t["input"]["l1"])
+        l2 = to_list(t["input"]["l2"])
+        
+        res_node = solution.addTwoNumbers(l1, l2)
+        res_arr = to_arr(res_node)
+        
+        result_entry["actual"] = res_arr
+        result_entry["expected"] = t["expected"]
+        
+        if res_arr == t["expected"]:
             result_entry["status"] = "Passed"
         else:
             result_entry["status"] = "Failed"
-
     except Exception as e:
         result_entry["status"] = "Error"
         result_entry["error"] = str(e)
-
+    
     results.append(result_entry)
 
 print(json.dumps(results))
 `,
     },
-    typescript: {
-      boilerplate: `function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
 
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
-    },
-    java: {
-      boilerplate: `class Solution {
-    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public ListNode AddTwoNumbers(ListNode l1, ListNode l2) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
     php: {
-      boilerplate: `function addTwoNumbers($l1, $l2) {
-    // Write your code here
+      boilerplate: `
+/**
+ * Definition for a singly-linked list.
+ * class ListNode {
+ * public $val = 0;
+ * public $next = null;
+ * function __construct($val = 0, $next = null) {
+ * $this->val = $val;
+ * $this->next = $next;
+ * }
+ * }
+ */
+function addTwoNumbers($l1, $l2) {
     
 }`,
       driverCode: (userCode, cases) => `
 <?php
-// 1. User Code
+class ListNode {
+    public $val = 0;
+    public $next = null;
+    function __construct($val = 0, $next = null) {
+        $this->val = $val;
+        $this->next = $next;
+    }
+}
+
+function to_list($arr) {
+    $dummy = new ListNode(0);
+    $curr = $dummy;
+    foreach ($arr as $val) {
+        $curr->next = new ListNode($val);
+        $curr = $curr->next;
+    }
+    return $dummy->next;
+}
+
+function to_arr($node) {
+    $arr = [];
+    while ($node) {
+        $arr[] = $node->val;
+        $node = $node->next;
+    }
+    return $arr;
+}
+
 ${userCode}
 
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
+$cases_json = '${JSON.stringify(cases)}';
 $test_cases = json_decode($cases_json, true);
 $results = [];
 
 foreach ($test_cases as $index => $t) {
     $result_entry = ['id' => $index + 1];
     try {
-        $input = $t['input'];
-        $expected = $t['expected'];
+        $l1 = to_list($t['input']['l1']);
+        $l2 = to_list($t['input']['l2']);
 
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
+        $resNode = addTwoNumbers($l1, $l2);
+        $resArr = to_arr($resNode);
 
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
+        $result_entry['actual'] = $resArr;
+        $result_entry['expected'] = $t['expected'];
+        
+        if ($resArr == $t['expected']) {
+            $result_entry['status'] = 'Passed';
         } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
+            $result_entry['status'] = 'Failed';
         }
     } catch (Exception $e) {
         $result_entry['status'] = 'Error';
@@ -530,16 +621,196 @@ foreach ($test_cases as $index => $t) {
     }
     $results[] = $result_entry;
 }
-
 echo json_encode($results);
 ?>
 `,
     },
+
+    java: {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        
+    }
+}`,
+      driverCode: (userCode, cases) => `
+import java.util.*;
+
+// Helpers
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+public class Main {
+    // Helper Methods
+    static ListNode toList(int[] arr) {
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        for (int val : arr) {
+            curr.next = new ListNode(val);
+            curr = curr.next;
+        }
+        return dummy.next;
+    }
+    
+    static String toArrStr(ListNode node) {
+        List<Integer> list = new ArrayList<>();
+        while(node != null) {
+            list.add(node.val);
+            node = node.next;
+        }
+        return list.toString(); // [7, 0, 8]
+    }
+    
+    ${userCode}
+
+    public static void main(String[] args) {
+        List<String> results = new ArrayList<>();
+        Solution solution = new Solution();
+
+        ${cases.map((t, i) => `
+        try {
+            int[] arr1 = {${t.input.l1.join(',')}};
+            int[] arr2 = {${t.input.l2.join(',')}};
+            int[] expectedArr = {${t.expected.join(',')}};
+            String expectedStr = Arrays.toString(expectedArr);
+            
+            ListNode l1 = toList(arr1);
+            ListNode l2 = toList(arr2);
+            
+            ListNode resultNode = solution.addTwoNumbers(l1, l2);
+            String resultStr = toArrStr(resultNode);
+            
+            boolean passed = resultStr.equals(expectedStr);
+            String status = passed ? "Passed" : "Failed";
+            
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": %s, \\"expected\\": %s}", 
+                ${i + 1}, status, resultStr, expectedStr);
+            results.add(json);
+            
+        } catch (Exception e) {
+            results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
+        }
+        `).join('\n')}
+
+        System.out.println("[" + String.join(",", results) + "]");
+    }
+}
+`,
+    },
+
+    csharp: {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * public int val;
+ * public ListNode next;
+ * public ListNode(int val=0, ListNode next=null) {
+ * this.val = val;
+ * this.next = next;
+ * }
+ * }
+ */
+public class Solution {
+    public ListNode AddTwoNumbers(ListNode l1, ListNode l2) {
+        
+    }
+}`,
+      driverCode: (userCode, cases) => `
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class ListNode {
+    public int val;
+    public ListNode next;
+    public ListNode(int val=0, ListNode next=null) {
+        this.val = val;
+        this.next = next;
+    }
+}
+
+public class MainClass {
+    static ListNode ToList(int[] arr) {
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+        foreach (int val in arr) {
+            curr.next = new ListNode(val);
+            curr = curr.next;
+        }
+        return dummy.next;
+    }
+    
+    static string ToArrStr(ListNode node) {
+        List<int> list = new List<int>();
+        while(node != null) {
+            list.Add(node.val);
+            node = node.next;
+        }
+        return "[" + string.Join(", ", list) + "]";
+    }
+    
+    ${userCode}
+
+    public static void Main(string[] args) {
+        List<string> results = new List<string>();
+        Solution solution = new Solution();
+
+        ${cases.map((t, i) => `
+        try {
+            int[] arr1 = new int[] {${t.input.l1.join(',')}};
+            int[] arr2 = new int[] {${t.input.l2.join(',')}};
+            int[] expectedArr = new int[] {${t.expected.join(',')}};
+            string expectedStr = "[" + string.Join(", ", expectedArr) + "]";
+            
+            ListNode l1 = ToList(arr1);
+            ListNode l2 = ToList(arr2);
+            
+            ListNode resultNode = solution.AddTwoNumbers(l1, l2);
+            string resultStr = ToArrStr(resultNode);
+            
+            bool passed = (resultStr == expectedStr);
+            string status = passed ? "Passed" : "Failed";
+            
+            results.Add($"{{\\"id\\": ${i + 1}, \\"status\\": \\"{status}\\", \\"actual\\": {resultStr}, \\"expected\\": {expectedStr}}}");
+        } catch (Exception e) {
+             results.Add($"{{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"{e.Message}\\"}}");
+        }
+        `).join('\n')}
+
+        Console.WriteLine("[" + string.Join(",", results) + "]");
+    }
+}
+`,
+    },
+
     cpp: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ * int val;
+ * ListNode *next;
+ * ListNode() : val(0), next(nullptr) {}
+ * ListNode(int x) : val(x), next(nullptr) {}
+ * ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        // Write your code here
         
     }
 };`,
@@ -547,20 +818,95 @@ public:
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
+
+using namespace std;
+
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+// Helper: Vector -> List
+ListNode* toList(const vector<int>& nums) {
+    ListNode* dummy = new ListNode(0);
+    ListNode* curr = dummy;
+    for(int x : nums) {
+        curr->next = new ListNode(x);
+        curr = curr->next;
+    }
+    return dummy->next;
+}
+
+// Helper: List -> String
+string toArrStr(ListNode* node) {
+    stringstream ss;
+    ss << "[";
+    bool first = true;
+    while(node) {
+        if(!first) ss << ",";
+        ss << node->val;
+        first = false;
+        node = node->next;
+    }
+    ss << "]";
+    return ss.str();
+}
+
+${userCode}
 
 int main() {
+    vector<string> results;
+    Solution solution;
+
+    ${cases.map((t, i) => `
     try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+        vector<int> v1 = {${t.input.l1.join(',')}};
+        vector<int> v2 = {${t.input.l2.join(',')}};
+        vector<int> vexp = {${t.expected.join(',')}};
+        
+        ListNode* l1 = toList(v1);
+        ListNode* l2 = toList(v2);
+        
+        // Manual expectation string building
+        stringstream ssExp;
+        ssExp << "[";
+        for(size_t k=0; k<vexp.size(); ++k) {
+            ssExp << vexp[k];
+            if(k < vexp.size()-1) ssExp << ",";
+        }
+        ssExp << "]";
+        string expectedStr = ssExp.str();
+        
+        ListNode* resNode = solution.addTwoNumbers(l1, l2);
+        string resultStr = toArrStr(resNode);
+        
+        bool passed = (resultStr == expectedStr);
+        string status = passed ? "Passed" : "Failed";
+        
+        stringstream json;
+        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << resultStr << ", \\"expected\\": " << expectedStr << "}";
+        results.push_back(json.str());
+    } catch (const exception& e) {
+        results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
     }
+    `).join('\n')}
+
+    cout << "[";
+    for(size_t i=0; i<results.size(); ++i) {
+        cout << results[i];
+        if(i < results.size()-1) cout << ",";
+    }
+    cout << "]" << endl;
+    
     return 0;
 }
 `,
-    },
-  },
+    }
+},
 
   // =========================================================
   // PROBLEM 3: LENGTHOFLONGESTSUBSTRING

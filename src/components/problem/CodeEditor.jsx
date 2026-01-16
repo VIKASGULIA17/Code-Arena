@@ -8,7 +8,7 @@ import {
   getProblemTemplate,
   problemTemplates,
 } from "../../data/problemTemplates";
-import { driverCode_Template } from "../../data/driveCodeTemplate";
+import { driverCode_Template } from "../../data/driverCodeTemplate";
 
 const CodeEditor = ({ problemId }) => {
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);   //all the language and versions
@@ -32,6 +32,17 @@ const CodeEditor = ({ problemId }) => {
     }
   }, [Language]); 
 
+  const handleReset = () => {
+    const freshTemplate = driverCode_Template[problemId]?.[Language[0]]?.boilerplate || "";
+    
+    // 2. Update state
+    setCode(freshTemplate);
+    setOutput(null);
+    if (CodeEditorRef.current) {
+      CodeEditorRef.current.setValue(freshTemplate);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-3">
       <LanguageSelector
@@ -39,6 +50,7 @@ const CodeEditor = ({ problemId }) => {
         Language={Language}
         setLanguage={setLanguage}
         setCode={setCode}
+        onReset={handleReset}
         problemId={problemId}
         Output={Output}
         setOutput={setOutput}
