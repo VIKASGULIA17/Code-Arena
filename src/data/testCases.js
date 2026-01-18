@@ -22,7 +22,7 @@ export const testCases = {
       }
     ],
     hidden: [
-      { input: { nums: [1, 5, 3, 7, 9], target: 10 }, expected: [1, 3] },
+      { input: { nums: [1, 5, 7, 7, 9], target: 10 }, expected: [0, 4] },
       { input: { nums: [-1, -2, -3, -4, -5], target: -8 }, expected: [2, 4] },
       { input: { nums: [0, 4, 3, 0], target: 0 }, expected: [0, 3] },
       { input: { nums: [1, 2, 3, 4, 5, 6], target: 11 }, expected: [4, 5] }

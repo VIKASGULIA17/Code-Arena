@@ -24,7 +24,7 @@ const Problems = () => {
     { id: 2, title: "Medium", progress: 78 },
     { id: 3, title: "hard", progress: 34 },
   ];
-
+  
   const [filters, setfilters] = useState({
     search: "",
     Difficulty: "All",

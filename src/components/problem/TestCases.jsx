@@ -1,24 +1,26 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { CloudUpload, Play } from "lucide-react";
+import { CloudUpload, Play, CheckCircle, XCircle } from "lucide-react";
 import { executeCode } from "../../api/api";
 import { testCases } from "../../data/testCases";
 import { driverCode_Template } from "../../data/driverCodeTemplate";
 
-const TestCases = ({ Language, value, problemId,Output ,setOutput }) => {
+const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
   // data variables
-  
   const [isError, setisError] = useState(false);
   const [isActive, setIsActive] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submit loading
+  const [submissionStatus, setSubmissionStatus] = useState(null); // To show "Accepted" or "Wrong Answer"
 
   const currentProblemTestcases = testCases[problemId] || {
     visible: [],
-    expected: [],
+    hidden: [],
   };
   const visibleTestCases = currentProblemTestcases.visible;
+  const hiddenTestCases = currentProblemTestcases.hidden; // Fixed typo
 
-  // data functions
+  // --- RUN CODE (Visible Cases) ---
   const runCode = async () => {
     const userCode = value;
     const lang = Language[0];
@@ -28,55 +30,37 @@ const TestCases = ({ Language, value, problemId,Output ,setOutput }) => {
     setIsLoading(true);
     setisError(false);
     setOutput(null);
+    setSubmissionStatus(null); // Clear previous submission status
 
     try {
       const driverCode = driverCode_Template[problemId]?.[lang]?.driverCode;
 
       if (!driverCode) {
         setisError(true);
-        setOutput([
-          {
-            status: "Error",
-            error: "Runtime Environment for this problem not Found",
-          },
-        ]);
-        setIsLoading(false);
+        setOutput([{ status: "Error", error: "Runtime Environment not Found" }]);
         return;
       }
 
-      // Generate the "Sandwich" code
+      // 1. Generate code using VISIBLE cases
       const fullSourceCode = driverCode(userCode, visibleTestCases);
-      
-      // Execute via Piston
+
       const data = await executeCode(Language, fullSourceCode);
 
-      // 1. Handle Compile/Runtime Errors (stderr)
       if (data.run.stderr) {
         setisError(true);
         setOutput([{ status: "Error", error: data.run.stderr }]);
-        setIsLoading(false);
         return;
       }
 
-      // 2. Parse the JSON Output
       try {
-        // FIX: Split output by lines and parse only the LAST line
-        // This handles cases where user code has print() statements
         const outputLines = data.run.output.trim().split("\n");
         const lastLine = outputLines[outputLines.length - 1];
-        
         const parsedOutput = JSON.parse(lastLine);
-        
         setOutput(parsedOutput);
         setisError(false);
       } catch (err) {
         setisError(true);
-        setOutput([
-          {
-            status: "Error",
-            error: "Execution Success but Output Parse Failed. Did you print extra logs?",
-          },
-        ]);
+        setOutput([{ status: "Error", error: "Output Parse Failed" }]);
       }
     } catch (error) {
       setisError(true);
@@ -86,134 +70,246 @@ const TestCases = ({ Language, value, problemId,Output ,setOutput }) => {
     }
   };
 
-  // Helper to safely get the current test case result
+  // --- SUBMIT CODE (Hidden Cases) ---
+  const submitCode = async () => {
+    const userCode = value;
+    const lang = Language[0];
+
+    if (!userCode) return;
+
+    setIsSubmitting(true);
+    setisError(false);
+    setOutput(null); 
+    setSubmissionStatus(null);
+
+    try {
+      const driverCode = driverCode_Template[problemId]?.[lang]?.driverCode;
+
+      if (!driverCode) {
+        setisError(true);
+        setSubmissionStatus("Runtime Environment Not Found");
+        return;
+      }
+
+      // 1.  HIDDEN cases
+      const fullSourceCode = driverCode(userCode, hiddenTestCases);
+
+      // 2. Execute 
+      const data = await executeCode(Language, fullSourceCode);
+
+      // 3. Handle Compilation Errors
+      if (data.run.stderr) {
+        setisError(true);
+        setSubmissionStatus("Runtime Error");
+        console.error("Submission Error:", data.run.stderr);
+        return;
+      }
+
+      // 4. Parse Hidden Results
+      try {
+        const outputLines = data.run.output.trim().split("\n");
+        const lastLine = outputLines[outputLines.length - 1];
+        const parsedHiddenResults = JSON.parse(lastLine);
+
+        console.log("Hidden Test Case Results:", parsedHiddenResults);
+
+        // 5. Calculate Final Status
+        // Check if every single test case passed
+        const allPassed = parsedHiddenResults.every(
+          (res) => res.status === "Passed"
+        );
+
+        if (allPassed) {
+          setSubmissionStatus("Accepted");
+        } else {
+          // Find first failure to log or display if needed
+          const firstFail = parsedHiddenResults.find(
+            (res) => res.status === "Failed"
+          );
+          setSubmissionStatus(`Wrong Answer`);
+          console.log("Failed at input:", firstFail?.input);
+        }
+      } catch (err) {
+        setisError(true);
+        setSubmissionStatus("Format Error");
+      }
+    } catch (error) {
+      setSubmissionStatus("Network Error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  
   const currentResult = Output && Output[isActive] ? Output[isActive] : null;
 
   return (
-    <div className="h-60">
-      <div className="flex items-center justify-between px-6 py-3 border-y-2">
-        <h1>TestCases</h1>
+    <div className="h-60 flex flex-col">
+      {/* HEADER */}
+      <div className="flex items-center justify-between px-6 py-3 border-y-2 bg-white">
+        <h1 className="font-bold text-gray-700">TestCases</h1>
         <div className="flex gap-4">
           <Button
             onClick={runCode}
-            disabled={isLoading}
-            className="border rounded-xl bg-gray-100 text-gray-800 disabled:opacity-50"
+            disabled={isLoading || isSubmitting}
+            className="border rounded-xl bg-gray-100 text-gray-800 disabled:opacity-50 hover:bg-gray-200"
           >
             <Play className="text-gray-800 w-4 h-4 mr-2" />
             <p>{isLoading ? "Running..." : "Run"}</p>
           </Button>
-          <Button className="border rounded-xl bg-brand-gradient">
+          <Button
+            onClick={submitCode}
+            disabled={isLoading || isSubmitting}
+            className="border rounded-xl bg-brand-gradient text-white disabled:opacity-70"
+          >
             <CloudUpload className="w-4 h-4 mr-2" />
-            <p>Submit</p>
+            <p>{isSubmitting ? "Submitting..." : "Submit"}</p>
           </Button>
         </div>
       </div>
 
-      <div className="px-10 py-6">
-        {/* Test Case Tabs */}
-        <div className="flex gap-4 mb-4">
-          {visibleTestCases.map((_, idx) => {
-            // Determine color of the tab based on result status
-            let tabColorClass = "bg-gray-100 text-black";
-            if (isActive === idx) tabColorClass = "bg-black text-white ";
-
-            // Optional: Add a dot/indicator if we have results
-            const statusColor =
-              Output && Output[idx]?.status === "Passed"
-                ? "text-green-700 bg-green-200 border-green-400"
-                : Output && Output[idx]?.status === "Failed"
-                  ? "text-red-500 bg-red-200 border-red-400"
-                  : "";
-
-            return (
-              <Button
-                onClick={() => setIsActive(idx)}
-                key={idx}
-                className={`${tabColorClass} border ${statusColor} } relative`}
-              >
-                Testcase {idx + 1}
-                {isActive===idx && (
-                    <span
-                      className={`absolute top-0 right-0 -mt-2 -mr-0.5 text-xs font-bold text-black`}
-                    >
-                      ●
-                    </span>
-                  )}
-              </Button>
-              // circle 
-            );
-          })}
-        </div>
-
-        {/* INPUT DISPLAY */}
-        <div className="py-2">
-          <h1 className="font-semibold uppercase text-xs text-gray-500">
-            Input
-          </h1>
-          <div className="bg-gray-50 rounded-lg my-2 py-3 px-4 font-mono text-sm border">
-            {visibleTestCases.length > 0 ? (
-              Object.entries(visibleTestCases[isActive].input).map(
-                ([key, val], i) => (
-                  <div key={i} className="mb-1 font-mono">
-                    <span className="text-gray-500">{key} = </span>
-                    <span className="font-mono"> {JSON.stringify(val)}</span>
-                  </div>
-                ),
-              )
+      {/* BODY */}
+      <div className="px-10 py-6 overflow-y-auto flex-1">
+        
+        {/* VIEW 1: SUBMISSION RESULT ( when Submission Status exists) */}
+        {submissionStatus ? (
+          <div className="flex flex-col items-center justify-center h-full gap-4 animate-in fade-in zoom-in duration-300">
+            {submissionStatus === "Accepted" ? (
+              <>
+                <CheckCircle className="w-16 h-16 text-green-500" />
+                <h2 className="text-3xl font-bold text-green-600">Accepted</h2>
+                <p className="text-gray-500">All hidden test cases passed!</p>
+              </>
             ) : (
-              <div>No test cases available</div>
+              <>
+                <XCircle className="w-16 h-16 text-red-500" />
+                <h2 className="text-3xl font-bold text-red-600">
+                  {submissionStatus}
+                </h2>
+                <p className="text-gray-500">
+                  Check the console for details on hidden cases.
+                </p>
+              </>
             )}
-          </div>
-        </div>
-
-        {/* EXPECTED OUTPUT DISPLAY */}
-        <div className="py-2">
-          <h1 className="font-semibold uppercase text-xs text-gray-500">
-            Expected Output
-          </h1>
-          <div className="bg-gray-50 rounded-lg my-2 py-3 px-4 font-mono text-sm border">
-            {JSON.stringify(visibleTestCases[isActive].expected)}
-          </div>
-        </div>
-
-        {/* ACTUAL OUTPUT DISPLAY */}
-        {currentResult && (
-          <div className="py-2">
-            <h1 className="font-semibold uppercase text-xs text-gray-500">
-              Actual Output
-            </h1>
-
-            <div
-              className={`rounded-lg my-2 py-3 px-4 font-mono text-sm border 
-              ${
-                currentResult.status === "Passed"
-                  ? "bg-green-50 border-green-200 text-green-900"
-                  : currentResult.status === "Failed"
-                    ? "bg-red-50 border-red-200 text-red-900"
-                    : "bg-yellow-50 border-yellow-200 text-yellow-900"
-              }`}
+            <Button
+              variant="outline"
+              onClick={() => setSubmissionStatus(null)}
+              className="mt-4"
             >
-              {/* If Error */}
-              {currentResult.status === "Error" ? (
-                <span className="text-red-600 whitespace-pre-wrap">
-                  {currentResult.error}
-                </span>
-              ) : (
-                /* If Success/Fail */
-                <div className="flex flex-col gap-1">
-                  <span
-                    className={`font-bold ${currentResult.status === "Passed" ? "text-green-600" : "text-red-600"}`}
+              Back to Test Cases
+            </Button>
+          </div>
+        ) : (
+          /* VIEW 2: VISIBLE TEST CASES (Standard View) */
+          <>
+            {/* Test Case Tabs */}
+            <div className="flex gap-4 mb-4 overflow-x-auto pb-2">
+              {visibleTestCases.map((_, idx) => {
+                let tabColorClass = "bg-gray-100 text-black";
+                if (isActive === idx) tabColorClass = "bg-black text-white";
+
+                // Status Indicator Logic
+                const statusColor =
+                  Output && Output[idx]?.status === "Passed"
+                    ? "text-green-700 bg-green-200 border-green-400"
+                    : Output && Output[idx]?.status === "Failed"
+                    ? "text-red-500 bg-red-200 border-red-400"
+                    : "";
+
+                return (
+                  <Button
+                    onClick={() => setIsActive(idx)}
+                    key={idx}
+                    className={`${tabColorClass} border ${statusColor} relative min-w-[100px]`}
                   >
-                    {currentResult.status}
-                  </span>
-                  {/* Only show actual value if it's not a syntax error */}
-                  {currentResult.actual !== undefined && (
-                    <span className="font-mono  ">{JSON.stringify(currentResult.actual)}</span>
+                    Case {idx + 1}
+                    {isActive === idx && (
+                      <span className="absolute top-0 right-0 -mt-2 -mr-1 text-xs font-bold text-black">
+                        ●
+                      </span>
+                    )}
+                  </Button>
+                );
+              })}
+            </div>
+
+            {/* INPUT DISPLAY */}
+            <div className="py-2">
+              <h1 className="font-semibold uppercase text-xs text-gray-500">
+                Input
+              </h1>
+              <div className="bg-gray-50 rounded-lg my-2 py-3 px-4 font-mono text-sm border">
+                {visibleTestCases.length > 0 ? (
+                  Object.entries(visibleTestCases[isActive].input).map(
+                    ([key, val], i) => (
+                      <div key={i} className="mb-1 font-mono">
+                        <span className="text-gray-500">{key} = </span>
+                        <span className="font-mono">
+                          {" "}
+                          {JSON.stringify(val)}
+                        </span>
+                      </div>
+                    )
+                  )
+                ) : (
+                  <div>No test cases available</div>
+                )}
+              </div>
+            </div>
+
+            {/* EXPECTED OUTPUT DISPLAY */}
+            <div className="py-2">
+              <h1 className="font-semibold uppercase text-xs text-gray-500">
+                Expected Output
+              </h1>
+              <div className="bg-gray-50 rounded-lg my-2 py-3 px-4 font-mono text-sm border">
+                {JSON.stringify(visibleTestCases[isActive].expected)}
+              </div>
+            </div>
+
+            {/* ACTUAL OUTPUT DISPLAY (Only after Run) */}
+            {currentResult && (
+              <div className="py-2 animate-in slide-in-from-top-2">
+                <h1 className="font-semibold uppercase text-xs text-gray-500">
+                  Actual Output
+                </h1>
+
+                <div
+                  className={`rounded-lg my-2 py-3 px-4 font-mono text-sm border 
+                  ${
+                    currentResult.status === "Passed"
+                      ? "bg-green-50 border-green-200 text-green-900"
+                      : currentResult.status === "Failed"
+                      ? "bg-red-50 border-red-200 text-red-900"
+                      : "bg-yellow-50 border-yellow-200 text-yellow-900"
+                  }`}
+                >
+                  {currentResult.status === "Error" ? (
+                    <span className="text-red-600 whitespace-pre-wrap">
+                      {currentResult.error}
+                    </span>
+                  ) : (
+                    <div className="flex flex-col gap-1">
+                      <span
+                        className={`font-bold ${
+                          currentResult.status === "Passed"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {currentResult.status}
+                      </span>
+                      {currentResult.actual !== undefined && (
+                        <span className="font-mono">
+                          {JSON.stringify(currentResult.actual)}
+                        </span>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
