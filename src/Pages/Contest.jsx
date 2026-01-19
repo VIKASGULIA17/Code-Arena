@@ -36,7 +36,7 @@ const Contest = () => {
               {/* imgage  */}
               <img
                 src="https://images.unsplash.com/photo-1757101782354-d7988295617c"
-                className="h-60 w-full object-cover "
+                className="h-60 lg:h-auto w-full object-cover "
                 alt=""
               />
               <p className="absolute bottom-7 left-13 bg-linear-to-r from-blue-400 via-purple-500 to-pink-600 text-white  px-3 py-1 rounded-2xl">

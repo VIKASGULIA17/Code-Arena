@@ -43,7 +43,7 @@ const LanguageSelector = ({
 
   return (
     <div className="h-15 flex border-b w-full">
-      <div className="mx-6 py-3 ">
+      <div className="pl-3 lg:px-6 py-3 ">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button className="flex items-center capitalize gap-2 border-2">

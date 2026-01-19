@@ -1,7 +1,7 @@
 export const dsaProblems = [
     {
       id: 1,
-      status: true,
+      status: false,
       title: "Two Sum",
       tags: ["Array", "Hash Table"],
       difficulty: "Easy",
@@ -9,7 +9,7 @@ export const dsaProblems = [
     },
     {
       id: 2,
-      status: false,
+      status: true,
       title: "Add Two Numbers",
       tags: ["Linked List", "Math", "Recursion"],
       difficulty: "Medium",
@@ -17,7 +17,7 @@ export const dsaProblems = [
     },
     {
       id: 3,
-      status: true,
+      status: false,
       title: "Longest Substring Without Repeating Characters",
       tags: ["String", "Sliding Window"],
       difficulty: "Medium",

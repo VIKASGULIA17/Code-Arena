@@ -19,7 +19,7 @@ const Navbar = () => {
     { label: "Home", path: "/" },
     { label: "Problem Arena", path: "/problem" },
     { label: "Contest", path: "/Contest" },
-    { label: "Community", path: "/Community" },
+    { label: "algo visualizer", path: "/algovisualizer" },
     { label: "Interview", path: "/interview" },
     { label: "Profile", path: "/profile" },
   ];

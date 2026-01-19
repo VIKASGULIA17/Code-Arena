@@ -19,7 +19,7 @@ const ProblemDetails = () => {
   const { id } = useParams();
 
   const problem = problemInfo[id];
-  const [currentTopBar, setcurrentTopBar] = useState("Solution");
+  const [currentTopBar, setcurrentTopBar] = useState("Discussion");
 
 
   if (!problem) {

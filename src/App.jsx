@@ -5,6 +5,8 @@ import Problems from './Pages/Problems'
 // import About from './Pages/About'
 import ProblemDetails from './components/problem/ProblemDetails'
 import Contest from './Pages/Contest'
+import Profile from './Pages/Profile'
+import AlgoVisualizer from './Pages/AlgoVisualizer'
 
 const App = () => {
   return (
@@ -14,6 +16,8 @@ const App = () => {
       <Route path='problem' element={<Problems />} />
       <Route path='/problem/:id' element={<ProblemDetails />} />
       <Route path='contest' element={<Contest />} />
+      <Route path='profile' element={<Profile />} />
+      <Route path='algovisualizer' element={<AlgoVisualizer />} />
       
       {/* <Route path='/about' element={<About />} /> */}
     </Routes>
