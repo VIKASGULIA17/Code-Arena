@@ -57,7 +57,7 @@ const CodeEditor = ({ problemId }) => {
       />
       <div className="h-[92.2vh] overflow-scroll select-text ">
         <Editor
-          height="65vh"
+          height="50vh"
           language={Language[0]}
           
           defaultValue={template} 

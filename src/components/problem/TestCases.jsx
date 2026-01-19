@@ -144,7 +144,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
   const currentResult = Output && Output[isActive] ? Output[isActive] : null;
 
   return (
-    <div className="h-60 flex flex-col">
+    <div className="h-[45vh] flex flex-col">
       {/* HEADER */}
       <div className="flex items-center justify-between px-6 py-3 border-y-2 bg-white">
         <h1 className="font-bold text-gray-700">TestCases</h1>

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,26 +6,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import { ChevronDown, Rotate3D, RotateCcw, RotateCw } from "lucide-react";
+import { ChevronDown, RotateCw } from "lucide-react";
 import Stopwatch from "../others/StopWatch";
-import { getProblemTemplate } from "../../data/problemTemplates";
+import { driverCode_Template } from "../../data/driverCodeTemplate";
 
-
-const LanguageSelector = ({ Language, setLanguage, LanguageList, setCode ,problemId ,setOutput,onReset}) => {
+const LanguageSelector = ({
+  Language,
+  setLanguage,
+  LanguageList,
+  setCode,
+  problemId,
+  setOutput,
+  onReset,
+}) => {
+  const [codeResetFlag, setcodeResetFlag] = useState(false);
 
   const handleCodeReset = () => {
     if (onReset) {
       onReset();
     }
     setcodeResetFlag(true);
-    setOutput(null)
+    setOutput(null);
 
     setTimeout(() => {
-      setcodeResetFlag(false)
+      setcodeResetFlag(false);
     }, 2000);
   };
 
-  const [codeResetFlag, setcodeResetFlag] = useState(false);
+  const handleLanguageChange = (lang, version) => {
+    setLanguage([lang, version]);
+
+    const newBoilerplate =
+      driverCode_Template[problemId]?.[lang]?.boilerplate || "";
+    setCode(newBoilerplate);
+  };
 
   return (
     <div className="h-15 flex border-b w-full">
@@ -42,19 +56,16 @@ const LanguageSelector = ({ Language, setLanguage, LanguageList, setCode ,proble
           </DropdownMenuTrigger>
 
           <DropdownMenuContent>
-            {LanguageList.map(([lang, version],i) => {
-              const isTrue = lang === Language[0];
+            {LanguageList.map(([lang, version], i) => {
+              const isSelected = lang === Language[0];
 
               return (
-                !isTrue && (
+                !isSelected && (
                   <div
-                  key={i}
-                    onClick={() => {
-                      setLanguage([lang, version]);
-                      setCode(getProblemTemplate(problemId,lang))
-                    }}
+                    key={i}
+                    onClick={() => handleLanguageChange(lang, version)}
                   >
-                    <DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
                       <p className="capitalize">{lang}</p>
                       <p className="text-gray-500 text-[13px] font-normal">
                         {version}
@@ -66,18 +77,22 @@ const LanguageSelector = ({ Language, setLanguage, LanguageList, setCode ,proble
             })}
           </DropdownMenuContent>
         </DropdownMenu>
-      
       </div>
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-5">
-
-        <RotateCw
-          size={15}
-          className="cursor-pointer text-gray-700"
-          onClick={handleCodeReset}
+          <RotateCw
+            size={15}
+            className="cursor-pointer text-gray-700 hover:rotate-180 transition-transform duration-500"
+            onClick={handleCodeReset}
           />
-       <p className={`duration-500 ${codeResetFlag?'block ':'hidden ' } bg-green-200 rounded-sm px-2 py-1 text-green-600 border-green-400 border`}>Code Reset SuccessFully!</p> 
-          </div>
+          <p
+            className={`duration-500 ${
+              codeResetFlag ? "opacity-100" : "opacity-0"
+            } bg-green-200 rounded-sm px-2 py-1 text-green-600 border-green-400 border text-xs`}
+          >
+            Code Reset Successfully!
+          </p>
+        </div>
         <Stopwatch />
       </div>
     </div>
