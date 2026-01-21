@@ -46,7 +46,6 @@ export function GraphVisualizer() {
     const newEdges = []
     const nodeCount = 12
 
-    // Generate nodes in a nice layout
     const positions = [
       { x: 100, y: 150 },
       { x: 200, y: 80 },

@@ -7,19 +7,19 @@ import { dsaProblems } from "../../data/dsaProblem";
 import Problems from "../../Pages/Problems";
 
 const ResultSection = ({ filters, filteredProblems }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9;
+  const [currentPage, setCurrentPage] = useState(1); // this s for the problem list 
+  const itemsPerPage = 9; // currenlt showing only 9 problems because of the page height
 
-  useEffect(() => {
+  useEffect(() => { //added because if user search any new problem ,then it will go to first page 
     setCurrentPage(1);
   }, [filters]);
 
-  const startElement = (currentPage - 1) * itemsPerPage;
-  const lastElement = startElement + itemsPerPage;
+  const startElement = (currentPage - 1) * itemsPerPage; //1st index
+  const lastElement = startElement + itemsPerPage; //last index
 
-  const TotalPages = Math.ceil(filteredProblems.length / itemsPerPage);
+  const TotalPages = Math.ceil(filteredProblems.length / itemsPerPage); //total count
 
-  const currElements = filteredProblems.slice(startElement, lastElement);
+  const currElements = filteredProblems.slice(startElement, lastElement); // problem array 
 
   return (
     <div className="w-full mt-10 rounded-t-xl h-auto overflow-x-auto shadow-2xl">

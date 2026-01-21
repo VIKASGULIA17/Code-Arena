@@ -40,6 +40,8 @@ const mockDiscussions = [
 ]
 
 const Composer = () => {
+
+  //might add some usestate in future (chats)
   return (
     <div className="w-full bg-white/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
       <div className="flex items-start gap-4">

@@ -23,16 +23,37 @@ import ContestList from "../components/Contest/ContestList";
 import { useState } from "react";
 
 const Contest = () => {
+
+  //ye abhi static h ,dynamic krna h isko 
+
+  // features left to apply 
+
+  // 1st - jo sabse recent contest hone wala h  ,display that info into the big div  -line 40
+
+  //2nd - when clicked on register ,register that user for contest and make it change 
+
+  //3rd - when contest is ongoing , show ongoing and for that contest fetch 3 question ,1 easy ,1 medium ,1 hard  - duration 1 hour 
+
+  //4th - handle rank list after contest according to time 
+
+  // 5th - maintain the timespan and points earned by the user  (even millisecond just to be secure )
+
+  // 6th - blocking access of the user on the screen the contest end ( maybe even close the whole contest editor )
+
+  // 7th - maintaining the contest history of the user and his contest rating 
+
+
+
   return (
     <div className="w-full  bg-gray-100 overflow-x-hidden">
       <Navbar />
       <div className="w-full h-full lg:flex mt-26 px-4 lg:mx-10">
         <div className="w-full lg:w-[70%]  ">
           {/* left div -  */}
-
-          <div className="flex flex-col lg:flex-row w-full rounded-2xl shadow-xl bg-white overflow-hidden">
+          {/*most recent-contest div  */}
+          <div className="flex  flex-col lg:flex-row w-full rounded-2xl shadow-xl bg-white overflow-hidden">
             {/* card div  */}
-            <div className="lg:w-[25%]  relative">
+            <div className="recent-contest  lg:w-[25%] relative">
               {/* imgage  */}
               <img
                 src="https://images.unsplash.com/photo-1757101782354-d7988295617c"

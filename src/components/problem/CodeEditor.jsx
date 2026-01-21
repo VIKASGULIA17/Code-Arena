@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import LanguageSelector from "./LanguageSelector";
 import { LANGUAGE_VERSIONS } from "../../data/constants";
-import { CODE_SNIPPETS } from "../../data/constants";
 import TestCases from "./TestCases";
 import {
   getProblemTemplate,

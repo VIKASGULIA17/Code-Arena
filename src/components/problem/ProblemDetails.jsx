@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
-  ArrowLeft,
-  Dock,
-  File,
   FileText,
   Lightbulb,
   MessagesSquare,
@@ -18,25 +15,27 @@ import Discussion from "./problemPages/Discussion";
 const ProblemDetails = () => {
   const { id } = useParams();
 
-  const problem = problemInfo[id];
-  const [currentTopBar, setcurrentTopBar] = useState("Discussion");
+  const problem = problemInfo[id]; //to get problem info(desciption on the left)
+  const [currentTopBar, setcurrentTopBar] = useState("Description"); //to manage between description ,solution and discussion 
 
 
   if (!problem) {
-    return <div className="p-10 text-center">Problem not found!</div>;
+    return <div className="p-10 text-center">Problem not found!</div>; 
   }
-  const TabButton = ({ label, icon: Icon }) => {
+
+
+  const TabButton = ({ label, icon: Icon }) => { //its for description ,solution and discussion (gradient underline)
     const isActive = currentTopBar === label;
     return (
       <Button
         variant="ghost"
         onClick={() => setcurrentTopBar(label)}
         className={`relative rounded-none h-10 px-4 font-semibold hover:bg-transparent transition-all gap-2 ${
-          isActive ? "text-gray-900" : "text-gray-500"
+          isActive ? "text-pink-500" : "text-gray-500"
         }`}
       >
         <Icon size={16} />
-        <h1>{label}</h1>
+        <h1 >{label}</h1>
         {/* Gradient Underline */}
         {isActive && (
           <div className="absolute bottom-0 left-0 w-full h-0.5  bg-linear-to-r from-blue-600 via-purple-600 to-pink-600" />

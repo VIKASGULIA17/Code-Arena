@@ -39,12 +39,17 @@ const formatText = (text) => {
 };
 
 const Solution = ({ id }) => {
-  const problemInfo = problemApproaches[id];
-  const problemCode = problemSolutions[id];
-  const [active, setactive] = useState("javascript");
-  const [currentCode, setcurrentCode] = useState(problemCode[active]);
+  const problemInfo = problemApproaches[id]; // solution explanation object
+  const problemCode = problemSolutions[id]; //code solution of current problem
 
-  const copyToClipboard = () => {
+
+  if (!problemInfo || !problemCode) { //returning early if solutoin is not there
+    return <div className="p-10 text-center">Problem Solution not found!</div>; 
+  }
+  const [active, setactive] = useState("javascript"); // this is to select language of the code solution 
+  const [currentCode, setcurrentCode] = useState(problemCode[active]); // this is the code which will be displayed on the code editor 
+
+  const copyToClipboard = () => { // copy to clipboard (code solution )
     const text = currentCode;
 
     navigator.clipboard
@@ -77,7 +82,10 @@ const Solution = ({ id }) => {
           {problemInfo.algorithm.map((obj, idx) => {
             return (
               <div key={idx} className="flex items-center py-2 gap-5">
-                <p className="rounded-full h-10 text-center w-10 flex items-center justify-center border bg-white px-2 "> {idx + 1}</p>
+                <p className="rounded-full h-10 text-center w-10 flex items-center justify-center border bg-white px-2 ">
+                  {" "}
+                  {idx + 1}
+                </p>
                 <p className="text-gray-600">{formatText(obj)}</p>
               </div>
             );
@@ -136,10 +144,9 @@ const Solution = ({ id }) => {
               })}
             </div>
             <div className="cursor-pointer" onClick={copyToClipboard}>
-
-            <Kbd variant="outline" size='md'>
-              <Copy size={25} />
-            </Kbd>
+              <Kbd variant="outline" size="md">
+                <Copy size={25} />
+              </Kbd>
             </div>
           </div>
           <Editor

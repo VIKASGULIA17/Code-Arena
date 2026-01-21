@@ -20,11 +20,6 @@ const algorithmInfo = {
     complexity: "O(n)",
     description: "n! = n × (n-1)!, demonstrates linear recursion",
   },
-  hanoi: {
-    name: "Tower of Hanoi",
-    complexity: "O(2^n)",
-    description: "Move disks between pegs following rules",
-  },
 }
 
 export function RecursionVisualizer() {
@@ -35,8 +30,6 @@ export function RecursionVisualizer() {
   const [inputValue, setInputValue] = useState("6")
   const [callStack, setCallStack] = useState([])
   const [totalCalls, setTotalCalls] = useState(0)
-  const [hanoiDisks, setHanoiDisks] = useState([])
-  const [hanoiMoves, setHanoiMoves] = useState(0)
   const stopRef = useRef(false)
   const pauseRef = useRef(false)
   const callIdRef = useRef(0)
@@ -125,54 +118,6 @@ export function RecursionVisualizer() {
     return result
   }
 
-  const initHanoi = (n) => {
-    const disks = []
-    for (let i = n; i >= 1; i--) {
-      disks.push({ size: i, peg: 0 })
-    }
-    setHanoiDisks(disks)
-    setHanoiMoves(0)
-  }
-
-  const moveDisk = async (from, to) => {
-    if (stopRef.current) return
-    await waitWhilePaused()
-
-    setHanoiDisks((prev) => {
-      const disks = [...prev]
-      const diskIndex = disks.findIndex(
-        (d) => d.peg === from && !disks.some((other) => other.peg === from && other.size < d.size),
-      )
-      if (diskIndex !== -1) {
-        disks[diskIndex] = { ...disks[diskIndex], peg: to }
-      }
-      return disks
-    })
-    setHanoiMoves((prev) => prev + 1)
-    await delay(Math.max(100, 400 - speed * 4))
-  }
-
-  const hanoi = async (n, from, to, aux) => {
-    if (stopRef.current || n === 0) return
-
-    const frameId = await pushToStack("hanoi", `n=${n}, ${from}→${to}`)
-    if (frameId === -1) return
-
-    await updateStackFrame(frameId, { state: "computing" })
-
-    await hanoi(n - 1, from, aux, to)
-    if (stopRef.current) return
-
-    await moveDisk(from, to)
-    if (stopRef.current) return
-
-    await updateStackFrame(frameId, { state: "complete" })
-
-    await hanoi(n - 1, aux, to, from)
-    if (stopRef.current) return
-
-    await popFromStack(frameId)
-  }
 
   const runAlgorithm = async () => {
     const n = Number.parseInt(inputValue)
@@ -185,9 +130,6 @@ export function RecursionVisualizer() {
     setCallStack([])
     setTotalCalls(0)
 
-    if (algorithm === "hanoi") {
-      initHanoi(Math.min(n, 6))
-    }
 
     await delay(100)
 
@@ -198,9 +140,7 @@ export function RecursionVisualizer() {
       case "factorial":
         await factorial(Math.min(n, 12))
         break
-      case "hanoi":
-        await hanoi(Math.min(n, 6), 0, 2, 1)
-        break
+
       default:
         break
     }
@@ -220,8 +160,6 @@ export function RecursionVisualizer() {
     setIsRunning(false)
     setIsPaused(false)
     setCallStack([])
-    setHanoiDisks([])
-    setHanoiMoves(0)
   }
 
   const getFrameColor = (state) => {
@@ -245,8 +183,6 @@ export function RecursionVisualizer() {
         return 10
       case "factorial":
         return 12
-      case "hanoi":
-        return 6
       default:
         return 10
     }
@@ -333,12 +269,7 @@ export function RecursionVisualizer() {
               <span className="text-muted-foreground">Total Calls:</span>
               <span className="font-mono text-chart-1">{totalCalls}</span>
             </div>
-            {algorithm === "hanoi" && (
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Moves:</span>
-                <span className="font-mono text-chart-3">{hanoiMoves}</span>
-              </div>
-            )}
+            
           </CardContent>
         </Card>
       </div>
@@ -377,64 +308,7 @@ export function RecursionVisualizer() {
           </CardContent>
         </Card>
 
-        {algorithm === "hanoi" ? (
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base text-card-foreground">Tower of Hanoi</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-64 md:h-80 flex items-end justify-around px-4">
-                {[0, 1, 2].map((peg) => {
-                  const pegsDisks = hanoiDisks.filter((d) => d.peg === peg).sort((a, b) => b.size - a.size)
-
-                  return (
-                    <div key={peg} className="flex flex-col items-center">
-                      <div className="relative w-32 h-48 flex flex-col-reverse items-center">
-                        {/* Peg */}
-                        <div className="absolute bottom-0 w-2 h-40 bg-muted-foreground rounded-t" />
-                        {/* Base */}
-                        <div className="w-28 h-2 bg-muted-foreground rounded" />
-                        {/* Disks */}
-                        <div className="absolute bottom-2 flex flex-col-reverse items-center gap-1">
-                          {pegsDisks.map((disk) => (
-                            <div
-                              key={disk.size}
-                              className="h-5 rounded transition-all duration-300"
-                              style={{
-                                width: `${disk.size * 18 + 20}px`,
-                                backgroundColor: `hsl(${disk.size * 40}, 70%, 50%)`,
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mt-2 text-sm text-muted-foreground">
-                        {peg === 0 ? "Source" : peg === 1 ? "Auxiliary" : "Target"}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        ) : (
-          <Card className="bg-card border-border">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base text-card-foreground">Visualization</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-64 md:h-80 flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <div className="text-6xl font-mono text-primary">{algorithm === "fibonacci" ? "F" : "n!"}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {algorithm === "fibonacci" ? "F(n) = F(n-1) + F(n-2)" : "n! = n × (n-1)!"}
-                  </div>
-                  <div className="text-xs text-muted-foreground">Watch the call stack on the left</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        
       </div>
 
       <div className="flex flex-wrap justify-center gap-4 text-xs">

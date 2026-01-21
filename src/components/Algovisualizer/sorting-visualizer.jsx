@@ -544,7 +544,7 @@ export function SortingVisualizer() {
               <span className="text-muted-foreground">Sorted</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded bg-chart-4" />
+              <div className="w-3 h-3 rounded bg-chart-5" />
               <span className="text-muted-foreground">Pivot</span>
             </div>
           </div>

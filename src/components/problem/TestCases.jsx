@@ -7,20 +7,22 @@ import { driverCode_Template } from "../../data/driverCodeTemplate";
 
 const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
   // data variables
-  const [isError, setisError] = useState(false);
-  const [isActive, setIsActive] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setisError] = useState(false); // for any error in execution ,so that i can show it in red or green 
+  const [isActive, setIsActive] = useState(0); //to display current testcase info 
+  const [isLoading, setIsLoading] = useState(false); // when clicked on submit button 
   const [isSubmitting, setIsSubmitting] = useState(false); // New state for submit loading
   const [submissionStatus, setSubmissionStatus] = useState(null); // To show "Accepted" or "Wrong Answer"
 
-  const currentProblemTestcases = testCases[problemId] || {
+  const [firstFailedTestCase, setfirstFailedTestCase] = useState([])
+
+  const currentProblemTestcases = testCases[problemId] || { //just in case there are no testcases 
     visible: [],
     hidden: [],
   };
-  const visibleTestCases = currentProblemTestcases.visible;
-  const hiddenTestCases = currentProblemTestcases.hidden; // Fixed typo
+  const visibleTestCases = currentProblemTestcases.visible; // for run
+  const hiddenTestCases = currentProblemTestcases.hidden; //for submit
 
-  // --- RUN CODE (Visible Cases) ---
+  // RUN CODE (Visible Cases) 
   const runCode = async () => {
     const userCode = value;
     const lang = Language[0];
@@ -43,7 +45,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
 
       // 1. Generate code using VISIBLE cases
       const fullSourceCode = driverCode(userCode, visibleTestCases);
-
+        // this will get data from the api
       const data = await executeCode(Language, fullSourceCode);
 
       if (data.run.stderr) {
@@ -70,7 +72,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
     }
   };
 
-  // --- SUBMIT CODE (Hidden Cases) ---
+  //  SUBMIT CODE (Hidden Cases)
   const submitCode = async () => {
     const userCode = value;
     const lang = Language[0];
@@ -122,12 +124,13 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
         if (allPassed) {
           setSubmissionStatus("Accepted");
         } else {
-          // Find first failure to log or display if needed
+          //  first failure to display if needed
           const firstFail = parsedHiddenResults.find(
             (res) => res.status === "Failed"
           );
           setSubmissionStatus(`Wrong Answer`);
-          console.log("Failed at input:", firstFail?.input);
+          setfirstFailedTestCase(firstFail)
+          console.log("Failed at input:", firstFail);
         }
       } catch (err) {
         setisError(true);
@@ -184,11 +187,57 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
               <>
                 <XCircle className="w-16 h-16 text-red-500" />
                 <h2 className="text-3xl font-bold text-red-600">
-                  {submissionStatus}
+                  {submissionStatus==="Accepted" && "Accepted"}
                 </h2>
-                <p className="text-gray-500">
-                  Check the console for details on hidden cases.
-                </p>
+
+                {firstFailedTestCase && hiddenTestCases && (
+                  <div className="w-full max-w-2xl bg-gray-50 rounded-xl border border-red-100 p-6 shadow-sm">
+                    <h3 className="text-red-600 font-bold mb-4 flex items-center gap-2">
+                      <XCircle size={18} /> Failed Test Case
+                    </h3>
+
+                    {/* INPUT */}
+                    <div className="mb-4">
+                      <p className="text-xs font-bold text-gray-500 uppercase mb-1">
+                        Input
+                      </p>
+                      <div className="bg-white border border-gray-200 p-3 rounded-lg font-mono text-sm text-gray-700">
+                        {hiddenTestCases[firstFailedTestCase.id - 1] ? (
+                          Object.entries(
+                            hiddenTestCases[firstFailedTestCase.id - 1].input
+                          ).map(([key, val]) => (
+                            <div key={key}>
+                              <span className="text-gray-500">{key} = </span>
+                              <span>{JSON.stringify(val)}</span>
+                            </div>
+                          ))
+                        ) : (
+                          <span>Hidden Input</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* OUTPUTS GRID */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-xs font-bold text-gray-500 uppercase mb-1">
+                          Output
+                        </p>
+                        <div className="bg-red-50 border border-red-200 p-3 rounded-lg font-mono text-sm text-red-700">
+                          {JSON.stringify(firstFailedTestCase.actual)}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-gray-500 uppercase mb-1">
+                          Expected
+                        </p>
+                        <div className="bg-green-50 border border-green-200 p-3 rounded-lg font-mono text-sm text-green-700">
+                          {JSON.stringify(firstFailedTestCase.expected)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </>
             )}
             <Button
