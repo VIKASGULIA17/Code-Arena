@@ -172,14 +172,18 @@ const ContestList = () => {
                     </div>
 
                     {obj.status === "Finished" ? (
-                      <Button className="px-8 bg-brand-gradient font-bold">
-                        Virtual{" "}
-                      </Button>
-                    ) : (
-                      <Button className="px-8 bg-brand-gradient font-bold">
-                        Register
-                      </Button>
-                    )}
+  <Button className="px-8 bg-brand-gradient font-bold">
+    Virtual
+  </Button>
+) : obj.status === "Ongoing" ? (
+  <Button className="px-8 bg-brand-gradient font-bold">
+    Enter
+  </Button>
+) : (
+  <Button className="px-8 bg-brand-gradient font-bold">
+    Register
+  </Button>
+)}
                   </div>
                 </div>
               </div>

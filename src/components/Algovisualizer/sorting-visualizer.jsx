@@ -42,18 +42,18 @@ const algorithmInfo = {
 }
 
 export function SortingVisualizer() {
-  const [array, setArray] = useState([])
-  const [algorithm, setAlgorithm] = useState("bubble")
-  const [speed, setSpeed] = useState(50)
-  const [size, setSize] = useState(30)
-  const [isRunning, setIsRunning] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
-  const [comparisons, setComparisons] = useState(0)
-  const [swaps, setSwaps] = useState(0)
+  const [array, setArray] = useState([]) //array that will be sorted [val and state]
+  const [algorithm, setAlgorithm] = useState("bubble") //default sorting
+  const [speed, setSpeed] = useState(0) //speed for sorting
+  const [size, setSize] = useState(30) //size of the array 
+  const [isRunning, setIsRunning] = useState(false) // currently running
+  const [isPaused, setIsPaused] = useState(false) //pasused
+  const [comparisons, setComparisons] = useState(0) //total no. of comparison to show
+  const [swaps, setSwaps] = useState(0) //no of swaps
   const stopRef = useRef(false)
   const pauseRef = useRef(false)
 
-  const generateArray = useCallback(() => {
+  const generateArray = useCallback(() => { //creating array with random value
     const newArray = []
     for (let i = 0; i < size; i++) {
       newArray.push({
@@ -469,7 +469,7 @@ export function SortingVisualizer() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm text-muted-foreground">Speed: {speed}%</label>
-                <Slider value={[speed]} onValueChange={([v]) => setSpeed(v)} min={1} max={100} step={1} />
+                <Slider value={[speed]} onValueChange={([v]) => setSpeed(v)} min={-50} max={50} step={1} />
               </div>
               <div className="space-y-2">
                 <label className="text-sm text-muted-foreground">Array Size: {size}</label>
@@ -520,7 +520,7 @@ export function SortingVisualizer() {
                 className={cn("transition-all duration-75 rounded-t-sm", getBarColor(bar.state))}
                 style={{
                   height: `${bar.value}%`,
-                  width: `${Math.max(100 / array.length - 1, 2)}%`,
+                  width: `${Math.max(100 / array.length - 1, 8)}%`,
                 }}
               />
             ))}

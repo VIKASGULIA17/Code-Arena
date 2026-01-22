@@ -44,7 +44,7 @@ const algorithmInfo = {
 export function TreeVisualizer() {
   const [root, setRoot] = useState(null)
   const [algorithm, setAlgorithm] = useState("inorder")
-  const [speed, setSpeed] = useState(50)
+  const [speed, setSpeed] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [inputValue, setInputValue] = useState("")
@@ -390,7 +390,7 @@ export function TreeVisualizer() {
 
             <div className="space-y-2">
               <label className="text-sm text-muted-foreground">Speed: {speed}%</label>
-              <Slider value={[speed]} onValueChange={([v]) => setSpeed(v)} min={1} max={100} step={1} />
+              <Slider value={[speed]} onValueChange={([v]) => setSpeed(v)} min={-50} max={50} step={1} />
             </div>
           </CardContent>
         </Card>

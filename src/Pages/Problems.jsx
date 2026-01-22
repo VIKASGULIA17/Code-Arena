@@ -13,33 +13,47 @@ import {
 import SearchInterface from "../components/problem/SearchInterface";
 import SessionCard from "../components/others/CircularProgress";
 import ResultSection from "../components/problem/ResultSection";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { dsaProblems } from "../data/dsaProblem";
 import Countdown from "../components/others/CountDown";
 import Footer from "../components/Footer";
 
 const Problems = () => {
+  const [potd, setpotd] = useState(null);
 
-  //thing to apply 
-  // 1st- when submitted ,if passed all the test cases ,mark it true 
-  // 2nd  - pass random problem info to problem of the day ,will just pass the shuffle function on the useeffect for now 
+  const problemOfTheDay = () => {
+    const id = Math.round(Math.random() * 100);
+
+    const problem = id % dsaProblems.length;
+    setpotd(dsaProblems[problem]);
+    console.log(problem);
+  };
+  useEffect(() => {
+    problemOfTheDay();
+  }, [dsaProblems]);
+
+  //thing to apply
+  // 1st- when submitted ,if passed all the test cases ,mark it true
+  // 2nd  - pass random problem info to problem of the day ,will just pass the shuffle function on the useeffect for now
 
   const Problem_Progress = [
     { id: 1, title: "Easy", progress: 56 },
     { id: 2, title: "Medium", progress: 78 },
     { id: 3, title: "hard", progress: 34 },
   ];
-  
-  const [filters, setfilters] = useState({ //this si for the search and the filter to filter out questions 
+
+  const [filters, setfilters] = useState({
+    //this si for the search and the filter to filter out questions
     search: "",
     Difficulty: "All",
     Tags: "All",
     topics: "All",
   });
 
-  const filteredProblems = useMemo(() => { // filtering problems in memory according to the questions 
-    // IMPORTANT --- topic wala filter add karna h , for now bus dsa h ,or problems bhi add krni h -- 
-    return dsaProblems.filter((problem) => { 
+  const filteredProblems = useMemo(() => {
+    // filtering problems in memory according to the questions
+    // IMPORTANT --- topic wala filter add karna h , for now bus dsa h ,or problems bhi add krni h --
+    return dsaProblems.filter((problem) => {
       //checking searches
       const matchSearches = problem.title
         .toLowerCase()
@@ -59,10 +73,10 @@ const Problems = () => {
     });
   }, [filters]);
 
-
   const navigate = useNavigate(); // path ke liye
-  
-  const handleShuffle = (filteredResults) => { //random problem open krne ke liye 
+
+  const handleShuffle = (filteredResults) => {
+    //random problem open krne ke liye
     if (filteredResults.length > 0) {
       const randomIndex = Math.floor(Math.random() * filteredResults.length);
       const randomProblem = filteredResults[randomIndex];
@@ -80,8 +94,10 @@ const Problems = () => {
         <div className="w-full lg:w-[70%] px-5 lg:px-0 my-6 ">
           <div>
             {/* left div  */}
-            <span className="
-            font-bold  bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent text-5xl ">
+            <span
+              className="
+            font-bold  bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent text-5xl "
+            >
               Problem Set
             </span>
             <h4 className="text-xl pt-3 text-gray-700  ">
@@ -104,9 +120,11 @@ const Problems = () => {
           />
         </div>
 
-        <div className="
+        <div
+          className="
         px-6 lg:px-0 my-10
-        lg:w-[20%] flex flex-col">
+        lg:w-[20%] flex flex-col"
+        >
           <div className=" shadow-2xl bg-linear-to-br rounded-2xl from-blue-500 via-purple-500 to-pink-600 ">
             {/* right div  */}
 
@@ -122,18 +140,23 @@ const Problems = () => {
               </div>
 
               <h3 className="px-2 text-3xl font-bold text-white ">
-                Trapping Rain water
+                {potd ? potd.title : ""}
               </h3>
               <div className="flex gap-4 items-center">
                 <button className="bg-red-500 px-3 py-1 rounded-xl text-white">
-                  Hard
+                  {potd ? potd.difficulty : ""}
                 </button>
                 <p className="text-white/80 text-xl">+10 Points</p>
               </div>
-              <button className="flex w-full items-center justify-center text-center rounded-lg px-3 py-2 bg-white text-xl font-bold text-purple-500">
-                <p>Solve now</p>
-                <MoveRight />
-              </button>
+              <Link
+                to={`/problem/${potd?potd.id:''}`}
+                className="hover:text-blue-600 transition-colors cursor-pointer"
+              >
+                <button className="flex w-full cursor-pointer items-center justify-center text-center rounded-lg px-3 py-2 bg-white text-xl font-bold text-purple-500">
+                  <p>Solve now</p>
+                  <MoveRight />
+                </button>
+              </Link>
             </div>
           </div>
           <div className="w-20 h-20 ">
@@ -185,7 +208,6 @@ const Problems = () => {
             </div>
           </div>
         </div>
-
       </div>
       <Footer />
     </div>

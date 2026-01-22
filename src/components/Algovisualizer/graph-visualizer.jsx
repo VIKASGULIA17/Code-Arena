@@ -30,7 +30,7 @@ export function GraphVisualizer() {
   const [nodes, setNodes] = useState([])
   const [edges, setEdges] = useState([])
   const [algorithm, setAlgorithm] = useState("dijkstra")
-  const [speed, setSpeed] = useState(50)
+  const [speed, setSpeed] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [startNode, setStartNode] = useState(null)
@@ -485,7 +485,7 @@ export function GraphVisualizer() {
 
             <div className="space-y-2">
               <label className="text-sm text-muted-foreground">Speed: {speed}%</label>
-              <Slider value={[speed]} onValueChange={([v]) => setSpeed(v)} min={1} max={100} step={1} />
+              <Slider value={[speed]} onValueChange={([v]) => setSpeed(v)} min={-50} max={100} step={1} />
             </div>
           </CardContent>
         </Card>

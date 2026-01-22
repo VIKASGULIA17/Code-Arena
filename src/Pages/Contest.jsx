@@ -20,7 +20,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ContestList from "../components/Contest/ContestList";
-import { useState } from "react";
 
 const Contest = () => {
 
@@ -40,9 +39,9 @@ const Contest = () => {
 
   // 6th - blocking access of the user on the screen the contest end ( maybe even close the whole contest editor )
 
-  // 7th - maintaining the contest history of the user and his contest rating 
+  // 7th - maintaining the contest history of the user and his contest rating. 
 
-
+  
 
   return (
     <div className="w-full  bg-gray-100 overflow-x-hidden">
