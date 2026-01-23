@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { useMenu } from '../../context/LoginMenuContext'
 import { FaGoogle, FaDiscord, FaTwitch, FaFacebook, FaApple } from "react-icons/fa";
 import Navbar from '../../components/Navbar';
 
@@ -8,7 +7,7 @@ const Signup = () => {
     return (
         <div>
             <Navbar />
-            <div className={`w-full h-screen absolute top-0 left-0 duration-1000   bg-white/50 z-20`}>
+            <div className={`w-full h-screen absolute top-10 left-0 duration-1000   bg-white/50 z-20`}>
                 <div className='absolute 
                 flex flex-col w-full
                 lg:top-20 lg:left-120  lg:flex-row lg:h-[80vh] lg:w-[55vw]'>
