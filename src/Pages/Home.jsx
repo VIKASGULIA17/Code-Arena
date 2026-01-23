@@ -10,7 +10,6 @@ const Home = () => {
      <div className='overflow-hidden'>
       <Navbar />
       <HeroSection />
-      {/* <MiddleSection /> */}
       <Footer />
       </div>
     

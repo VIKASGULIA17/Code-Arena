@@ -7,8 +7,8 @@ const Signup = () => {
     return (
         <div>
             <Navbar />
-            <div className={`w-full h-screen absolute top-10 left-0 duration-1000   bg-white/50 z-20`}>
-                <div className='absolute 
+            <div className={`w-full h-screen  absolute top-10 left-0 duration-1000   bg-white/50 z-20`}>
+                <div className='absolute shadow-2xl
                 flex flex-col w-full
                 lg:top-20 lg:left-120  lg:flex-row lg:h-[80vh] lg:w-[55vw]'>
                     <div className='w-full h-full '>

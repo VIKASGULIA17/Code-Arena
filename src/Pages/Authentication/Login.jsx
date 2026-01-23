@@ -15,7 +15,7 @@ const Login = () => {
          `}>
             <Navbar />
 
-            <div className='h-[40vh]  border border-cardbg rounded-2xl 
+            <div className='h-[40vh] shadow-2xl border border-cardbg rounded-2xl 
             top-0 left-0 bg-grey
             lg:w-[55vw] absolute lg:top-40 lg:left-120 lg:flex-row
             flex flex-col lg:h-[59vh] lg:my-10
