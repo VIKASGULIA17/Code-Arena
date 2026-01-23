@@ -24,9 +24,9 @@ const Login = () => {
                 w-full
                 lg:w-1/2 h-full '>
                     <div className="h-full w-full
-                    lg:w-full lg:h-full bg-[url('https://static.metafy.gg/illustrations/astronaut_new_bg.svg')]  bg-cover bg-center">
+                    lg:w-full lg:h-full ">
 
-                        <img src="https://i.sstatic.net/022Fl.gif" alt="" className='w-full bg-cover  h-full bg-black' />
+                        <img src="src/assets/authentication.gif" alt="" className='w-full bg-cover  h-full bg-black' />
                     </div>
 
                     {/* right */}

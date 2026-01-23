@@ -15,15 +15,15 @@ const Signup = () => {
                         <div className="
                         h-[33vh]
                         lg:w-full lg:h-full
-                         bg-[url('https://static.metafy.gg/illustrations/astronaut_new_bg.svg')] bg-cover bg-center">
+                        ">
 
-                            <img src="https://i.sstatic.net/022Fl.gif" alt="" className='w-full bg-cover bg-grey h-full' />
+                            <img src="src/assets/authentication.gif" alt="" className='w-full bg-cover bg-black h-full' />
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="43" height="93" fill="none" viewBox="0 0 43 93" className="hidden lg:block absolute 
                             top-33 left-[265px] h-[95px] rotate-[7deg]"><path fill="#1e1e27" d="M.613 50.507 4.925 4.799a1 1 0 0 1 .871-.899L35.463.192a1 1 0 0 1 1.08 1.288l-7.449 24.097c-.244.79.523 1.53 1.31 1.275 1.748-.57 4.293-1.343 7.352-2.16 2.442-.652 4.822 1.173 4.755 3.7-.623 23.673-10.906 45.725-21.5 62.833-1.233 1.99-4.8.309-4.288-1.977 3.018-13.456 4.77-28.847 4.823-37.95.008-1.375-1.38-2.271-2.657-1.766l-12.823 5.07C3.289 55.7.332 53.479.613 50.507"></path><path fill="#282834" d="M5.949 4.545 1.609 50.6c-.211 2.23 2.007 3.895 4.089 3.072l12.823-5.07c1.897-.75 4.037.576 4.025 2.702-.054 9.186-1.817 24.65-4.847 38.163-.117.522.208 1.128.936 1.467.727.338 1.28.162 1.526-.236C30.717 73.651 40.895 51.78 41.51 28.366c.049-1.839-1.68-3.193-3.497-2.708a145 145 0 0 0-7.301 2.145c-1.537.5-3.064-.937-2.574-2.521L35.895.336a.478.478 0 0 1 .914.283l-7.715 24.958c-.244.79.523 1.53 1.31 1.275 1.748-.57 4.293-1.343 7.352-2.16 2.442-.652 4.822 1.173 4.755 3.7-.623 23.673-10.906 45.725-21.5 62.833-1.233 1.99-4.8.309-4.288-1.977 3.018-13.456 4.77-28.847 4.823-37.95.008-1.375-1.38-2.271-2.657-1.766l-12.823 5.07C3.289 55.7.332 53.479.613 50.507L4.957 4.45a.498.498 0 0 1 .992.094"></path></svg>
                         <div className='bg-footer text-white w-90 text-center px-4 absolute top-0 left-15 rounded-lg -rotate-3 py-5 hidden lg:block'>
                             <h1 className='font-bold text-xl'>Hold that thought</h1>
-                            <p className='font-semibold text-gray-600'>You can join a game once you sign up or sign into your account!
+                            <p className='font-semibold text-gray-600'>You can join a game of life once you sign up or sign into your account!
                             </p>
                             <p className='text-amber-300 text-[12.5px] pt-3'>This will only take a minute, <span className='text-white'>
                                 so hold on to that thought.

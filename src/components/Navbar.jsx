@@ -81,9 +81,14 @@ const Navbar = () => {
             <div className="">
               <img src="https://i.pravatar.cc" alt="" className="w-8 h-8 rounded-full" />
             </div> :
+            <div className="flex gap-4">
             <Link to="/login">
               <Button className="border bg-black text-white">Login</Button>
             </Link>
+            <Link to="/signup">
+              <Button className="border bg-white border-black text-black">Signup</Button>
+            </Link>
+            </div>
           }
         </div>
         <div className={` ${MenuOpen ? 'hidden' : 'flex'} items-center my-4 px-2 lg:hidden rounded-lg hover:text-white`}>
