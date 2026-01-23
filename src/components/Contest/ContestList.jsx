@@ -95,11 +95,10 @@ const ContestList = () => {
                     filters.status === status ? "All" : status,
                   );
               }}
-              className={`rounded-3xl transition-all ${
-                filters.status === status
+              className={`rounded-3xl transition-all ${filters.status === status
                   ? "bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 text-white"
                   : "bg-white text-black border border-gray-200 hover:bg-gray-50"
-              } text-center px-5 py-6 flex gap-2`}
+                } text-center px-5 py-6 flex gap-2`}
             >
               {status === "Ongoing" && (
                 <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
@@ -172,18 +171,18 @@ const ContestList = () => {
                     </div>
 
                     {obj.status === "Finished" ? (
-  <Button className="px-8 bg-brand-gradient font-bold">
-    Virtual
-  </Button>
-) : obj.status === "Ongoing" ? (
-  <Button className="px-8 bg-brand-gradient font-bold">
-    Enter
-  </Button>
-) : (
-  <Button className="px-8 bg-brand-gradient font-bold">
-    Register
-  </Button>
-)}
+                      <Button className="px-8 bg-brand-gradient font-bold">
+                        Virtual
+                      </Button>
+                    ) : obj.status === "Ongoing" ? (
+                      <Button className="px-8 bg-brand-gradient font-bold">
+                        Enter
+                      </Button>
+                    ) : (
+                      <Button className="px-8 bg-brand-gradient font-bold">
+                        Register
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -206,11 +205,10 @@ const ContestList = () => {
                     <Button
                       key={i}
                       onClick={() => setCurrentPage(i + 1)}
-                      className={`w-10 h-10 rounded-full ${
-                        currentPage === i + 1
+                      className={`w-10 h-10 rounded-full ${currentPage === i + 1
                           ? "bg-blue-600 text-white"
                           : "bg-white text-gray-600 border hover:bg-gray-50"
-                      }`}
+                        }`}
                     >
                       {i + 1}
                     </Button>

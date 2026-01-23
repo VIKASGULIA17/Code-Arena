@@ -6,7 +6,11 @@ import Problems from './Pages/Problems'
 import ProblemDetails from './components/problem/ProblemDetails'
 import Contest from './Pages/Contest'
 import Profile from './Pages/Profile'
+import NotFound from './Pages/NotFound'
+import Login from './Pages/Authentication/Login'
+import Signup from './Pages/Authentication/Signup'
 import AlgoVisualizer from './Pages/AlgoVisualizer'
+
 
 const App = () => {
   return (
@@ -17,7 +21,10 @@ const App = () => {
       <Route path='/problem/:id' element={<ProblemDetails />} />
       <Route path='contest' element={<Contest />} />
       <Route path='profile' element={<Profile />} />
+      <Route path='login' element={<Login />} />
+      <Route path='signup' element={<Signup />} />
       <Route path='algovisualizer' element={<AlgoVisualizer />} />
+      <Route path='*' element={<NotFound />} />
       
       {/* <Route path='/about' element={<About />} /> */}
     </Routes>

@@ -1,116 +1,195 @@
-import React from "react";
-import { Button } from "../ui/button";
-import { Sparkles, ArrowRight, BadgeCheck } from "lucide-react";
-import { CodeXml, UsersRound, Zap } from "lucide-react";
-import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
+'use client'
 
-const BottomWave = () => (
-  <div className="absolute bottom-0 left-0 right-0 ">
-    <svg
-      viewBox="0 0 1440 120"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full text-bg-color"
-    >
-      <path
-        d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
-        fill="white"
-      />
-    </svg>
-  </div>
-);
+import { Button } from '@/components/ui/button'
+import { ArrowRight, Code2, Users, Zap, BarChart3, Sparkles, Award } from 'lucide-react'
 
-const HeroSection = () => {
+
+export default function HeroSection() {
   return (
-    <div className="absolute left-0 top-16 min-h-screen w-full bg-linear-to-br from-blue-600 via-purple-600 to-pink-600 ">
-      <div className="absolute inset-0 opacity-30 overflow-clip ">
-        <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
-        <div
-          className="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-float"
-          style={{ animationDelay: "2s" }}
-        ></div>
-        <div
-          className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-float"
-          style={{ animationDelay: "4s" }}
-        ></div>
-      </div>
+    <div className="min-h-screen pt-10 bg-linear-to-br from-slate-50 via-blue-50 to-pink-100">
 
-      <div className="flex flex-col items-center gap-6 z-30 py-20">
-        <Button
-          variant="outline"
-          className="animate-float duration-200 flex items-center rounded-2xl bg-white/20 hover:bg-white/40 "
-        >
-          <Sparkles className="text-white" />
-          <p className="text-white">AI powered Learning Platform</p>
-        </Button>
 
-        <div className="z-20">
-          <h1 className="text-5xl text-center leading-15 md:text-5xl lg:text-7xl md:leading-16 lg:leading-20 capitalize text-white font-bold">
-            Master Coding with
-          </h1>
-          <h1 className="text-5xl text-center  leading-15 md:text-5xl lg:text-7xl md:leading-16 lg:leading-20 text-transparent bg-clip-text bg-linear-to-br from-yellow-400  to-white font-bold">
-            AI-Powered Practice
-          </h1>
+      {/* Hero Section */}
+      <section className="px-6 py-20 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 bg-white border   text-blue-500 px-3 py-2 rounded-full text-sm font-medium">
+              <span className="w-2 h-2 bg-blue-500 rounded-full" />
+              Weekly Contest #352 is Live
+            </div>
+            <div className="space-y-2">
+              <h1 className="text-5xl md:text-6xl font-semibold text-foreground leading-tight">
+                Master <br />
+                <span className="">
+                  Algorithms.
+                </span>
+              </h1>
+              <h2 className="text-4xl md:text-7xl bg-linear-to-b from-blue-500 via-purple-500 to-pink-600 bg-clip-text text-transparent font-bold ">
+                Ace the  Interview.
+              </h2>
+            </div>
+            <p className="text-lg text-foreground/70 max-w-md">
+              The best platform to practice coding, compete in global contests, and visualize data structures with our modern tools.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button size="lg" className="bg-foreground hover:bg-foreground/90 text-background rounded-lg">
+                Start Solving
+              </Button>
+              <Button variant="outline" size="lg" className="rounded-lg bg-transparent">
+                <Sparkles className="w-4 h-4" />
+                Explore Visualizer
+              </Button>
+            </div>
+            <div className="flex items-center gap-4 pt-4">
+              <div className="flex -space-x-2">
+                {[1, 29, 3, 4].map((i) => (
+                  <img src={`https://i.pravatar.cc?img=${i}`} key={i} alt=""  className="w-12 h-12 rounded-full bg-linear-to-br from-purple-400 to-pink-400 border-2 border-white"/>
+                ))}
+              </div>
+              <div className="text-sm text-foreground/70">
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <span key={i} className="text-yellow-400">
+                      ★
+                    </span>
+                  ))}
+                </div>
+                <div className="font-semibold">1M+ developers joined today</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Hero Image */}
+          <div className="relative hidden lg:block">
+            <div className="absolute inset-0 bg-linear-to-r from-blue-400 to-purple-400 rounded-3xl blur-3xl opacity-20" />
+            <div className="relative bg-white rounded-2xl overflow-hidden shadow-2xl border border-slate-200">
+              <div className="flex items-center justify-between mb-4   px-4 pt-4">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 bg-red-400 rounded-full" />
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full" />
+                  <div className="w-3 h-3 bg-green-400 rounded-full" />
+                </div>
+                <span className="text-xs text-white">solution.ts</span>
+              </div>
+              <div className=''>
+                <img src="https://images.unsplash.com/photo-1504353888070-4ee702492320?q=80&w=1137&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" className='object-cover  w-full' />
+              </div>
+              <div className="absolute bottom-6 right-6 bg-green-100 border border-green-300 rounded-lg p-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full" />
+                  <span className="text-sm font-semibold text-green-700">Accepted</span>
+                </div>
+                <div className="text-xs text-green-600 mt-1">All test cases passed</div>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        <div className="py-2 z-20 lg:mx-[33vw]">
-          <p className="text-xl text-center lg:text-2xl text-white/90 ">
-            Practice problems, compete in contests, and ace your
-            interviews with intelligent feedback and real-time analysis
+      {/* Stats Section */}
+      <section className="px-6 py-16 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-xl p-8 border border-slate-200">
+            <Code2 className="w-12 h-12 bg-blue-100 text-blue-600 p-2 rounded-lg mb-4" />
+            <p className="text-sm font-medium text-foreground/70 uppercase tracking-wide">Total Submissions</p>
+            <p className="text-4xl font-bold text-foreground mt-2">1.2M+</p>
+          </div>
+          <div className="bg-white rounded-xl  p-8 border border-slate-200">
+            <Users className="w-12 h-12 p-2 mb-4 bg-purple-100 text-purple-600 rounded-lg" />
+            <p className="text-sm font-medium text-foreground/70 uppercase tracking-wide">Active Users</p>
+            <p className="text-4xl font-bold text-foreground mt-2">50k+</p>
+          </div>
+          <div className="bg-white rounded-xl p-8 border border-slate-200">
+            <Zap className="w-12 h-12 p-2 bg-pink-100 text-pink-600 rounded-lg mb-4" />
+            <p className="text-sm font-medium text-foreground/70 uppercase tracking-wide">Problems Available</p>
+            <p className="text-4xl font-bold text-foreground mt-2">2,400+</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Daily Challenge Section */}
+      <section className="px-6 py-16 max-w-7xl mx-auto">
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          <div className="flex flex-col md:flex-row  items-center gap-4 p-8">
+            <div className="w-12 h-12 bg-linear-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center shrink-0">
+              <Award className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1 text-center md:text-start">
+              <h3 className="text-lg font-bold text-foreground mb-2">Daily Challenge</h3>
+              <div className="space-y-3">
+                <h4 className="text-xl font-bold text-foreground">Reverse Linked List II</h4>
+                <p className="text-foreground/70 text-md md:w-3/4">
+                  Given the head of a singly linked list and two integers left and right where left ≤ right, reverse the nodes of the list from position left to position right, and return the reversed list.
+                </p>
+                <div className="flex gap-2 pt-2">
+                  <span className="px-3 py-1 bg-yellow-50 text-yellow-700 text-xs font-semibold rounded-full border border-yellow-200">
+                    Medium
+                  </span>
+                  <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-200">
+                    Linked List
+                  </span>
+                  <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-200">
+                    Recursion
+                  </span>
+                </div>
+              </div>
+            </div>
+            <Button className="bg-foreground lg:w-1/8 hover:bg-foreground/90 text-background rounded-lg">
+              Solve Now <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="px-6 py-20 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-foreground mb-4">Everything you need to grow</h2>
+          <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+            From beginner concepts to advanced competitive programming, we have the modern tools to help you succeed.
           </p>
         </div>
-
-        {/* cta  */}
-
-        <div className="flex flex-col md:flex-row py-6 gap-4 z-20">
-          <Button
-            variant="outline"
-            size="lg"
-            className="
-          hover:scale-105 hover:bg-white/90 duration-200
-          text-purple-500 cursor-pointer"
-          >
-            <p className="text-[17px]">
-              Start Solving
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white rounded-xl p-8 border border-slate-200 hover:shadow-lg transition-shadow">
+            <BarChart3 className="w-12 h-12 p-2 bg-pink-100 text-pink-600 rounded-lg mb-4" />
+            <h3 className="text-xl font-bold text-foreground mb-2">Problem Archive</h3>
+            <p className="text-foreground/70">
+              Practice with over 2000 problems curated by difficulty, company, and tags. Track your progress with detailed analytics.
             </p>
-            <ArrowRight />
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="
-          hover:scale-105 bg-white/20 hover:bg-white/30
-          text-white duration-200 cursor-pointer"
-          >
-            <p
-              className="text-[17px]
-            "
-            >
-              View Contest
+          </div>
+          <div className="bg-white rounded-xl p-8 border border-slate-200 hover:shadow-lg transition-shadow">
+            <Sparkles className="w-12 h-12 p-2 bg-cyan-100 text-blue-600 rounded-lg mb-4" />
+            <h3 className="text-xl font-bold text-foreground mb-2">Live Contests</h3>
+            <p className="text-foreground/70">
+              Join weekly contests, compete with peers in real time, and climb the global leaderboard to earn badges.
             </p>
-          </Button>
-        </div>
-
-        {/* tags */}
-        <div className="grid col-2 md:flex gap-4">
-          <div className="flex text-md lg:text-sm text-white/80 gap-2 items-center">
-            <BadgeCheck className="text-green-400" />
-            <p>Real-time code execution</p>
           </div>
-          <div className="flex text-md lg:text-sm text-white/80 gap-2 items-center ">
-            <BadgeCheck className="text-green-400" />
-            <p>Comprehensive test cases</p>
-          </div>
-          <div className="flex text-md lg:text-sm text-white/80 gap-2 items-center ">
-            <BadgeCheck className="text-green-400" />
-            <p>Company-tagged problem</p>
+          <div className="bg-white rounded-xl p-8 border border-slate-200 hover:shadow-lg transition-shadow">
+            <Zap className="w-12 h-12 p-2 bg-green-100 text-green-600 rounded-lg mb-4" />
+            <h3 className="text-xl font-bold text-foreground mb-2">Algorithm Visualizer</h3>
+            <p className="text-foreground/70">
+              Don't just read code—see it. Interactive visualizers for sorting, searching, dynamic programming, and linked lists.
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      <BottomWave />
+      {/* CTA Section */}
+      <section className="px-6 py-20 max-w-7xl mx-auto">
+        <div className="bg-linear-to-r from-slate-900 to-slate-800 rounded-3xl p-12 text-center text-white">
+          <h2 className="text-5xl font-bold mb-6 leading-16">
+            Join <span className="text-brand-gradient">50,000+ developers <br /> </span>  sharpening their skills
+          </h2>
+          <p className="text-lg text-slate-300 max-w-2xl mx-auto mb-8">
+            Whether you're preparing for a technical interview or just want to improve your problem-solving skills, CodePlatform is the place for you.
+          </p>
+          <Button size="lg" className="bg-white hover:bg-slate-100 text-foreground rounded-full">
+            Get Started for Free
+          </Button>
+        </div>
+      </section>
+
+      
     </div>
-  );
-};
-
-export default HeroSection;
+  )
+}

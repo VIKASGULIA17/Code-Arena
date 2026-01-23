@@ -11,6 +11,7 @@ import CodeEditor from "./CodeEditor";
 import Description from "./problemPages/Description";
 import Solution from "./problemPages/Solution";
 import Discussion from "./problemPages/Discussion";
+import NotFound from "../../Pages/NotFound";
 
 const ProblemDetails = () => {
   const { id } = useParams();
@@ -20,7 +21,7 @@ const ProblemDetails = () => {
 
 
   if (!problem) {
-    return <div className="p-10 text-center">Problem not found!</div>; 
+    return <NotFound />
   }
 
 
