@@ -97,8 +97,8 @@ const ContestList = () => {
                   );
               }}
               className={`rounded-3xl transition-all ${filters.status === status
-                  ? "bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 text-white"
-                  : "bg-white text-black border border-gray-200 hover:bg-gray-50"
+                ? "bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 text-white"
+                : "bg-white text-black border border-gray-200 hover:bg-gray-50"
                 } text-center px-5 py-6 flex gap-2`}
             >
               {status === "Ongoing" && (
@@ -173,20 +173,22 @@ const ContestList = () => {
 
                     {obj.status === "Finished" ? (
                       <Link to={`/contest/${obj.name} || Virtual Contest`}>
-                      <Button className="px-8 bg-brand-gradient font-bold">
-                        Virtual
-                      </Button>
+                        <Button className="px-8 bg-brand-gradient font-bold">
+                          Virtual
+                        </Button>
                       </Link>
                     ) : obj.status === "Ongoing" ? (
                       <Link to={`/contest/${obj.name}`}>
-                      <Button className="px-8 bg-brand-gradient font-bold">
-                        Enter
-                      </Button>
+                        <Button className="px-8 bg-brand-gradient font-bold">
+                          Enter
+                        </Button>
                       </Link>
                     ) : (
-                      <Button className="px-8 bg-brand-gradient font-bold">
-                        Register
-                      </Button>
+                      <Link to='registration'>
+                        <Button className="px-8 bg-brand-gradient font-bold">
+                          Register
+                        </Button>
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -211,8 +213,8 @@ const ContestList = () => {
                       key={i}
                       onClick={() => setCurrentPage(i + 1)}
                       className={`w-10 h-10 rounded-full ${currentPage === i + 1
-                          ? "bg-blue-600 text-white"
-                          : "bg-white text-gray-600 border hover:bg-gray-50"
+                        ? "bg-blue-600 text-white"
+                        : "bg-white text-gray-600 border hover:bg-gray-50"
                         }`}
                     >
                       {i + 1}

@@ -6,11 +6,12 @@ import { Button } from '../ui/button'
 import { useParams } from 'react-router-dom'
 
 
+
 const OngoingContestPage = () => {
 
     const { contestName } = useParams()
 
-    const contest= contestName.split("||")
+    const contest = contestName.split("||")
 
     console.log(contestName);
 
@@ -54,19 +55,19 @@ const OngoingContestPage = () => {
     const activeProblem = ContestProblems[activeIndex];
 
     useEffect(() => {
-      const activeProblem = ContestProblems[activeIndex];
+        const activeProblem = ContestProblems[activeIndex];
     }, [activeIndex])
-    
+
 
 
     return (
-        <div className='flex'>
+        <div className='flex flex-col lg:flex-row h-auto'>
             {/* <Navbar /> */}
-            <div className='w-80 border h-screen'>
-                {contest.map((obj,idx)=>{
+            <div className='lg:w-80 lg:h-screen border h-auto w-full'>
+                {contest.map((obj, idx) => {
                     console.log(obj)
 
-                   return  <h1 key={idx} className={` ${obj===" Virtual Contest"? 'text-black font-medium  ':'text-brand-gradient '} text-center  pt-6 px-4 text-3xl text-wrap`}>{obj || "Ongoing Contest"}</h1>
+                    return <h1 key={idx} className={` ${obj === " Virtual Contest" ? 'text-black font-medium  ' : 'text-brand-gradient '} text-center  pt-6 px-4 text-3xl text-wrap`}>{obj || "Ongoing Contest"}</h1>
                 })}
 
                 <h2 className='text-gray-600 text-center font-medium px-2 pt-4 my-6 border-t-2'>
@@ -89,7 +90,7 @@ const OngoingContestPage = () => {
                                     {obj.title}
                                 </span>
 
-                                <span className={` ${isActive?'text-green-200' :' text-green-400 '} font-bold`}>{obj.score}</span>
+                                <span className={` ${isActive ? 'text-green-200' : ' text-green-400 '} font-bold`}>{obj.score}</span>
                             </h1>
                         </Button>
                     })}
@@ -97,7 +98,7 @@ const OngoingContestPage = () => {
             </div>
             <div className='w-full'>
 
-                <ProblemDetails isContest={true}  problemId={activeProblem.id} />
+                <ProblemDetails isContest={true} problemId={activeProblem.id} />
             </div>
         </div>
     )
