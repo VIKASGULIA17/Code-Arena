@@ -35,15 +35,15 @@ export default function HeroSection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/problem">
-              <Button size="lg" className="bg-foreground hover:bg-foreground/90 text-background rounded-lg">
-                Start Solving
-              </Button>
+                <Button size="lg" className="bg-foreground hover:bg-foreground/90 text-background rounded-lg">
+                  Start Solving
+                </Button>
               </Link>
               <Link to="/algovisualizer">
-              <Button variant="outline" size="lg" className="hover:scale-105 rounded-lg bg-transparent">
-                <Sparkles className="w-4 h-4" />
-                Explore Visualizer
-              </Button>
+                <Button variant="outline" size="lg" className="hover:scale-105 rounded-lg bg-transparent">
+                  <Sparkles className="w-4 h-4" />
+                  Explore Visualizer
+                </Button>
               </Link>
             </div>
             <div className="flex items-center gap-4 pt-4">
@@ -66,7 +66,7 @@ export default function HeroSection() {
           </div>
 
           {/* Hero Image */}
-          <div className="h-full w-[40vw] bg-black rounded-2xl overflow-hidden">
+          <div className="lg:h-full lg:w-[40vw]   bg-black rounded-2xl overflow-hidden">
             <div className="flex items-center justify-between bg-black  px-4 py-4">
               <div className="flex gap-2">
                 <div className="w-3 h-3 bg-red-400 rounded-full" />
@@ -76,10 +76,10 @@ export default function HeroSection() {
               <span className="text-xs text-white">solution.ts</span>
             </div>
             <div
-              className="bg-center bg-cover rounded-xl h-full  flex flex-row gap-3 p-5"
+              className="bg-center bg-cover rounded-xl h-full flex flex-col lg:flex-row gap-3 p-5"
               style={{ backgroundImage: `url(${'src/assets/BlackBackground.jpeg'})` }}
             >
-              <div className=" h-full w-1/2 p-3 flex flex-col gap-3 items-center justify-center">
+              <div className="w-full lg:w-1/2 lg:h-full h-auto p-3 flex flex-col gap-3 items-center justify-center">
                 <div className=" h-auto w-full">
                   <p className="text-white text font-bold p-3 bg-blue">
                     READY TO SPEED UP YOUR CODING?
@@ -96,20 +96,20 @@ export default function HeroSection() {
                     more time focusing on solving problems.
                   </p>
                   <div>
-                      <Link to="/problem">
-                    <div className="flex flex-row  w-auto justify-center p-4">
-                      <div className="bg-blue-700 h-full py-2 rounded-tl-lg rounded-bl-lg">
-                        <MdOutlineStart className="bg-red text-3xl pl-3 text-white" />
+                    <Link to="/problem">
+                      <div className="flex flex-row  w-auto justify-center p-4">
+                        <div className="bg-blue-700 h-full py-2 rounded-tl-lg rounded-bl-lg">
+                          <MdOutlineStart className="bg-red text-3xl pl-3 text-white" />
+                        </div>
+                        <button className="bg-blue-700 cursor-pointer text-white px-4 py-2 rounded-tr-lg rounded-br-lg">Get Started</button>
                       </div>
-                      <button className="bg-blue-700 cursor-pointer text-white px-4 py-2 rounded-tr-lg rounded-br-lg">Get Started</button>
-                    </div>
-                      </Link>
+                    </Link>
 
                   </div>
                 </div>
               </div>
-              <div className="h-auto w-1/2">
-                <div className="bg-cover bg-no-repeat h-[92%] w-full rounded-2xl"
+              <div className="w-full lg:w-1/2 h-[300px] lg:h-auto">
+                <div className="bg-cover bg-no-repeat h-full w-full rounded-2xl"
                   style={{ backgroundImage: `url(${'https://images.unsplash.com/photo-1618477388954-7852f32655ec?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'})` }}
 
                 >
@@ -171,12 +171,12 @@ export default function HeroSection() {
               </div>
             </div>
             <div className="lg:w-1/8">
-            <Link to="/problem/1">
+              <Link to="/problem/1">
 
-            <Button className="bg-foreground  hover:bg-foreground/90 text-background rounded-lg">
-              Solve Now <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-            </Link>
+                <Button className="bg-foreground  hover:bg-foreground/90 text-background rounded-lg">
+                  Solve Now <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -225,9 +225,9 @@ export default function HeroSection() {
             Whether you're preparing for a technical interview or just want to improve your problem-solving skills, CodeArena is the place for you.
           </p>
           <Link to='/problem'>
-          <Button size="lg" className="bg-white hover:bg-slate-100 text-foreground rounded-full">
-            Get Started for Free
-          </Button>
+            <Button size="lg" className="bg-white hover:bg-slate-100 text-foreground rounded-full">
+              Get Started for Free
+            </Button>
           </Link>
         </div>
       </section>
