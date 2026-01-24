@@ -3,27 +3,42 @@ import Editor from "@monaco-editor/react";
 import LanguageSelector from "./LanguageSelector";
 import { LANGUAGE_VERSIONS } from "../../data/constants";
 import TestCases from "./TestCases";
-import {
-  getProblemTemplate,
-  problemTemplates,
-} from "../../data/problemTemplates";
 import { driverCode_Template } from "../../data/driverCodeTemplate";
 
-const CodeEditor = ({ problemId }) => {
+const CodeEditor = ({ problemId=1,isContest }) => {
+
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);   //all the language and versions
   const [Language, setLanguage] = useState(LanguageList[0]);  // current slected language 
   const CodeEditorRef = useRef(); //refrence ot code editor
   const [Output, setOutput] = useState(null); // output (here because if i want to reset the code ,testcases get reset too)
+
+  const currentLang=Language[0];
   
   const onMount = (editor) => { //to focus on editor on refresh
     CodeEditorRef.current = editor;
     editor.focus();
   };
 
-  const template = driverCode_Template[1]['python']['boilerplate'];
+
+
+  const template = driverCode_Template[problemId][currentLang]['boilerplate']||" ";
 
   // const fetchedTemplate = getProblemTemplate(problemId, Language[0]);  //basic teplate 
   const [Code, setCode] = useState(template); //current code of the user
+
+  useEffect(() => {
+    
+    const newLang=Language[0]
+    const new_template = driverCode_Template[problemId][newLang]['boilerplate'];
+    setCode(new_template)
+    setOutput(null)
+
+    if(CodeEditorRef.current){
+      CodeEditorRef.current.setValue(new_template);
+    }
+  
+  }, [problemId,Language])
+  
 
   useEffect(() => {
     if (CodeEditorRef.current) {
@@ -85,6 +100,7 @@ const CodeEditor = ({ problemId }) => {
             problemId={problemId} 
             Output={Output}
             setOutput={setOutput}
+            isContest={isContest}
         />
       </div>
     </div>

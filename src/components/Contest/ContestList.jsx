@@ -9,6 +9,7 @@ import SearchBar from "../others/SearchBar";
 import { Button } from "../ui/button";
 import { contestData } from "../../data/ContestData";
 import { useMemo, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const ContestList = () => {
   const [selected, setselected] = useState("grid");
@@ -171,13 +172,17 @@ const ContestList = () => {
                     </div>
 
                     {obj.status === "Finished" ? (
+                      <Link to={`/contest/${obj.name} || Virtual Contest`}>
                       <Button className="px-8 bg-brand-gradient font-bold">
                         Virtual
                       </Button>
+                      </Link>
                     ) : obj.status === "Ongoing" ? (
+                      <Link to={`/contest/${obj.name}`}>
                       <Button className="px-8 bg-brand-gradient font-bold">
                         Enter
                       </Button>
+                      </Link>
                     ) : (
                       <Button className="px-8 bg-brand-gradient font-bold">
                         Register

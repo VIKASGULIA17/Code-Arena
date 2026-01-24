@@ -2,8 +2,8 @@
 
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Code2, Users, Zap, BarChart3, Sparkles, Award } from 'lucide-react'
-import DownloadArea from './MiddleSection'
 import { MdOutlineStart } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
 
 export default function HeroSection() {
@@ -34,13 +34,17 @@ export default function HeroSection() {
               The best platform to practice coding, compete in global contests, and visualize data structures with our modern tools.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
+              <Link to="/problem">
               <Button size="lg" className="bg-foreground hover:bg-foreground/90 text-background rounded-lg">
                 Start Solving
               </Button>
-              <Button variant="outline" size="lg" className="rounded-lg bg-transparent">
+              </Link>
+              <Link to="/algovisualizer">
+              <Button variant="outline" size="lg" className="hover:scale-105 rounded-lg bg-transparent">
                 <Sparkles className="w-4 h-4" />
                 Explore Visualizer
               </Button>
+              </Link>
             </div>
             <div className="flex items-center gap-4 pt-4">
               <div className="flex -space-x-2">
@@ -92,12 +96,14 @@ export default function HeroSection() {
                     more time focusing on solving problems.
                   </p>
                   <div>
+                      <Link to="/problem">
                     <div className="flex flex-row  w-auto justify-center p-4">
                       <div className="bg-blue-700 h-full py-2 rounded-tl-lg rounded-bl-lg">
                         <MdOutlineStart className="bg-red text-3xl pl-3 text-white" />
                       </div>
-                      <button className="bg-blue-700 text-white px-4 py-2 rounded-tr-lg rounded-br-lg">Get Started</button>
+                      <button className="bg-blue-700 cursor-pointer text-white px-4 py-2 rounded-tr-lg rounded-br-lg">Get Started</button>
                     </div>
+                      </Link>
 
                   </div>
                 </div>
@@ -138,8 +144,8 @@ export default function HeroSection() {
       </section>
 
       {/* Daily Challenge Section */}
-      <section className="px-6 py-16 max-w-7xl mx-auto">
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+      <section className="px-6 py-16 max-w-7xl mx-auto ">
+        <div className="bg-white rounded-2xl border shadow-xl hover:scale-101 duration-300 border-slate-200 overflow-hidden">
           <div className="flex flex-col md:flex-row  items-center gap-4 p-8">
             <div className="w-12 h-12 bg-linear-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center shrink-0">
               <Award className="w-6 h-6 text-white" />
@@ -164,9 +170,14 @@ export default function HeroSection() {
                 </div>
               </div>
             </div>
-            <Button className="bg-foreground lg:w-1/8 hover:bg-foreground/90 text-background rounded-lg">
+            <div className="lg:w-1/8">
+            <Link to="/problem/1">
+
+            <Button className="bg-foreground  hover:bg-foreground/90 text-background rounded-lg">
               Solve Now <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
+            </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -211,11 +222,13 @@ export default function HeroSection() {
             Join <span className="text-brand-gradient">50,000+ developers <br /> </span>  sharpening their skills
           </h2>
           <p className="text-lg text-slate-300 max-w-2xl mx-auto mb-8">
-            Whether you're preparing for a technical interview or just want to improve your problem-solving skills, CodePlatform is the place for you.
+            Whether you're preparing for a technical interview or just want to improve your problem-solving skills, CodeArena is the place for you.
           </p>
+          <Link to='/problem'>
           <Button size="lg" className="bg-white hover:bg-slate-100 text-foreground rounded-full">
             Get Started for Free
           </Button>
+          </Link>
         </div>
       </section>
 
