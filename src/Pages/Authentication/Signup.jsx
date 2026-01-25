@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 
 const Signup = () => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
     const [capVal, setcapVal] = useState(null);
     console.log(capVal);
@@ -16,9 +17,11 @@ const Signup = () => {
             <div className={`w-full h-screen  absolute top-10 left-0 duration-1000   bg-white/50 z-20`}>
                 <div className='absolute shadow-2xl
                 flex flex-col w-full
-                lg:top-20 lg:left-120  lg:flex-row lg:h-[80vh] lg:w-[55vw]'>
-                    <div className='w-full h-full '>
-                        <div className="
+                lg:top-20 lg:left-120  lg:flex-row lg:h-[80vh] lg:w-[55vw]"
+        >
+          <div className="w-full h-full ">
+            <div
+              className="
                         h-[33vh]
                         lg:w-full lg:h-full
                         ">
@@ -48,17 +51,19 @@ const Signup = () => {
                             <h1 className='
                                 lg:text-3xl lg:text-start
                                 text-xl
-                                font-bold text-black text-center '>Sign Up</h1>
-                            <div className='flex gap-2'>
-                                <FaGoogle className='w-12 h-12 rounded-xl bg-white border text-green-500 px-3 py-3' />
-                                <FaDiscord className='w-12 h-12 rounded-xl bg-[#7289DA] text-white px-3 py-3' />
-                                <FaTwitch className='w-12 h-12 rounded-xl bg-[#B07BFF] text-white px-3 py-3' />
-                                <FaFacebook className='w-12 h-12 rounded-xl bg-[#1976D2] text-white px-3 py-3' />
-                                <FaApple className='w-12 h-12 rounded-xl bg-black text-white px-3 py-3' />
-                            </div>
-
-                        </div>
-                        <div className='w-[70%] h-px bg-cardbg my-5'></div>
+                                font-bold text-black text-center "
+              >
+                Sign Up
+              </h1>
+              <div className="flex gap-2">
+                <FaGoogle className="w-12 h-12 rounded-xl bg-white border text-green-500 px-3 py-3" />
+                <FaDiscord className="w-12 h-12 rounded-xl bg-[#7289DA] text-white px-3 py-3" />
+                <FaTwitch className="w-12 h-12 rounded-xl bg-[#B07BFF] text-white px-3 py-3" />
+                <FaFacebook className="w-12 h-12 rounded-xl bg-[#1976D2] text-white px-3 py-3" />
+                <FaApple className="w-12 h-12 rounded-xl bg-black text-white px-3 py-3" />
+              </div>
+            </div>
+            <div className="w-[70%] h-px bg-cardbg my-5"></div>
 
                         <div className='w-full  '>
                             {/* bottom */}
@@ -86,8 +91,12 @@ const Signup = () => {
                     </div>
                 </div>
             </div>
+          </div>
         </div>
-    )
-}
+      </div>
+      <ToastContainer />
+    </div>
+  );
+};
 
-export default Signup
+export default Signup;
