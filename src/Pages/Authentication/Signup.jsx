@@ -65,7 +65,7 @@ const Signup = () => {
                             <div className='flex flex-col
                             w-[90%]
                             lg:w-[75%] gap-5  px-3 mx-5'>
-                                <input type="text" placeholder='User id' className='placeholder:text-primary  outline-2 text-black px-4 py-3 rounded-xl    bg-cardbg' />
+                                <input type="text" placeholder='User Name' className='placeholder:text-primary  outline-2 text-black px-4 py-3 rounded-xl    bg-cardbg' />
                                 <input type="text" placeholder='Email address' className='placeholder:text-primary  outline-2 text-black px-4 py-3 rounded-xl    bg-cardbg' />
                                 <input type="password" placeholder='Password' className='placeholder:text-primary outline-2 text-black px-4 py-3 rounded-xl    bg-cardbg' />
                                 <div className="flex justify-center lg:justify-start mx-2">
