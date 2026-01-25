@@ -10,6 +10,8 @@ import NotFound from './Pages/NotFound'
 import Login from './Pages/Authentication/Login'
 import Signup from './Pages/Authentication/Signup'
 import AlgoVisualizer from './Pages/AlgoVisualizer'
+import OngoingContestPage from './components/Contest/OngoingContestPage'
+import ContestRegistration from './components/Contest/ContestRegistration'
 
 
 const App = () => {
@@ -20,6 +22,8 @@ const App = () => {
       <Route path='problem' element={<Problems />} />
       <Route path='/problem/:id' element={<ProblemDetails />} />
       <Route path='contest' element={<Contest />} />
+      <Route path='contest/registration' element={<ContestRegistration />} />
+      <Route path='contest/:contestName' element={<OngoingContestPage />} />
       <Route path='profile' element={<Profile />} />
       <Route path='login' element={<Login />} />
       <Route path='signup' element={<Signup />} />

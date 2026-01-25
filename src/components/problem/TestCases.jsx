@@ -5,7 +5,7 @@ import { executeCode } from "../../api/api";
 import { testCases } from "../../data/testCases";
 import { driverCode_Template } from "../../data/driverCodeTemplate";
 
-const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
+const TestCases = ({ Language, value, problemId, Output, setOutput, isContest }) => {
   // data variables
   const [isError, setisError] = useState(false); // for any error in execution ,so that i can show it in red or green 
   const [isActive, setIsActive] = useState(0); //to display current testcase info 
@@ -45,7 +45,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
 
       // 1. Generate code using VISIBLE cases
       const fullSourceCode = driverCode(userCode, visibleTestCases);
-        // this will get data from the api
+      // this will get data from the api
       const data = await executeCode(Language, fullSourceCode);
 
       if (data.run.stderr) {
@@ -81,7 +81,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
 
     setIsSubmitting(true);
     setisError(false);
-    setOutput(null); 
+    setOutput(null);
     setSubmissionStatus(null);
 
     try {
@@ -143,7 +143,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
     }
   };
 
-  
+
   const currentResult = Output && Output[isActive] ? Output[isActive] : null;
 
   return (
@@ -173,7 +173,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
 
       {/* BODY */}
       <div className="px-10 py-6 overflow-y-auto flex-1">
-        
+
         {/* VIEW 1: SUBMISSION RESULT ( when Submission Status exists) */}
         {submissionStatus ? (
           <div className="flex flex-col items-center justify-center h-full gap-4 animate-in fade-in zoom-in duration-300">
@@ -187,7 +187,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
               <>
                 <XCircle className="w-16 h-16 text-red-500" />
                 <h2 className="text-3xl font-bold text-red-600">
-                  {submissionStatus==="Accepted" && "Accepted"}
+                  {submissionStatus === "Accepted" && "Accepted"}
                 </h2>
 
                 {firstFailedTestCase && hiddenTestCases && (
@@ -262,8 +262,8 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
                   Output && Output[idx]?.status === "Passed"
                     ? "text-green-700 bg-green-200 border-green-400"
                     : Output && Output[idx]?.status === "Failed"
-                    ? "text-red-500 bg-red-200 border-red-400"
-                    : "";
+                      ? "text-red-500 bg-red-200 border-red-400"
+                      : "";
 
                 return (
                   <Button
@@ -325,13 +325,12 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
 
                 <div
                   className={`rounded-lg my-2 py-3 px-4 font-mono text-sm border 
-                  ${
-                    currentResult.status === "Passed"
+                  ${currentResult.status === "Passed"
                       ? "bg-green-50 border-green-200 text-green-900"
                       : currentResult.status === "Failed"
-                      ? "bg-red-50 border-red-200 text-red-900"
-                      : "bg-yellow-50 border-yellow-200 text-yellow-900"
-                  }`}
+                        ? "bg-red-50 border-red-200 text-red-900"
+                        : "bg-yellow-50 border-yellow-200 text-yellow-900"
+                    }`}
                 >
                   {currentResult.status === "Error" ? (
                     <span className="text-red-600 whitespace-pre-wrap">
@@ -340,11 +339,10 @@ const TestCases = ({ Language, value, problemId, Output, setOutput }) => {
                   ) : (
                     <div className="flex flex-col gap-1">
                       <span
-                        className={`font-bold ${
-                          currentResult.status === "Passed"
+                        className={`font-bold ${currentResult.status === "Passed"
                             ? "text-green-600"
                             : "text-red-600"
-                        }`}
+                          }`}
                       >
                         {currentResult.status}
                       </span>

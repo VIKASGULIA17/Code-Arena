@@ -36,11 +36,7 @@ const Problems = () => {
   // 1st- when submitted ,if passed all the test cases ,mark it true
   // 2nd  - pass random problem info to problem of the day ,will just pass the shuffle function on the useeffect for now
 
-  const Problem_Progress = [
-    { id: 1, title: "Easy", progress: 56 },
-    { id: 2, title: "Medium", progress: 78 },
-    { id: 3, title: "hard", progress: 34 },
-  ];
+
 
   const [filters, setfilters] = useState({
     //this si for the search and the filter to filter out questions
@@ -143,10 +139,10 @@ const Problems = () => {
                 {potd ? potd.title : ""}
               </h3>
               <div className="flex gap-4 items-center">
-                <button className="bg-red-500 px-3 py-1 rounded-xl text-white">
+                <button className={`${potd? (potd.difficulty==="Easy"?'bg-green-300 ':(potd.difficulty==="Medium"?"bg-yellow-400":" bg-red-500")):'  '} bg-red-500 px-3 py-1 rounded-xl text-white`}>
                   {potd ? potd.difficulty : ""}
                 </button>
-                <p className="text-white/80 text-xl">+10 Points</p>
+                <p className="text-emerald-100 text-lg font-medium">+10 Points</p>
               </div>
               <Link
                 to={`/problem/${potd?potd.id:''}`}
