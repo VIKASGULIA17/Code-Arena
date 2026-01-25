@@ -1,8 +1,14 @@
 import { Link } from 'react-router-dom';
 import { FaGoogle, FaDiscord, FaTwitch, FaFacebook, FaApple } from "react-icons/fa";
 import Navbar from '../../components/Navbar';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { useState } from 'react';
+
 
 const Signup = () => {
+
+    const [capVal, setcapVal] = useState(null);
+    console.log(capVal);
 
     return (
         <div>
@@ -16,7 +22,6 @@ const Signup = () => {
                         h-[33vh]
                         lg:w-full lg:h-full
                         ">
-
                             <img src="src/assets/authentication.gif" alt="" className='w-full bg-cover bg-black h-full' />
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="43" height="93" fill="none" viewBox="0 0 43 93" className="hidden lg:block absolute 
@@ -38,7 +43,7 @@ const Signup = () => {
                    border-2
                     w-full h-full'>
                         
-                        <div className=' flex flex-col px-10 text-black  justify-end h-[40%] gap-5 w-full'>
+                        <div className=' flex flex-col px-10 text-black py-10 pt-20 gap-5 w-full'>
 
                             <h1 className='
                                 lg:text-3xl lg:text-start
@@ -55,18 +60,22 @@ const Signup = () => {
                         </div>
                         <div className='w-[70%] h-px bg-cardbg my-5'></div>
 
-                        <div className='w-full h-[54.7%]  '>
+                        <div className='w-full  '>
                             {/* bottom */}
-                            <div className='flex flex-col 
+                            <div className='flex flex-col
                             w-[90%]
-                            lg:w-[75%] py-5 gap-5  px-3 mx-5'>
+                            lg:w-[75%] gap-5  px-3 mx-5'>
+                                <input type="text" placeholder='User id' className='placeholder:text-primary  outline-2 text-black px-4 py-3 rounded-xl    bg-cardbg' />
                                 <input type="text" placeholder='Email address' className='placeholder:text-primary  outline-2 text-black px-4 py-3 rounded-xl    bg-cardbg' />
                                 <input type="password" placeholder='Password' className='placeholder:text-primary outline-2 text-black px-4 py-3 rounded-xl    bg-cardbg' />
-                                <button className=' w-[80%] bg-cardbg text-black border border-primary px-5 py-5 flex gap-2 mx-10'>
-                                    <input type="checkbox" className='w-6 h-6' name="" id="" /> Verify You are a Human
-                                </button>
+                                <div className="flex justify-center lg:justify-start mx-2">
+                                    <ReCAPTCHA
+                                        sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+                                        onChange={(val) => setCapVal(val)}
+                                    />
+                                </div>
                                 <p className='w-full text-center text-sm text-primary'>By signing up, you agree with our <span className='text-black hover:underline'>ToS,</span> <span className='text-black cursor-pointer underline'> Community Guidelines </span> and <span className='text-black cursor-pointer underline'> Privacy Policy</span> </p>
-                                <button className='w-full rounded-lg bg-amber-200 h-10'>Sign up</button>
+                                <button className={`w-full rounded-lg ${capVal?'bg-amber-300 ':'bg-amber-200 '}  h-10`}>Sign up</button>
                                 <p className='text-black font-semibold'>Already have an account? 
                                     <Link to='/login'>
                                     <span className='text-yellow-400 font-bold '> Log in </span>
