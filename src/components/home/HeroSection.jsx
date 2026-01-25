@@ -108,8 +108,8 @@ export default function HeroSection() {
                   </div>
                 </div>
               </div>
-              <div className="w-full lg:w-1/2 h-[300px] lg:h-auto">
-                <div className="bg-cover bg-no-repeat h-full w-full rounded-2xl"
+              <div className="w-full lg:w-1/2 h-[300px] overflow-hidden rounded-2xl lg:h-auto">
+                <div className="bg-cover bg-no-repeat h-full duration-500 hover:scale-110 w-full rounded-2xl"
                   style={{ backgroundImage: `url(${'https://images.unsplash.com/photo-1618477388954-7852f32655ec?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'})` }}
 
                 >

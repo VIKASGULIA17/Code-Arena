@@ -58,7 +58,7 @@ const ContestRegistration = ({ contestId = null }) => {
                                 </span>
                                 <span className="text-xs font-bold tracking-wide text-purple-600 dark:text-purple-300 uppercase">Registration Open</span>
                             </div>
-                            <div className="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 p-3 rounded-2xl">
+                            <div className="bg-linear-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 p-3 rounded-2xl">
                                 <Trophy className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
                             </div>
                         </motion.div>
@@ -67,7 +67,7 @@ const ContestRegistration = ({ contestId = null }) => {
                         <motion.div variants={itemVariants} className="mb-10">
                             <h1 className="text-4xl lg:text-5xl xl:text-6xl font-black text-gray-900 dark:text-white leading-tight mb-6 tracking-tight">
                                 Global Coding <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600">
+                                <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-purple-600 to-pink-600">
                                     Contest 2024
                                 </span>
                             </h1>
@@ -115,7 +115,7 @@ const ContestRegistration = ({ contestId = null }) => {
                         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-6 mt-auto">
                             <Button
                                 size="lg"
-                                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:opacity-90 border-0 text-white font-bold text-base px-8 py-6 rounded-xl shadow-lg shadow-purple-500/30 transition-all hover:scale-[1.02]"
+                                className="w-full sm:w-auto bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 hover:opacity-90 border-0 text-white font-bold text-base px-8 py-6 rounded-xl shadow-lg shadow-purple-500/30 transition-all hover:scale-[1.02]"
                             >
                                 <Zap className="mr-2 w-5 h-5 fill-current" />
                                 Register Now
@@ -131,7 +131,7 @@ const ContestRegistration = ({ contestId = null }) => {
 
                     {/* Right: Visual Section */}
                     <div className="w-full lg:w-[45%] relative min-h-[400px] lg:min-h-full overflow-hidden group">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 lg:bg-gradient-to-l" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent z-10 lg:bg-linear-to-l" />
                         <img
                             src="https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?q=80&w=687&auto=format&fit=crop"
                             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -157,7 +157,7 @@ const ContestRegistration = ({ contestId = null }) => {
 
                         {/* Mobile Only Overlay Text */}
                         <div className="absolute bottom-6 left-6 z-20 lg:hidden">
-                            <p className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-2">
+                            <p className="bg-linear-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-2">
                                 Featured Event
                             </p>
                             <h3 className="text-white font-bold text-xl">Compete & Win</h3>
@@ -228,7 +228,7 @@ const ContestRegistration = ({ contestId = null }) => {
                             </div>
 
                             {/* 1st Place */}
-                            <div className="flex flex-col items-center bg-gradient-to-b from-yellow-50 to-white dark:from-yellow-900/10 dark:to-zinc-800/50 p-4 rounded-2xl border border-yellow-100 dark:border-yellow-900/30 order-1 sm:order-2 relative shadow-md transform scale-105 z-10">
+                            <div className="flex flex-col items-center bg-linear-to-b from-yellow-50 to-white dark:from-yellow-900/10 dark:to-zinc-800/50 p-4 rounded-2xl border border-yellow-100 dark:border-yellow-900/30 order-1 sm:order-2 relative shadow-md transform scale-105 z-10">
                                 <div className="absolute -top-4 bg-yellow-400 text-yellow-900 text-xs font-bold py-1 px-3 rounded-full border-2 border-white dark:border-zinc-900 shadow-sm">
                                     1st Place
                                 </div>
