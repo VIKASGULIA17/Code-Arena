@@ -22,7 +22,7 @@ const Login = () => {
       <Navbar />
 
       <div
-        className="h-[40vh] shadow-2xl border border-cardbg rounded-2xl 
+        className="h-[40vh] lg:shadow-2xl border border-cardbg rounded-2xl 
             top-0 left-0 bg-grey
             lg:w-[55vw] absolute lg:top-40 lg:left-120 lg:flex-row
             flex flex-col lg:h-[59vh] lg:my-10
@@ -35,7 +35,7 @@ const Login = () => {
         >
           <div
             className="h-full w-full
-                    lg:w-full lg:h-full "
+                    lg:w-full lg:h-full mx-2 lg:mx-0"
           >
             <img
               src="src/assets/authentication.gif"
@@ -68,9 +68,9 @@ const Login = () => {
             {/* bottom */}
             <div
               className="flex flex-col w-full
-                         lg:w-[75%] py-5 gap-5  px-3 mx-5"
+                         lg:w-[75%] py-5 gap-10 px-3 lg:mx-5"
             >
-              <form>
+              <form className="flex flex-col gap-5">
                 <input
                   type="text"
                   placeholder="Email address"
