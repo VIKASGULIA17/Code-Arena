@@ -35,6 +35,7 @@ const Signup = () => {
 
   const saveToSpringboot = async (values) => {
     const res = await axios.post(`${BACKEND_URL}/public/register`, values);
+    console.log(res.data);
     return res.data;
   };
 
