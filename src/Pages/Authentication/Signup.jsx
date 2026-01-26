@@ -21,20 +21,22 @@ const Signup = () => {
   console.log(capVal);
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
+  
   const validateData = yup.object({
     username: yup.string().required("**name is required"),
     email: yup
-      .string()
-      .email("invalid email format")
-      .required("**email is required"),
+    .string()
+    .email("invalid email format")
+    .required("**email is required"),
     password: yup
-      .string()
-      .min(6, "Min 6 characters")
-      .required("**password is required"),
+    .string()
+    .min(6, "Min 6 characters")
+    .required("**password is required"),
   });
-
+  
   const saveToSpringboot = async (values) => {
     const res = await axios.post(`${BACKEND_URL}/public/register`, values);
+    console.log(`${BACKEND_URL}/public/register`);
     console.log(res.data);
     return res.data;
   };
