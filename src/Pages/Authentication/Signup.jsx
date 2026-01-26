@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaGoogle,
   FaDiscord,
@@ -20,19 +20,19 @@ const Signup = () => {
   const [capVal, setCapVal] = useState(null);
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-  
+
   const validateData = yup.object({
     username: yup.string().required("**name is required"),
     email: yup
-    .string()
-    .email("invalid email format")
-    .required("**email is required"),
+      .string()
+      .email("invalid email format")
+      .required("**email is required"),
     password: yup
-    .string()
-    .min(6, "Min 6 characters")
-    .required("**password is required"),
+      .string()
+      .min(6, "Min 6 characters")
+      .required("**password is required"),
   });
-  
+
   const saveToSpringboot = async (values) => {
     const res = await axios.post(`${BACKEND_URL}/public/register`, values);
     return res.data;
@@ -55,11 +55,11 @@ const Signup = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <Navbar />
-      <div className="w-full h-screen absolute top-10 left-0 duration-1000 bg-white/50 z-20">
+      <div className="w-full h-auto absolute top-10 left-0 duration-1000 bg-white/50 z-20">
         {/* Fixed syntax error in className below */}
-        <div className="absolute shadow-2xl flex flex-col w-full lg:top-20 lg:left-120 lg:flex-row lg:h-[80vh] lg:w-[55vw]">
+        <div className="absolute shadow-2xl flex flex-col w-full md:px-20 lg:px-0 lg:top-20 lg:left-[25%] lg:flex-row lg:h-[85vh] lg:w-[55vw]">
           {/* LEFT SIDE */}
           <div className="w-full h-full">
             <div className="h-[33vh] lg:w-full lg:h-full">
@@ -100,13 +100,13 @@ const Signup = () => {
           </div>
 
           {/* RIGHT SIDE (FORM) */}
-          <div className="bg-gray-50 pl-4 border-2 w-full h-full">
+          <div className="bg-gray-50 pl-4 border-2 w-full h-auto">
             <div className="flex flex-col px-10 text-black py-10 pt-20 gap-5 w-full">
               {/* Fixed syntax error in className below */}
               <h1 className="lg:text-3xl lg:text-start text-xl font-bold text-black text-center">
                 Sign Up
               </h1>
-              <div className="flex gap-2">
+              <div className="flex gap-2 sm:justify-center lg:justify-normal">
                 <FaGoogle className="w-12 h-12 rounded-xl bg-white border text-green-500 px-3 py-3 cursor-pointer" />
                 <FaDiscord className="w-12 h-12 rounded-xl bg-[#7289DA] text-white px-3 py-3 cursor-pointer" />
                 <FaTwitch className="w-12 h-12 rounded-xl bg-[#B07BFF] text-white px-3 py-3 cursor-pointer" />
@@ -117,7 +117,7 @@ const Signup = () => {
 
             <div className="w-[70%] h-px bg-cardbg my-5"></div>
 
-            <div className="w-full">
+            <div className="w-full h-auto">
               <div className="flex flex-col w-[90%] lg:w-[75%] gap-5 px-3 mx-5">
                 <Formik
                   initialValues={{ username: "", email: "", password: "" }}
@@ -126,7 +126,7 @@ const Signup = () => {
                 >
                   {({ isSubmitting }) => {
                     return (
-                      <Form>
+                      <Form className="flex flex-col gap-3">
                         <Field
                           name="username"
                           type="text"
@@ -154,7 +154,7 @@ const Signup = () => {
                         <Field
                           name="password"
                           type="password"
-                          placeholder="••••••"
+                          placeholder="Password"
                           className="placeholder:text-primary outline-2 text-black px-4 py-3 rounded-xl bg-cardbg"
                         />
                         <ErrorMessage
@@ -191,14 +191,14 @@ const Signup = () => {
                           disabled={!capVal || isSubmitting}
                           type="submit"
                         >
-                          {isSubmitting?"Signing in...":"Sign up"}
+                          {isSubmitting ? "Signing in..." : "Sign up"}
                         </button>
                       </Form>
                     );
                   }}
                 </Formik>
 
-                <p className="text-black font-semibold">
+                <p className="text-black pb-6 lg:pb-0 text-center font-semibold">
                   Already have an account?
                   <Link to="/login">
                     <span className="text-yellow-400 font-bold ml-1">
