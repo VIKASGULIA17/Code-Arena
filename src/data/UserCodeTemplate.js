@@ -26,43 +26,7 @@ const twoSum = function(nums, target) {
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         # Write your code here
         pass`,
-      driverCode: (userCode, cases) => `
-import json
-from typing import List
-
-# 1. User Code
-${userCode}
-
-# 2. Driver Code
-cases_json = '${JSON.stringify(cases)}'
-test_cases = json.loads(cases_json)
-results = []
-solution = Solution()
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        nums = t["input"]["nums"]
-        target = t["input"]["target"]
-        expected = t["expected"]
-        
-        result = solution.twoSum(nums, target)
-        
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-        
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-    
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
+      
     },
 
     
@@ -76,44 +40,7 @@ print(json.dumps(results))
         return new int[]{};
     }
 }`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-import java.util.stream.*;
-
-// 1. DRIVER CLASS (Must come FIRST so it runs)
-public class Solution {
-    public static void main(String[] args) {
-        List<String> results = new ArrayList<>();
-        UserLogic solution = new UserLogic(); // Instantiate the renamed user class
-
-        ${cases.map((t, i) => `
-        try {
-            int[] nums = {${t.input.nums.join(',')}};
-            int target = ${t.input.target};
-            int[] expected = {${t.expected.join(',')}};
-            
-            int[] result = solution.twoSum(nums, target);
-            
-            boolean passed = Arrays.equals(result, expected);
-            
-            String status = passed ? "Passed" : "Failed";
-            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": %s, \\"expected\\": %s}", 
-                ${i + 1}, status, Arrays.toString(result), Arrays.toString(expected));
-            
-            results.add(json);
-        } catch (Exception e) {
-            results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
-        }
-        `).join('\n')}
-
-        System.out.println("[" + String.join(",", results) + "]");
-    }
-}
-
-// 2. USER CODE (Renamed & Moved to bottom)
-// We strip 'public' to avoid conflict, and rename Solution -> UserLogic
-${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
-`,
+      
     },
 
     
@@ -126,59 +53,7 @@ public:
         
     }
 };`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <bits/stdc++.h>
-
-using namespace std;
-
-// Helper to print vector
-string vecToStr(const vector<int>& v) {
-    stringstream ss;
-    ss << "[";
-    for(size_t i=0; i<v.size(); ++i) {
-        ss << v[i];
-        if(i < v.size()-1) ss << ",";
-    }
-    ss << "]";
-    return ss.str();
-}
-
-${userCode}
-
-int main() {
-    vector<string> results;
-    Solution solution;
-
-    ${cases.map((t, i) => `
-    try {
-        vector<int> nums = {${t.input.nums.join(',')}};
-        int target = ${t.input.target};
-        vector<int> expected = {${t.expected.join(',')}};
-        
-        vector<int> result = solution.twoSum(nums, target);
-        
-        bool passed = (result == expected);
-        string status = passed ? "Passed" : "Failed";
-        
-        stringstream json;
-        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << vecToStr(result) << ", \\"expected\\": " << vecToStr(expected) << "}";
-        results.push_back(json.str());
-    } catch (const exception& e) {
-        results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
-    }
-    `).join('\n')}
-
-    cout << "[";
-    for(size_t i=0; i<results.size(); ++i) {
-        cout << results[i];
-        if(i < results.size()-1) cout << ",";
-    }
-    cout << "]" << endl;
-    
-    return 0;
-}
-`,
+      
     },
   },
 

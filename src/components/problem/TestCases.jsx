@@ -38,6 +38,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
     const type=dsaProblems[problemId-1].type;
 
 
+
     if (!userCode) return;
 
     setIsLoading(true);
@@ -47,6 +48,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
 
     try {
       const driverCode = driverCodeTemplate[type][lang];
+      console.log(driverCode)
 
       if (!driverCode) {
         setisError(true);
@@ -98,6 +100,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
 
     try {
       const driverCode = driverCodeTemplate[type][lang];
+      console.log(driverCode)
 
       if (!driverCode) {
         setisError(true);

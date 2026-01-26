@@ -10,11 +10,14 @@ export const driverCodeTemplate = {
 
         testCases.forEach((t, index) => {
             const resultEntry = { id: index + 1 };
-            try {driverCode
+            try {
+                // FIXED: Removed the word 'driverCode' that was here
                 const result = twoSum(t.input.nums, t.input.target);
+                
                 resultEntry.actual = result;
                 resultEntry.expected = t.expected;
                 
+                // Compare arrays using JSON.stringify
                 if (JSON.stringify(result) === JSON.stringify(t.expected)) {
                     resultEntry.status = "Passed";
                 } else {
@@ -27,8 +30,7 @@ export const driverCodeTemplate = {
             results.push(resultEntry);
         });
         console.log(JSON.stringify(results));
-        `
-        ,
+        `,
 
 
 
@@ -72,7 +74,6 @@ print(json.dumps(results))
 
 
 
-        // --- COMPILED LANGUAGES (Using Code Injection instead of JSON) ---
 
         java: (userCode, cases) => `
 import java.util.*;
@@ -304,19 +305,11 @@ for i, t in enumerate(test_cases):
 print(json.dumps(results))
 `,
 
-        java: (userCode, cases) => `
+       java: (userCode, cases) => `
 import java.util.*;
 import java.util.stream.*;
 
-// 1. HELPER CLASSES
-class ListNode {
-    int val;
-    ListNode next;
-    ListNode() {}
-    ListNode(int val) { this.val = val; }
-    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-}
-
+// 1. DRIVER CLASS (MUST BE TOP-LEVEL)
 public class Solution {
     
     // Helper: Array -> LinkedList
@@ -331,14 +324,14 @@ public class Solution {
         return dummy.next;
     }
     
-    // Helper: LinkedList -> Array (String format for JSON)
+    // Helper: LinkedList -> String
     public static String listToString(ListNode node) {
         List<Integer> list = new ArrayList<>();
         while(node != null) {
             list.add(node.val);
             node = node.next;
         }
-        return list.toString(); // "[1, 2, 3]"
+        return list.toString();
     }
     
     // Helper: Compare
@@ -361,21 +354,20 @@ public class Solution {
 
         ${cases.map((t, i) => `
         try {
-            // Parse inputs
-            ${Object.entries(t.input).map(([key, val]) => `
-            int[] ${key}Arr = {${val.join(',')}};
-            ListNode ${key} = buildList(${key}Arr);
-            `).join('\n')}
+            int[] l1Arr = {${t.input.l1.join(',')}};
+            ListNode l1 = buildList(l1Arr);
+            
+            int[] l2Arr = {${t.input.l2.join(',')}};
+            ListNode l2 = buildList(l2Arr);
             
             int[] expected = {${t.expected.join(',')}};
             
-            // Call User Function
-            ListNode result = solution.addTwoNumbers(${Object.keys(t.input).join(', ')});
+            ListNode result = solution.addTwoNumbers(l1, l2);
             
             boolean passed = compareLists(result, expected);
             
             String status = passed ? "Passed" : "Failed";
-            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": %s, \\"expected\\": %s}", 
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
                 ${i + 1}, status, listToString(result), Arrays.toString(expected));
             
             results.add(json);
@@ -388,10 +380,18 @@ public class Solution {
     }
 }
 
-// 2. USER CODE
+// 2. HELPER CLASSES (Moved below Solution)
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+// 3. USER CODE
 ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
 `,
-
         cpp: (userCode, cases) => `
 #include <iostream>
 #include <vector>
@@ -1124,6 +1124,178 @@ int main() {
         string status = "Passed"; 
         stringstream json;
         json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": \\"" << expected << "\\", \\"expected\\": \\"" << expected << "\\"}";
+        results.push_back(json.str());
+    } catch (const exception& e) {
+        results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
+    }
+    `).join('\n')}
+
+    cout << "[";
+    for(size_t i=0; i<results.size(); ++i) {
+        cout << results[i];
+        if(i < results.size()-1) cout << ",";
+    }
+    cout << "]" << endl;
+    
+    return 0;
+}
+`,
+    },
+    "String": {
+        javascript: (fnName, userCode, cases) => `
+        // 1. User Code
+        ${userCode}
+
+        // 2. Driver Code
+        const testCases = ${JSON.stringify(cases)};
+        const results = [];
+
+        testCases.forEach((t, index) => {
+            const resultEntry = { id: index + 1 };
+            try {
+                // Extract arguments (handles multiple string inputs if needed)
+                const args = Object.values(t.input);
+                
+                // Dynamic Function Call
+                const result = ${fnName}(...args);
+                
+                resultEntry.actual = result;
+                resultEntry.expected = t.expected;
+                
+                // String/Number comparison (direct equality is fine for primitives)
+                // Using JSON.stringify handles both primitives and objects safely
+                if (JSON.stringify(result) === JSON.stringify(t.expected)) {
+                    resultEntry.status = "Passed";
+                } else {
+                    resultEntry.status = "Failed";
+                }
+            } catch (error) {
+                resultEntry.status = "Error";
+                resultEntry.error = error.message;
+            }
+            results.push(resultEntry);
+        });
+        console.log(JSON.stringify(results));
+        `,
+
+        python: (fnName, userCode, cases) => `
+import json
+from typing import List
+
+# 1. User Code
+${userCode}
+
+# 2. Driver Code
+cases_json = '${JSON.stringify(cases)}'
+test_cases = json.loads(cases_json)
+results = []
+solution = Solution()
+
+for i, t in enumerate(test_cases):
+    result_entry = {"id": i + 1}
+    try:
+        # Get all input values as a list
+        args = list(t["input"].values())
+        
+        # Dynamic Method Call
+        func = getattr(solution, "${fnName}")
+        result = func(*args)
+        
+        result_entry["actual"] = result
+        result_entry["expected"] = t["expected"]
+        
+        if result == t["expected"]:
+            result_entry["status"] = "Passed"
+        else:
+            result_entry["status"] = "Failed"
+            
+    except Exception as e:
+        result_entry["status"] = "Error"
+        result_entry["error"] = str(e)
+    
+    results.append(result_entry)
+
+print(json.dumps(results))
+`,
+
+        java: (fnName, userCode, cases) => `
+import java.util.*;
+import java.util.stream.*;
+
+// 1. DRIVER CLASS
+public class Solution {
+    public static void main(String[] args) {
+        List<String> results = new ArrayList<>();
+        UserLogic solution = new UserLogic();
+
+        ${cases.map((t, i) => `
+        try {
+            // Dynamic Input Parsing (Strings)
+            ${Object.entries(t.input).map(([key, val]) => `
+            String ${key} = "${val}";
+            `).join('\n')}
+            
+            // Expected Output (Handle String or Int return types)
+            ${typeof t.expected === 'number' ? `int expected = ${t.expected};` : `String expected = "${t.expected}";`}
+            
+            // Call User Function
+            ${typeof t.expected === 'number' ? 'int' : 'String'} result = solution.${fnName}(${Object.keys(t.input).join(', ')});
+            
+            boolean passed = ${typeof t.expected === 'number' ? 'result == expected' : 'result.equals(expected)'};
+            
+            String status = passed ? "Passed" : "Failed";
+            
+            // JSON Construction
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
+                ${i + 1}, status, result, expected);
+            
+            results.add(json);
+        } catch (Exception e) {
+            results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
+        }
+        `).join('\n')}
+
+        System.out.println("[" + String.join(",", results) + "]");
+    }
+}
+
+// 2. USER CODE
+${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
+`,
+
+        cpp: (fnName, userCode, cases) => `
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <algorithm>
+
+using namespace std;
+
+${userCode}
+
+int main() {
+    vector<string> results;
+    Solution solution;
+
+    ${cases.map((t, i) => `
+    try {
+        // Parse Inputs
+        ${Object.entries(t.input).map(([key, val]) => `
+        string ${key} = "${val}";
+        `).join('\n')}
+        
+        // Expected Output
+        ${typeof t.expected === 'number' ? `int expected = ${t.expected};` : `string expected = "${t.expected}";`}
+        
+        // Call Function
+        auto result = solution.${fnName}(${Object.keys(t.input).join(', ')});
+        
+        bool passed = (result == expected);
+        string status = passed ? "Passed" : "Failed";
+        
+        stringstream json;
+        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": \\"" << result << "\\", \\"expected\\": \\"" << expected << "\\"}";
         results.push_back(json.str());
     } catch (const exception& e) {
         results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
