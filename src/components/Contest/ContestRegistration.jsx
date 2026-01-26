@@ -11,11 +11,13 @@ import {
     AlertCircle,
     Crown,
     Medal,
-    Gift
+    Gift,
+    ArrowBigLeft
 } from "lucide-react";
 import Countdown from '../others/CountDown';
 import { Button } from '../ui/button';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const ContestRegistration = ({ contestId = null }) => {
     // Animation variants
@@ -35,10 +37,17 @@ const ContestRegistration = ({ contestId = null }) => {
         hidden: { opacity: 0, y: 10 },
         visible: { opacity: 1, y: 0 }
     };
+    const navigate=useNavigate()
 
     return (
         <div className="min-h-screen bg-gray-50/50 dark:bg-zinc-950/50 p-4 lg:p-8 overflow-y-auto">
+                <ArrowRight 
+                onClick={()=>navigate(-1)}
+                className='bg-gray-50 rotate-180 p-2 border-2 rounded-full text-gray-500 cursor-pointer border-gray-300'
+                size={40}
+                />
             <div className="lg:max-w-[80vw] mx-auto space-y-8">
+                
                 {/* Main Registration Card */}
                 <motion.div
                     initial="hidden"
