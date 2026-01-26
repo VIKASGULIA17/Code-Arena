@@ -18,7 +18,6 @@ import axios from "axios";
 const Signup = () => {
   const navigate = useNavigate();
   const [capVal, setCapVal] = useState(null);
-  console.log(capVal);
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   
@@ -36,8 +35,6 @@ const Signup = () => {
   
   const saveToSpringboot = async (values) => {
     const res = await axios.post(`${BACKEND_URL}/public/register`, values);
-    console.log(`${BACKEND_URL}/public/register`);
-    console.log(res.data);
     return res.data;
   };
 
