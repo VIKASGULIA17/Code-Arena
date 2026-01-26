@@ -3,9 +3,14 @@ import { Button } from "../ui/button";
 import { CloudUpload, Play, CheckCircle, XCircle } from "lucide-react";
 import { executeCode } from "../../api/api";
 import { testCases } from "../../data/testCases";
-import { driverCode_Template } from "../../data/driverCodeTemplate";
+import { userCode } from "../../data/UserCodeTemplate";
+import { driverCodeTemplate } from "../../data/driverCode";
+import { dsaProblems } from "../../data/dsaProblem";
+
 
 const TestCases = ({ Language, value, problemId, Output, setOutput, isContest }) => {
+
+
   // data variables
   const [isError, setisError] = useState(false); // for any error in execution ,so that i can show it in red or green 
   const [isActive, setIsActive] = useState(0); //to display current testcase info 
@@ -22,10 +27,16 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
   const visibleTestCases = currentProblemTestcases.visible; // for run
   const hiddenTestCases = currentProblemTestcases.hidden; //for submit
 
-  // RUN CODE (Visible Cases) 
+  const type=dsaProblems[problemId-1].type;
+  // console.log(type)
+  // console.log(driverCodeTemplate[type][Language[0]])
+
+  // RUN CODE (Visible Cases)
   const runCode = async () => {
     const userCode = value;
     const lang = Language[0];
+    const type=dsaProblems[problemId-1].type;
+
 
     if (!userCode) return;
 
@@ -35,7 +46,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
     setSubmissionStatus(null); // Clear previous submission status
 
     try {
-      const driverCode = driverCode_Template[problemId]?.[lang]?.driverCode;
+      const driverCode = driverCodeTemplate[type][lang];
 
       if (!driverCode) {
         setisError(true);
@@ -76,6 +87,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
   const submitCode = async () => {
     const userCode = value;
     const lang = Language[0];
+    const type=dsaProblems[problemId-1].type;
 
     if (!userCode) return;
 
@@ -85,7 +97,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
     setSubmissionStatus(null);
 
     try {
-      const driverCode = driverCode_Template[problemId]?.[lang]?.driverCode;
+      const driverCode = driverCodeTemplate[type][lang];
 
       if (!driverCode) {
         setisError(true);
@@ -340,8 +352,8 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
                     <div className="flex flex-col gap-1">
                       <span
                         className={`font-bold ${currentResult.status === "Passed"
-                            ? "text-green-600"
-                            : "text-red-600"
+                          ? "text-green-600"
+                          : "text-red-600"
                           }`}
                       >
                         {currentResult.status}

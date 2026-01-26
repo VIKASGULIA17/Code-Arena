@@ -30,7 +30,7 @@ export default function Home() {
           </Button>
           <ArrowRight
             onClick={() =>navigate(-1)}
-            className="rotate-180 bg-gray-200 p-2 rounded-full border-2 border-white"
+            className="rotate-180 bg-gray-200 p-2 rounded-full border-2 border-white cursor-pointer"
             size={40}
 
           />

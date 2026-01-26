@@ -46,18 +46,18 @@ const Description = ({id}) => {
             <div className="w-full border py-4 px-4 h-auto  bg-gray-100 rounded-2xl">
               <div className="flex gap-2">
                 <h3 className="capitalize text-gray-600 font-light">Input:</h3>
-                <p className="font-medium"> {obj.input}</p>
+                <p className=" font-mono text-black "> {obj.input}</p>
               </div>
               <div className="flex gap-2">
                 <h3 className="capitalize text-gray-600 font-light">Output:</h3>
-                <p className="font-medium"> {obj.output}</p>
+                <p className="font-mono"> {obj.output}</p>
               </div>
               {obj.explanation && (
                 <div className="flex gap-2">
                   <h3 className="capitalize text-gray-600 font-light">
                     Explanation:
                   </h3>
-                  <p className=""> {obj.explanation}</p>
+                  <p className="font-medium"> {obj.explanation}</p>
                 </div>
               )}
             </div>

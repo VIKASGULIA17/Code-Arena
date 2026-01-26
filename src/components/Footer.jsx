@@ -1,4 +1,5 @@
 import { CodeXml, UsersRound, Github, Linkedin, Instagram } from "lucide-react";
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <div className="flex flex-col w-full bg-gray-800 text-white/80 px-6 lg:px-0">
@@ -23,35 +24,53 @@ const Footer = () => {
           <div className="">
             {/* 2nd */}
             <h3 className="py-1.5 text-white font-bold">Platform</h3>
-            <p className="py-1.5">Problem Set</p>
-            <p className="py-1.5">Contests</p>
-            <p className="py-1.5">Mock Interview</p>
+            <Link to="/problem">
+              <p className="py-1.5 hover:underline">Problem Set</p>
+            </Link>
+            <Link to="/contest">
+              <p className="py-1.5 hover:underline">Contests</p>
+            </Link>
+            <Link to="/interview">
+              <p className="py-1.5 hover:underline">Mock Interview</p>
+            </Link>
           </div>
         </div>
         <div>
           {/* 3rd */}
 
           <h3 className="py-1.5 text-white font-bold">Community</h3>
-          <p className="py-1.5">Discussion</p>
-          <p className="py-1.5">Blog</p>
-          <p className="py-1.5">Help Center</p>
+          <Link to="/">
+            <p className="py-1.5 hover:underline">Discussion</p>
+          </Link>
+          <Link to="/">
+            <p className="py-1.5 hover:underline">Blog</p>
+          </Link>
+          <Link to="/">
+            <p className="py-1.5 hover:underline">Help Center</p>
+          </Link>
         </div>
         <div className="flex flex-col gap-3">
           {/* 4th */}
           <h3 className="py-1.5 text-white font-bold">Connect</h3>
           <div className="flex gap-2">
-            <Github />
-            <Linkedin />
-            <Instagram />
+            <Link>
+            <Github className="cursor-pointer "/>
+            </Link>
+            <Link>
+            <Linkedin className="cursor-pointer "/>
+            </Link>
+            <Link>
+            <Instagram className="cursor-pointer "/>
+            </Link>
           </div>
         </div>
       </div>
       <div className="flex flex-col items-center gap-4 lg:items-start lg:flex-row justify-around border-t text-md border-white/40 py-10">{/* bottom  */}
         <div className="">
-            <p>© 2024 CodeArena. All rights reserved.</p>
+          <p>© 2024 CodeArena. All rights reserved.</p>
         </div>
         <div>
-            Built with React, TypeScript, and TailwindCSS
+          Built with React, TypeScript, and TailwindCSS
         </div>
       </div>
     </div>

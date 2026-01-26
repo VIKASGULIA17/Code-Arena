@@ -1,7 +1,7 @@
 // Driver code templates for all 70 problems across all languages
 // This file contains boilerplate code and driver code functions for testing
 
-export const driverCode_Template = {
+export const userCode = {
   // =========================================================
   // PROBLEM 1: TWOSUM
   // =========================================================
@@ -15,71 +15,11 @@ export const driverCode_Template = {
 const twoSum = function(nums, target) {
     // Write your code here
     
-};`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
+};`
 
-// 2. Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const result = twoSum(t.input.nums, t.input.target);
-        resultEntry.actual = result;
-        resultEntry.expected = t.expected;
-        
-        if (JSON.stringify(result) === JSON.stringify(t.expected)) {
-            resultEntry.status = "Passed";
-        } else {
-            resultEntry.status = "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-console.log(JSON.stringify(results));
-`,
     },
 
-    typescript: {
-      boilerplate: `function twoSum(nums: number[], target: number): number[] {
-    // Write your code here
-    return [];
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results: any[] = [];
-
-testCases.forEach((t: any, index: number) => {
-    const resultEntry: any = { id: index + 1 };
-    try {
-        const result = twoSum(t.input.nums, t.input.target);
-        resultEntry.actual = result;
-        resultEntry.expected = t.expected;
-        
-        if (JSON.stringify(result) === JSON.stringify(t.expected)) {
-            resultEntry.status = "Passed";
-        } else {
-            resultEntry.status = "Failed";
-        }
-    } catch (error: any) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-console.log(JSON.stringify(results));
-`,
-    },
+    
 
     python: {
       boilerplate: `class Solution:
@@ -125,49 +65,7 @@ print(json.dumps(results))
 `,
     },
 
-    php: {
-      boilerplate: `function twoSum($nums, $target) {
-    // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Driver Code
-$cases_json = '${JSON.stringify(cases)}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $nums = $t['input']['nums'];
-        $target = $t['input']['target'];
-        $expected = $t['expected'];
-
-        $result = twoSum($nums, $target);
-
-        $result_entry['actual'] = $result;
-        $result_entry['expected'] = $expected;
-        
-        // PHP array comparison
-        if ($result == $expected) {
-            $result_entry['status'] = 'Passed';
-        } else {
-            $result_entry['status'] = 'Failed';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-echo json_encode($results);
-?>
-`,
-    },
 
     // --- COMPILED LANGUAGES (Using Code Injection instead of JSON) ---
 
@@ -218,50 +116,7 @@ ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/clas
 `,
     },
 
-    csharp: {
-      boilerplate: `public class Solution {
-    public int[] TwoSum(int[] nums, int target) {
-        // Write your code here
-        return new int[]{};
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-public class MainClass {
-    ${userCode}
-
-    public static void Main(string[] args) {
-        List<string> results = new List<string>();
-        Solution solution = new Solution();
-
-        ${cases.map((t, i) => `
-        try {
-            int[] nums = new int[] {${t.input.nums.join(',')}};
-            int target = ${t.input.target};
-            int[] expected = new int[] {${t.expected.join(',')}};
-            
-            int[] result = solution.TwoSum(nums, target);
-            
-            bool passed = Enumerable.SequenceEqual(result, expected);
-            string status = passed ? "Passed" : "Failed";
-            
-            string resStr = "[" + string.Join(",", result) + "]";
-            string expStr = "[" + string.Join(",", expected) + "]";
-            
-            results.Add($"{{\\"id\\": ${i + 1}, \\"status\\": \\"{status}\\", \\"actual\\": {resStr}, \\"expected\\": {expStr}}}");
-        } catch (Exception e) {
-             results.Add($"{{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"{e.Message}\\"}}");
-        }
-        `).join('\n')}
-
-        Console.WriteLine("[" + string.Join(",", results) + "]");
-    }
-}
-`,
-    },
+    
 
     cpp: {
       boilerplate: `class Solution {

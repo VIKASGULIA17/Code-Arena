@@ -3,7 +3,7 @@ import Editor from "@monaco-editor/react";
 import LanguageSelector from "./LanguageSelector";
 import { LANGUAGE_VERSIONS } from "../../data/constants";
 import TestCases from "./TestCases";
-import { driverCode_Template } from "../../data/driverCodeTemplate";
+import { userCode } from "../../data/UserCodeTemplate";
 
 const CodeEditor = ({ problemId=1,isContest }) => {
 
@@ -21,7 +21,7 @@ const CodeEditor = ({ problemId=1,isContest }) => {
 
 
 
-  const template = driverCode_Template[problemId][currentLang]['boilerplate']||" ";
+  const template = userCode[problemId][currentLang]['boilerplate']||" ";
 
   // const fetchedTemplate = getProblemTemplate(problemId, Language[0]);  //basic teplate 
   const [Code, setCode] = useState(template); //current code of the user
@@ -29,7 +29,7 @@ const CodeEditor = ({ problemId=1,isContest }) => {
   useEffect(() => {
     
     const newLang=Language[0]
-    const new_template = driverCode_Template[problemId][newLang]['boilerplate'];
+    const new_template = userCode[problemId][newLang]['boilerplate'];
     setCode(new_template)
     setOutput(null)
 
@@ -47,7 +47,7 @@ const CodeEditor = ({ problemId=1,isContest }) => {
   }, [Language]); 
 
   const handleReset = () => {
-    const freshTemplate = driverCode_Template[problemId]?.[Language[0]]?.boilerplate || "";
+    const freshTemplate = userCode[problemId]?.[Language[0]]?.boilerplate || "";
     
     // 2. Update state
     setCode(freshTemplate);

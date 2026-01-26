@@ -13,7 +13,7 @@ import Solution from "./problemPages/Solution";
 import Discussion from "./problemPages/Discussion";
 import NotFound from "../../Pages/NotFound";
 
-const ProblemDetails = ({ isContest,key,problemId }) => {
+const ProblemDetails = ({ isContest,problemId }) => {
 
   const { id:paramId } = useParams();
 

@@ -8,7 +8,7 @@ import {
 import { Button } from "../ui/button";
 import { ChevronDown, RotateCw } from "lucide-react";
 import Stopwatch from "../others/StopWatch";
-import { driverCode_Template } from "../../data/driverCodeTemplate";
+import { userCode } from "../../data/UserCodeTemplate";
 
 const LanguageSelector = ({
   Language,
@@ -37,7 +37,7 @@ const LanguageSelector = ({
     setLanguage([lang, version]);
 
     const newBoilerplate =
-      driverCode_Template[problemId]?.[lang]?.boilerplate || "";
+      userCode[problemId]?.[lang]?.boilerplate || "";
     setCode(newBoilerplate);
   };
 
