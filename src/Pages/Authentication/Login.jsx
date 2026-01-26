@@ -8,8 +8,46 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import * as yup from "yup";
+import { Formik, Field, ErrorMessage, Form } from "formik";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const navigate = useNavigate();
+
+  const validateData = yup.object({
+    username: yup.string().required("**username is required"),
+    password: yup
+      .string()
+      .min(6, "Min 6 characters")
+      .required("**password is required"),
+  });
+
+  const checkToSpringBackend = async (values) => {
+    const result = await axios.post(`${BACKEND_URL}/public/login`, values);
+    return result.data;
+  };
+
+  const handleSubmit = async (values, helper) => {
+    try {
+      const res = await checkToSpringBackend(values);
+      if (res.jwtToken) {
+        console.log(res.jwtToken);
+        toast.success(`User logged in..`);
+        navigate("/");
+      } else {
+        throw new Error();
+      }
+    } catch (e) {
+      toast.error("User failed to login");
+    } finally {
+      helper.resetForm();
+    }
+  };
+
   return (
     <div
       className={`
@@ -70,31 +108,57 @@ const Login = () => {
               className="flex flex-col w-full
                          lg:w-[75%] py-5 gap-10 px-3 lg:mx-5"
             >
-              <form className="flex flex-col gap-5">
-                <input
-                  type="text"
-                  placeholder="Email address"
-                  className="placeholder:text-primary outline-2 text-black px-4 py-3 rounded-xl    bg-cardbg"
-                />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  className="placeholder:text-primary outline-2 text-black px-4 py-3 rounded-xl    bg-cardbg"
-                />
+              <Formik
+                initialValues={{ username: "", password: "" }}
+                validationSchema={validateData}
+                onSubmit={handleSubmit}
+              >
+                {({ isSubmitted }) => {
+                  return (
+                    <Form className="flex flex-col gap-5">
+                      <Field
+                        name="username"
+                        type="text"
+                        placeholder="Username"
+                        className="placeholder:text-primary outline-2 text-black px-4 py-3 rounded-xl    bg-cardbg"
+                      />
+                      <ErrorMessage
+                        component="p"
+                        name="username"
+                        className="text-sm text-red-600"
+                      />
+                      <Field
+                        name="password"
+                        type="password"
+                        placeholder="••••••"
+                        className="placeholder:text-primary outline-2 text-black px-4 py-3 rounded-xl bg-cardbg"
+                      />
+                      <ErrorMessage
+                        component="p"
+                        name="password"
+                        className="text-sm text-red-600"
+                      />
 
-                <button className="w-full rounded-lg bg-amber-200 h-10">
-                  Log In
-                </button>
-                <p className="text-black font-semibold">
-                  Don't have an account?
-                  <Link to="/signup">
-                    <span className="text-yellow-400 font-bold ">
-                      {" "}
-                      Create One{" "}
-                    </span>
-                  </Link>
-                </p>
-              </form>
+                      <button
+                        disabled={isSubmitted}
+                        type="submit"
+                        className="w-full rounded-lg bg-amber-200 h-10"
+                      >
+                        {isSubmitted ? "Logging in..." : "Log In"}
+                      </button>
+                    </Form>
+                  );
+                }}
+              </Formik>
+              <p className="text-black font-semibold">
+                Don't have an account?
+                <Link to="/signup">
+                  <span className="text-yellow-400 font-bold ">
+                    {" "}
+                    Create One{" "}
+                  </span>
+                </Link>
+              </p>
             </div>
           </div>
         </div>
