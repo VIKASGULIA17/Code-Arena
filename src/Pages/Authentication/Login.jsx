@@ -16,7 +16,7 @@ const Login = () => {
         w-full h-screen
          absolute top-0 left-0 duration-1000 text-black flex bg-white/50
          flex-row
-         lg:flex-row 
+         lg:flex-row
          `}
     >
       <Navbar />
