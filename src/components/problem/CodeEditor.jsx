@@ -4,6 +4,7 @@ import LanguageSelector from "./LanguageSelector";
 import { LANGUAGE_VERSIONS } from "../../data/constants";
 import TestCases from "./TestCases";
 import { userCode } from "../../data/UserCodeTemplate";
+import { problemSolutions } from "../../data/solution";
 
 const CodeEditor = ({ problemId=1,isContest }) => {
 
@@ -21,10 +22,12 @@ const CodeEditor = ({ problemId=1,isContest }) => {
 
 
 
-  const template = userCode[problemId][currentLang]['boilerplate']||" ";
+  // const template = userCode[problemId][currentLang]['boilerplate']||" ";
+
+  const template = problemSolutions[problemId][currentLang] || "";
 
   // const fetchedTemplate = getProblemTemplate(problemId, Language[0]);  //basic teplate 
-  const [Code, setCode] = useState(template); //current code of the user
+  const [Code, setCode] = useState(template); //current code of the user 
 
   useEffect(() => {
     

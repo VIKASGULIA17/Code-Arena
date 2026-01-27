@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Code2, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 import { useAppContext } from "../context/AppContext";
 
@@ -47,7 +48,10 @@ const Navbar = () => {
   return (
     <>
       {/* 1. Main Navbar Header */}
-      <div
+      <motion.div
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
         style={{ height: NAVBAR_HEIGHT }}
         className="w-full fixed top-0 z-50 text-sm bg-white/80 flex justify-around border-b border-border/50 border-grey-100 backdrop-blur-xl duration-200"
       >
@@ -66,7 +70,7 @@ const Navbar = () => {
             {navBarContent.map((obj, idx) => (
 
 
-              <div key={idx} className={`flex cursor-pointer ${!user && obj.label === "Profile" ? 'hidden' : ''} capitalize rounded-sm text-white`}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} key={idx} className={`flex cursor-pointer ${!user && obj.label === "Profile" ? 'hidden' : ''} capitalize rounded-sm text-white`}>
                 <Link to={obj.path}>
                   <p
                     className={`rounded-sm px-3 py-2 ${isActive(obj.path)
@@ -77,7 +81,7 @@ const Navbar = () => {
                     {obj.label}
                   </p>
                 </Link>
-              </div>
+              </motion.div>
 
             ))}
           </div>
@@ -91,13 +95,16 @@ const Navbar = () => {
               <img src="https://i.pravatar.cc" alt="" className="w-8 h-8 rounded-full" />
             </div> :
             <div className="flex gap-4">
+
             <Link to="/login">
               <Button className={`${isJwtExist?"hidden":"block"} border bg-black text-white`}>Login</Button>
             </Link>
             <Link to="/signup">
               <Button className={`${isJwtExist?"hidden":"block"} border bg-white border-black text-black`}>Signup</Button>
+            
             </Link>
             <Button onClick={clearJwtToken} className={`${isJwtExist?"block":"hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}>Logout</Button>
+
             </div>
           }
         </div>
@@ -107,7 +114,7 @@ const Navbar = () => {
         <div className={` ${MenuOpen ? 'flex' : 'hidden'} items-center my-4 px-2 rounded-lg hover:text-white`}>
           <X onClick={() => { setMenuOpen(false); }} className="cursor-pointer hover:text-blue-400" />
         </div>
-      </div >
+      </motion.div >
 
       {/* 3. Mobile Menu Content */}
       < div
@@ -137,11 +144,11 @@ const Navbar = () => {
           <div className="flex flex-col w-full">
             <div className="flex flex-col gap-2 border-t py-3 border-gray-500 mx-10 mt-2">
               <Link to="/login">
-              
-              <h2 className="hover:bg-blue-400 duration-200 hover:text-white px-3 py-2 rounded-lg cursor-pointer text-center border bg-black text-white">Login</h2>
+
+                <h2 className="hover:bg-blue-400 duration-200 hover:text-white px-3 py-2 rounded-lg cursor-pointer text-center border bg-black text-white">Login</h2>
               </Link>
               <Link to='/signup'>
-              <h2 className="bg-blue-400 text-white text-center px-3 py-2 rounded-lg cursor-pointer">Sign up</h2>
+                <h2 className="bg-blue-400 text-white text-center px-3 py-2 rounded-lg cursor-pointer">Sign up</h2>
               </Link>
             </div>
           </div>

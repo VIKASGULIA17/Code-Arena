@@ -1640,7 +1640,7 @@ var findMedianSortedArrays = function(nums1, nums2) {
     python: `class Solution:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
         if len(nums1) > len(nums2):
-            nums1, nums2 = nums2, nums1
+            return self.findMedianSortedArrays(nums2, nums1)
             
         x, y = len(nums1), len(nums2)
         low, high = 0, x
@@ -1656,13 +1656,15 @@ var findMedianSortedArrays = function(nums1, nums2) {
             
             if maxX <= minY and maxY <= minX:
                 if (x + y) % 2 == 0:
-                    return (max(maxX, maxY) + min(minX, minY)) / 2
+                    return (max(maxX, maxY) + min(minX, minY)) / 2.0
                 else:
-                    return max(maxX, maxY)
+                    return float(max(maxX, maxY))
             elif maxX > minY:
                 high = partitionX - 1
             else:
-                low = partitionX + 1`,
+                low = partitionX + 1
+        
+        return 0.0`,
 
     cpp: `class Solution {
 public:

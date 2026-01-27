@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
+  ArrowLeft,
+  ArrowRight,
   FileText,
   Lightbulb,
   MessagesSquare,
@@ -13,11 +15,11 @@ import Solution from "./problemPages/Solution";
 import Discussion from "./problemPages/Discussion";
 import NotFound from "../../Pages/NotFound";
 
-const ProblemDetails = ({ isContest,problemId }) => {
+const ProblemDetails = ({ isContest, problemId }) => {
 
-  const { id:paramId } = useParams();
+  const { id: paramId } = useParams();
 
-  const id= isContest?problemId:paramId;
+  const id = isContest ? problemId : paramId;
 
   const problem = problemInfo[id]; //to get problem info(desciption on the left)
   const [currentTopBar, setcurrentTopBar] = useState("Description"); //to manage between description ,solution and discussion 
@@ -55,29 +57,37 @@ const ProblemDetails = ({ isContest,problemId }) => {
       <div className="w-full md:w-1/2 px-3 md:px-5 md:h-screen md:overflow-y-auto">
         {/* left  */}
         <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-2 min-h-10 sticky top-0 z-10">
-           {isContest ?
-           <TabButton
-            label="Description"
-            icon={Lightbulb}
-            />
-           :
-          <div className="flex items-center gap-1 overflow-x-auto">
+          {isContest ?
             <TabButton
               label="Description"
-              icon={FileText}
+              icon={Lightbulb}
             />
- 
-            <TabButton
-            label="Solution"
-            icon={Lightbulb}
-            />
+            :
+            <div className="flex items-center gap-1 overflow-x-auto">
+              <TabButton
+                label="Description"
+                icon={FileText}
+              />
 
-            <TabButton
-            label="Discussion"
-            icon={MessagesSquare}
-            />
+              <TabButton
+                label="Solution"
+                icon={Lightbulb}
+              />
+
+              <TabButton
+                label="Discussion"
+                icon={MessagesSquare}
+              />
+            </div>
+          }
+          <div className="flex gap-2 items-center">
+            <Link to={`/problem/${Number(id) - 1}`}>
+              <ArrowLeft className="cursor-pointer hover:text-blue-500 transition-colors" />
+            </Link >
+            <Link to={`/problem/${Number(id) + 1}`}>
+              <ArrowRight className="cursor-pointer hover:text-blue-500 transition-colors" />
+            </Link>
           </div>
-            }
         </div>
 
         {currentTopBar == "Description" ? (

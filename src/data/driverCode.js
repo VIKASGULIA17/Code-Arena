@@ -78,16 +78,19 @@ print(json.dumps(results))
 import java.util.*;
 import java.util.stream.*;
 
-// 1. DRIVER CLASS
 public class Solution {
     public static void main(String[] args) {
         List<String> results = new ArrayList<>();
         UserLogic solution = new UserLogic();
 
         ${cases.map((t, i) => {
-            // Logic to determine types based on data
+            // FIX: Detect if we need double or int based on function name or data
+            const isFloat = fnName === 'findMedianSortedArrays' || !Number.isInteger(t.expected);
+            const numType = isFloat ? "double" : "int";
+            
+            // Handle Arrays vs Primitives
             const isArrExpected = Array.isArray(t.expected);
-            const expectedType = isArrExpected ? "int[]" : (typeof t.expected === "boolean" ? "boolean" : "int");
+            const expectedType = isArrExpected ? "int[]" : numType;
             const expectedVal = isArrExpected ? `{${t.expected.join(',')}}` : t.expected;
 
             return `
@@ -107,11 +110,11 @@ public class Solution {
             ${expectedType} result = solution.${fnName}(${Object.keys(t.input).join(', ')});
             
             // Compare
-            boolean passed = ${isArrExpected ? "Arrays.equals(result, expected)" : "result == expected"};
+            boolean passed = ${isArrExpected ? "Arrays.equals(result, expected)" : (isFloat ? "Math.abs(result - expected) < 0.00001" : "result == expected")};
             
             String status = passed ? "Passed" : "Failed";
             
-            // Format JSON output
+            // Format Output for JSON
             String actualStr = ${isArrExpected ? "Arrays.toString(result)" : "String.valueOf(result)"};
             String expectedStr = ${isArrExpected ? "Arrays.toString(expected)" : "String.valueOf(expected)"};
             
@@ -128,16 +131,38 @@ public class Solution {
     }
 }
 
-// 2. USER CODE
 ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
 `,
 
         cpp: (fnName, userCode, cases) => `
 #include <iostream>
+#include <string>
 #include <vector>
-#include <sstream>
 #include <algorithm>
-#include <bits/stdc++.h>
+#include <sstream>
+#include <queue>
+#include <deque>
+#include <bitset>
+#include <iterator>
+#include <list>
+#include <stack>
+#include <map>
+#include <set>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <limits>
+#include <time.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <unordered_map>
+#include <unordered_set>
+#include<climits>
+
+using namespace std;
 
 using namespace std;
 
@@ -443,12 +468,32 @@ ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/clas
 
         cpp: (fnName, userCode, cases) => `
 #include <iostream>
-#include <vector>
 #include <string>
-#include <sstream>
+#include <vector>
 #include <algorithm>
-#include <bits/stdc++.h>
+#include <sstream>
+#include <queue>
+#include <deque>
+#include <bitset>
+#include <iterator>
+#include <list>
+#include <stack>
+#include <map>
+#include <set>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <limits>
+#include <time.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <unordered_map>
+#include <unordered_set>
 
+using namespace std;
 
 using namespace std;
 
@@ -767,11 +812,32 @@ ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/clas
 
         cpp: (fnName, userCode, cases) => `
 #include <iostream>
-#include <vector>
-#include <queue>
 #include <string>
-#include <sstream>
+#include <vector>
 #include <algorithm>
+#include <sstream>
+#include <queue>
+#include <deque>
+#include <bitset>
+#include <iterator>
+#include <list>
+#include <stack>
+#include <map>
+#include <set>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <limits>
+#include <time.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <unordered_map>
+#include <unordered_set>
+
+using namespace std;
 
 using namespace std;
 
@@ -1073,11 +1139,32 @@ ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/clas
 
         cpp: (fnName, userCode, cases) => `
 #include <iostream>
-#include <vector>
-#include <unordered_map>
 #include <string>
-#include <sstream>
+#include <vector>
 #include <algorithm>
+#include <sstream>
+#include <queue>
+#include <deque>
+#include <bitset>
+#include <iterator>
+#include <list>
+#include <stack>
+#include <map>
+#include <set>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <limits>
+#include <time.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <unordered_map>
+#include <unordered_set>
+
+using namespace std;
 
 using namespace std;
 
@@ -1232,46 +1319,46 @@ print(json.dumps(results))
 
         java: (fnName, userCode, cases) => `
 import java.util.*;
-import java.util.stream.*;
 
-// 1. DRIVER CLASS
 public class Solution {
     public static void main(String[] args) {
         List<String> results = new ArrayList<>();
         UserLogic solution = new UserLogic();
 
-        ${cases.map((t, i) => `
+        ${cases.map((t, i) => {
+            // FIX: Detect Return Type based on expected value
+            let returnType = "String";
+            if (typeof t.expected === "boolean") returnType = "boolean";
+            else if (typeof t.expected === "number") returnType = "int";
+
+            return `
         try {
-            // Dynamic Input Parsing (Strings)
-            ${Object.entries(t.input).map(([key, val]) => `
-            String ${key} = "${val}";
-            `).join('\n')}
+            String s = "${t.input.s}";
+            ${returnType} expected = ${t.expected};
             
-            // Expected Output (Handle String or Int return types)
-            ${typeof t.expected === 'number' ? `int expected = ${t.expected};` : `String expected = "${t.expected}";`}
+            // Dynamic Return Type Declaration
+            ${returnType} result = solution.${fnName}(s);
             
-            // Call User Function
-            ${typeof t.expected === 'number' ? 'int' : 'String'} result = solution.${fnName}(${Object.keys(t.input).join(', ')});
-            
-            boolean passed = ${typeof t.expected === 'number' ? 'result == expected' : 'result.equals(expected)'};
-            
+            boolean passed = result == expected; // Works for int and boolean
+            // For Strings, we might need result.equals(expected), but for this fix boolean is priority
+            if ("${returnType}".equals("String")) {
+                 passed = String.valueOf(result).equals(String.valueOf(expected));
+            }
+
             String status = passed ? "Passed" : "Failed";
             
-            // JSON Construction
             String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
                 ${i + 1}, status, result, expected);
             
             results.add(json);
         } catch (Exception e) {
             results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
-        }
-        `).join('\n')}
+        }`;
+        }).join('\n')}
 
         System.out.println("[" + String.join(",", results) + "]");
     }
 }
-
-// 2. USER CODE
 ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
 `,
 
@@ -1279,10 +1366,30 @@ ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/clas
 #include <iostream>
 #include <string>
 #include <vector>
-#include <sstream>
 #include <algorithm>
-#include<queue>
-#include<bits/stdc++>
+#include <sstream>
+#include <queue>
+#include <deque>
+#include <bitset>
+#include <iterator>
+#include <list>
+#include <stack>
+#include <map>
+#include <set>
+#include <functional>
+#include <numeric>
+#include <utility>
+#include <limits>
+#include <time.h>
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <unordered_map>
+#include <unordered_set>
+
+using namespace std;
 
 using namespace std;
 

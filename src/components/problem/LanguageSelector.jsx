@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { ChevronDown, RotateCw } from "lucide-react";
 import Stopwatch from "../others/StopWatch";
 import { userCode } from "../../data/UserCodeTemplate";
+import { problemSolutions } from "../../data/solution";
 
 const LanguageSelector = ({
   Language,
@@ -36,8 +37,10 @@ const LanguageSelector = ({
   const handleLanguageChange = (lang, version) => {
     setLanguage([lang, version]);
 
-    const newBoilerplate =
-      userCode[problemId]?.[lang]?.boilerplate || "";
+    // const newBoilerplate =
+      // userCode[problemId]?.[lang]?.boilerplate || "";
+
+      const newBoilerplate = problemSolutions[problemId]?.[lang] || "";
     setCode(newBoilerplate);
   };
 
