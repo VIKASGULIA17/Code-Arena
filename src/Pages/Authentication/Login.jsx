@@ -30,6 +30,7 @@ const Login = () => {
 
   const checkToSpringBackend = async (values) => {
     const result = await axios.post(`${BACKEND_URL}/public/login`, values);
+    console.log(result.data);
     return result.data;
   };
 
