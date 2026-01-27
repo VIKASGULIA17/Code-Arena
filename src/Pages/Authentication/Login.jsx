@@ -41,7 +41,7 @@ const Login = () => {
         // setisJwtExist(true);
         // setjwtToken(res.jwtToken);
         // toast.success(`User logged in..`);
-        // navigate("/");
+        navigate("/");
       // } else {
         // throw new Error();
       // }
