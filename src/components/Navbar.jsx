@@ -145,11 +145,12 @@ const Navbar = () => {
             <div className="flex flex-col gap-2 border-t py-3 border-gray-500 mx-10 mt-2">
               <Link to="/login">
 
-                <h2 className="hover:bg-blue-400 duration-200 hover:text-white px-3 py-2 rounded-lg cursor-pointer text-center border bg-black text-white">Login</h2>
+                <h2 className={`hover:bg-blue-400 duration-200 hover:text-white px-3 py-2 rounded-lg cursor-pointer text-center border bg-black text-white ${isJwtExist ? "hidden" : "block"}`}>Login</h2>
               </Link>
               <Link to='/signup'>
-                <h2 className="bg-blue-400 text-white text-center px-3 py-2 rounded-lg cursor-pointer">Sign up</h2>
+                <h2 className={`bg-blue-400 text-white text-center px-3 py-2 rounded-lg cursor-pointer ${isJwtExist ? "hidden" : "block"}`}>Sign up</h2>
               </Link>
+              <Button onClick={clearJwtToken} className={`${isJwtExist ? "block" : "hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}>Logout</Button>
             </div>
           </div>
         </div>
