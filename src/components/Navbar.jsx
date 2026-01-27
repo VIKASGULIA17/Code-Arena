@@ -6,7 +6,10 @@ import { Button } from "./ui/button";
 const Navbar = () => {
   const [MenuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [user, setuser] = useState(null)
+  const [user, setuser] = useState(null);
+  const [isJwtExist,setisJwtExist] = useState(()=>{
+    return localStorage.getItem("jwtToken")!=null 
+  })
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +34,11 @@ const Navbar = () => {
   function isActive(path) {
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
+  }
+
+  function clearJwtToken(){
+    localStorage.removeItem("jwtToken");
+    setisJwtExist(false);
   }
 
   const NAVBAR_HEIGHT = "64px";
@@ -83,11 +91,12 @@ const Navbar = () => {
             </div> :
             <div className="flex gap-4">
             <Link to="/login">
-              <Button className="border bg-black text-white">Login</Button>
+              <Button className={`${isJwtExist?"hidden":"block"} border bg-black text-white`}>Login</Button>
             </Link>
             <Link to="/signup">
-              <Button className="border bg-white border-black text-black">Signup</Button>
+              <Button className={`${isJwtExist?"hidden":"block"} border bg-white border-black text-black`}>Signup</Button>
             </Link>
+            <Button onClick={clearJwtToken} className={`${isJwtExist?"block":"hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}>Logout</Button>
             </div>
           }
         </div>

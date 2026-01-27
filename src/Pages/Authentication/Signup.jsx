@@ -20,7 +20,6 @@ const Signup = () => {
   const [capVal, setCapVal] = useState(null);
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-
   const validateData = yup.object({
     username: yup.string().required("**name is required"),
     email: yup

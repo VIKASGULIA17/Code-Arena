@@ -35,7 +35,7 @@ const Login = () => {
     try {
       const res = await checkToSpringBackend(values);
       if (res.jwtToken) {
-        console.log(res.jwtToken);
+        localStorage.setItem("jwtToken",res.jwtToken);
         toast.success(`User logged in..`);
         navigate("/");
       } else {
