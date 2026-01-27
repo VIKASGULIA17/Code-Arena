@@ -12,6 +12,7 @@ import Signup from './Pages/Authentication/Signup'
 import AlgoVisualizer from './Pages/AlgoVisualizer'
 import OngoingContestPage from './components/Contest/OngoingContestPage'
 import ContestRegistration from './components/Contest/ContestRegistration'
+import SessionExpired from './components/others/sessionExpired'
 
 
 const App = () => {
@@ -29,6 +30,7 @@ const App = () => {
       <Route path='signup' element={<Signup />} />
       <Route path='algovisualizer' element={<AlgoVisualizer />} />
       <Route path='*' element={<NotFound />} />
+      <Route path="/sessionExpired" element={<SessionExpired/>}/>
       
       {/* <Route path='/about' element={<About />} /> */}
     </Routes>
