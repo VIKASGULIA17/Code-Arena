@@ -30,7 +30,6 @@ const Login = () => {
 
   const checkToSpringBackend = async (values) => {
     const result = await axios.post(`${BACKEND_URL}/public/login`, values);
-    console.log(result);
     return result.data;
   };
 
@@ -38,13 +37,12 @@ const Login = () => {
     try {
       const res = await checkToSpringBackend(values);
       if (res.jwtToken) {
-        // localStorage.setItem("jwtToken", res.jwtToken);
-        // setisJwtExist(true);
-        // setjwtToken(res.jwtToken);
-        // toast.success(`User logged in..`);
+        localStorage.setItem("jwtToken", res.jwtToken);
+        setisJwtExist(true);
+        setjwtToken(res.jwtToken);
+        toast.success(`User logged in..`);
         navigate("/");
       } else {
-        console.log("login failed");
         throw new Error();
       }
     } catch (e) {
