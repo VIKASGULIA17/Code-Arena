@@ -36,11 +36,11 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
     const userCode = value;
     const lang = Language[0];
     const type=dsaProblems[problemId-1].type;
+    const fnName=dsaProblems[problemId-1].fnName;
 
 
 
     if (!userCode) return;
-
     setIsLoading(true);
     setisError(false);
     setOutput(null);
@@ -57,7 +57,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
       }
 
       // 1. Generate code using VISIBLE cases
-      const fullSourceCode = driverCode(userCode, visibleTestCases);
+      const fullSourceCode = driverCode(fnName,userCode, visibleTestCases);
       // this will get data from the api
       const data = await executeCode(Language, fullSourceCode);
 
@@ -90,6 +90,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
     const userCode = value;
     const lang = Language[0];
     const type=dsaProblems[problemId-1].type;
+    const fnName=dsaProblems[problemId-1].fnName;
 
     if (!userCode) return;
 
@@ -109,7 +110,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
       }
 
       // 1.  HIDDEN cases
-      const fullSourceCode = driverCode(userCode, hiddenTestCases);
+      const fullSourceCode = driverCode(fnName,userCode, hiddenTestCases);
 
       // 2. Execute 
       const data = await executeCode(Language, fullSourceCode);

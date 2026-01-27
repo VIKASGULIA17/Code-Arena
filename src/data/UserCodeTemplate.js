@@ -1,13 +1,7 @@
-// Driver code templates for all 70 problems across all languages
-// This file contains boilerplate code and driver code functions for testing
-
 export const userCode = {
-  // =========================================================
-  // PROBLEM 1: TWOSUM
-  // =========================================================
- 1: {
-    javascript: {
-      boilerplate: `/**
+    1: {
+        javascript: {
+            boilerplate: `/**
  * @param {number[]} nums
  * @param {number} target
  * @return {number[]}
@@ -16,53 +10,49 @@ const twoSum = function(nums, target) {
     // Write your code here
     
 };`
-
-    },
-
-    
-
-    python: {
-      boilerplate: `class Solution:
+        },
+        python: {
+            boilerplate: `class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         # Write your code here
         pass`,
-      
-    },
 
-    
+        },
 
-    // --- COMPILED LANGUAGES (Using Code Injection instead of JSON) ---
 
-   java: {
-      boilerplate: `class Solution {
+
+        // --- COMPILED LANGUAGES (Using Code Injection instead of JSON) ---
+
+        java: {
+            boilerplate: `class Solution {
     public int[] twoSum(int[] nums, int target) {
         // Write your code here
         return new int[]{};
     }
 }`,
-      
-    },
 
-    
+        },
 
-    cpp: {
-      boilerplate: `class Solution {
+
+
+        cpp: {
+            boilerplate: `class Solution {
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
         // Write your code here
         
     }
 };`,
-      
-    },
-  },
 
-  // =========================================================
-  // PROBLEM 2: ADD TWO NUMBERS
-  // =========================================================
-  2: {
-    javascript: {
-      boilerplate: `/**
+        },
+    },
+
+    // =========================================================
+    // PROBLEM 2: ADD TWO NUMBERS
+    // =========================================================
+    2: {
+        javascript: {
+            boilerplate: `/**
  * Definition for singly-linked list.
  * function ListNode(val, next) {
  * this.val = (val===undefined ? 0 : val)
@@ -77,7 +67,7 @@ public:
 var addTwoNumbers = function(l1, l2) {
     
 };`,
-      driverCode: (userCode, cases) => `
+            driverCode: (userCode, cases) => `
 function ListNode(val, next) {
     this.val = (val===undefined ? 0 : val)
     this.next = (next===undefined ? null : next)
@@ -130,10 +120,10 @@ testCases.forEach((t, index) => {
 });
 console.log(JSON.stringify(results));
 `,
-    },
+        },
 
-    typescript: {
-      boilerplate: `class ListNode {
+        typescript: {
+            boilerplate: `class ListNode {
     val: number
     next: ListNode | null
     constructor(val?: number, next?: ListNode | null) {
@@ -146,7 +136,7 @@ function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | nul
     // Write your code here
     return null;
 }`,
-      driverCode: (userCode, cases) => `
+            driverCode: (userCode, cases) => `
 // We re-declare class inside driver for safety in case user deletes it
 class ListNode {
     val: number
@@ -207,10 +197,10 @@ testCases.forEach((t: any, index: number) => {
 });
 console.log(JSON.stringify(results));
 `,
-    },
+        },
 
-    python: {
-      boilerplate: `
+        python: {
+            boilerplate: `
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -219,7 +209,7 @@ console.log(JSON.stringify(results));
 class Solution:
     def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
         pass`,
-      driverCode: (userCode, cases) => `
+            driverCode: (userCode, cases) => `
 import json
 from typing import Optional, List
 
@@ -274,10 +264,10 @@ for i, t in enumerate(test_cases):
 
 print(json.dumps(results))
 `,
-    },
+        },
 
-    php: {
-      boilerplate: `
+        php: {
+            boilerplate: `
 /**
  * Definition for a singly-linked list.
  * class ListNode {
@@ -292,7 +282,7 @@ print(json.dumps(results))
 function addTwoNumbers($l1, $l2) {
     
 }`,
-      driverCode: (userCode, cases) => `
+            driverCode: (userCode, cases) => `
 <?php
 class ListNode {
     public $val = 0;
@@ -354,10 +344,10 @@ foreach ($test_cases as $index => $t) {
 echo json_encode($results);
 ?>
 `,
-    },
+        },
 
-    java: {
-      boilerplate: `/**
+        java: {
+            boilerplate: `/**
  * Definition for singly-linked list.
  * public class ListNode {
  * int val;
@@ -372,7 +362,7 @@ class Solution {
         
     }
 }`,
-      driverCode: (userCode, cases) => `
+            driverCode: (userCode, cases) => `
 import java.util.*;
 
 // Helpers
@@ -440,10 +430,10 @@ public class Main {
     }
 }
 `,
-    },
+        },
 
-    csharp: {
-      boilerplate: `/**
+        csharp: {
+            boilerplate: `/**
  * Definition for singly-linked list.
  * public class ListNode {
  * public int val;
@@ -459,7 +449,7 @@ public class Solution {
         
     }
 }`,
-      driverCode: (userCode, cases) => `
+            driverCode: (userCode, cases) => `
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -525,10 +515,10 @@ public class MainClass {
     }
 }
 `,
-    },
+        },
 
-    cpp: {
-      boilerplate: `/**
+        cpp: {
+            boilerplate: `/**
  * Definition for singly-linked list.
  * struct ListNode {
  * int val;
@@ -544,7 +534,7 @@ public:
         
     }
 };`,
-      driverCode: (userCode, cases) => `
+            driverCode: (userCode, cases) => `
 #include <iostream>
 #include <vector>
 #include <string>
@@ -618,10 +608,10 @@ int main() {
         string status = passed ? "Passed" : "Failed";
         
         stringstream json;
-        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << resultStr << ", \\"expected\\": " << expectedStr << "}";
+        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << resultStr << ", \\"expected\\": " << expectedStr << "}";
         results.push_back(json.str());
     } catch (const exception& e) {
-        results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
+        results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
     }
     `).join('\n')}
 
@@ -635,1381 +625,223 @@ int main() {
     return 0;
 }
 `,
-    }
-},
-
-  // =========================================================
-  // PROBLEM 3: LENGTHOFLONGESTSUBSTRING
-  // =========================================================
-  3: {
-    javascript: {
-      boilerplate: `function lengthOfLongestSubstring(s) {
+        }
+    },
+    // =========================================================
+    // PROBLEM 3: LONGEST SUBSTRING WITHOUT REPEATING CHARACTERS
+    // =========================================================
+    3: {
+        javascript: {
+            boilerplate: `/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
-    },
-    python: {
-      boilerplate: `def lengthOfLongestSubstring(s):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function lengthOfLongestSubstring(s: string): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
-    },
-    java: {
-      boilerplate: `class Solution {
+};`
+        },
+        python: {
+            boilerplate: `class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # Write your code here
+        pass`
+        },
+        java: {
+            boilerplate: `class Solution {
     public int lengthOfLongestSubstring(String s) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int LengthOfLongestSubstring(string s) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function lengthOfLongestSubstring($s) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
-    },
-    cpp: {
-      boilerplate: `class Solution {
+}`
+        },
+        cpp: {
+            boilerplate: `class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
-    }
-    return 0;
-}
-`,
+};`
+        }
     },
-  },
 
-  // =========================================================
-  // PROBLEM 4: FINDMEDIANSORTEDARRAYS
-  // =========================================================
-  4: {
-    javascript: {
-      boilerplate: `function findMedianSortedArrays(nums1, nums2) {
+    // =========================================================
+    // PROBLEM 4: MEDIAN OF TWO SORTED ARRAYS
+    // =========================================================
+    4: {
+        javascript: {
+            boilerplate: `/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number}
+ */
+var findMedianSortedArrays = function(nums1, nums2) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
-    },
-    python: {
-      boilerplate: `def findMedianSortedArrays(nums1, nums2):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
-    },
-    java: {
-      boilerplate: `class Solution {
+};`
+        },
+        python: {
+            boilerplate: `class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        # Write your code here
+        pass`
+        },
+        java: {
+            boilerplate: `class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         // Write your code here
-        
+        return 0.0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public double FindMedianSortedArrays(int[] nums1, int[] nums2) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function findMedianSortedArrays($nums1, $nums2) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
-    },
-    cpp: {
-      boilerplate: `class Solution {
+}`
+        },
+        cpp: {
+            boilerplate: `class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
-    }
-    return 0;
-}
-`,
+};`
+        }
     },
-  },
 
-  // =========================================================
-  // PROBLEM 5: ISVALID
-  // =========================================================
-  5: {
-    javascript: {
-      boilerplate: `function isValid(s) {
+    // =========================================================
+    // PROBLEM 5: VALID PARENTHESES
+    // =========================================================
+    5: {
+        javascript: {
+            boilerplate: `/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isValid = function(s) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
-    },
-    python: {
-      boilerplate: `def isValid(s):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function isValid(s: string): boolean {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
-    },
-    java: {
-      boilerplate: `class Solution {
+};`
+        },
+        python: {
+            boilerplate: `class Solution:
+    def isValid(self, s: str) -> bool:
+        # Write your code here
+        pass`
+        },
+        java: {
+            boilerplate: `class Solution {
     public boolean isValid(String s) {
         // Write your code here
-        
+        return false;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public bool IsValid(string s) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function isValid($s) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
-    },
-    cpp: {
-      boilerplate: `class Solution {
+}`
+        },
+        cpp: {
+            boilerplate: `class Solution {
 public:
     bool isValid(string s) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
-    }
-    return 0;
-}
-`,
+};`
+        }
     },
-  },
 
-  // =========================================================
-  // PROBLEM 6: MERGEKLISTS
-  // =========================================================
-  6: {
-    javascript: {
-      boilerplate: `function mergeKLists(lists) {
+    // =========================================================
+    // PROBLEM 6: MERGE K SORTED LISTS
+    // =========================================================
+    6: {
+        javascript: {
+            boilerplate: `/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ * this.val = (val===undefined ? 0 : val)
+ * this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode[]} lists
+ * @return {ListNode}
+ */
+var mergeKLists = function(lists) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
-    },
-    python: {
-      boilerplate: `def mergeKLists(lists):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function mergeKLists(lists: (ListNode | null)[]): ListNode | null {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
-    },
-    java: {
-      boilerplate: `class Solution {
+};`
+        },
+        python: {
+            boilerplate: `# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        # Write your code here
+        pass`
+        },
+        java: {
+            boilerplate: `/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
         // Write your code here
-        
+        return null;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public ListNode MergeKLists(ListNode[] lists) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function mergeKLists($lists) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
-    },
-    cpp: {
-      boilerplate: `class Solution {
+}`
+        },
+        cpp: {
+            boilerplate: `/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ * int val;
+ * ListNode *next;
+ * ListNode() : val(0), next(nullptr) {}
+ * ListNode(int x) : val(x), next(nullptr) {}
+ * ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
+        }
     }
-    return 0;
-}
-`,
-    },
-  },
-
-  // =========================================================
-  // PROBLEM 7: MAXPROFIT
+    ,// =========================================================
+  // PROBLEM 7: BEST TIME TO BUY AND SELL STOCK
   // =========================================================
   7: {
     javascript: {
-      boilerplate: `function maxProfit(prices) {
+      boilerplate: `/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(prices) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def maxProfit(prices):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function maxProfit(prices: number[]): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int maxProfit(int[] prices) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int MaxProfit(int[] prices) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function maxProfit($prices) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -2018,466 +850,111 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 8: LEVELORDER
+  // PROBLEM 8: BINARY TREE LEVEL ORDER TRAVERSAL
   // =========================================================
   8: {
     javascript: {
-      boilerplate: `function levelOrder(root) {
+      boilerplate: `/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ * this.val = (val===undefined ? 0 : val)
+ * this.left = (left===undefined ? null : left)
+ * this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function(root) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def levelOrder(root):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function levelOrder(root: TreeNode | null): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ * int val;
+ * TreeNode left;
+ * TreeNode right;
+ * TreeNode() {}
+ * TreeNode(int val) { this.val = val; }
+ * TreeNode(int val, TreeNode left, TreeNode right) {
+ * this.val = val;
+ * this.left = left;
+ * this.right = right;
+ * }
+ * }
+ */
+class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<IList<int>> LevelOrder(TreeNode root) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function levelOrder($root) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ * int val;
+ * TreeNode *left;
+ * TreeNode *right;
+ * TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ * TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ * TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 9: NEXTPERMUTATION
+  // PROBLEM 9: NEXT PERMUTATION
   // =========================================================
   9: {
     javascript: {
-      boilerplate: `function nextPermutation(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var nextPermutation = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def nextPermutation(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function nextPermutation(nums: number[]): void {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
@@ -2485,91 +962,7 @@ console.log(JSON.stringify(results));
         // Write your code here
         
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public void NextPermutation(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function nextPermutation($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -2578,278 +971,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 10: ISPALINDROME
+  // PROBLEM 10: PALINDROME NUMBER
   // =========================================================
   10: {
     javascript: {
-      boilerplate: `function isPalindrome(x) {
+      boilerplate: `/**
+ * @param {number} x
+ * @return {boolean}
+ */
+var isPalindrome = function(x) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def isPalindrome(x):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function isPalindrome(x: number): boolean {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public boolean isPalindrome(int x) {
         // Write your code here
-        
+        return false;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public bool IsPalindrome(int x) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function isPalindrome($x) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -2858,278 +1010,36 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
-
   // =========================================================
-  // PROBLEM 11: MAXAREA
+  // PROBLEM 11: CONTAINER WITH MOST WATER
   // =========================================================
   11: {
     javascript: {
-      boilerplate: `function maxArea(height) {
+      boilerplate: `/**
+ * @param {number[]} height
+ * @return {number}
+ */
+var maxArea = function(height) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def maxArea(height):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function maxArea(height: number[]): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int maxArea(int[] height) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int MaxArea(int[] height) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function maxArea($height) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -3138,278 +1048,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 12: ROMANTOINT
+  // PROBLEM 12: ROMAN TO INTEGER
   // =========================================================
   12: {
     javascript: {
-      boilerplate: `function romanToInt(s) {
+      boilerplate: `/**
+ * @param {string} s
+ * @return {number}
+ */
+var romanToInt = function(s) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def romanToInt(s):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function romanToInt(s: string): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def romanToInt(self, s: str) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int romanToInt(String s) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int RomanToInt(string s) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function romanToInt($s) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -3418,278 +1087,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 13: LONGESTCOMMONPREFIX
+  // PROBLEM 13: LONGEST COMMON PREFIX
   // =========================================================
   13: {
     javascript: {
-      boilerplate: `function longestCommonPrefix(strs) {
+      boilerplate: `/**
+ * @param {string[]} strs
+ * @return {string}
+ */
+var longestCommonPrefix = function(strs) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def longestCommonPrefix(strs):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function longestCommonPrefix(strs: string[]): string {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public String longestCommonPrefix(String[] strs) {
         // Write your code here
-        
+        return "";
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public string LongestCommonPrefix(string[] strs) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function longestCommonPrefix($strs) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -3698,278 +1126,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 14: THREESUM
+  // PROBLEM 14: 3SUM
   // =========================================================
   14: {
     javascript: {
-      boilerplate: `function threeSum(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var threeSum = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def threeSum(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function threeSum(nums: number[]): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<IList<int>> ThreeSum(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function threeSum($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -3978,278 +1165,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 15: LETTERCOMBINATIONS
+  // PROBLEM 15: LETTER COMBINATIONS OF A PHONE NUMBER
   // =========================================================
   15: {
     javascript: {
-      boilerplate: `function letterCombinations(digits) {
+      boilerplate: `/**
+ * @param {string} digits
+ * @return {string[]}
+ */
+var letterCombinations = function(digits) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def letterCombinations(digits):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function letterCombinations(digits: string): string[] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<String> letterCombinations(String digits) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<string> LetterCombinations(string digits) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function letterCombinations($digits) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -4258,558 +1204,109 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 16: REMOVENTHFROMEND
+  // PROBLEM 16: REMOVE NTH NODE FROM END OF LIST
   // =========================================================
   16: {
     javascript: {
-      boilerplate: `function removeNthFromEnd(head, n) {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ * this.val = (val===undefined ? 0 : val)
+ * this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+var removeNthFromEnd = function(head, n) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def removeNthFromEnd(head, n):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function removeNthFromEnd(head: ListNode | null, n: number): ListNode | null {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        # Write your code here
+        pass`
     },
     java: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
         // Write your code here
-        
+        return null;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public ListNode RemoveNthFromEnd(ListNode head, int n) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function removeNthFromEnd($head, $n) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ * int val;
+ * ListNode *next;
+ * ListNode() : val(0), next(nullptr) {}
+ * ListNode(int x) : val(x), next(nullptr) {}
+ * ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 17: GENERATEPARENTHESIS
+  // PROBLEM 17: GENERATE PARENTHESES
   // =========================================================
   17: {
     javascript: {
-      boilerplate: `function generateParenthesis(n) {
+      boilerplate: `/**
+ * @param {number} n
+ * @return {string[]}
+ */
+var generateParenthesis = function(n) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def generateParenthesis(n):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function generateParenthesis(n: number): string[] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<String> generateParenthesis(int n) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<string> GenerateParenthesis(int n) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function generateParenthesis($n) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -4818,1118 +1315,251 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 18: MERGETWOLISTS
+  // PROBLEM 18: MERGE TWO SORTED LISTS
   // =========================================================
   18: {
     javascript: {
-      boilerplate: `function mergeTwoLists(l1, l2) {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ * this.val = (val===undefined ? 0 : val)
+ * this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function(list1, list2) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def mergeTwoLists(l1, l2):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function mergeTwoLists(l1: ListNode | null, l2: ListNode | null): ListNode | null {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        # Write your code here
+        pass`
     },
     java: {
-      boilerplate: `class Solution {
-    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
         // Write your code here
-        
+        return null;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public ListNode MergeTwoLists(ListNode l1, ListNode l2) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function mergeTwoLists($l1, $l2) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ * int val;
+ * ListNode *next;
+ * ListNode() : val(0), next(nullptr) {}
+ * ListNode(int x) : val(x), next(nullptr) {}
+ * ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
 public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
-  },
-
-  // =========================================================
-  // PROBLEM 19: SWAPPAIRS
+  },// =========================================================
+  // PROBLEM 19: SWAP NODES IN PAIRS
   // =========================================================
   19: {
     javascript: {
-      boilerplate: `function swapPairs(head) {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ * this.val = (val===undefined ? 0 : val)
+ * this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var swapPairs = function(head) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def swapPairs(head):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function swapPairs(head: ListNode | null): ListNode | null {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # Write your code here
+        pass`
     },
     java: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
     public ListNode swapPairs(ListNode head) {
         // Write your code here
-        
+        return null;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public ListNode SwapPairs(ListNode head) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function swapPairs($head) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ * int val;
+ * ListNode *next;
+ * ListNode() : val(0), next(nullptr) {}
+ * ListNode(int x) : val(x), next(nullptr) {}
+ * ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
 public:
     ListNode* swapPairs(ListNode* head) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 20: REVERSEKGROUP
+  // PROBLEM 20: REVERSE NODES IN K-GROUP
   // =========================================================
   20: {
     javascript: {
-      boilerplate: `function reverseKGroup(head, k) {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ * this.val = (val===undefined ? 0 : val)
+ * this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} k
+ * @return {ListNode}
+ */
+var reverseKGroup = function(head, k) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def reverseKGroup(head, k):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function reverseKGroup(head: ListNode | null, k: number): ListNode | null {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        # Write your code here
+        pass`
     },
     java: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
         // Write your code here
-        
+        return null;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public ListNode ReverseKGroup(ListNode head, int k) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function reverseKGroup($head, $k) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ * int val;
+ * ListNode *next;
+ * ListNode() : val(0), next(nullptr) {}
+ * ListNode(int x) : val(x), next(nullptr) {}
+ * ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 21: SEARCH
+  // PROBLEM 21: SEARCH IN ROTATED SORTED ARRAY
   // =========================================================
   21: {
     javascript: {
-      boilerplate: `function search(nums, target) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var search = function(nums, target) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def search(nums, target):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function search(nums: number[], target: number): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int search(int[] nums, int target) {
         // Write your code here
-        
+        return -1;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int Search(int[] nums, int target) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function search($nums, $target) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -5938,278 +1568,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 22: SEARCHRANGE
+  // PROBLEM 22: FIRST AND LAST POSITION OF ELEMENT IN SORTED ARRAY
   // =========================================================
   22: {
     javascript: {
-      boilerplate: `function searchRange(nums, target) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+var searchRange = function(nums, target) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def searchRange(nums, target):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function searchRange(nums: number[], target: number): number[] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int[] searchRange(int[] nums, int target) {
         // Write your code here
-        
+        return new int[]{-1, -1};
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int[] SearchRange(int[] nums, int target) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function searchRange($nums, $target) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -6218,278 +1608,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 23: SEARCHINSERT
+  // PROBLEM 23: SEARCH INSERT POSITION
   // =========================================================
   23: {
     javascript: {
-      boilerplate: `function searchInsert(nums, target) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var searchInsert = function(nums, target) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def searchInsert(nums, target):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function searchInsert(nums: number[], target: number): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int searchInsert(int[] nums, int target) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int SearchInsert(int[] nums, int target) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function searchInsert($nums, $target) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -6498,278 +1648,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 24: ISVALIDSUDOKU
+  // PROBLEM 24: VALID SUDOKU
   // =========================================================
   24: {
     javascript: {
-      boilerplate: `function isValidSudoku(board) {
+      boilerplate: `/**
+ * @param {character[][]} board
+ * @return {boolean}
+ */
+var isValidSudoku = function(board) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def isValidSudoku(board):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function isValidSudoku(board: string[][]): boolean {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public boolean isValidSudoku(char[][] board) {
         // Write your code here
-        
+        return false;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public bool IsValidSudoku(char[][] board) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function isValidSudoku($board) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -6778,186 +1687,32 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 25: SOLVESUDOKU
+  // PROBLEM 25: SUDOKU SOLVER
   // =========================================================
   25: {
     javascript: {
-      boilerplate: `function solveSudoku(board) {
+      boilerplate: `/**
+ * @param {character[][]} board
+ * @return {void} Do not return anything, modify board in-place instead.
+ */
+var solveSudoku = function(board) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def solveSudoku(board):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function solveSudoku(board: string[][]): void {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def solveSudoku(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
@@ -6965,91 +1720,7 @@ console.log(JSON.stringify(results));
         // Write your code here
         
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public void SolveSudoku(char[][] board) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function solveSudoku($board) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -7058,278 +1729,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 26: COUNTANDSAY
+  // PROBLEM 26: COUNT AND SAY
   // =========================================================
   26: {
     javascript: {
-      boilerplate: `function countAndSay(n) {
+      boilerplate: `/**
+ * @param {number} n
+ * @return {string}
+ */
+var countAndSay = function(n) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def countAndSay(n):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function countAndSay(n: number): string {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def countAndSay(self, n: int) -> str:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public String countAndSay(int n) {
         // Write your code here
-        
+        return "";
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public string CountAndSay(int n) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function countAndSay($n) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -7338,278 +1768,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 27: COMBINATIONSUM
+  // PROBLEM 27: COMBINATION SUM
   // =========================================================
   27: {
     javascript: {
-      boilerplate: `function combinationSum(candidates, target) {
+      boilerplate: `/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum = function(candidates, target) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def combinationSum(candidates, target):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function combinationSum(candidates: number[], target: number): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<IList<int>> CombinationSum(int[] candidates, int target) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function combinationSum($candidates, $target) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -7618,278 +1808,36 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
-  },
-
-  // =========================================================
-  // PROBLEM 28: COMBINATIONSUM2
+  },// =========================================================
+  // PROBLEM 28: COMBINATION SUM II
   // =========================================================
   28: {
     javascript: {
-      boilerplate: `function combinationSum2(candidates, target) {
+      boilerplate: `/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum2 = function(candidates, target) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def combinationSum2(candidates, target):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function combinationSum2(candidates: number[], target: number): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<IList<int>> CombinationSum2(int[] candidates, int target) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function combinationSum2($candidates, $target) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -7898,278 +1846,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 29: FIRSTMISSINGPOSITIVE
+  // PROBLEM 29: FIRST MISSING POSITIVE
   // =========================================================
   29: {
     javascript: {
-      boilerplate: `function firstMissingPositive(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var firstMissingPositive = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def firstMissingPositive(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function firstMissingPositive(nums: number[]): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int firstMissingPositive(int[] nums) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int FirstMissingPositive(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function firstMissingPositive($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -8178,278 +1885,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 30: TRAP
+  // PROBLEM 30: TRAPPING RAIN WATER
   // =========================================================
   30: {
     javascript: {
-      boilerplate: `function trap(height) {
+      boilerplate: `/**
+ * @param {number[]} height
+ * @return {number}
+ */
+var trap = function(height) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def trap(height):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function trap(height: number[]): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def trap(self, height: List[int]) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int trap(int[] height) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int Trap(int[] height) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function trap($height) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -8458,278 +1924,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 31: MULTIPLY
+  // PROBLEM 31: MULTIPLY STRINGS
   // =========================================================
   31: {
     javascript: {
-      boilerplate: `function multiply(num1, num2) {
+      boilerplate: `/**
+ * @param {string} num1
+ * @param {string} num2
+ * @return {string}
+ */
+var multiply = function(num1, num2) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def multiply(num1, num2):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function multiply(num1: string, num2: string): string {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public String multiply(String num1, String num2) {
         // Write your code here
-        
+        return "";
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public string Multiply(string num1, string num2) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function multiply($num1, $num2) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -8738,278 +1964,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 32: ISMATCH
+  // PROBLEM 32: WILDCARD MATCHING
   // =========================================================
   32: {
     javascript: {
-      boilerplate: `function isMatch(s, p) {
+      boilerplate: `/**
+ * @param {string} s
+ * @param {string} p
+ * @return {boolean}
+ */
+var isMatch = function(s, p) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def isMatch(s, p):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function isMatch(s: string, p: string): boolean {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public boolean isMatch(String s, String p) {
         // Write your code here
-        
+        return false;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public bool IsMatch(string s, string p) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function isMatch($s, $p) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -9018,278 +2004,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 33: JUMP
+  // PROBLEM 33: JUMP GAME II
   // =========================================================
   33: {
     javascript: {
-      boilerplate: `function jump(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var jump = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def jump(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function jump(nums: number[]): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def jump(self, nums: List[int]) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int jump(int[] nums) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int Jump(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function jump($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -9298,278 +2043,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 34: PERMUTE
+  // PROBLEM 34: PERMUTATIONS
   // =========================================================
   34: {
     javascript: {
-      boilerplate: `function permute(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permute = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def permute(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function permute(nums: number[]): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<List<Integer>> permute(int[] nums) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<IList<int>> Permute(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function permute($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -9578,278 +2082,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 35: PERMUTEUNIQUE
+  // PROBLEM 35: PERMUTATIONS II
   // =========================================================
   35: {
     javascript: {
-      boilerplate: `function permuteUnique(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permuteUnique = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def permuteUnique(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function permuteUnique(nums: number[]): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<List<Integer>> permuteUnique(int[] nums) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<IList<int>> PermuteUnique(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function permuteUnique($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -9858,186 +2121,32 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 36: ROTATE
+  // PROBLEM 36: ROTATE IMAGE
   // =========================================================
   36: {
     javascript: {
-      boilerplate: `function rotate(matrix) {
+      boilerplate: `/**
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+var rotate = function(matrix) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def rotate(matrix):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function rotate(matrix: number[][]): void {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
@@ -10045,91 +2154,7 @@ console.log(JSON.stringify(results));
         // Write your code here
         
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public void Rotate(int[][] matrix) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function rotate($matrix) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -10138,278 +2163,36 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
-
   // =========================================================
-  // PROBLEM 37: GROUPANAGRAMS
+  // PROBLEM 37: GROUP ANAGRAMS
   // =========================================================
   37: {
     javascript: {
-      boilerplate: `function groupAnagrams(strs) {
+      boilerplate: `/**
+ * @param {string[]} strs
+ * @return {string[][]}
+ */
+var groupAnagrams = function(strs) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def groupAnagrams(strs):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function groupAnagrams(strs: string[]): string[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<IList<string>> GroupAnagrams(string[] strs) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function groupAnagrams($strs) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -10418,278 +2201,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 38: MYPOW
+  // PROBLEM 38: POW(X, N)
   // =========================================================
   38: {
     javascript: {
-      boilerplate: `function myPow(x, n) {
+      boilerplate: `/**
+ * @param {number} x
+ * @param {number} n
+ * @return {number}
+ */
+var myPow = function(x, n) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def myPow(x, n):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function myPow(x: number, n: number): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public double myPow(double x, int n) {
         // Write your code here
-        
+        return 0.0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public double MyPow(double x, int n) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function myPow($x, $n) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -10698,278 +2241,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 39: SOLVENQUEENS
+  // PROBLEM 39: N-QUEENS
   // =========================================================
   39: {
     javascript: {
-      boilerplate: `function solveNQueens(n) {
+      boilerplate: `/**
+ * @param {number} n
+ * @return {string[][]}
+ */
+var solveNQueens = function(n) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def solveNQueens(n):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function solveNQueens(n: number): string[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<List<String>> solveNQueens(int n) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<IList<string>> SolveNQueens(int n) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function solveNQueens($n) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -10978,278 +2280,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 40: TOTALNQUEENS
+  // PROBLEM 40: N-QUEENS II
   // =========================================================
   40: {
     javascript: {
-      boilerplate: `function totalNQueens(n) {
+      boilerplate: `/**
+ * @param {number} n
+ * @return {number}
+ */
+var totalNQueens = function(n) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def totalNQueens(n):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function totalNQueens(n: number): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def totalNQueens(self, n: int) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int totalNQueens(int n) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int TotalNQueens(int n) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function totalNQueens($n) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -11258,278 +2319,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 41: MAXSUBARRAY
+  // PROBLEM 41: MAXIMUM SUBARRAY
   // =========================================================
   41: {
     javascript: {
-      boilerplate: `function maxSubArray(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def maxSubArray(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function maxSubArray(nums: number[]): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int maxSubArray(int[] nums) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int MaxSubArray(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function maxSubArray($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -11538,278 +2358,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 42: SPIRALORDER
+  // PROBLEM 42: SPIRAL MATRIX
   // =========================================================
   42: {
     javascript: {
-      boilerplate: `function spiralOrder(matrix) {
+      boilerplate: `/**
+ * @param {number[][]} matrix
+ * @return {number[]}
+ */
+var spiralOrder = function(matrix) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def spiralOrder(matrix):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function spiralOrder(matrix: number[][]): number[] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<Integer> spiralOrder(int[][] matrix) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<int> SpiralOrder(int[][] matrix) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function spiralOrder($matrix) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -11818,278 +2397,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 43: CANJUMP
+  // PROBLEM 43: JUMP GAME
   // =========================================================
   43: {
     javascript: {
-      boilerplate: `function canJump(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canJump = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def canJump(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function canJump(nums: number[]): boolean {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public boolean canJump(int[] nums) {
         // Write your code here
-        
+        return false;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public bool CanJump(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function canJump($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -12098,278 +2436,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 44: MERGE
+  // PROBLEM 44: MERGE INTERVALS
   // =========================================================
   44: {
     javascript: {
-      boilerplate: `function merge(intervals) {
+      boilerplate: `/**
+ * @param {number[][]} intervals
+ * @return {number[][]}
+ */
+var merge = function(intervals) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def merge(intervals):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function merge(intervals: number[][]): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int[][] merge(int[][] intervals) {
         // Write your code here
-        
+        return new int[][]{};
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int[][] Merge(int[][] intervals) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function merge($intervals) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -12378,278 +2475,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 45: INSERT
+  // PROBLEM 45: INSERT INTERVAL
   // =========================================================
   45: {
     javascript: {
-      boilerplate: `function insert(intervals, newInterval) {
+      boilerplate: `/**
+ * @param {number[][]} intervals
+ * @param {number[]} newInterval
+ * @return {number[][]}
+ */
+var insert = function(intervals, newInterval) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def insert(intervals, newInterval):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function insert(intervals: number[][], newInterval: number[]): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int[][] insert(int[][] intervals, int[] newInterval) {
         // Write your code here
-        
+        return new int[][]{};
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int[][] Insert(int[][] intervals, int[] newInterval) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function insert($intervals, $newInterval) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -12658,278 +2515,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 46: LENGTHOFLASTWORD
+  // PROBLEM 46: LENGTH OF LAST WORD
   // =========================================================
   46: {
     javascript: {
-      boilerplate: `function lengthOfLastWord(s) {
+      boilerplate: `/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLastWord = function(s) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def lengthOfLastWord(s):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function lengthOfLastWord(s: string): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def lengthOfLastWord(self, s: str) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int lengthOfLastWord(String s) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int LengthOfLastWord(string s) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function lengthOfLastWord($s) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -12938,278 +2554,35 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
-  },
-
-  // =========================================================
-  // PROBLEM 47: GENERATEMATRIX
+  },// =========================================================
+  // PROBLEM 47: SPIRAL MATRIX II
   // =========================================================
   47: {
     javascript: {
-      boilerplate: `function generateMatrix(n) {
+      boilerplate: `/**
+ * @param {number} n
+ * @return {number[][]}
+ */
+var generateMatrix = function(n) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def generateMatrix(n):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function generateMatrix(n: number): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int[][] generateMatrix(int n) {
         // Write your code here
-        
+        return new int[][]{};
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int[][] GenerateMatrix(int n) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function generateMatrix($n) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -13218,278 +2591,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 48: GETPERMUTATION
+  // PROBLEM 48: PERMUTATION SEQUENCE
   // =========================================================
   48: {
     javascript: {
-      boilerplate: `function getPermutation(n, k) {
+      boilerplate: `/**
+ * @param {number} n
+ * @param {number} k
+ * @return {string}
+ */
+var getPermutation = function(n, k) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def getPermutation(n, k):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function getPermutation(n: number, k: number): string {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def getPermutation(self, n: int, k: int) -> str:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public String getPermutation(int n, int k) {
         // Write your code here
-        
+        return "";
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public string GetPermutation(int n, int k) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function getPermutation($n, $k) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -13498,558 +2631,110 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 49: ROTATERIGHT
+  // PROBLEM 49: ROTATE LIST
   // =========================================================
   49: {
     javascript: {
-      boilerplate: `function rotateRight(head, k) {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ * this.val = (val===undefined ? 0 : val)
+ * this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} k
+ * @return {ListNode}
+ */
+var rotateRight = function(head, k) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def rotateRight(head, k):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function rotateRight(head: ListNode | null, k: number): ListNode | null {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        # Write your code here
+        pass`
     },
     java: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
     public ListNode rotateRight(ListNode head, int k) {
         // Write your code here
-        
+        return null;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public ListNode RotateRight(ListNode head, int k) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function rotateRight($head, $k) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ * int val;
+ * ListNode *next;
+ * ListNode() : val(0), next(nullptr) {}
+ * ListNode(int x) : val(x), next(nullptr) {}
+ * ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
 public:
     ListNode* rotateRight(ListNode* head, int k) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 50: UNIQUEPATHS
+  // PROBLEM 50: UNIQUE PATHS
   // =========================================================
   50: {
     javascript: {
-      boilerplate: `function uniquePaths(m, n) {
+      boilerplate: `/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = function(m, n) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def uniquePaths(m, n):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function uniquePaths(m: number, n: number): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int uniquePaths(int m, int n) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int UniquePaths(int m, int n) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function uniquePaths($m, $n) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -14058,278 +2743,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 51: UNIQUEPATHSWITHOBSTACLES
+  // PROBLEM 51: UNIQUE PATHS II
   // =========================================================
   51: {
     javascript: {
-      boilerplate: `function uniquePathsWithObstacles(obstacleGrid) {
+      boilerplate: `/**
+ * @param {number[][]} obstacleGrid
+ * @return {number}
+ */
+var uniquePathsWithObstacles = function(obstacleGrid) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def uniquePathsWithObstacles(obstacleGrid):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function uniquePathsWithObstacles(obstacleGrid: number[][]): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int UniquePathsWithObstacles(int[][] obstacleGrid) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function uniquePathsWithObstacles($obstacleGrid) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -14338,278 +2782,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 52: MINPATHSUM
+  // PROBLEM 52: MINIMUM PATH SUM
   // =========================================================
   52: {
     javascript: {
-      boilerplate: `function minPathSum(grid) {
+      boilerplate: `/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var minPathSum = function(grid) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def minPathSum(grid):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function minPathSum(grid: number[][]): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int minPathSum(int[][] grid) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int MinPathSum(int[][] grid) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function minPathSum($grid) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -14618,278 +2821,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 53: ISNUMBER
+  // PROBLEM 53: VALID NUMBER
   // =========================================================
   53: {
     javascript: {
-      boilerplate: `function isNumber(s) {
+      boilerplate: `/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isNumber = function(s) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def isNumber(s):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function isNumber(s: string): boolean {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def isNumber(self, s: str) -> bool:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public boolean isNumber(String s) {
         // Write your code here
-        
+        return false;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public bool IsNumber(string s) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function isNumber($s) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -14898,278 +2860,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 54: PLUSONE
+  // PROBLEM 54: PLUS ONE
   // =========================================================
   54: {
     javascript: {
-      boilerplate: `function plusOne(digits) {
+      boilerplate: `/**
+ * @param {number[]} digits
+ * @return {number[]}
+ */
+var plusOne = function(digits) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def plusOne(digits):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function plusOne(digits: number[]): number[] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int[] plusOne(int[] digits) {
         // Write your code here
-        
+        return new int[]{};
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int[] PlusOne(int[] digits) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function plusOne($digits) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -15178,278 +2899,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 55: ADDBINARY
+  // PROBLEM 55: ADD BINARY
   // =========================================================
   55: {
     javascript: {
-      boilerplate: `function addBinary(a, b) {
+      boilerplate: `/**
+ * @param {string} a
+ * @param {string} b
+ * @return {string}
+ */
+var addBinary = function(a, b) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def addBinary(a, b):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function addBinary(a: string, b: string): string {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public String addBinary(String a, String b) {
         // Write your code here
-        
+        return "";
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public string AddBinary(string a, string b) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function addBinary($a, $b) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -15458,278 +2939,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 56: FULLJUSTIFY
+  // PROBLEM 56: TEXT JUSTIFICATION
   // =========================================================
   56: {
     javascript: {
-      boilerplate: `function fullJustify(words, maxWidth) {
+      boilerplate: `/**
+ * @param {string[]} words
+ * @param {number} maxWidth
+ * @return {string[]}
+ */
+var fullJustify = function(words, maxWidth) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def fullJustify(words, maxWidth):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function fullJustify(words: string[], maxWidth: number): string[] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<String> fullJustify(String[] words, int maxWidth) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<string> FullJustify(string[] words, int maxWidth) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function fullJustify($words, $maxWidth) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -15738,278 +2979,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 57: MYSQRT
+  // PROBLEM 57: SQRT(X)
   // =========================================================
   57: {
     javascript: {
-      boilerplate: `function mySqrt(x) {
+      boilerplate: `/**
+ * @param {number} x
+ * @return {number}
+ */
+var mySqrt = function(x) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def mySqrt(x):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function mySqrt(x: number): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def mySqrt(self, x: int) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int mySqrt(int x) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int MySqrt(int x) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function mySqrt($x) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -16018,278 +3018,35 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
-  },
-
-  // =========================================================
-  // PROBLEM 58: CLIMBSTAIRS
+  },// =========================================================
+  // PROBLEM 58: CLIMBING STAIRS
   // =========================================================
   58: {
     javascript: {
-      boilerplate: `function climbStairs(n) {
+      boilerplate: `/**
+ * @param {number} n
+ * @return {number}
+ */
+var climbStairs = function(n) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def climbStairs(n):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function climbStairs(n: number): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def climbStairs(self, n: int) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int climbStairs(int n) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int ClimbStairs(int n) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function climbStairs($n) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -16298,278 +3055,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 59: SIMPLIFYPATH
+  // PROBLEM 59: SIMPLIFY PATH
   // =========================================================
   59: {
     javascript: {
-      boilerplate: `function simplifyPath(path) {
+      boilerplate: `/**
+ * @param {string} path
+ * @return {string}
+ */
+var simplifyPath = function(path) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def simplifyPath(path):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function simplifyPath(path: string): string {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def simplifyPath(self, path: str) -> str:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public String simplifyPath(String path) {
         // Write your code here
-        
+        return "";
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public string SimplifyPath(string path) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function simplifyPath($path) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -16578,278 +3094,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 60: MINDISTANCE
+  // PROBLEM 60: EDIT DISTANCE
   // =========================================================
   60: {
     javascript: {
-      boilerplate: `function minDistance(word1, word2) {
+      boilerplate: `/**
+ * @param {string} word1
+ * @param {string} word2
+ * @return {number}
+ */
+var minDistance = function(word1, word2) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def minDistance(word1, word2):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function minDistance(word1: string, word2: string): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int minDistance(String word1, String word2) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int MinDistance(string word1, string word2) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function minDistance($word1, $word2) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -16858,186 +3134,32 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 61: SETZEROES
+  // PROBLEM 61: SET MATRIX ZEROES
   // =========================================================
   61: {
     javascript: {
-      boilerplate: `function setZeroes(matrix) {
+      boilerplate: `/**
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+var setZeroes = function(matrix) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def setZeroes(matrix):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function setZeroes(matrix: number[][]): void {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
@@ -17045,91 +3167,7 @@ console.log(JSON.stringify(results));
         // Write your code here
         
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public void SetZeroes(int[][] matrix) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function setZeroes($matrix) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -17138,278 +3176,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 62: SEARCHMATRIX
+  // PROBLEM 62: SEARCH A 2D MATRIX
   // =========================================================
   62: {
     javascript: {
-      boilerplate: `function searchMatrix(matrix, target) {
+      boilerplate: `/**
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
+ */
+var searchMatrix = function(matrix, target) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def searchMatrix(matrix, target):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function searchMatrix(matrix: number[][], target: number): boolean {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public boolean searchMatrix(int[][] matrix, int target) {
         // Write your code here
-        
+        return false;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public bool SearchMatrix(int[][] matrix, int target) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function searchMatrix($matrix, $target) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -17418,186 +3216,32 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 63: SORTCOLORS
+  // PROBLEM 63: SORT COLORS
   // =========================================================
   63: {
     javascript: {
-      boilerplate: `function sortColors(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var sortColors = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def sortColors(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function sortColors(nums: number[]): void {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
@@ -17605,91 +3249,7 @@ console.log(JSON.stringify(results));
         // Write your code here
         
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public void SortColors(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function sortColors($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -17698,278 +3258,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 64: MINWINDOW
+  // PROBLEM 64: MINIMUM WINDOW SUBSTRING
   // =========================================================
   64: {
     javascript: {
-      boilerplate: `function minWindow(s, t) {
+      boilerplate: `/**
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+var minWindow = function(s, t) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def minWindow(s, t):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function minWindow(s: string, t: string): string {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public String minWindow(String s, String t) {
         // Write your code here
-        
+        return "";
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public string MinWindow(string s, string t) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function minWindow($s, $t) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -17978,278 +3298,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 65: COMBINE
+  // PROBLEM 65: COMBINATIONS
   // =========================================================
   65: {
     javascript: {
-      boilerplate: `function combine(n, k) {
+      boilerplate: `/**
+ * @param {number} n
+ * @param {number} k
+ * @return {number[][]}
+ */
+var combine = function(n, k) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def combine(n, k):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function combine(n: number, k: number): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<List<Integer>> combine(int n, int k) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<IList<int>> Combine(int n, int k) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function combine($n, $k) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -18258,24 +3338,8 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
@@ -18283,253 +3347,28 @@ int main() {
   // =========================================================
   66: {
     javascript: {
-      boilerplate: `function subsets(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsets = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def subsets(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function subsets(nums: number[]): number[][] {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public List<List<Integer>> subsets(int[] nums) {
         // Write your code here
-        
+        return new ArrayList<>();
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public IList<IList<int>> Subsets(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function subsets($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -18538,278 +3377,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 67: EXIST
+  // PROBLEM 67: WORD SEARCH
   // =========================================================
   67: {
     javascript: {
-      boilerplate: `function exist(board, word) {
+      boilerplate: `/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+var exist = function(board, word) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def exist(board, word):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function exist(board: string[][], word: string): boolean {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public boolean exist(char[][] board, String word) {
         // Write your code here
-        
+        return false;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public bool Exist(char[][] board, string word) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function exist($board, $word) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -18818,278 +3417,37 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 68: REMOVEDUPLICATES
+  // PROBLEM 68: REMOVE DUPLICATES FROM SORTED ARRAY II
   // =========================================================
   68: {
     javascript: {
-      boilerplate: `function removeDuplicates(nums) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var removeDuplicates = function(nums) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def removeDuplicates(nums):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function removeDuplicates(nums: number[]): number {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public int removeDuplicates(int[] nums) {
         // Write your code here
-        
+        return 0;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public int RemoveDuplicates(int[] nums) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function removeDuplicates($nums) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -19098,278 +3456,38 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 69: SEARCH
+  // PROBLEM 69: SEARCH IN ROTATED SORTED ARRAY II
   // =========================================================
   69: {
     javascript: {
-      boilerplate: `function search(nums, target) {
+      boilerplate: `/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {boolean}
+ */
+var search = function(nums, target) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def search(nums, target):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function search(nums: number[], target: number): boolean {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `class Solution:
+    def search(self, nums: List[int], target: int) -> bool:
+        # Write your code here
+        pass`
     },
     java: {
       boilerplate: `class Solution {
     public boolean search(int[] nums, int target) {
         // Write your code here
-        
+        return false;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public bool Search(int[] nums, int target) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function search($nums, $target) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
       boilerplate: `class Solution {
@@ -19378,304 +3496,79 @@ public:
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
-}
-`,
-    },
   },
 
   // =========================================================
-  // PROBLEM 70: DELETEDUPLICATES
+  // PROBLEM 70: REMOVE DUPLICATES FROM SORTED LIST II
   // =========================================================
   70: {
     javascript: {
-      boilerplate: `function deleteDuplicates(head) {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ * this.val = (val===undefined ? 0 : val)
+ * this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var deleteDuplicates = function(head) {
     // Write your code here
     
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+};`
     },
     python: {
-      boilerplate: `def deleteDuplicates(head):
-    # Write your code here
-    pass`,
-      driverCode: (userCode, cases) => `
-import json
-import re
-
-# 1. User Code
-${userCode}
-
-# 2. Hidden Driver Code
-cases_json = '''${JSON.stringify(cases)}'''
-test_cases = json.loads(cases_json)
-results = []
-
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
-    try:
-        input_data = t["input"]
-        expected = t["expected"]
-
-        # Extract function name from user code
-        func_match = re.search(r'def\\s+(\\w+)\\s*\\(', userCode)
-
-        if "class Solution:" in userCode:
-            solution = Solution()
-            method_name = [name for name in dir(solution) if not name.startswith('_')][0]
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = getattr(solution, method_name)(*values)
-        elif func_match:
-            func_name = func_match.group(1)
-            input_keys = list(input_data.keys())
-            values = [repr(input_data[k]) for k in input_keys]
-            result = locals()[func_name](*values)
-        else:
-            raise Exception("Could not find function or class")
-
-        result_entry["actual"] = result
-        result_entry["expected"] = expected
-
-        # Compare results
-        if result == expected:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
-
-    except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-
-    results.append(result_entry)
-
-print(json.dumps(results))
-`,
-    },
-    typescript: {
-      boilerplate: `function deleteDuplicates(head: ListNode | null): ListNode | null {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-const testCases = ${JSON.stringify(cases)};
-const results = [];
-
-testCases.forEach((t, index) => {
-    const resultEntry = { id: index + 1 };
-    try {
-        const input = t.input;
-        const expected = t.expected;
-
-        // Get function name from user code
-        const funcMatch = userCode.match(/function\\s+(\\w+)\\s*\\(/);
-        let funcName = funcMatch ? funcMatch[1] : null;
-
-        if (!funcName) {
-            resultEntry.status = "Error";
-            resultEntry.error = "Could not find function name";
-        } else {
-            // Build function call
-            const inputKeys = Object.keys(input);
-            const values = inputKeys.map(k => JSON.stringify(input[k]));
-            const result = eval(\`\${funcName}(\${values.join(', ')})\`);
-
-            resultEntry.actual = result;
-            resultEntry.expected = expected;
-
-            // Compare results
-            const actualStr = typeof result === 'object' ? JSON.stringify(result) : String(result);
-            const expectedStr = typeof expected === 'object' ? JSON.stringify(expected) : String(expected);
-            resultEntry.status = actualStr === expectedStr ? "Passed" : "Failed";
-        }
-    } catch (error) {
-        resultEntry.status = "Error";
-        resultEntry.error = error.message;
-    }
-    results.push(resultEntry);
-});
-
-console.log(JSON.stringify(results));
-`,
+      boilerplate: `# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # Write your code here
+        pass`
     },
     java: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ * int val;
+ * ListNode next;
+ * ListNode() {}
+ * ListNode(int val) { this.val = val; }
+ * ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
     public ListNode deleteDuplicates(ListNode head) {
         // Write your code here
-        
+        return null;
     }
-}`,
-      driverCode: (userCode, cases) => `
-import java.util.*;
-
-public class Main {
-    public static void main(String[] args) {
-        try {
-            // Driver code for Java
-            // ${JSON.stringify(cases)}
-            System.out.println("[]");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-}
-`,
-    },
-    csharp: {
-      boilerplate: `public class Solution {
-    public ListNode DeleteDuplicates(ListNode head) {
-        // Write your code here
-        
-    }
-}`,
-      driverCode: (userCode, cases) => `
-using System;
-
-public class MainClass {
-    public static void Main(string[] args) {
-        try {
-            // Driver code for C#
-            // ${JSON.stringify(cases)}
-            Console.WriteLine("[]");
-        } catch (Exception e) {
-            Console.WriteLine(e.Message);
-        }
-    }
-}
-`,
-    },
-    php: {
-      boilerplate: `function deleteDuplicates($head) {
-    // Write your code here
-    
-}`,
-      driverCode: (userCode, cases) => `
-<?php
-// 1. User Code
-${userCode}
-
-// 2. Hidden Driver Code
-$cases_json = '${JSON.stringify(JSON.stringify(cases))}';
-$test_cases = json_decode($cases_json, true);
-$results = [];
-
-foreach ($test_cases as $index => $t) {
-    $result_entry = ['id' => $index + 1];
-    try {
-        $input = $t['input'];
-        $expected = $t['expected'];
-
-        // Extract function name
-        preg_match('/function\\s+(\\w+)\\s*\\(/', $userCode, $matches);
-        if (isset($matches[1])) {
-            $func_name = $matches[1];
-            $values = array_values($input);
-            $result = call_user_func_array($func_name, $values);
-
-            $result_entry['actual'] = $result;
-            $result_entry['expected'] = $expected;
-            $result_entry['status'] = ($result == $expected) ? 'Passed' : 'Failed';
-        } else {
-            $result_entry['status'] = 'Error';
-            $result_entry['error'] = 'Could not find function name';
-        }
-    } catch (Exception $e) {
-        $result_entry['status'] = 'Error';
-        $result_entry['error'] = $e->getMessage();
-    }
-    $results[] = $result_entry;
-}
-
-echo json_encode($results);
-?>
-`,
+}`
     },
     cpp: {
-      boilerplate: `class Solution {
+      boilerplate: `/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ * int val;
+ * ListNode *next;
+ * ListNode() : val(0), next(nullptr) {}
+ * ListNode(int x) : val(x), next(nullptr) {}
+ * ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
         // Write your code here
         
     }
-};`,
-      driverCode: (userCode, cases) => `
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    try {
-        // Driver code for C++
-        // ${JSON.stringify(JSON.stringify(cases))}
-        std::cout << "[]" << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
+};`
     }
-    return 0;
+  }
+    
 }
-`,
-    },
-  },
-
-};

@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Editor } from "@monaco-editor/react";
+import { ToastContainer, toast } from "react-toastify";
 
 const formatText = (text) => {
   // Splits by backticks, single quotes, or double quotes
@@ -55,11 +56,14 @@ const Solution = ({ id }) => {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        alert("Code copied");
+        toast.success("Code Copied");
+        // alert("Code copied");
       })
       .catch((err) => {
         console.error("Could not copy text: ", err);
-        alert("Failed to copy text."); // Handle errors
+        toast.error("Failed to Copy text");
+
+        // alert("Failed to copy text."); // Handle errors
       });
   };
 
@@ -169,6 +173,7 @@ const Solution = ({ id }) => {
           />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
