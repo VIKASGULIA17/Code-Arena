@@ -37,7 +37,7 @@ const Login = () => {
     try {
       const res = await checkToSpringBackend(values);
       if (res.jwtToken) {
-        localStorage.setItem("jwtToken", res.jwtToken);
+        // localStorage.setItem("jwtToken", res.jwtToken);
         setisJwtExist(true);
         setjwtToken(res.jwtToken);
         toast.success(`User logged in..`);
