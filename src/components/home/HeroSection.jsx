@@ -14,13 +14,13 @@ import {
 import { useState } from "react";
 import { MdOutlineStart } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppContext } from "../../context/AppContext";
 
 export default function HeroSection() {
-  const [jwtToken, setjwtToken] = useState(() => {
-    return localStorage.getItem("jwtToken") || null;
-  });
+  
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
+  const {jwtToken} = useAppContext();
 
   async function handleTesting() {
     try {

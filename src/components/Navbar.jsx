@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Code2, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useAppContext } from "../context/AppContext";
 
 const Navbar = () => {
   const [MenuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setuser] = useState(null);
-  const [isJwtExist,setisJwtExist] = useState(()=>{
-    return localStorage.getItem("jwtToken")!=null 
-  })
+  const {isJwtExist,setisJwtExist,setjwtToken} = useAppContext();
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,6 +39,7 @@ const Navbar = () => {
   function clearJwtToken(){
     localStorage.removeItem("jwtToken");
     setisJwtExist(false);
+    setjwtToken(null);
   }
 
   const NAVBAR_HEIGHT = "64px";

@@ -13,10 +13,12 @@ import { Formik, Field, ErrorMessage, Form } from "formik";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../../context/AppContext";
 
 const Login = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
+  const {setjwtToken,setisJwtExist} = useAppContext();
 
   const validateData = yup.object({
     username: yup.string().required("**username is required"),
@@ -36,6 +38,8 @@ const Login = () => {
       const res = await checkToSpringBackend(values);
       if (res.jwtToken) {
         localStorage.setItem("jwtToken",res.jwtToken);
+        setisJwtExist(true);
+        setjwtToken(res.jwtToken);
         toast.success(`User logged in..`);
         navigate("/");
       } else {
