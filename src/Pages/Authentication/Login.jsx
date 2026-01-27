@@ -36,15 +36,16 @@ const Login = () => {
   const handleSubmit = async (values, helper) => {
     try {
       const res = await checkToSpringBackend(values);
-      // if (res.jwtToken) {
+      if (res.jwtToken) {
         // localStorage.setItem("jwtToken", res.jwtToken);
         // setisJwtExist(true);
         // setjwtToken(res.jwtToken);
         // toast.success(`User logged in..`);
         navigate("/");
-      // } else {
-        // throw new Error();
-      // }
+      } else {
+        console.log("login failed");
+        throw new Error();
+      }
     } catch (e) {
       toast.error("User failed to login");
     } finally {
