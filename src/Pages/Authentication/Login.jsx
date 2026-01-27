@@ -18,7 +18,7 @@ import { useAppContext } from "../../context/AppContext";
 const Login = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
-  const {setjwtToken,setisJwtExist} = useAppContext();
+  const { setjwtToken, setisJwtExist } = useAppContext();
 
   const validateData = yup.object({
     username: yup.string().required("**username is required"),
@@ -37,11 +37,13 @@ const Login = () => {
     try {
       const res = await checkToSpringBackend(values);
       if (res.jwtToken) {
-        localStorage.setItem("jwtToken",res.jwtToken);
+        localStorage.setItem("jwtToken", res.jwtToken);
         setisJwtExist(true);
         setjwtToken(res.jwtToken);
         toast.success(`User logged in..`);
-        navigate("/");
+        setTimeout(() => {
+          navigate("/");
+        }, 200);
       } else {
         throw new Error();
       }
