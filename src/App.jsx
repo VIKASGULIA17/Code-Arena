@@ -12,7 +12,7 @@ import Signup from './Pages/Authentication/Signup'
 import AlgoVisualizer from './Pages/AlgoVisualizer'
 import OngoingContestPage from './components/Contest/OngoingContestPage'
 import ContestRegistration from './components/Contest/ContestRegistration'
-import SessionExpired from './components/others/sessionExpired'
+import SessionExpired from './components/others/SessionExpired'
 
 
 const App = () => {
