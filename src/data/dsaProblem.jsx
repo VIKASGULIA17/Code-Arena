@@ -576,7 +576,7 @@ export const dsaProblems = [
     id: 58,
     status: true,
     title: "Climbing Stairs",
-    type: "Dynamic Programming",
+    type: "Integer",
     fnName: "climbStairs",
     tags: ["DP", "Math"],
     difficulty: "Easy",

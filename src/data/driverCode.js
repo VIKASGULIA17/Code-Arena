@@ -1,5 +1,5 @@
 export const driverCodeTemplate = {
-   "Array": {
+    "Array": {
         javascript: (fnName, userCode, cases, problemInfo) => `
         // 1. User Code
         ${userCode}
@@ -62,7 +62,6 @@ for i, t in enumerate(cases):
 
 print(json.dumps(results))
         `,
-
         java: (fnName, userCode, cases, problemInfo) => `
 import java.util.*;
 import java.util.stream.*;
@@ -73,57 +72,193 @@ public class Solution {
         UserLogic solution = new UserLogic();
 
         ${cases.map((t, i) => {
-            // JS Logic: Decide code generation based on void status
-            const isVoid = problemInfo?.returnType === "void";
-            
-            const isArrExpected = Array.isArray(t.expected);
-            const expectedType = isArrExpected ? "int[]" : (typeof t.expected === "boolean" ? "boolean" : "int");
-            const expectedVal = isArrExpected ? `{${t.expected.join(',')}}` : t.expected;
-            
-            const firstArgName = Object.keys(t.input)[0];
-            const callArgs = Object.keys(t.input).join(', ');
+            // --- JS HELPER FUNCTIONS ---
 
-            // Generate correct Java syntax based on void status
-            const executionCode = isVoid 
-                ? `solution.${fnName}(${callArgs});
-            ${expectedType} result = ${firstArgName};`
-                : `${expectedType} result = solution.${fnName}(${callArgs});`;
+            // 1. Detect if we need char[][] (specifically for Sudoku)
+            const isCharBoard = (val) => {
+                return Array.isArray(val) && val.length > 0 &&
+                    Array.isArray(val[0]) &&
+                    typeof val[0][0] === "string" && val[0][0].length === 1;
+            };
+
+            // 2. Generate Java Type String based on value content
+            const getJavaType = (val) => {
+                if (val === null) return "Object";
+                if (Array.isArray(val)) {
+                    // Check for 2D Arrays
+                    if (val.length > 0 && Array.isArray(val[0])) {
+                        if (isCharBoard(val)) return "char[][]";
+                        // If it contains numbers, assume int[][] unless decimals found
+                        if (typeof val[0][0] === "number") return "int[][]";
+                        return "Object[][]"; // Fallback
+                    }
+                    // 1D Arrays
+                    if (val.length > 0 && typeof val[0] === "string") return "String[]";
+                    return "int[]"; // Default 1D number array
+                }
+                if (typeof val === "string") return "String";
+                if (typeof val === "boolean") return "boolean";
+                if (Number.isInteger(val)) return "int";
+                if (typeof val === "number") return "double";
+                return "Object";
+            };
+
+            // 3. Format Value to valid Java Literal with explicit type
+            const formatJavaVal = (val, type) => {
+                if (val === null) return "null";
+
+                // Handle Sudoku Board (char[][])
+                if (type === "char[][]") {
+                    const rows = val.map(row =>
+                        "{" + row.map(c => "'" + c + "'").join(',') + "}"
+                    ).join(',');
+                    return "new char[][]{" + rows + "}";
+                }
+
+                // Handle Arrays (Always use new Type[]{...} syntax for safety with Object)
+                if (Array.isArray(val)) {
+                    if (val.length === 0) return "new " + type + "{}";
+
+                    let inner = "";
+                    if (Array.isArray(val[0])) {
+                        // 2D generic - Recursive to handle nested new int[] correctly
+                        inner = val.map(v => formatJavaVal(v, getJavaType(v))).join(',');
+                    } else if (typeof val[0] === "string") {
+                        inner = val.map(s => '"' + s + '"').join(',');
+                    } else {
+                        inner = val.join(',');
+                    }
+
+                    return "new " + type + "{" + inner + "}";
+                }
+
+                // Primitives
+                if (typeof val === "string") return '"' + val + '"';
+                if (typeof val === "boolean") return val.toString();
+
+                return val; // numbers
+            };
+            // --- END JS HELPERS ---
+
+            const isVoid = problemInfo?.returnType === "void";
+
+            // Generate Input Definitions
+            const inputDefs = Object.entries(t.input).map(([key, val]) => {
+                const type = getJavaType(val);
+                const value = formatJavaVal(val, type);
+                return `${type} ${key} = ${value};`;
+            }).join('\n            ');
+
+            // Generate Expected Value
+            const expectedValRaw = t.expected;
+            const expectedTypeRaw = getJavaType(expectedValRaw);
+            const expectedValueStr = formatJavaVal(expectedValRaw, expectedTypeRaw);
+
+            const callArgs = Object.keys(t.input).join(', ');
+            const firstArg = Object.keys(t.input)[0];
 
             return `
         try {
-            ${Object.entries(t.input).map(([key, val]) => {
-                const isArr = Array.isArray(val);
-                const type = isArr ? "int[]" : "int";
-                const value = isArr ? `{${val.join(',')}}` : val;
-                return `${type} ${key} = ${value};`;
-            }).join('\n            ')}
-            
-            ${expectedType} expected = ${expectedVal};
-            
-            // Generated Execution Block
-            ${executionCode}
-            
-            boolean passed = ${isArrExpected ? "Arrays.equals(result, expected)" : "result == expected"};
+            // 1. Setup Inputs
+            ${inputDefs}
+            // Use Object for expected to avoid type mismatch if user returns List but we expect Array
+            Object expected = ${expectedValueStr};
+
+            // 2. Execute User Function
+            Object result;
+            ${isVoid
+                    ? `solution.${fnName}(${callArgs}); result = ${firstArg};`
+                    : `result = solution.${fnName}(${callArgs});`
+                }
+
+            // 3. Compare Results using Robust Helper
+            boolean passed = TestHelper.isEqual(result, expected);
             String status = passed ? "Passed" : "Failed";
             
-            String actualStr = ${isArrExpected ? "Arrays.toString(result)" : "String.valueOf(result)"};
-            String expectedStr = ${isArrExpected ? "Arrays.toString(expected)" : "String.valueOf(expected)"};
+            // 4. Serialize for JSON output
+            String actualStr = TestHelper.serialize(result);
+            String expectedStr = TestHelper.serialize(expected);
             
-            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": %s, \\"expected\\": %s}", 
+            // Escape JSON quotes (Fixed escaping: \\" becomes \" in Java source)
+            actualStr = actualStr.replace("\\"", "\\\\\\\"");
+            expectedStr = expectedStr.replace("\\"", "\\\\\\\"");
+            
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
                 ${i + 1}, status, actualStr, expectedStr);
-            
             results.add(json);
+
         } catch (Exception e) {
-            results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
+            results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.toString().replace("\\"", "\\\\\\\"") + "\\"}");
         }`;
         }).join('\n')}
 
         System.out.println("[" + String.join(",", results) + "]");
     }
 }
-${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
-        `,
 
+// --- Helper Class to handle Type Comparison (List vs Array, Integer vs Double) ---
+class TestHelper {
+    // Robust comparison of two objects (Array, List, Primitive)
+    public static boolean isEqual(Object a, Object b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+
+        // Convert Lists to Arrays for unified comparison
+        if (a instanceof List) a = listToArray((List) a);
+        if (b instanceof List) b = listToArray((List) b);
+
+        if (a.getClass().isArray() && b.getClass().isArray()) {
+            int len = java.lang.reflect.Array.getLength(a);
+            if (len != java.lang.reflect.Array.getLength(b)) return false;
+            for (int i = 0; i < len; i++) {
+                if (!isEqual(java.lang.reflect.Array.get(a, i), java.lang.reflect.Array.get(b, i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        // Handle Number comparisons (Double vs Integer)
+        if (a instanceof Number && b instanceof Number) {
+            return Math.abs(((Number) a).doubleValue() - ((Number) b).doubleValue()) < 1e-9;
+        }
+
+        return a.equals(b);
+    }
+
+    // Convert List/Nested Lists to Object[]
+    private static Object listToArray(List list) {
+        Object[] arr = new Object[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            Object val = list.get(i);
+            if (val instanceof List) arr[i] = listToArray((List) val);
+            else arr[i] = val;
+        }
+        return arr;
+    }
+
+    // Serialize object to String for JSON output
+    public static String serialize(Object o) {
+        if (o == null) return "null";
+        if (o instanceof List) return serialize(listToArray((List) o));
+        
+        if (o.getClass().isArray()) {
+            StringBuilder sb = new StringBuilder("[");
+            int len = java.lang.reflect.Array.getLength(o);
+            for (int i = 0; i < len; i++) {
+                sb.append(serialize(java.lang.reflect.Array.get(o, i)));
+                if (i < len - 1) sb.append(",");
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+        if (o instanceof String) return "\\"" + o + "\\"";
+        return o.toString();
+    }
+}
+
+${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
+`,
         cpp: (fnName, userCode, cases, problemInfo) => `
 #include <iostream>
 #include <vector>
@@ -153,29 +288,29 @@ int main() {
     Solution solution;
 
     ${cases.map((t, i) => {
-        const isVoid = problemInfo?.returnType === "void";
-        const isArrExpected = Array.isArray(t.expected);
-        
-        const expectedType = isArrExpected ? "vector<int>" : (typeof t.expected === "boolean" ? "bool" : "int");
-        let expectedVal = isArrExpected ? `{${t.expected.join(',')}}` : t.expected;
-        if(expectedType === "bool") expectedVal = t.expected ? "true" : "false";
-        
-        const firstArgName = Object.keys(t.input)[0];
-        const callArgs = Object.keys(t.input).join(', ');
+            const isVoid = problemInfo?.returnType === "void";
+            const isArrExpected = Array.isArray(t.expected);
 
-        const executionCode = isVoid 
-            ? `solution.${fnName}(${callArgs});
+            const expectedType = isArrExpected ? "vector<int>" : (typeof t.expected === "boolean" ? "bool" : "int");
+            let expectedVal = isArrExpected ? `{${t.expected.join(',')}}` : t.expected;
+            if (expectedType === "bool") expectedVal = t.expected ? "true" : "false";
+
+            const firstArgName = Object.keys(t.input)[0];
+            const callArgs = Object.keys(t.input).join(', ');
+
+            const executionCode = isVoid
+                ? `solution.${fnName}(${callArgs});
         auto result = ${firstArgName};`
-            : `auto result = solution.${fnName}(${callArgs});`;
+                : `auto result = solution.${fnName}(${callArgs});`;
 
-        return `
+            return `
     try {
         ${Object.entries(t.input).map(([key, val]) => {
-            const isArr = Array.isArray(val);
-            const type = isArr ? "vector<int>" : "int";
-            const valStr = isArr ? `{${val.join(',')}}` : val;
-            return `${type} ${key} = ${valStr};`;
-        }).join('\n        ')}
+                const isArr = Array.isArray(val);
+                const type = isArr ? "vector<int>" : "int";
+                const valStr = isArr ? `{${val.join(',')}}` : val;
+                return `${type} ${key} = ${valStr};`;
+            }).join('\n        ')}
         
         ${expectedType} expected = ${expectedVal};
         
@@ -188,12 +323,12 @@ int main() {
         string expectedStr = ${isArrExpected ? "vecToStr(expected)" : "valToStr(expected)"};
         
         stringstream json;
-        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << actualStr << ", \\"expected\\": " << expectedStr << "}";
+        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << actualStr << ", \\"expected\\": " << expectedStr << "}";
         results.push_back(json.str());
     } catch (const exception& e) {
-        results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
+        results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
     }`;
-    }).join('\n')}
+        }).join('\n')}
 
     cout << "[";
     for(size_t i=0; i<results.size(); ++i) { cout << results[i]; if(i < results.size()-1) cout << ","; }
@@ -343,7 +478,7 @@ for i, t in enumerate(test_cases):
 print(json.dumps(results))
 `,
 
-       java: (fnName, userCode, cases) => `
+        java: (fnName, userCode, cases) => `
 import java.util.*;
 
 // 1. DRIVER CLASS (MUST BE FIRST)
@@ -375,7 +510,7 @@ public class Solution {
 
         ${cases.map((t, i) => {
             const isKLists = Object.keys(t.input).includes('lists');
-            
+
             if (isKLists) {
                 const matrix = t.input.lists;
                 return `
@@ -484,11 +619,11 @@ int main() {
     Solution solution;
 
     ${cases.map((t, i) => {
-        const isKLists = Object.keys(t.input).includes('lists');
-        
-        if (isKLists) {
-             const matrix = t.input.lists; 
-             return `
+            const isKLists = Object.keys(t.input).includes('lists');
+
+            if (isKLists) {
+                const matrix = t.input.lists;
+                return `
     try {
         // Build Vector of Lists
         vector<vector<int>> rawLists = {${matrix.map(row => `{${row.join(',')}}`).join(',')}};
@@ -501,12 +636,12 @@ int main() {
         
         string status = (resultStr == expectedStr) ? "Passed" : "Failed";
         stringstream json;
-        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << resultStr << ", \\"expected\\": " << expectedStr << "}";
+        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << resultStr << ", \\"expected\\": " << expectedStr << "}";
         results.push_back(json.str());
-    } catch (const exception& e) { results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}"); }
+    } catch (const exception& e) { results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}"); }
              `;
-        } else {
-            return `
+            } else {
+                return `
     try {
         ${Object.entries(t.input).map(([key, val]) => `
         vector<int> ${key}Arr = {${val.join(',')}};
@@ -519,12 +654,12 @@ int main() {
         
         string status = (resultStr == expectedStr) ? "Passed" : "Failed";
         stringstream json;
-        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << resultStr << ", \\"expected\\": " << expectedStr << "}";
+        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << resultStr << ", \\"expected\\": " << expectedStr << "}";
         results.push_back(json.str());
-    } catch (const exception& e) { results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}"); }
+    } catch (const exception& e) { results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}"); }
             `;
-        }
-    }).join('\n')}
+            }
+        }).join('\n')}
 
     cout << "[";
     for(size_t i=0; i<results.size(); ++i) {
@@ -1183,29 +1318,31 @@ int main() {
 `,
     },
     "String": {
-        javascript: (fnName, userCode, cases) => `
+        javascript: (fnName, userCode, cases, problemInfo) => `
         // 1. User Code
         ${userCode}
 
         // 2. Driver Code
         const testCases = ${JSON.stringify(cases)};
         const results = [];
+        const isVoid = ${problemInfo?.returnType === "void"};
 
         testCases.forEach((t, index) => {
             const resultEntry = { id: index + 1 };
             try {
-                // Extract arguments (handles multiple string inputs if needed)
+                // Extract arguments dynamically
                 const args = Object.values(t.input);
                 
-                // Dynamic Function Call
-                const result = ${fnName}(...args);
+                const output = ${fnName}(...args);
+                
+                // Handle void/in-place (rare for strings in JS, but safe to add)
+                const result = isVoid ? args[0] : output;
                 
                 resultEntry.actual = result;
                 resultEntry.expected = t.expected;
                 
-                // String/Number comparison (direct equality is fine for primitives)
-                // Using JSON.stringify handles both primitives and objects safely
-                if (JSON.stringify(result) === JSON.stringify(t.expected)) {
+                // Loose equality handles string vs number comparisons well
+                if (result == t.expected) {
                     resultEntry.status = "Passed";
                 } else {
                     resultEntry.status = "Failed";
@@ -1217,30 +1354,34 @@ int main() {
             results.push(resultEntry);
         });
         console.log(JSON.stringify(results));
-        `,
+    `,
 
-        python: (fnName, userCode, cases) => `
+        python: (fnName, userCode, cases, problemInfo) => `
 import json
-from typing import List
+import copy
 
 # 1. User Code
 ${userCode}
 
 # 2. Driver Code
+# Triple quotes to safely handle strings containing single quotes
 cases_json = '''${JSON.stringify(cases)}'''
 test_cases = json.loads(cases_json)
 results = []
 solution = Solution()
+is_void = ${problemInfo?.returnType === "void" ? "True" : "False"}
 
 for i, t in enumerate(test_cases):
     result_entry = {"id": i + 1}
     try:
-        # Get all input values as a list
+        # Get arguments dynamically
         args = list(t["input"].values())
         
-        # Dynamic Method Call
         func = getattr(solution, "${fnName}")
-        result = func(*args)
+        output = func(*args)
+        
+        # Handle void logic (return modified first arg if void)
+        result = args[0] if is_void else output
         
         result_entry["actual"] = result
         result_entry["expected"] = t["expected"]
@@ -1249,7 +1390,6 @@ for i, t in enumerate(test_cases):
             result_entry["status"] = "Passed"
         else:
             result_entry["status"] = "Failed"
-            
     except Exception as e:
         result_entry["status"] = "Error"
         result_entry["error"] = str(e)
@@ -1257,10 +1397,11 @@ for i, t in enumerate(test_cases):
     results.append(result_entry)
 
 print(json.dumps(results))
-`,
+    `,
 
-        java: (fnName, userCode, cases) => `
+        java: (fnName, userCode, cases, problemInfo) => `
 import java.util.*;
+import java.util.stream.*;
 
 public class Solution {
     public static void main(String[] args) {
@@ -1268,29 +1409,59 @@ public class Solution {
         UserLogic solution = new UserLogic();
 
         ${cases.map((t, i) => {
-            // FIX: Detect Return Type based on expected value
+            const isVoid = problemInfo?.returnType === "void";
+
+            // 1. Detect Return Type & Format Expected Value
             let returnType = "String";
-            if (typeof t.expected === "boolean") returnType = "boolean";
-            else if (typeof t.expected === "number") returnType = "int";
+            let expectedVal = `"${t.expected}"`; // Default: Quote the string
+
+            if (typeof t.expected === "boolean") {
+                returnType = "boolean";
+                expectedVal = t.expected; // true/false (no quotes)
+            } else if (typeof t.expected === "number") {
+                returnType = "int";
+                expectedVal = t.expected; // numbers (no quotes)
+            }
+
+            // 2. Generate Arguments String
+            const callArgs = Object.keys(t.input).join(', ');
+            const firstArg = Object.keys(t.input)[0];
 
             return `
         try {
-            String s = "${t.input.s}";
-            ${returnType} expected = ${t.expected};
+            // Dynamic Input Declaration (e.g. String s = "..."; String t = "...")
+            ${Object.entries(t.input).map(([key, val]) => `
+            String ${key} = "${val}";
+            `).join('\n            ')}
             
-            // Dynamic Return Type Declaration
-            ${returnType} result = solution.${fnName}(s);
+            ${returnType} expected = ${expectedVal};
             
-            boolean passed = result == expected; // Works for int and boolean
-            // For Strings, we might need result.equals(expected), but for this fix boolean is priority
-            if ("${returnType}".equals("String")) {
-                 passed = String.valueOf(result).equals(String.valueOf(expected));
+            ${returnType} result;
+            
+            // Execution Logic
+            if (${isVoid}) {
+                solution.${fnName}(${callArgs});
+                // Unlikely for Java Strings to be modified in place due to immutability,
+                // but casting avoids compiler errors if this path was ever taken.
+                result = (${returnType}) ((Object)${firstArg});
+            } else {
+                result = solution.${fnName}(${callArgs});
+            }
+            
+            // Comparison Logic
+            boolean passed = false;
+            if ("${returnType}".equals("boolean")) {
+                passed = (boolean)((Object)result) == (boolean)((Object)expected);
+            } else if ("${returnType}".equals("int")) {
+                passed = (int)((Object)result) == (int)((Object)expected);
+            } else {
+                passed = String.valueOf(result).equals(String.valueOf(expected));
             }
 
             String status = passed ? "Passed" : "Failed";
             
             String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
-                ${i + 1}, status, result, expected);
+                ${i + 1}, status, String.valueOf(result), String.valueOf(expected));
             
             results.add(json);
         } catch (Exception e) {
@@ -1302,41 +1473,24 @@ public class Solution {
     }
 }
 ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
-`,
+    `,
 
-        cpp: (fnName, userCode, cases) => `
+        cpp: (fnName, userCode, cases, problemInfo) => `
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 #include <sstream>
-#include <queue>
-#include <deque>
-#include <bitset>
-#include <iterator>
-#include <list>
-#include <stack>
+#include <algorithm>
 #include <map>
-#include <set>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <limits>
-#include <time.h>
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <assert.h>
 #include <unordered_map>
-#include <unordered_set>
 
 using namespace std;
 
-// 1. Helpers to convert results to string for JSON output
+// Helpers to print output safely
 string valToStr(bool val) { return val ? "true" : "false"; }
 string valToStr(int val) { return to_string(val); }
-string valToStr(string val) { return "\\"" + val + "\\""; } // Add quotes for string results
+string valToStr(double val) { return to_string(val); }
+string valToStr(string val) { return "\\"" + val + "\\""; }
 string valToStr(const char* val) { return "\\"" + string(val) + "\\""; }
 
 ${userCode}
@@ -1344,45 +1498,55 @@ ${userCode}
 int main() {
     vector<string> results;
     Solution solution;
+    bool isVoid = ${problemInfo?.returnType === "void"};
 
     ${cases.map((t, i) => {
-        // --- JAVASCRIPT LOGIC TO DETERMINE C++ TYPES ---
-        let cppType = "string";
-        let expectedValue = `"${t.expected}"`; // Default: String needs quotes
+            // 1. Detect Types
+            let cppType = "string";
+            let expectedValue = `"${t.expected}"`;
 
-        if (typeof t.expected === "boolean") {
-            cppType = "bool";
-            expectedValue = t.expected ? "true" : "false"; // Bool needs NO quotes
-        } else if (typeof t.expected === "number") {
-            cppType = "int";
-            expectedValue = t.expected; // Number needs NO quotes
-        }
+            if (typeof t.expected === "boolean") {
+                cppType = "bool";
+                expectedValue = t.expected ? "true" : "false";
+            } else if (typeof t.expected === "number") {
+                cppType = "int";
+                expectedValue = t.expected;
+            }
 
-        return `
+            const firstArg = Object.keys(t.input)[0];
+            const callArgs = Object.keys(t.input).join(', ');
+
+            return `
     try {
-        // Parse Inputs
+        // Dynamic Input Declaration
         ${Object.entries(t.input).map(([key, val]) => `
         string ${key} = "${val}";
-        `).join('\n')}
+        `).join('\n        ')}
         
-        // Expected Output (Typed correctly)
         ${cppType} expected = ${expectedValue};
-        
-        // Call Function (Typed correctly)
-        ${cppType} result = solution.${fnName}(${Object.keys(t.input).join(', ')});
+        ${cppType} result;
+
+        // Execution Logic
+        if (isVoid) {
+            solution.${fnName}(${callArgs});
+            // C++ Strings CAN be modified in place if passed by reference
+            // But we need to handle casting if return type mismatch.
+            // For template simplicity, we assume result capture logic handles assignments.
+             result = (${cppType})${firstArg}; 
+        } else {
+            result = solution.${fnName}(${callArgs});
+        }
         
         bool passed = (result == expected);
         string status = passed ? "Passed" : "Failed";
         
         stringstream json;
-        // Use valToStr to safely print bools/ints/strings into the JSON string
-        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << valToStr(result) << ", \\"expected\\": " << valToStr(expected) << "}";
+        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << valToStr(result) << ", \\"expected\\": " << valToStr(expected) << "}";
         results.push_back(json.str());
     } catch (const exception& e) {
-        results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
-    }
-    `;
-    }).join('\n')}
+        results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
+    }`;
+        }).join('\n')}
 
     cout << "[";
     for(size_t i=0; i<results.size(); ++i) {
@@ -1390,11 +1554,262 @@ int main() {
         if(i < results.size()-1) cout << ",";
     }
     cout << "]" << endl;
-    
     return 0;
 }
-`,
+    `
+    },
+    "Integer": {  //it include all (int ,double ,float )
+        javascript: (fnName, userCode, cases, problemInfo) => `
+        // 1. User Code
+        ${userCode}
+
+        // 2. Driver Code
+        const testCases = ${JSON.stringify(cases)};
+        const results = [];
+        const isVoid = ${problemInfo?.returnType === "void"};
+
+        testCases.forEach((t, index) => {
+            const resultEntry = { id: index + 1 };
+            try {
+                // Extract values dynamically (handles 1 arg, 2 args, etc.)
+                const args = Object.values(t.input);
+                
+                // Call Function
+                const output = ${fnName}(...args);
+                
+                // Handle void vs return
+                const result = isVoid ? args[0] : output;
+                
+                resultEntry.actual = result;
+                resultEntry.expected = t.expected;
+                
+                // Comparison Logic (Handles float precision if needed, otherwise strict)
+                const isFloat = typeof t.expected === 'number' && !Number.isInteger(t.expected);
+                
+                let passed = false;
+                if (isFloat) {
+                    passed = Math.abs(result - t.expected) < 0.00001;
+                } else {
+                    passed = JSON.stringify(result) === JSON.stringify(t.expected);
+                }
+
+                resultEntry.status = passed ? "Passed" : "Failed";
+            } catch (error) {
+                resultEntry.status = "Error";
+                resultEntry.error = error.message;
+            }
+            results.push(resultEntry);
+        });
+        console.log(JSON.stringify(results));
+    `,
+
+        python: (fnName, userCode, cases, problemInfo) => `
+import json
+import copy
+import math
+
+# 1. User Code
+${userCode}
+
+# 2. Driver Code
+cases_json = '''${JSON.stringify(cases)}'''
+test_cases = json.loads(cases_json)
+results = []
+solution = Solution()
+is_void = ${problemInfo?.returnType === "void" ? "True" : "False"}
+
+for i, t in enumerate(test_cases):
+    result_entry = {"id": i + 1}
+    try:
+        # Dynamic Arguments
+        args = list(t["input"].values())
+        
+        func = getattr(solution, "${fnName}")
+        output = func(*args)
+        
+        result = args[0] if is_void else output
+        
+        result_entry["actual"] = result
+        result_entry["expected"] = t["expected"]
+        
+        # Compare (Handle Float vs Exact)
+        passed = False
+        if isinstance(t["expected"], float):
+            passed = abs(result - t["expected"]) < 0.00001
+        else:
+            passed = result == t["expected"]
+
+        result_entry["status"] = "Passed" if passed else "Failed"
+            
+    except Exception as e:
+        result_entry["status"] = "Error"
+        result_entry["error"] = str(e)
+    
+    results.append(result_entry)
+
+print(json.dumps(results))
+    `,
+
+        java: (fnName, userCode, cases, problemInfo) => `
+import java.util.*;
+
+public class Solution {
+    public static void main(String[] args) {
+        List<String> results = new ArrayList<>();
+        UserLogic solution = new UserLogic();
+        boolean isVoid = ${problemInfo?.returnType === "void"};
+
+        ${cases.map((t, i) => {
+            // 1. Detect Return Type (int, double, boolean, String)
+            let returnType = "int";
+            if (typeof t.expected === "boolean") returnType = "boolean";
+            else if (typeof t.expected === "string") returnType = "String";
+            else if (!Number.isInteger(t.expected)) returnType = "double";
+
+            // 2. Format Expected Value
+            let expectedVal = t.expected;
+            if (returnType === "String") expectedVal = `"${t.expected}"`;
+
+            // 3. Helper to format variable declarations
+            const inputsDecl = Object.entries(t.input).map(([key, val]) => {
+                const type = typeof val === "boolean" ? "boolean" : (Number.isInteger(val) ? "int" : "double");
+                return `${type} ${key} = ${val};`;
+            }).join("\n            ");
+
+            const callArgs = Object.keys(t.input).join(", ");
+            const firstArg = Object.keys(t.input)[0];
+
+            return `
+        try {
+            // Inputs
+            ${inputsDecl}
+            
+            // Expected
+            ${returnType} expected = ${expectedVal};
+            
+            // Execution
+            ${returnType} result;
+            if (isVoid) {
+                solution.${fnName}(${callArgs});
+                result = (${returnType}) ${firstArg}; // Cast mostly for non-int types
+            } else {
+                result = solution.${fnName}(${callArgs});
+            }
+            
+            // Comparison
+            boolean passed = false;
+            if ("${returnType}".equals("double")) {
+                passed = Math.abs((double)result - (double)expected) < 0.00001;
+            } else if ("${returnType}".equals("String")) {
+                passed = String.valueOf(result).equals(String.valueOf(expected));
+            } else {
+                passed = result == expected;
+            }
+
+            String status = passed ? "Passed" : "Failed";
+            
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
+                ${i + 1}, status, String.valueOf(result), String.valueOf(expected));
+            
+            results.add(json);
+        } catch (Exception e) {
+            results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
+        }`;
+        }).join('\n')}
+
+        System.out.println("[" + String.join(",", results) + "]");
     }
+}
+${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
+    `,
+
+        cpp: (fnName, userCode, cases, problemInfo) => `
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+// Helpers
+string valToStr(int val) { return to_string(val); }
+string valToStr(long long val) { return to_string(val); }
+string valToStr(double val) { return to_string(val); }
+string valToStr(bool val) { return val ? "true" : "false"; }
+string valToStr(string val) { return "\\"" + val + "\\""; }
+
+${userCode}
+
+int main() {
+    vector<string> results;
+    Solution solution;
+    bool isVoid = ${problemInfo?.returnType === "void"};
+
+    ${cases.map((t, i) => {
+            // 1. Detect Return Type
+            let cppType = "int";
+            let expectedVal = t.expected;
+
+            if (typeof t.expected === "boolean") {
+                cppType = "bool";
+                expectedVal = t.expected ? "true" : "false";
+            } else if (typeof t.expected === "string") {
+                cppType = "string";
+                expectedVal = `"${t.expected}"`;
+            } else if (!Number.isInteger(t.expected)) {
+                cppType = "double";
+            }
+
+            const callArgs = Object.keys(t.input).join(", ");
+            const firstArg = Object.keys(t.input)[0];
+
+            // 2. Generate Inputs Declaration
+            const inputsDecl = Object.entries(t.input).map(([key, val]) => {
+                const type = typeof val === "boolean" ? "bool" : (Number.isInteger(val) ? "int" : "double");
+                const valStr = typeof val === "boolean" ? (val ? "true" : "false") : val;
+                return `${type} ${key} = ${valStr};`;
+            }).join("\n        ");
+
+            return `
+    try {
+        ${inputsDecl}
+        ${cppType} expected = ${expectedVal};
+        ${cppType} result;
+        
+        if (isVoid) {
+            solution.${fnName}(${callArgs});
+            result = ${firstArg};
+        } else {
+            result = solution.${fnName}(${callArgs});
+        }
+        
+        bool passed = false;
+        if (is_same<${cppType}, double>::value) {
+            passed = abs((double)result - (double)expected) < 1e-5;
+        } else {
+            passed = (result == expected);
+        }
+        
+        string status = passed ? "Passed" : "Failed";
+        
+        stringstream json;
+        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": \\"" << valToStr(result) << "\\", \\"expected\\": \\"" << valToStr(expected) << "\\"}";
+        results.push_back(json.str());
+    } catch (const exception& e) {
+        results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
+    }`;
+        }).join('\n')}
+
+    cout << "[";
+    for(size_t i=0; i<results.size(); ++i) { cout << results[i]; if(i < results.size()-1) cout << ","; }
+    cout << "]" << endl;
+    return 0;
+}
+    `,
+    },
 }
 
 
