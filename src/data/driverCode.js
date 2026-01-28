@@ -1,26 +1,24 @@
 export const driverCodeTemplate = {
-    "Array": {
-        javascript: (fnName, userCode, cases) => `
+   "Array": {
+        javascript: (fnName, userCode, cases, problemInfo) => `
         // 1. User Code
         ${userCode}
 
         // 2. Driver Code
         const testCases = ${JSON.stringify(cases)};
         const results = [];
+        const isVoid = ${problemInfo?.returnType === "void"};
 
         testCases.forEach((t, index) => {
             const resultEntry = { id: index + 1 };
             try {
-                // Extract arguments dynamically
-                const args = Object.values(t.input);
-                
-                // Dynamic Function Call using fnName
-                const result = ${fnName}(...args);
+                const args = Object.values(t.input).map(arg => JSON.parse(JSON.stringify(arg)));
+                const output = ${fnName}(...args);
+                const result = isVoid ? args[0] : output;
                 
                 resultEntry.actual = result;
                 resultEntry.expected = t.expected;
                 
-                // Compare arrays or primitives using JSON.stringify
                 if (JSON.stringify(result) === JSON.stringify(t.expected)) {
                     resultEntry.status = "Passed";
                 } else {
@@ -35,46 +33,37 @@ export const driverCodeTemplate = {
         console.log(JSON.stringify(results));
         `,
 
-        python: (fnName, userCode, cases) => `
+        python: (fnName, userCode, cases, problemInfo) => `
 import json
+import copy
 from typing import List
 
-# 1. User Code
 ${userCode}
 
-# 2. Driver Code
-cases_json = '${JSON.stringify(cases)}'
-test_cases = json.loads(cases_json)
+cases = json.loads('${JSON.stringify(cases)}')
 results = []
-solution = Solution()
+sol = Solution()
+is_void = ${problemInfo?.returnType === "void" ? "True" : "False"}
 
-for i, t in enumerate(test_cases):
-    result_entry = {"id": i + 1}
+for i, t in enumerate(cases):
     try:
-        # Get all input values as a list
         args = list(t["input"].values())
+        args_copy = copy.deepcopy(args)
         
-        # Dynamic Method Call
-        func = getattr(solution, "${fnName}")
-        result = func(*args)
+        func = getattr(sol, "${fnName}")
+        output = func(*args_copy)
         
-        result_entry["actual"] = result
-        result_entry["expected"] = t["expected"]
+        result = args_copy[0] if is_void else output
         
-        if result == t["expected"]:
-            result_entry["status"] = "Passed"
-        else:
-            result_entry["status"] = "Failed"
+        status = "Passed" if result == t["expected"] else "Failed"
+        results.append({"id": i+1, "status": status, "actual": result, "expected": t["expected"]})
     except Exception as e:
-        result_entry["status"] = "Error"
-        result_entry["error"] = str(e)
-    
-    results.append(result_entry)
+        results.append({"id": i+1, "status": "Error", "error": str(e)})
 
 print(json.dumps(results))
-`,
+        `,
 
-        java: (fnName, userCode, cases) => `
+        java: (fnName, userCode, cases, problemInfo) => `
 import java.util.*;
 import java.util.stream.*;
 
@@ -84,18 +73,24 @@ public class Solution {
         UserLogic solution = new UserLogic();
 
         ${cases.map((t, i) => {
-            // FIX: Detect if we need double or int based on function name or data
-            const isFloat = fnName === 'findMedianSortedArrays' || !Number.isInteger(t.expected);
-            const numType = isFloat ? "double" : "int";
+            // JS Logic: Decide code generation based on void status
+            const isVoid = problemInfo?.returnType === "void";
             
-            // Handle Arrays vs Primitives
             const isArrExpected = Array.isArray(t.expected);
-            const expectedType = isArrExpected ? "int[]" : numType;
+            const expectedType = isArrExpected ? "int[]" : (typeof t.expected === "boolean" ? "boolean" : "int");
             const expectedVal = isArrExpected ? `{${t.expected.join(',')}}` : t.expected;
+            
+            const firstArgName = Object.keys(t.input)[0];
+            const callArgs = Object.keys(t.input).join(', ');
+
+            // Generate correct Java syntax based on void status
+            const executionCode = isVoid 
+                ? `solution.${fnName}(${callArgs});
+            ${expectedType} result = ${firstArgName};`
+                : `${expectedType} result = solution.${fnName}(${callArgs});`;
 
             return `
         try {
-            // Dynamic Input Parsing
             ${Object.entries(t.input).map(([key, val]) => {
                 const isArr = Array.isArray(val);
                 const type = isArr ? "int[]" : "int";
@@ -103,18 +98,14 @@ public class Solution {
                 return `${type} ${key} = ${value};`;
             }).join('\n            ')}
             
-            // Expected Output
             ${expectedType} expected = ${expectedVal};
             
-            // Call User Function
-            ${expectedType} result = solution.${fnName}(${Object.keys(t.input).join(', ')});
+            // Generated Execution Block
+            ${executionCode}
             
-            // Compare
-            boolean passed = ${isArrExpected ? "Arrays.equals(result, expected)" : (isFloat ? "Math.abs(result - expected) < 0.00001" : "result == expected")};
-            
+            boolean passed = ${isArrExpected ? "Arrays.equals(result, expected)" : "result == expected"};
             String status = passed ? "Passed" : "Failed";
             
-            // Format Output for JSON
             String actualStr = ${isArrExpected ? "Arrays.toString(result)" : "String.valueOf(result)"};
             String expectedStr = ${isArrExpected ? "Arrays.toString(expected)" : "String.valueOf(expected)"};
             
@@ -130,67 +121,30 @@ public class Solution {
         System.out.println("[" + String.join(",", results) + "]");
     }
 }
-
 ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
-`,
+        `,
 
-        cpp: (fnName, userCode, cases) => `
+        cpp: (fnName, userCode, cases, problemInfo) => `
 #include <iostream>
-#include <string>
 #include <vector>
-#include <algorithm>
 #include <sstream>
-#include <queue>
-#include <deque>
-#include <bitset>
-#include <iterator>
-#include <list>
-#include <stack>
+#include <algorithm>
 #include <map>
-#include <set>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <limits>
-#include <time.h>
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <assert.h>
 #include <unordered_map>
-#include <unordered_set>
-#include<climits>
+#include <set>
+#include <cmath>
+#include <climits>
 
 using namespace std;
 
-using namespace std;
-
-// Helper to print vector
 string vecToStr(const vector<int>& v) {
-    stringstream ss;
-    ss << "[";
-    for(size_t i=0; i<v.size(); ++i) {
-        ss << v[i];
-        if(i < v.size()-1) ss << ",";
-    }
-    ss << "]";
-    return ss.str();
+    stringstream ss; ss << "[";
+    for(size_t i=0; i<v.size(); ++i) { ss << v[i]; if(i < v.size()-1) ss << ","; }
+    ss << "]"; return ss.str();
 }
-
-// Helper to print primitives
-template <typename T>
-string valToStr(T val) {
-    stringstream ss;
-    ss << val;
-    return ss.str();
-}
-
-// Specialization for bool
-template <>
-string valToStr<bool>(bool val) {
-    return val ? "true" : "false";
-}
+string valToStr(int val) { return to_string(val); }
+string valToStr(bool val) { return val ? "true" : "false"; }
+string valToStr(double val) { return to_string(val); }
 
 ${userCode}
 
@@ -199,25 +153,33 @@ int main() {
     Solution solution;
 
     ${cases.map((t, i) => {
-            const isArrExpected = Array.isArray(t.expected);
-            const expectedType = isArrExpected ? "vector<int>" : (typeof t.expected === "boolean" ? "bool" : "int");
-            const expectedVal = isArrExpected ? `{${t.expected.join(',')}}` : t.expected;
-
-            return `
-    try {
-        // Dynamic Input Parsing
-        ${Object.entries(t.input).map(([key, val]) => {
-                const isArr = Array.isArray(val);
-                const type = isArr ? "vector<int>" : "int";
-                const value = isArr ? `{${val.join(',')}}` : val;
-                return `${type} ${key} = ${value};`;
-            }).join('\n        ')}
+        const isVoid = problemInfo?.returnType === "void";
+        const isArrExpected = Array.isArray(t.expected);
         
-        // Expected Output
+        const expectedType = isArrExpected ? "vector<int>" : (typeof t.expected === "boolean" ? "bool" : "int");
+        let expectedVal = isArrExpected ? `{${t.expected.join(',')}}` : t.expected;
+        if(expectedType === "bool") expectedVal = t.expected ? "true" : "false";
+        
+        const firstArgName = Object.keys(t.input)[0];
+        const callArgs = Object.keys(t.input).join(', ');
+
+        const executionCode = isVoid 
+            ? `solution.${fnName}(${callArgs});
+        auto result = ${firstArgName};`
+            : `auto result = solution.${fnName}(${callArgs});`;
+
+        return `
+    try {
+        ${Object.entries(t.input).map(([key, val]) => {
+            const isArr = Array.isArray(val);
+            const type = isArr ? "vector<int>" : "int";
+            const valStr = isArr ? `{${val.join(',')}}` : val;
+            return `${type} ${key} = ${valStr};`;
+        }).join('\n        ')}
+        
         ${expectedType} expected = ${expectedVal};
         
-        // Call Function
-        auto result = solution.${fnName}(${Object.keys(t.input).join(', ')});
+        ${executionCode}
         
         bool passed = (result == expected);
         string status = passed ? "Passed" : "Failed";
@@ -226,52 +188,44 @@ int main() {
         string expectedStr = ${isArrExpected ? "vecToStr(expected)" : "valToStr(expected)"};
         
         stringstream json;
-        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << actualStr << ", \\"expected\\": " << expectedStr << "}";
+        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << actualStr << ", \\"expected\\": " << expectedStr << "}";
         results.push_back(json.str());
     } catch (const exception& e) {
-        results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
+        results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
     }`;
-        }).join('\n')}
+    }).join('\n')}
 
     cout << "[";
-    for(size_t i=0; i<results.size(); ++i) {
-        cout << results[i];
-        if(i < results.size()-1) cout << ",";
-    }
+    for(size_t i=0; i<results.size(); ++i) { cout << results[i]; if(i < results.size()-1) cout << ","; }
     cout << "]" << endl;
-    
     return 0;
 }
-`,
+        `,
     },
     "LinkedList": {
         javascript: (fnName, userCode, cases) => `
-        // 1. HELPER CLASSES (Hidden)
+        // 1. HELPER CLASSES
         function ListNode(val, next) {
             this.val = (val===undefined ? 0 : val)
             this.next = (next===undefined ? null : next)
         }
 
-        // Convert Array to LinkedList
-        const arrayToLinkedList = (arr) => {
+        const createList = (arr) => {
             if (!arr || arr.length === 0) return null;
-            let head = new ListNode(arr[0]);
-            let current = head;
-            for (let i = 1; i < arr.length; i++) {
-                current.next = new ListNode(arr[i]);
-                current = current.next;
+            let dummy = new ListNode(0);
+            let curr = dummy;
+            for (let val of arr) {
+                curr.next = new ListNode(val);
+                curr = curr.next;
             }
-            return head;
+            return dummy.next;
         };
 
-        // Convert LinkedList to Array (for comparison)
-        const linkedListToArray = (head) => {
-            const arr = [];
-            let current = head;
-            while (current) {
-                arr.push(current.val);
-                node = current.next; // Fixed variable reference
-                current = current.next;
+        const toArray = (node) => {
+            let arr = [];
+            while (node) {
+                arr.push(node.val);
+                node = node.next;
             }
             return arr;
         };
@@ -286,15 +240,23 @@ int main() {
         testCases.forEach((t, index) => {
             const resultEntry = { id: index + 1 };
             try {
-                // Convert inputs (l1, l2) from Arrays to LinkedLists
-                // We map over values because input can be { l1: [...], l2: [...] } or just { head: [...] }
-                const args = Object.values(t.input).map(val => arrayToLinkedList(val));
+                // FIX: Detect if we need a single List or an Array of Lists
+                const args = Object.keys(t.input).map(key => {
+                    const val = t.input[key];
+                    // If it's a 2D array (like for mergeKLists), map over it
+                    if (Array.isArray(val) && val.length > 0 && Array.isArray(val[0])) {
+                        return val.map(innerArr => createList(innerArr));
+                    }
+                    // Handle empty array [] for mergeKLists edge case
+                    if (key === 'lists' && Array.isArray(val) && val.length === 0) {
+                        return [];
+                    }
+                    // Default: Single List
+                    return createList(val);
+                });
                 
-                // Dynamic Function Call
                 const resultNode = ${fnName}(...args);
-                
-                // Convert result back to array for comparison
-                const resultArray = linkedListToArray(resultNode);
+                const resultArray = toArray(resultNode);
                 
                 resultEntry.actual = resultArray;
                 resultEntry.expected = t.expected;
@@ -323,16 +285,16 @@ class ListNode:
         self.val = val
         self.next = next
 
-def to_linked_list(arr):
+def to_list(arr):
     if not arr: return None
-    head = ListNode(arr[0])
-    curr = head
-    for x in arr[1:]:
+    dummy = ListNode(0)
+    curr = dummy
+    for x in arr:
         curr.next = ListNode(x)
         curr = curr.next
-    return head
+    return dummy.next
 
-def to_array(node):
+def to_arr(node):
     arr = []
     while node:
         arr.append(node.val)
@@ -351,15 +313,19 @@ solution = Solution()
 for i, t in enumerate(test_cases):
     result_entry = {"id": i + 1}
     try:
-        # Convert all input arrays to LinkedLists
-        args = [to_linked_list(v) for v in t["input"].values()]
+        args = []
+        for key, val in t["input"].items():
+            # FIX: Check if input is a list of lists (for mergeKLists)
+            if key == "lists":
+                args.append([to_list(sub) for sub in val])
+            else:
+                args.append(to_list(val))
         
         # Dynamic Method Call
         func = getattr(solution, "${fnName}")
         result_node = func(*args)
         
-        # Convert result back to array
-        result_arr = to_array(result_node)
+        result_arr = to_arr(result_node)
         
         result_entry["actual"] = result_arr
         result_entry["expected"] = t["expected"]
@@ -377,83 +343,85 @@ for i, t in enumerate(test_cases):
 print(json.dumps(results))
 `,
 
-        java: (fnName, userCode, cases) => `
+       java: (fnName, userCode, cases) => `
 import java.util.*;
-import java.util.stream.*;
 
-// 1. DRIVER CLASS (MUST BE TOP-LEVEL)
+// 1. DRIVER CLASS (MUST BE FIRST)
 public class Solution {
-    
-    // Helper: Array -> LinkedList
     public static ListNode buildList(int[] arr) {
         if (arr.length == 0) return null;
         ListNode dummy = new ListNode(0);
         ListNode curr = dummy;
-        for(int val : arr) {
+        for (int val : arr) {
             curr.next = new ListNode(val);
             curr = curr.next;
         }
         return dummy.next;
     }
     
-    // Helper: LinkedList -> String
     public static String listToString(ListNode node) {
         List<Integer> list = new ArrayList<>();
         while(node != null) {
             list.add(node.val);
             node = node.next;
         }
-        return list.toString();
-    }
-    
-    // Helper: Compare
-    public static boolean compareLists(ListNode node, int[] expected) {
-        List<Integer> list = new ArrayList<>();
-        while(node != null) {
-            list.add(node.val);
-            node = node.next;
-        }
-        if (list.size() != expected.length) return false;
-        for (int i = 0; i < expected.length; i++) {
-            if (list.get(i) != expected[i]) return false;
-        }
-        return true;
+        // FIX: Remove spaces to match JSON format "[1,2,3]"
+        return list.toString().replace(" ", "");
     }
 
     public static void main(String[] args) {
         List<String> results = new ArrayList<>();
         UserLogic solution = new UserLogic();
 
-        ${cases.map((t, i) => `
+        ${cases.map((t, i) => {
+            const isKLists = Object.keys(t.input).includes('lists');
+            
+            if (isKLists) {
+                const matrix = t.input.lists;
+                return `
         try {
-            // Dynamic Input Parsing (Map over inputs)
+            int[][] rawLists = {${matrix.map(row => `{${row.join(',')}}`).join(',')}};
+            ListNode[] lists = new ListNode[rawLists.length];
+            for(int k=0; k<rawLists.length; k++) {
+                lists[k] = buildList(rawLists[k]);
+            }
+            
+            ListNode result = solution.${fnName}(lists);
+            String resultStr = listToString(result);
+            String expectedStr = "${JSON.stringify(t.expected).replace(/"/g, "")}";
+            
+            String status = resultStr.equals(expectedStr) ? "Passed" : "Failed";
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": %s, \\"expected\\": %s}", 
+                ${i + 1}, status, resultStr, expectedStr);
+            results.add(json);
+        } catch (Exception e) { results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}"); }
+        `;
+            } else {
+                return `
+        try {
             ${Object.entries(t.input).map(([key, val]) => `
             int[] ${key}Arr = {${val.join(',')}};
             ListNode ${key} = buildList(${key}Arr);
             `).join('\n')}
             
-            int[] expected = {${t.expected.join(',')}};
-            
-            // Dynamic Function Call
             ListNode result = solution.${fnName}(${Object.keys(t.input).join(', ')});
+            String resultStr = listToString(result);
+            String expectedStr = "${JSON.stringify(t.expected).replace(/"/g, "")}";
             
-            boolean passed = compareLists(result, expected);
-            
-            String status = passed ? "Passed" : "Failed";
+            String status = resultStr.equals(expectedStr) ? "Passed" : "Failed";
             String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": %s, \\"expected\\": %s}", 
-                ${i + 1}, status, listToString(result), Arrays.toString(expected));
-            
+                ${i + 1}, status, resultStr, expectedStr);
             results.add(json);
-        } catch (Exception e) {
-            results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
-        }
-        `).join('\n')}
+        } catch (Exception e) { results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}"); }
+        `;
+            }
+        }).join('\n')}
 
         System.out.println("[" + String.join(",", results) + "]");
     }
 }
 
-// 2. HELPER CLASSES (Moved below Solution)
+// 2. HELPER CLASSES (MOVED TO BOTTOM)
 class ListNode {
     int val;
     ListNode next;
@@ -468,36 +436,14 @@ ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/clas
 
         cpp: (fnName, userCode, cases) => `
 #include <iostream>
-#include <string>
 #include <vector>
-#include <algorithm>
+#include <string>
 #include <sstream>
-#include <queue>
-#include <deque>
-#include <bitset>
-#include <iterator>
-#include <list>
-#include <stack>
-#include <map>
-#include <set>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <limits>
-#include <time.h>
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <unordered_map>
-#include <unordered_set>
+#include <algorithm>
+#include <queue> 
 
 using namespace std;
 
-using namespace std;
-
-// 1. HELPER STRUCT
 struct ListNode {
     int val;
     ListNode *next;
@@ -506,7 +452,6 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-// Helper: Array -> LinkedList
 ListNode* buildList(const vector<int>& arr) {
     if (arr.empty()) return nullptr;
     ListNode* dummy = new ListNode(0);
@@ -518,40 +463,18 @@ ListNode* buildList(const vector<int>& arr) {
     return dummy->next;
 }
 
-// Helper: LinkedList -> String
 string listToStr(ListNode* node) {
     stringstream ss;
     ss << "[";
+    bool first = true;
     while(node) {
+        if(!first) ss << ",";
         ss << node->val;
-        if(node->next) ss << ",";
+        first = false;
         node = node->next;
     }
     ss << "]";
     return ss.str();
-}
-
-// Helper: Vector -> String (For Expected)
-string vecToStr(const vector<int>& v) {
-    stringstream ss;
-    ss << "[";
-    for(size_t i=0; i<v.size(); ++i) {
-        ss << v[i];
-        if(i < v.size()-1) ss << ",";
-    }
-    ss << "]";
-    return ss.str();
-}
-
-// Helper: Compare
-bool compare(ListNode* node, const vector<int>& expected) {
-    int i = 0;
-    while(node && i < expected.size()) {
-        if(node->val != expected[i]) return false;
-        node = node->next;
-        i++;
-    }
-    return !node && i == expected.size();
 }
 
 ${userCode}
@@ -560,29 +483,48 @@ int main() {
     vector<string> results;
     Solution solution;
 
-    ${cases.map((t, i) => `
+    ${cases.map((t, i) => {
+        const isKLists = Object.keys(t.input).includes('lists');
+        
+        if (isKLists) {
+             const matrix = t.input.lists; 
+             return `
     try {
-        // Parse Inputs
+        // Build Vector of Lists
+        vector<vector<int>> rawLists = {${matrix.map(row => `{${row.join(',')}}`).join(',')}};
+        vector<ListNode*> lists;
+        for(auto& v : rawLists) lists.push_back(buildList(v));
+        
+        ListNode* result = solution.${fnName}(lists);
+        string resultStr = listToStr(result);
+        string expectedStr = "${JSON.stringify(t.expected).replace(/"/g, "")}";
+        
+        string status = (resultStr == expectedStr) ? "Passed" : "Failed";
+        stringstream json;
+        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << resultStr << ", \\"expected\\": " << expectedStr << "}";
+        results.push_back(json.str());
+    } catch (const exception& e) { results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}"); }
+             `;
+        } else {
+            return `
+    try {
         ${Object.entries(t.input).map(([key, val]) => `
         vector<int> ${key}Arr = {${val.join(',')}};
         ListNode* ${key} = buildList(${key}Arr);
         `).join('\n')}
         
-        vector<int> expected = {${t.expected.join(',')}};
-        
-        // Dynamic Function Call
         ListNode* result = solution.${fnName}(${Object.keys(t.input).join(', ')});
+        string resultStr = listToStr(result);
+        string expectedStr = "${JSON.stringify(t.expected).replace(/"/g, "")}";
         
-        bool passed = compare(result, expected);
-        string status = passed ? "Passed" : "Failed";
-        
+        string status = (resultStr == expectedStr) ? "Passed" : "Failed";
         stringstream json;
-        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << listToStr(result) << ", \\"expected\\": " << vecToStr(expected) << "}";
+        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << resultStr << ", \\"expected\\": " << expectedStr << "}";
         results.push_back(json.str());
-    } catch (const exception& e) {
-        results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
-    }
-    `).join('\n')}
+    } catch (const exception& e) { results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}"); }
+            `;
+        }
+    }).join('\n')}
 
     cout << "[";
     for(size_t i=0; i<results.size(); ++i) {
@@ -1391,7 +1333,11 @@ ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/clas
 
 using namespace std;
 
-using namespace std;
+// 1. Helpers to convert results to string for JSON output
+string valToStr(bool val) { return val ? "true" : "false"; }
+string valToStr(int val) { return to_string(val); }
+string valToStr(string val) { return "\\"" + val + "\\""; } // Add quotes for string results
+string valToStr(const char* val) { return "\\"" + string(val) + "\\""; }
 
 ${userCode}
 
@@ -1399,29 +1345,44 @@ int main() {
     vector<string> results;
     Solution solution;
 
-    ${cases.map((t, i) => `
+    ${cases.map((t, i) => {
+        // --- JAVASCRIPT LOGIC TO DETERMINE C++ TYPES ---
+        let cppType = "string";
+        let expectedValue = `"${t.expected}"`; // Default: String needs quotes
+
+        if (typeof t.expected === "boolean") {
+            cppType = "bool";
+            expectedValue = t.expected ? "true" : "false"; // Bool needs NO quotes
+        } else if (typeof t.expected === "number") {
+            cppType = "int";
+            expectedValue = t.expected; // Number needs NO quotes
+        }
+
+        return `
     try {
         // Parse Inputs
         ${Object.entries(t.input).map(([key, val]) => `
         string ${key} = "${val}";
         `).join('\n')}
         
-        // Expected Output
-        ${typeof t.expected === 'number' ? `int expected = ${t.expected};` : `string expected = "${t.expected}";`}
+        // Expected Output (Typed correctly)
+        ${cppType} expected = ${expectedValue};
         
-        // Call Function
-        auto result = solution.${fnName}(${Object.keys(t.input).join(', ')});
+        // Call Function (Typed correctly)
+        ${cppType} result = solution.${fnName}(${Object.keys(t.input).join(', ')});
         
         bool passed = (result == expected);
         string status = passed ? "Passed" : "Failed";
         
         stringstream json;
-        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": \\"" << result << "\\", \\"expected\\": \\"" << expected << "\\"}";
+        // Use valToStr to safely print bools/ints/strings into the JSON string
+        json << "{\\"id\\": ${i+1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << valToStr(result) << ", \\"expected\\": " << valToStr(expected) << "}";
         results.push_back(json.str());
     } catch (const exception& e) {
-        results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
+        results.push_back("{\\"id\\": ${i+1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
     }
-    `).join('\n')}
+    `;
+    }).join('\n')}
 
     cout << "[";
     for(size_t i=0; i<results.size(); ++i) {

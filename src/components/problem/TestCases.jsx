@@ -5,7 +5,7 @@ import { executeCode } from "../../api/api";
 import { testCases } from "../../data/testCases";
 import { userCode } from "../../data/UserCodeTemplate";
 import { driverCodeTemplate } from "../../data/driverCode";
-import { dsaProblems } from "../../data/dsaProblem";
+import { dsaProblems, problemInfo } from "../../data/dsaProblem";
 
 
 const TestCases = ({ Language, value, problemId, Output, setOutput, isContest }) => {
@@ -37,7 +37,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
     const lang = Language[0];
     const type=dsaProblems[problemId-1].type;
     const fnName=dsaProblems[problemId-1].fnName;
-
+    const problemInfo=dsaProblems[problemId-1];
 
 
     if (!userCode) return;
@@ -57,7 +57,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
       }
 
       // 1. Generate code using VISIBLE cases
-      const fullSourceCode = driverCode(fnName,userCode, visibleTestCases);
+      const fullSourceCode = driverCode(fnName,userCode, visibleTestCases,problemInfo);
       // this will get data from the api
       const data = await executeCode(Language, fullSourceCode);
 

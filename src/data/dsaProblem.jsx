@@ -85,6 +85,7 @@ export const dsaProblems = [
     title: "Next Permutation",
     type: "Array",
     fnName: "nextPermutation",
+    returnType: "void", // In-place modification
     tags: ["Array"],
     difficulty: "Medium",
     acceptance: "39.1%",
@@ -93,7 +94,7 @@ export const dsaProblems = [
     id: 10,
     status: true,
     title: "Palindrome Number",
-    type: "Math",
+    type: "Integer",
     fnName: "isPalindrome",
     tags: ["Math"],
     difficulty: "Easy",
@@ -245,6 +246,7 @@ export const dsaProblems = [
     title: "Sudoku Solver",
     type: "Array",
     fnName: "solveSudoku",
+    returnType: "void", // In-place modification
     tags: ["Backtracking", "Matrix"],
     difficulty: "Hard",
     acceptance: "59.2%",
@@ -355,6 +357,7 @@ export const dsaProblems = [
     title: "Rotate Image",
     type: "Array",
     fnName: "rotate",
+    returnType: "void", // In-place modification
     tags: ["Array", "Math", "Matrix"],
     difficulty: "Medium",
     acceptance: "72.8%",
@@ -373,7 +376,7 @@ export const dsaProblems = [
     id: 38,
     status: false,
     title: "Pow(x, n)",
-    type: "Math",
+    type: "Integer",
     fnName: "myPow",
     tags: ["Math", "Recursion"],
     difficulty: "Medium",
@@ -383,7 +386,7 @@ export const dsaProblems = [
     id: 39,
     status: true,
     title: "N-Queens",
-    type: "Backtracking",
+    type: "Integer",
     fnName: "solveNQueens",
     tags: ["Backtracking"],
     difficulty: "Hard",
@@ -393,7 +396,7 @@ export const dsaProblems = [
     id: 40,
     status: false,
     title: "N-Queens II",
-    type: "Backtracking",
+    type: "Integer",
     fnName: "totalNQueens",
     tags: ["Backtracking"],
     difficulty: "Hard",
@@ -473,7 +476,7 @@ export const dsaProblems = [
     id: 48,
     status: true,
     title: "Permutation Sequence",
-    type: "Math",
+    type: "Integer",
     fnName: "getPermutation",
     tags: ["Math", "Recursion"],
     difficulty: "Hard",
@@ -493,7 +496,7 @@ export const dsaProblems = [
     id: 50,
     status: true,
     title: "Unique Paths",
-    type: "Dynamic Programming",
+    type: "Integer",
     fnName: "uniquePaths",
     tags: ["DP", "Combinatorics"],
     difficulty: "Medium",
@@ -563,7 +566,7 @@ export const dsaProblems = [
     id: 57,
     status: false,
     title: "Sqrt(x)",
-    type: "Math",
+    type: "Integer",
     fnName: "mySqrt",
     tags: ["Math", "Binary Search"],
     difficulty: "Easy",
@@ -605,6 +608,7 @@ export const dsaProblems = [
     title: "Set Matrix Zeroes",
     type: "Array",
     fnName: "setZeroes",
+    returnType: "void", // In-place modification
     tags: ["Matrix", "Array"],
     difficulty: "Medium",
     acceptance: "54.7%",
@@ -625,6 +629,7 @@ export const dsaProblems = [
     title: "Sort Colors",
     type: "Array",
     fnName: "sortColors",
+    returnType: "void", // In-place modification
     tags: ["Array", "Two Pointers", "Sorting"],
     difficulty: "Medium",
     acceptance: "60.4%",
@@ -643,7 +648,7 @@ export const dsaProblems = [
     id: 65,
     status: false,
     title: "Combinations",
-    type: "Backtracking",
+    type: "Integer",
     fnName: "combine",
     tags: ["Backtracking"],
     difficulty: "Medium",
@@ -701,8 +706,7 @@ export const dsaProblems = [
   },
 ];
 
-
-  export const problemInfo = {
+export const problemInfo = {
   1: {
     id: 1,
     title: "Two Sum",
