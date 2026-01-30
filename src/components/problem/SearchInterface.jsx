@@ -7,7 +7,7 @@ const SearchInterface = ({ filters, setfilters, onShuffle }) => {
   const FILTER_OPTIONS = {
     Difficulty: ["All", "Easy", "Medium", "Hard"],
     Topic: ["All", "Algorithms", "Data Structures", "Database", "Shell"],
-    Tags: ["All", "Array", "String", "Hash Table", "DP", "Math", "Sorting"],
+    Tags: ["All", "Array", "String", "Tree","Graph","Hash Table", "DP", "Math", "Sorting"],
   };
   const popularTags = [
     {

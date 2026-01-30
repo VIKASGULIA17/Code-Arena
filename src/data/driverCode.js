@@ -478,11 +478,101 @@ for i, t in enumerate(test_cases):
 print(json.dumps(results))
 `,
 
-        java: (fnName, userCode, cases) => `
+        java: (fnName, userCode, cases, problemInfo) => `
 import java.util.*;
 
-// 1. DRIVER CLASS (MUST BE FIRST)
 public class Solution {
+    public static void main(String[] args) {
+        List<String> results = new ArrayList<>();
+        UserLogic solution = new UserLogic();
+
+        ${cases.map((t, i) => {
+            // --- INPUT GENERATION LOGIC ---
+            // Fix: Removed backslashes before backticks and \${} to allow proper interpolation
+            const inputSetup = Object.entries(t.input).map(([key, val]) => {
+                // Case 1: List of Lists (e.g., Merge k Sorted Lists input: [[1,2],[3,4]])
+                if (Array.isArray(val) && val.length > 0 && Array.isArray(val[0])) {
+                    const matrixStr = "{" + val.map(r => "{" + r.join(',') + "}").join(',') + "}";
+                    return `
+            int[][] ${key}Raw = ${matrixStr};
+            ListNode[] ${key} = new ListNode[${key}Raw.length];
+            for(int k=0; k<${key}Raw.length; k++) ${key}[k] = Helper.buildList(${key}Raw[k]);`;
+                }
+                
+                // Case 2: Standard LinkedList (from Array input: [1,2,3])
+                if (Array.isArray(val)) {
+                    const valStr = val.length === 0 ? "{}" : "{" + val.join(',') + "}";
+                    return `ListNode ${key} = Helper.buildList(new int[]${valStr});`;
+                }
+                
+                // Case 3: Primitives (int, etc.) - Handles mixed inputs like (head, n)
+                return `int ${key} = ${val};`;
+            }).join('\n            ');
+
+            // --- EXPECTED OUTPUT SETUP ---
+            let expectedSetup = "";
+            if (Array.isArray(t.expected)) {
+                // Expected is a LinkedList (represented as array in JSON)
+                const valStr = t.expected.length === 0 ? "{}" : "{" + t.expected.join(',') + "}";
+                expectedSetup = `Object expected = Helper.buildList(new int[]${valStr});`;
+            } else {
+                // Expected is primitive (boolean, int, etc.)
+                expectedSetup = `Object expected = ${t.expected};`;
+            }
+
+            const callArgs = Object.keys(t.input).join(', ');
+            const firstArg = Object.keys(t.input)[0];
+            const isVoid = problemInfo?.returnType === "void";
+
+            return `
+        try {
+            // 1. Setup Inputs
+            ${inputSetup}
+            ${expectedSetup}
+
+            // 2. Execute
+            Object result;
+            ${isVoid 
+                ? `solution.${fnName}(${callArgs}); result = ${firstArg};` 
+                : `result = solution.${fnName}(${callArgs});` 
+            }
+            
+            // 3. Compare & Serialize
+            boolean passed = Helper.isEqual(result, expected);
+            String status = passed ? "Passed" : "Failed";
+            
+            String actualStr = Helper.serialize(result);
+            String expectedStr = Helper.serialize(expected);
+            
+            // Escape JSON quotes for Java String format (Triply escaped to generate correct Java code)
+            actualStr = actualStr.replace("\\"", "\\\\\\\"");
+            expectedStr = expectedStr.replace("\\"", "\\\\\\\"");
+            
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
+                ${i + 1}, status, actualStr, expectedStr);
+            results.add(json);
+
+        } catch (Exception e) {
+            results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
+        }`;
+        }).join('\n')}
+
+        System.out.println("[" + String.join(",", results) + "]");
+    }
+}
+
+// --- HELPER CLASSES ---
+
+class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+class Helper {
+    // Convert int array to LinkedList
     public static ListNode buildList(int[] arr) {
         if (arr.length == 0) return null;
         ListNode dummy = new ListNode(0);
@@ -493,79 +583,45 @@ public class Solution {
         }
         return dummy.next;
     }
-    
-    public static String listToString(ListNode node) {
-        List<Integer> list = new ArrayList<>();
-        while(node != null) {
-            list.add(node.val);
-            node = node.next;
+
+    // Compare two results (Deep compare for Lists, standard equals for primitives)
+    public static boolean isEqual(Object a, Object b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+
+        if (a instanceof ListNode && b instanceof ListNode) {
+            ListNode l1 = (ListNode) a;
+            ListNode l2 = (ListNode) b;
+            while (l1 != null && l2 != null) {
+                if (l1.val != l2.val) return false;
+                l1 = l1.next;
+                l2 = l2.next;
+            }
+            return l1 == null && l2 == null;
         }
-        // FIX: Remove spaces to match JSON format "[1,2,3]"
-        return list.toString().replace(" ", "");
+        return a.equals(b);
     }
 
-    public static void main(String[] args) {
-        List<String> results = new ArrayList<>();
-        UserLogic solution = new UserLogic();
-
-        ${cases.map((t, i) => {
-            const isKLists = Object.keys(t.input).includes('lists');
-
-            if (isKLists) {
-                const matrix = t.input.lists;
-                return `
-        try {
-            int[][] rawLists = {${matrix.map(row => `{${row.join(',')}}`).join(',')}};
-            ListNode[] lists = new ListNode[rawLists.length];
-            for(int k=0; k<rawLists.length; k++) {
-                lists[k] = buildList(rawLists[k]);
+    // Serialize result to String for JSON output
+    public static String serialize(Object obj) {
+        if (obj == null) return "null";
+        
+        if (obj instanceof ListNode) {
+            List<Integer> list = new ArrayList<>();
+            ListNode curr = (ListNode) obj;
+            while (curr != null) {
+                list.add(curr.val);
+                curr = curr.next;
             }
-            
-            ListNode result = solution.${fnName}(lists);
-            String resultStr = listToString(result);
-            String expectedStr = "${JSON.stringify(t.expected).replace(/"/g, "")}";
-            
-            String status = resultStr.equals(expectedStr) ? "Passed" : "Failed";
-            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": %s, \\"expected\\": %s}", 
-                ${i + 1}, status, resultStr, expectedStr);
-            results.add(json);
-        } catch (Exception e) { results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}"); }
-        `;
-            } else {
-                return `
-        try {
-            ${Object.entries(t.input).map(([key, val]) => `
-            int[] ${key}Arr = {${val.join(',')}};
-            ListNode ${key} = buildList(${key}Arr);
-            `).join('\n')}
-            
-            ListNode result = solution.${fnName}(${Object.keys(t.input).join(', ')});
-            String resultStr = listToString(result);
-            String expectedStr = "${JSON.stringify(t.expected).replace(/"/g, "")}";
-            
-            String status = resultStr.equals(expectedStr) ? "Passed" : "Failed";
-            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": %s, \\"expected\\": %s}", 
-                ${i + 1}, status, resultStr, expectedStr);
-            results.add(json);
-        } catch (Exception e) { results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}"); }
-        `;
-            }
-        }).join('\n')}
-
-        System.out.println("[" + String.join(",", results) + "]");
+            // Format as [1,2,3]
+            return list.toString().replace(" ", "");
+        }
+        
+        return obj.toString();
     }
 }
 
-// 2. HELPER CLASSES (MOVED TO BOTTOM)
-class ListNode {
-    int val;
-    ListNode next;
-    ListNode() {}
-    ListNode(int val) { this.val = val; }
-    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-}
-
-// 3. USER CODE
+// --- USER CODE ---
 ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
 `,
 
