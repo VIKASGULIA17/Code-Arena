@@ -9,8 +9,8 @@ const Navbar = () => {
   const [MenuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setuser] = useState(null);
-  const {isJwtExist,setisJwtExist,setjwtToken} = useAppContext();
-  
+  const { isJwtExist, setisJwtExist, setjwtToken, isAdmin } = useAppContext();
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +28,7 @@ const Navbar = () => {
     { label: "algo visualizer", path: "/algovisualizer" },
     { label: "Interview", path: "/interview" },
     { label: "Profile", path: "/profile" },
+    { label: "Admin Panel", path: "/admin", adminOnly: true },
   ];
 
   const location = useLocation();
@@ -37,7 +38,7 @@ const Navbar = () => {
     return location.pathname.startsWith(path);
   }
 
-  function clearJwtToken(){
+  function clearJwtToken() {
     localStorage.removeItem("jwtToken");
     setisJwtExist(false);
     setjwtToken(null);
@@ -70,7 +71,7 @@ const Navbar = () => {
             {navBarContent.map((obj, idx) => (
 
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} key={idx} className={`flex cursor-pointer ${!user && obj.label === "Profile" ? 'hidden' : ''} capitalize rounded-sm text-white`}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} key={idx} className={`flex cursor-pointer ${!user && obj.label === "Profile" ? 'hidden' : ''} ${obj.adminOnly && !isAdmin ? 'hidden' : ''} capitalize rounded-sm text-white`}>
                 <Link to={obj.path}>
                   <p
                     className={`rounded-sm px-3 py-2 ${isActive(obj.path)
@@ -96,14 +97,14 @@ const Navbar = () => {
             </div> :
             <div className="flex gap-4">
 
-            <Link to="/login">
-              <Button className={`${isJwtExist?"hidden":"block"} border bg-black text-white`}>Login</Button>
-            </Link>
-            <Link to="/signup">
-              <Button className={`${isJwtExist?"hidden":"block"} border bg-white border-black text-black`}>Signup</Button>
-            
-            </Link>
-            <Button onClick={clearJwtToken} className={`${isJwtExist?"block":"hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}>Logout</Button>
+              <Link to="/login">
+                <Button className={`${isJwtExist ? "hidden" : "block"} border bg-black text-white`}>Login</Button>
+              </Link>
+              <Link to="/signup">
+                <Button className={`${isJwtExist ? "hidden" : "block"} border bg-white border-black text-black`}>Signup</Button>
+
+              </Link>
+              <Button onClick={clearJwtToken} className={`${isJwtExist ? "block" : "hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}>Logout</Button>
 
             </div>
           }
@@ -128,7 +129,7 @@ const Navbar = () => {
       >
         <div className="w-full pb-4">
           {navBarContent.map((obj, idx) => (
-            <div key={idx} className="w-full flex py-1 cursor-pointer capitalize text-white">
+            <div key={idx} className={`w-full flex py-1 cursor-pointer capitalize text-white ${obj.adminOnly && !isAdmin ? 'hidden' : ''}`}>
               <Link to={obj.path} className="w-full mx-10" onClick={() => setMenuOpen(false)}>
                 <p
                   className={`rounded-md px-3 py-2 ${isActive(obj.path)
