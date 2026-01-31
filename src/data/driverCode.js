@@ -262,6 +262,7 @@ ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/clas
         cpp: (fnName, userCode, cases, problemInfo) => `
 #include <iostream>
 #include <vector>
+#include <string>
 #include <sstream>
 #include <algorithm>
 #include <map>
@@ -269,17 +270,63 @@ ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/clas
 #include <set>
 #include <cmath>
 #include <climits>
+#include <iomanip>
 
 using namespace std;
 
-string vecToStr(const vector<int>& v) {
+// --- Forward Declarations ---
+template<typename T> string valToStr(T val);
+string valToStr(bool val);
+string valToStr(const string& val);
+string valToStr(double val);
+
+template<typename T> string vecToStr(const vector<T>& v);
+
+// --- Implementations ---
+template<typename T> 
+string valToStr(T val) { return to_string(val); }
+string valToStr(bool val) { return val ? "true" : "false"; }
+string valToStr(const string& val) { return "\\"" + val + "\\""; }
+string valToStr(double val) { 
+    stringstream ss; 
+    ss << fixed << setprecision(6) << val; 
+    string s = ss.str();
+    s.erase(s.find_last_not_of('0') + 1, string::npos);
+    if(s.back() == '.') s.pop_back();
+    return s;
+}
+
+template<typename T>
+string vecToStr(const vector<T>& v) {
     stringstream ss; ss << "[";
-    for(size_t i=0; i<v.size(); ++i) { ss << v[i]; if(i < v.size()-1) ss << ","; }
+    for(size_t i=0; i<v.size(); ++i) {
+        if constexpr (is_same_v<T, int> || is_same_v<T, long long> || is_same_v<T, double> || is_same_v<T, bool>) {
+            ss << valToStr(v[i]);
+        } else if constexpr (is_same_v<T, string>) {
+            ss << "\\"" << v[i] << "\\"";
+        } else {
+            ss << vecToStr(v[i]);
+        }
+        if(i < v.size()-1) ss << ",";
+    }
     ss << "]"; return ss.str();
 }
-string valToStr(int val) { return to_string(val); }
-string valToStr(bool val) { return val ? "true" : "false"; }
-string valToStr(double val) { return to_string(val); }
+
+// --- Robust Comparison ---
+template<typename T>
+bool isEqual(const T& a, const T& b) { return a == b; }
+
+bool isEqual(double a, double b) { return abs(a - b) < 1e-7; }
+
+template<typename T>
+bool isEqual(const vector<T>& a, const vector<vector<T>>& b) { return false; } // Safety for mismatch
+
+template<typename T>
+bool isEqual(const vector<T>& a, const vector<T>& b) {
+    if (a.size() != b.size()) return false;
+    for (size_t i = 0; i < a.size(); ++i) if (!isEqual(a[i], b[i])) return false;
+    return true;
+}
 
 ${userCode}
 
@@ -288,54 +335,65 @@ int main() {
     Solution solution;
 
     ${cases.map((t, i) => {
-            const isVoid = problemInfo?.returnType === "void";
-            const isArrExpected = Array.isArray(t.expected);
+        // Recursive helper to find the deep type of a JS array
+        const getCppType = (val) => {
+            if (!Array.isArray(val)) {
+                if (typeof val === 'string') return "string";
+                if (typeof val === 'boolean') return "bool";
+                if (typeof val === 'number' && !Number.isInteger(val)) return "double";
+                return "int";
+            }
+            if (val.length === 0) return "vector<int>"; // Fallback
+            return "vector<" + getCppType(val[0]) + ">";
+        };
 
-            const expectedType = isArrExpected ? "vector<int>" : (typeof t.expected === "boolean" ? "bool" : "int");
-            let expectedVal = isArrExpected ? `{${t.expected.join(',')}}` : t.expected;
-            if (expectedType === "bool") expectedVal = t.expected ? "true" : "false";
+        const toCppVal = (val) => {
+            if (Array.isArray(val)) return "{" + val.map(v => toCppVal(v)).join(',') + "}";
+            if (typeof val === 'string') return "\\\"" + val + "\\\"";
+            return val;
+        };
 
-            const firstArgName = Object.keys(t.input)[0];
-            const callArgs = Object.keys(t.input).join(', ');
+        const firstArgName = Object.keys(t.input)[0];
+        const callArgs = Object.keys(t.input).join(', ');
+        const isVoid = problemInfo?.returnType === "void";
 
-            const executionCode = isVoid
-                ? `solution.${fnName}(${callArgs});
-        auto result = ${firstArgName};`
-                : `auto result = solution.${fnName}(${callArgs});`;
-
-            return `
+        return `
     try {
+        // 1. Declare and Initialize Inputs
         ${Object.entries(t.input).map(([key, val]) => {
-                const isArr = Array.isArray(val);
-                const type = isArr ? "vector<int>" : "int";
-                const valStr = isArr ? `{${val.join(',')}}` : val;
-                return `${type} ${key} = ${valStr};`;
-            }).join('\n        ')}
+            return `${getCppType(val)} ${key} = ${toCppVal(val)};`;
+        }).join('\n        ')}
         
-        ${expectedType} expected = ${expectedVal};
+        // 2. Execute and Capture Result
+        ${isVoid 
+            ? `solution.${fnName}(${callArgs}); auto result = ${firstArgName};` 
+            : `auto result = solution.${fnName}(${callArgs});`}
         
-        ${executionCode}
+        // 3. Declare Expected with EXACT same type as Result
+        decltype(result) expected = ${toCppVal(t.expected)};
         
-        bool passed = (result == expected);
-        string status = passed ? "Passed" : "Failed";
+        // 4. Compare and Format JSON
+        bool passed = isEqual(result, expected);
+        string actualStr = ${Array.isArray(t.expected) ? "vecToStr(result)" : "valToStr(result)"};
+        string expectedStr = ${Array.isArray(t.expected) ? "vecToStr(expected)" : "valToStr(expected)"};
         
-        string actualStr = ${isArrExpected ? "vecToStr(result)" : "valToStr(result)"};
-        string expectedStr = ${isArrExpected ? "vecToStr(expected)" : "valToStr(expected)"};
-        
-        stringstream json;
-        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << actualStr << ", \\"expected\\": " << expectedStr << "}";
-        results.push_back(json.str());
-    } catch (const exception& e) {
+        stringstream ss;
+        ss << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << (passed ? "Passed" : "Failed") 
+           << "\\", \\"actual\\": " << actualStr << ", \\"expected\\": " << expectedStr << "}";
+        results.push_back(ss.str());
+    } catch (...) {
         results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
-    }`;
-        }).join('\n')}
+    } \n`;
+    }).join('')}
 
     cout << "[";
-    for(size_t i=0; i<results.size(); ++i) { cout << results[i]; if(i < results.size()-1) cout << ","; }
+    for(size_t i=0; i<results.size(); ++i) { 
+        cout << results[i] << (i < results.size()-1 ? "," : ""); 
+    }
     cout << "]" << endl;
     return 0;
 }
-        `,
+`,
     },
     "LinkedList": {
         javascript: (fnName, userCode, cases) => `
@@ -1465,61 +1523,78 @@ public class Solution {
         UserLogic solution = new UserLogic();
 
         ${cases.map((t, i) => {
+            // --- JS HELPER FUNCTIONS ---
+            const getJavaType = (val) => {
+                if (val === null) return "Object";
+                if (Array.isArray(val)) {
+                    if (val.length > 0 && typeof val[0] === "string") return "String[]";
+                    return "int[]";
+                }
+                if (typeof val === "string") return "String";
+                if (typeof val === "boolean") return "boolean";
+                if (Number.isInteger(val)) return "int";
+                return "double";
+            };
+
+            const formatJavaVal = (val, type) => {
+                if (val === null) return "null";
+                if (Array.isArray(val)) {
+                    // Always use new Type[]{} syntax for safety
+                    if (val.length === 0) return "new " + type + "{}";
+                    let inner = val.join(',');
+                    if (type === "String[]") inner = val.map(s => '"' + s + '"').join(',');
+                    return "new " + type + "{" + inner + "}";
+                }
+                if (typeof val === "string") return '"' + val + '"';
+                if (typeof val === "boolean") return val.toString();
+                return val;
+            };
+
             const isVoid = problemInfo?.returnType === "void";
+            
+            // 1. Generate Input Definitions
+            const inputDefs = Object.entries(t.input).map(([key, val]) => {
+                const type = getJavaType(val);
+                const value = formatJavaVal(val, type);
+                return `${type} ${key} = ${value};`;
+            }).join('\n            ');
 
-            // 1. Detect Return Type & Format Expected Value
-            let returnType = "String";
-            let expectedVal = `"${t.expected}"`; // Default: Quote the string
-
-            if (typeof t.expected === "boolean") {
-                returnType = "boolean";
-                expectedVal = t.expected; // true/false (no quotes)
-            } else if (typeof t.expected === "number") {
-                returnType = "int";
-                expectedVal = t.expected; // numbers (no quotes)
-            }
-
-            // 2. Generate Arguments String
+            // 2. Generate Expected Value
+            const expectedValRaw = t.expected;
+            const expectedValueStr = formatJavaVal(expectedValRaw, getJavaType(expectedValRaw));
+            
             const callArgs = Object.keys(t.input).join(', ');
             const firstArg = Object.keys(t.input)[0];
 
             return `
         try {
-            // Dynamic Input Declaration (e.g. String s = "..."; String t = "...")
-            ${Object.entries(t.input).map(([key, val]) => `
-            String ${key} = "${val}";
-            `).join('\n            ')}
-            
-            ${returnType} expected = ${expectedVal};
-            
-            ${returnType} result;
-            
-            // Execution Logic
-            if (${isVoid}) {
-                solution.${fnName}(${callArgs});
-                // Unlikely for Java Strings to be modified in place due to immutability,
-                // but casting avoids compiler errors if this path was ever taken.
-                result = (${returnType}) ((Object)${firstArg});
-            } else {
-                result = solution.${fnName}(${callArgs});
-            }
-            
-            // Comparison Logic
-            boolean passed = false;
-            if ("${returnType}".equals("boolean")) {
-                passed = (boolean)((Object)result) == (boolean)((Object)expected);
-            } else if ("${returnType}".equals("int")) {
-                passed = (int)((Object)result) == (int)((Object)expected);
-            } else {
-                passed = String.valueOf(result).equals(String.valueOf(expected));
+            // Setup Inputs
+            ${inputDefs}
+            Object expected = ${expectedValueStr};
+
+            // Execute
+            Object result;
+            ${isVoid 
+                ? `solution.${fnName}(${callArgs}); result = ${firstArg};` 
+                : `result = solution.${fnName}(${callArgs});` 
             }
 
+            // Compare
+            boolean passed = Helper.isEqual(result, expected);
             String status = passed ? "Passed" : "Failed";
             
-            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
-                ${i + 1}, status, String.valueOf(result), String.valueOf(expected));
+            // Serialize
+            String actualStr = Helper.serialize(result);
+            String expectedStr = Helper.serialize(expected);
             
+            // Escape quotes for JSON (Java: actualStr.replace("\"", "\\\""))
+            actualStr = actualStr.replace("\\"", "\\\\\\\"");
+            expectedStr = expectedStr.replace("\\"", "\\\\\\\"");
+            
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
+                ${i + 1}, status, actualStr, expectedStr);
             results.add(json);
+
         } catch (Exception e) {
             results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
         }`;
@@ -1528,91 +1603,180 @@ public class Solution {
         System.out.println("[" + String.join(",", results) + "]");
     }
 }
+
+class Helper {
+    public static boolean isEqual(Object a, Object b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+
+        if (a instanceof List) a = listToArray((List<?>) a);
+        if (b instanceof List) b = listToArray((List<?>) b);
+
+        if (a.getClass().isArray() && b.getClass().isArray()) {
+            int len = java.lang.reflect.Array.getLength(a);
+            if (len != java.lang.reflect.Array.getLength(b)) return false;
+            for (int i = 0; i < len; i++) {
+                if (!isEqual(java.lang.reflect.Array.get(a, i), java.lang.reflect.Array.get(b, i))) return false;
+            }
+            return true;
+        }
+        
+        if (a instanceof Number && b instanceof Number) {
+            return Math.abs(((Number) a).doubleValue() - ((Number) b).doubleValue()) < 1e-9;
+        }
+
+        return a.equals(b);
+    }
+
+    private static Object listToArray(List<?> list) {
+        return list.toArray();
+    }
+
+    public static String serialize(Object o) {
+        if (o == null) return "null";
+        if (o instanceof List) return serialize(listToArray((List<?>) o));
+        
+        if (o.getClass().isArray()) {
+            StringBuilder sb = new StringBuilder("[");
+            int len = java.lang.reflect.Array.getLength(o);
+            for (int i = 0; i < len; i++) {
+                sb.append(serialize(java.lang.reflect.Array.get(o, i)));
+                if (i < len - 1) sb.append(",");
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+        // Fix: Properly escape the quotes for the Java source string
+        if (o instanceof String) return "\\"" + o + "\\"";
+        return o.toString();
+    }
+}
+
 ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
-    `,
+`,
 
         cpp: (fnName, userCode, cases, problemInfo) => `
 #include <iostream>
-#include <string>
 #include <vector>
+#include <string>
 #include <sstream>
 #include <algorithm>
 #include <map>
 #include <unordered_map>
+#include <set>
+#include <cmath>
+#include <climits>
+#include <iomanip>
+#include <type_traits>
 
 using namespace std;
 
-// Helpers to print output safely
-string valToStr(bool val) { return val ? "true" : "false"; }
-string valToStr(int val) { return to_string(val); }
-string valToStr(double val) { return to_string(val); }
-string valToStr(string val) { return "\\"" + val + "\\""; }
-string valToStr(const char* val) { return "\\"" + string(val) + "\\""; }
+// --- Serialization Helpers ---
+template<typename T>
+string valToStr(T val) {
+    if constexpr (is_same_v<T, bool>) return val ? "true" : "false";
+    else if constexpr (is_same_v<T, string>) return "\\"" + val + "\\"";
+    else if constexpr (is_same_v<T, char>) return string("'") + val + "'";
+    else if constexpr (is_floating_point_v<T>) {
+        stringstream ss; ss << fixed << setprecision(6) << val;
+        string s = ss.str();
+        s.erase(s.find_last_not_of('0') + 1, string::npos);
+        if(s.back() == '.') s.pop_back();
+        return s;
+    }
+    else return to_string(val);
+}
+
+template<typename T>
+string vecToStr(const vector<T>& v) {
+    stringstream ss; ss << "[";
+    for(size_t i=0; i<v.size(); ++i) {
+        if constexpr (is_scalar_v<T> || is_same_v<T, string>) ss << valToStr(v[i]);
+        else ss << vecToStr(v[i]);
+        if(i < v.size()-1) ss << ",";
+    }
+    ss << "]"; return ss.str();
+}
+
+// --- Precision-Safe Comparison ---
+template<typename T, typename U>
+bool isEqual(const T& a, const U& b) {
+    if constexpr (is_floating_point_v<T> || is_floating_point_v<U>) return abs(a - b) < 1e-7;
+    else if constexpr (is_same_v<T, U>) return a == b;
+    else return false; 
+}
+
+template<typename T>
+bool isEqual(const vector<T>& a, const vector<T>& b) {
+    if (a.size() != b.size()) return false;
+    for (size_t i = 0; i < a.size(); ++i) if (!isEqual(a[i], b[i])) return false;
+    return true;
+}
 
 ${userCode}
 
 int main() {
     vector<string> results;
     Solution solution;
-    bool isVoid = ${problemInfo?.returnType === "void"};
 
     ${cases.map((t, i) => {
-            // 1. Detect Types
-            let cppType = "string";
-            let expectedValue = `"${t.expected}"`;
-
-            if (typeof t.expected === "boolean") {
-                cppType = "bool";
-                expectedValue = t.expected ? "true" : "false";
-            } else if (typeof t.expected === "number") {
-                cppType = "int";
-                expectedValue = t.expected;
+        const getCppType = (val) => {
+            if (!Array.isArray(val)) {
+                if (typeof val === 'string') return val.length === 1 ? "char" : "string";
+                if (typeof val === 'boolean') return "bool";
+                if (typeof val === 'number' && !Number.isInteger(val)) return "double";
+                return "int";
             }
+            if (val.length === 0) return "vector<string>"; // Safer default for string problems
+            return "vector<" + getCppType(val[0]) + ">";
+        };
 
-            const firstArg = Object.keys(t.input)[0];
-            const callArgs = Object.keys(t.input).join(', ');
+        // FIXED: Using single backslash escaping for JS to output a clean " for C++
+        const toCppVal = (val) => {
+            if (Array.isArray(val)) return "{" + val.map(v => toCppVal(v)).join(',') + "}";
+            if (typeof val === 'string') {
+                return val.length === 1 ? ("'" + val + "'") : ("\\\"" + val + "\\\"");
+            }
+            return val;
+        };
 
-            return `
+        const isVoid = problemInfo?.returnType === "void";
+        const firstArgName = Object.keys(t.input)[0];
+        const callArgs = Object.keys(t.input).join(', ');
+
+        return `
     try {
-        // Dynamic Input Declaration
-        ${Object.entries(t.input).map(([key, val]) => `
-        string ${key} = "${val}";
-        `).join('\n        ')}
+        ${Object.entries(t.input).map(([key, val]) => {
+            return `${getCppType(val)} ${key} = ${toCppVal(val)};`;
+        }).join('\n        ')}
         
-        ${cppType} expected = ${expectedValue};
-        ${cppType} result;
-
-        // Execution Logic
-        if (isVoid) {
-            solution.${fnName}(${callArgs});
-            // C++ Strings CAN be modified in place if passed by reference
-            // But we need to handle casting if return type mismatch.
-            // For template simplicity, we assume result capture logic handles assignments.
-             result = (${cppType})${firstArg}; 
-        } else {
-            result = solution.${fnName}(${callArgs});
-        }
+        ${isVoid 
+            ? `solution.${fnName}(${callArgs}); auto result = ${firstArgName};` 
+            : `auto result = solution.${fnName}(${callArgs});`}
+            
+        decltype(result) expected = ${toCppVal(t.expected)};
         
-        bool passed = (result == expected);
-        string status = passed ? "Passed" : "Failed";
+        bool passed = isEqual(result, expected);
+        string actualStr = ${Array.isArray(t.expected) ? "vecToStr(result)" : "valToStr(result)"};
+        string expectedStr = ${Array.isArray(t.expected) ? "vecToStr(expected)" : "valToStr(expected)"};
         
-        stringstream json;
-        json << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << status << "\\", \\"actual\\": " << valToStr(result) << ", \\"expected\\": " << valToStr(expected) << "}";
-        results.push_back(json.str());
-    } catch (const exception& e) {
+        stringstream ss;
+        ss << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << (passed ? "Passed" : "Failed") 
+           << "\\", \\"actual\\": " << actualStr << ", \\"expected\\": " << expectedStr << "}";
+        results.push_back(ss.str());
+    } catch (...) {
         results.push_back("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"Runtime Error\\"}");
-    }`;
-        }).join('\n')}
+    } \n`;
+    }).join('')}
 
     cout << "[";
-    for(size_t i=0; i<results.size(); ++i) {
-        cout << results[i];
-        if(i < results.size()-1) cout << ",";
+    for(size_t i=0; i<results.size(); ++i) { 
+        cout << results[i] << (i < results.size()-1 ? "," : ""); 
     }
     cout << "]" << endl;
     return 0;
 }
-    `
+`
     },
     "Integer": {  //it include all (int ,double ,float )
         javascript: (fnName, userCode, cases, problemInfo) => `
@@ -1706,68 +1870,90 @@ for i, t in enumerate(test_cases):
 print(json.dumps(results))
     `,
 
-        java: (fnName, userCode, cases, problemInfo) => `
+       java: (fnName, userCode, cases, problemInfo) => `
 import java.util.*;
+import java.util.stream.*;
 
 public class Solution {
     public static void main(String[] args) {
         List<String> results = new ArrayList<>();
         UserLogic solution = new UserLogic();
-        boolean isVoid = ${problemInfo?.returnType === "void"};
 
         ${cases.map((t, i) => {
-            // 1. Detect Return Type (int, double, boolean, String)
-            let returnType = "int";
-            if (typeof t.expected === "boolean") returnType = "boolean";
-            else if (typeof t.expected === "string") returnType = "String";
-            else if (!Number.isInteger(t.expected)) returnType = "double";
+            // --- JS HELPER FUNCTIONS ---
+            const getJavaType = (val) => {
+                if (val === null) return "Object";
+                if (Array.isArray(val)) {
+                    if (val.length > 0 && typeof val[0] === "string") return "String[]";
+                    return "int[]";
+                }
+                if (typeof val === "string") return "String";
+                if (typeof val === "boolean") return "boolean";
+                if (Number.isInteger(val)) return "int";
+                return "double";
+            };
 
-            // 2. Format Expected Value
-            let expectedVal = t.expected;
-            if (returnType === "String") expectedVal = `"${t.expected}"`;
+            const formatJavaVal = (val, type) => {
+                if (val === null) return "null";
+                if (Array.isArray(val)) {
+                    // Always use new Type[]{} syntax for safety
+                    if (val.length === 0) return "new " + type + "{}";
+                    let inner = val.join(',');
+                    if (type === "String[]") inner = val.map(s => '"' + s + '"').join(',');
+                    return "new " + type + "{" + inner + "}";
+                }
+                if (typeof val === "string") return '"' + val + '"';
+                if (typeof val === "boolean") return val.toString();
+                return val;
+            };
 
-            // 3. Helper to format variable declarations
-            const inputsDecl = Object.entries(t.input).map(([key, val]) => {
-                const type = typeof val === "boolean" ? "boolean" : (Number.isInteger(val) ? "int" : "double");
-                return `${type} ${key} = ${val};`;
-            }).join("\n            ");
+            const isVoid = problemInfo?.returnType === "void";
+            
+            // 1. Generate Input Definitions
+            // Fix: Use direct string concatenation to avoid template nesting issues
+            const inputDefs = Object.entries(t.input).map(([key, val]) => {
+                const type = getJavaType(val);
+                const value = formatJavaVal(val, type);
+                return type + " " + key + " = " + value + ";";
+            }).join('\n            ');
 
-            const callArgs = Object.keys(t.input).join(", ");
+            // 2. Generate Expected Value
+            const expectedValRaw = t.expected;
+            const expectedValueStr = formatJavaVal(expectedValRaw, getJavaType(expectedValRaw));
+            
+            const callArgs = Object.keys(t.input).join(', ');
             const firstArg = Object.keys(t.input)[0];
 
             return `
         try {
-            // Inputs
-            ${inputsDecl}
-            
-            // Expected
-            ${returnType} expected = ${expectedVal};
-            
-            // Execution
-            ${returnType} result;
-            if (isVoid) {
-                solution.${fnName}(${callArgs});
-                result = (${returnType}) ${firstArg}; // Cast mostly for non-int types
-            } else {
-                result = solution.${fnName}(${callArgs});
-            }
-            
-            // Comparison
-            boolean passed = false;
-            if ("${returnType}".equals("double")) {
-                passed = Math.abs((double)result - (double)expected) < 0.00001;
-            } else if ("${returnType}".equals("String")) {
-                passed = String.valueOf(result).equals(String.valueOf(expected));
-            } else {
-                passed = result == expected;
+            // Setup Inputs
+            ${inputDefs}
+            Object expected = ${expectedValueStr};
+
+            // Execute (use Object to catch any return type: int, double, boolean, List, etc.)
+            Object result;
+            ${isVoid 
+                ? `solution.${fnName}(${callArgs}); result = ${firstArg};` 
+                : `result = solution.${fnName}(${callArgs});` 
             }
 
+            // Compare
+            boolean passed = Helper.isEqual(result, expected);
             String status = passed ? "Passed" : "Failed";
             
-            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
-                ${i + 1}, status, String.valueOf(result), String.valueOf(expected));
+            // Serialize
+            String actualStr = Helper.serialize(result);
+            String expectedStr = Helper.serialize(expected);
             
+            // Escape quotes for JSON (Java output: actualStr.replace("\"", "\\\""))
+            // Fix: Use \\" to generate \" in Java source, avoiding "illegal text block" error
+            actualStr = actualStr.replace("\\"", "\\\\\\\"");
+            expectedStr = expectedStr.replace("\\"", "\\\\\\\"");
+            
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
+                ${i + 1}, status, actualStr, expectedStr);
             results.add(json);
+
         } catch (Exception e) {
             results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.getMessage() + "\\"}");
         }`;
@@ -1776,8 +1962,60 @@ public class Solution {
         System.out.println("[" + String.join(",", results) + "]");
     }
 }
+
+// --- HELPER CLASS ---
+class Helper {
+    public static boolean isEqual(Object a, Object b) {
+        if (a == null && b == null) return true;
+        if (a == null || b == null) return false;
+
+        // Normalize Lists to Arrays for comparison (Handles List<Integer> vs int[])
+        if (a instanceof List) a = listToArray((List<?>) a);
+        if (b instanceof List) b = listToArray((List<?>) b);
+
+        if (a.getClass().isArray() && b.getClass().isArray()) {
+            int len = java.lang.reflect.Array.getLength(a);
+            if (len != java.lang.reflect.Array.getLength(b)) return false;
+            for (int i = 0; i < len; i++) {
+                if (!isEqual(java.lang.reflect.Array.get(a, i), java.lang.reflect.Array.get(b, i))) return false;
+            }
+            return true;
+        }
+        
+        // Robust numeric comparison (handles int vs double, e.g., 5 vs 5.0)
+        if (a instanceof Number && b instanceof Number) {
+            return Math.abs(((Number) a).doubleValue() - ((Number) b).doubleValue()) < 1e-9;
+        }
+
+        return a.equals(b);
+    }
+
+    private static Object listToArray(List<?> list) {
+        return list.toArray();
+    }
+
+    public static String serialize(Object o) {
+        if (o == null) return "null";
+        if (o instanceof List) return serialize(listToArray((List<?>) o));
+        
+        if (o.getClass().isArray()) {
+            StringBuilder sb = new StringBuilder("[");
+            int len = java.lang.reflect.Array.getLength(o);
+            for (int i = 0; i < len; i++) {
+                sb.append(serialize(java.lang.reflect.Array.get(o, i)));
+                if (i < len - 1) sb.append(",");
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+        // Properly escape strings for JSON output: return "\"" + o + "\"";
+        if (o instanceof String) return "\\"" + o + "\\"";
+        return o.toString();
+    }
+}
+
 ${userCode.replace(/public\s+class\s+Solution/, "class UserLogic").replace(/class\s+Solution/, "class UserLogic")}
-    `,
+`,
 
         cpp: (fnName, userCode, cases, problemInfo) => `
 #include <iostream>
