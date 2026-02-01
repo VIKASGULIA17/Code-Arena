@@ -12,9 +12,8 @@ export const AppProvider = (props) => {
   });
 
   const [isAdmin, setIsAdmin] = useState(() => {
-    // Simulating admin check - in real app would check role claim in token
     const token = localStorage.getItem("jwtToken");
-    return token ? true : false; // For development, treating logged in users as potential admins or strict to specific user
+    return token ? true : false;
   });
 
   const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin };

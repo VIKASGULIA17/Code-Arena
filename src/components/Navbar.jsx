@@ -30,7 +30,7 @@ const Navbar = () => {
     { label: "Profile", path: "/profile" },
     { label: "Admin Panel", path: "/admin", adminOnly: true },
   ];
-
+  console.log(isAdmin)
   const location = useLocation();
 
   function isActive(path) {
@@ -71,7 +71,7 @@ const Navbar = () => {
             {navBarContent.map((obj, idx) => (
 
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} key={idx} className={`flex cursor-pointer ${!user && obj.label === "Profile" ? 'hidden' : ''} ${obj.adminOnly && !isAdmin ? 'hidden' : ''} capitalize rounded-sm text-white`}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} key={idx} className={`flex cursor-pointer ${!user && obj.label === "Profile" ? 'hidden' : ''} ${obj.adminOnly &&!isAdmin ? 'hidden' : ''} capitalize rounded-sm text-white`}>
                 <Link to={obj.path}>
                   <p
                     className={`rounded-sm px-3 py-2 ${isActive(obj.path)
