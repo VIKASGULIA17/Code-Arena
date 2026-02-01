@@ -124,6 +124,11 @@
   }
 }
 
+@theme{
+  --breakpoint-lg:1024px;
+  --breakpoint-window:1440px;
+}
+
 .animate-float {
     animation: float 6s ease-in-out infinite;
   }

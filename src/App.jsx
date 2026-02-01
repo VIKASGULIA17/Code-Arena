@@ -20,10 +20,6 @@ import ProblemManagement from './Pages/Admin/ProblemManagement'
 import ContestManagement from './Pages/Admin/ContestManagement'
 import Analysis from './Pages/Admin/Analysis'
 
-
-
-
-
 const App = () => {
   return (
     <>

@@ -86,8 +86,8 @@ const Problems = () => {
     <div className=" bg-gray-100 overflow-hidden">
       <Navbar />
 
-      <div className="lg:pl-20 pt-16 w-screen lg:flex lg:gap-20">
-        <div className="w-full lg:w-[70%] px-5 lg:px-0 my-6 ">
+      <div className="lg:px-20 pt-16 w-screen window:flex lg:gap-20">
+        <div className="w-full window:w-[70%] px-5 lg:px-0 my-6 ">
           <div>
             {/* left div  */}
             <span
@@ -119,7 +119,7 @@ const Problems = () => {
         <div
           className="
         px-6 lg:px-0 my-10
-        lg:w-[20%] flex flex-col"
+        window:w-[20%] flex flex-col"
         >
           <div className=" shadow-2xl bg-linear-to-br rounded-2xl from-blue-500 via-purple-500 to-pink-600 ">
             {/* right div  */}
@@ -159,7 +159,7 @@ const Problems = () => {
             <SessionCard />
           </div>
 
-          <div className="w-full  py-6 rounded-2xl shadow-2xl mt-60">
+          <div className="w-auto text-sm py-6 rounded-2xl shadow-2xl mt-60">
             <h1 className="text-2xl text-gray-600 px-10">Trending Companies</h1>
             <div className="grid grid-cols-2 gap-7 pt-5 px-10">
               <div className="border border-black/30 rounded-lg font-semibold flex gap-2 px-3 py-2 text-black/80">

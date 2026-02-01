@@ -46,8 +46,8 @@ const Contest = () => {
   return (
     <div className="w-full  bg-gray-100 overflow-x-hidden">
       <Navbar />
-      <div className="w-full h-full lg:flex mt-26 px-4 lg:mx-10">
-        <div className="w-full lg:w-[70%]  ">
+      <div className="w-full h-full window:flex mt-26 px-4 window:mx-10 lg:px-10">
+        <div className="w-full window:w-[70%]  ">
           {/* left div -  */}
           {/*most recent-contest div  */}
           <div className="flex  flex-col lg:flex-row w-full rounded-2xl shadow-xl bg-white overflow-hidden">
@@ -106,7 +106,7 @@ const Contest = () => {
           <ContestList />
         </div>
 
-        <div className="w-full lg:w-[28%] lg:px-10 h-auto  overflow-hidden">
+        <div className="w-full window:w-[28%] lg:px-10 h-auto  overflow-hidden">
           {/* right  */}
           <div className="bg-white p-5 rounded-xl border border-gray shadow-2xl">
             {/* card  */}

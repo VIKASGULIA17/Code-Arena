@@ -110,8 +110,10 @@ export default function HeroSection() {
           </div>
 
           {/* Hero Image */}
-          <div className="lg:h-full lg:w-[40vw]   bg-black rounded-2xl overflow-hidden">
-            <div className="flex items-center justify-between bg-black  px-4 py-4">
+          <div className="lg:h-full lg:w-[40vw]  bg-black rounded-2xl overflow-hidden">
+            <div className="flex items-center justify-between bg-black  px-4 py-4
+            
+            ">
               <div className="flex gap-2">
                 <div className="w-3 h-3 bg-red-400 rounded-full" />
                 <div className="w-3 h-3 bg-yellow-400 rounded-full" />
@@ -120,12 +122,17 @@ export default function HeroSection() {
               <span className="text-xs text-white">solution.ts</span>
             </div>
             <div
-              className="bg-center bg-cover rounded-xl h-full flex flex-col lg:flex-row gap-3 p-5"
+              className="bg-center bg-cover rounded-xl h-full flex flex-col gap-3 p-5
+              window:flex-row
+              lg:auto
+              "
               style={{
                 backgroundImage: `url(${"src/assets/BlackBackground.jpeg"})`,
               }}
             >
-              <div className="w-full lg:w-1/2 lg:h-full h-auto p-3 flex flex-col gap-3 items-center justify-center">
+              <div className="w-full h-auto p-3 flex flex-col gap-3 items-center justify-center
+              
+              window:w-1/2 window:lg-auto">
                 <div className=" h-auto w-full">
                   <p className="text-white text font-bold p-3 bg-blue">
                     READY TO SPEED UP YOUR CODING?
@@ -135,7 +142,7 @@ export default function HeroSection() {
                   </p>
                 </div>
                 <div>
-                  <p className="myhighlights leading-loose  text-white font-light p-3">
+                  <p className=" leading-loose  text-white font-light p-3">
                     CodeTemplate Builder will guide you step-by-step to access
                     pre-built, optimized templates designed for faster
                     problem-solving. Spend less time writing boilerplate code
@@ -155,7 +162,11 @@ export default function HeroSection() {
                   </div>
                 </div>
               </div>
-              <div className="w-full lg:w-1/2 h-[300px] overflow-hidden rounded-2xl lg:h-auto">
+              <div className="w-full h-[300px] overflow-hidden rounded-2xl 
+              lg:h-[300px]
+              window:w-1/2 window:h-auto 
+              
+              ">
                 <div
                   className="bg-cover bg-no-repeat h-full duration-500 hover:scale-110 w-full rounded-2xl"
                   style={{

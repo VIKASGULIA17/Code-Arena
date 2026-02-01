@@ -53,8 +53,8 @@ const ProblemDetails = ({ isContest, problemId }) => {
   };
 
   return (
-    <div className="flex h-auto md:h-screen flex-col md:flex-row">
-      <div className="w-full md:w-1/2 px-3 md:px-5 md:h-screen md:overflow-y-auto">
+    <div className="flex h-auto lg:h-screen flex-col lg:flex-row">
+      <div className="w-full lg:w-1/2 px-3 md:px-5 lg:h-screen lg:overflow-y-auto">
         {/* left  */}
         <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-2 min-h-10 sticky top-0 z-10">
           {isContest ?
@@ -101,7 +101,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
         )}
       </div>
 
-      <div className="w-full md:w-1/2 md:border-l border-t md:border-t-0 h-auto md:h-screen md:overflow-y-auto">
+      <div className="w-full lg:w-1/2 md:border-l border-t md:border-t-0 h-auto md:h-screen md:overflow-y-auto">
         {/* right  */}
         <CodeEditor problemId={id} isContest={isContest} />
       </div>
