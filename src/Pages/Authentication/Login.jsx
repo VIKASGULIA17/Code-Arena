@@ -18,7 +18,7 @@ import Image from "../../assets/authentication.gif"
 const Login = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
-  const { setjwtToken, setisJwtExist } = useAppContext();
+  const { setjwtToken, setisJwtExist,setuserDetails,setisLoggedIn,getUserData } = useAppContext();
 
   const validateData = yup.object({
     username: yup.string().required("**Username is required"),
@@ -33,13 +33,26 @@ const Login = () => {
     return result.data;
   };
 
+
+// RESPONSE BODY	
+// {
+//     "email": "brijmohan",
+//     "username": "brijmohan123@gmail.com",
+//     "roles": [
+//         "USER",
+//         "ADMIN"
+//     ]
+// }
+
   const handleSubmit = async (values, helper) => {
     try {
       const res = await checkToSpringBackend(values);
-      if (res.jwtToken) {
+      if (res.status===1) {
         localStorage.setItem("jwtToken", res.jwtToken);
         setisJwtExist(true);
+        setisLoggedIn(true);
         setjwtToken(res.jwtToken);
+        getUserData();
         toast.success(`User logged in..`);
         navigate("/");
       } else {

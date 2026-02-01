@@ -9,18 +9,17 @@ const Navbar = () => {
   const [MenuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setuser] = useState(null);
-  const { isJwtExist, setisJwtExist, setjwtToken, isAdmin } = useAppContext();
-
+  const { isJwtExist, setisJwtExist, setjwtToken, isAdmin, userDetails,setisLoggedIn,getUserData } =
+    useAppContext();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+  
   const navBarContent = [
     { label: "Home", path: "/" },
     { label: "Problem Arena", path: "/problem" },
@@ -28,9 +27,9 @@ const Navbar = () => {
     { label: "algo visualizer", path: "/algovisualizer" },
     { label: "Interview", path: "/interview" },
     { label: "Profile", path: "/profile" },
-    { label: "Admin Panel", path: "/admin", adminOnly: true },
+    { label: "Admin Panel", path: "/admin" },
   ];
-  console.log(isAdmin)
+
   const location = useLocation();
 
   function isActive(path) {
@@ -41,6 +40,7 @@ const Navbar = () => {
   function clearJwtToken() {
     localStorage.removeItem("jwtToken");
     setisJwtExist(false);
+    setisLoggedIn(false);
     setjwtToken(null);
   }
 
@@ -69,58 +69,88 @@ const Navbar = () => {
           {/* Desktop Links */}
           <div className="hidden lg:flex gap-4">
             {navBarContent.map((obj, idx) => (
-
-
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} key={idx} className={`flex cursor-pointer ${!user && obj.label === "Profile" ? 'hidden' : ''} ${obj.adminOnly &&!isAdmin ? 'hidden' : ''} capitalize rounded-sm text-white`}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                key={idx}
+                className={`flex cursor-pointer ${obj.label!="Admin Panel" || (obj.label == "Admin Panel" && (userDetails?.roles || []).includes("ADMIN")) ? "" : "hidden"} capitalize rounded-sm text-white`}
+              >
                 <Link to={obj.path}>
                   <p
-                    className={`rounded-sm px-3 py-2 ${isActive(obj.path)
-                      ? "bg-blue-400 text-white"
-                      : "text-black hover:bg-blue-400 duration-200 hover:text-white"
-                      }`}
+                    className={`rounded-sm px-3 py-2 ${
+                      isActive(obj.path)
+                        ? "bg-blue-400 text-white"
+                        : "text-black hover:bg-blue-400 duration-200 hover:text-white"
+                    }`}
                   >
                     {obj.label}
                   </p>
                 </Link>
               </motion.div>
-
             ))}
           </div>
         </div>
 
         {/*  Mobile Icons */}
         <div className="hidden lg:flex py-4">
-          {user ?
-
+          {user ? (
             <div className="">
-              <img src="https://i.pravatar.cc" alt="" className="w-8 h-8 rounded-full" />
-            </div> :
+              <img
+                src="https://i.pravatar.cc"
+                alt=""
+                className="w-8 h-8 rounded-full"
+              />
+            </div>
+          ) : (
             <div className="flex gap-4">
-
               <Link to="/login">
-                <Button className={`${isJwtExist ? "hidden" : "block"} border bg-black text-white`}>Login</Button>
+                <Button
+                  className={`${isJwtExist ? "hidden" : "block"} border bg-black text-white`}
+                >
+                  Login
+                </Button>
               </Link>
               <Link to="/signup">
-                <Button className={`${isJwtExist ? "hidden" : "block"} border bg-white border-black text-black`}>Signup</Button>
-
+                <Button
+                  className={`${isJwtExist ? "hidden" : "block"} border bg-white border-black text-black`}
+                >
+                  Signup
+                </Button>
               </Link>
-              <Button onClick={clearJwtToken} className={`${isJwtExist ? "block" : "hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}>Logout</Button>
-
+              <Button
+                onClick={clearJwtToken}
+                className={`${isJwtExist ? "block" : "hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}
+              >
+                Logout
+              </Button>
             </div>
-          }
+          )}
         </div>
-        <div className={` ${MenuOpen ? 'hidden' : 'flex'} items-center my-4 px-2 lg:hidden rounded-lg hover:text-white`}>
-          <Menu onClick={() => { setMenuOpen(true); }} className="cursor-pointer hover:text-blue-400" />
+        <div
+          className={` ${MenuOpen ? "hidden" : "flex"} items-center my-4 px-2 lg:hidden rounded-lg hover:text-white`}
+        >
+          <Menu
+            onClick={() => {
+              setMenuOpen(true);
+            }}
+            className="cursor-pointer hover:text-blue-400"
+          />
         </div>
-        <div className={` ${MenuOpen ? 'flex' : 'hidden'} items-center my-4 px-2 rounded-lg hover:text-white`}>
-          <X onClick={() => { setMenuOpen(false); }} className="cursor-pointer hover:text-blue-400" />
+        <div
+          className={` ${MenuOpen ? "flex" : "hidden"} items-center my-4 px-2 rounded-lg hover:text-white`}
+        >
+          <X
+            onClick={() => {
+              setMenuOpen(false);
+            }}
+            className="cursor-pointer hover:text-blue-400"
+          />
         </div>
-      </motion.div >
+      </motion.div>
 
       {/* 3. Mobile Menu Content */}
-      < div
-        style={{ paddingTop: NAVBAR_HEIGHT }
-        }
+      <div
+        style={{ paddingTop: NAVBAR_HEIGHT }}
         className={` 
           w-screen fixed top-0 left-0 h-auto lg:hidden bg-white z-40 
           transform transition-transform duration-500 ease-in-out
@@ -129,13 +159,21 @@ const Navbar = () => {
       >
         <div className="w-full pb-4">
           {navBarContent.map((obj, idx) => (
-            <div key={idx} className={`w-full flex py-1 cursor-pointer capitalize text-white ${obj.adminOnly && !isAdmin ? 'hidden' : ''}`}>
-              <Link to={obj.path} className="w-full mx-10" onClick={() => setMenuOpen(false)}>
+            <div
+              key={idx}
+              className={`w-full flex py-1 cursor-pointer capitalize text-white ${obj.adminOnly && !isAdmin ? "hidden" : ""}`}
+            >
+              <Link
+                to={obj.path}
+                className="w-full mx-10"
+                onClick={() => setMenuOpen(false)}
+              >
                 <p
-                  className={`rounded-md px-3 py-2 ${isActive(obj.path)
-                    ? "bg-blue-400 text-white"
-                    : "text-black hover:bg-blue-400 duration-200 hover:text-white"
-                    }`}
+                  className={`rounded-md px-3 py-2 ${
+                    isActive(obj.path)
+                      ? "bg-blue-400 text-white"
+                      : "text-black hover:bg-blue-400 duration-200 hover:text-white"
+                  }`}
                 >
                   {obj.label}
                 </p>
@@ -145,17 +183,29 @@ const Navbar = () => {
           <div className="flex flex-col w-full">
             <div className="flex flex-col gap-2 border-t py-3 border-gray-500 mx-10 mt-2">
               <Link to="/login">
-
-                <h2 className={`hover:bg-blue-400 duration-200 hover:text-white px-3 py-2 rounded-lg cursor-pointer text-center border bg-black text-white ${isJwtExist ? "hidden" : "block"}`}>Login</h2>
+                <h2
+                  className={`hover:bg-blue-400 duration-200 hover:text-white px-3 py-2 rounded-lg cursor-pointer text-center border bg-black text-white ${isJwtExist ? "hidden" : "block"}`}
+                >
+                  Login
+                </h2>
               </Link>
-              <Link to='/signup'>
-                <h2 className={`bg-blue-400 text-white text-center px-3 py-2 rounded-lg cursor-pointer ${isJwtExist ? "hidden" : "block"}`}>Sign up</h2>
+              <Link to="/signup">
+                <h2
+                  className={`bg-blue-400 text-white text-center px-3 py-2 rounded-lg cursor-pointer ${isJwtExist ? "hidden" : "block"}`}
+                >
+                  Sign up
+                </h2>
               </Link>
-              <Button onClick={clearJwtToken} className={`${isJwtExist ? "block" : "hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}>Logout</Button>
+              <Button
+                onClick={clearJwtToken}
+                className={`${isJwtExist ? "block" : "hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}
+              >
+                Logout
+              </Button>
             </div>
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 };
