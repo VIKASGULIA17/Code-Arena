@@ -20,16 +20,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   
-
-//   useEffect(() => {
-//   console.log("Navbar userDetails:", userDetails);
-// }, [userDetails]);
-
-//   useEffect(()=>{
-//     console.log("calling");
-//     getUserData();
-//   },[]);
-  
   const navBarContent = [
     { label: "Home", path: "/" },
     { label: "Problem Arena", path: "/problem" },
