@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, MoreVertical, Shield, Ban, Eye, Mail, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
+import { useAppContext } from '../../context/AppContext';
 
 const UserModal = ({ user, onClose }) => {
     if (!user) return null;
@@ -78,19 +80,40 @@ const UserModal = ({ user, onClose }) => {
 };
 
 const UserManagement = () => {
+    const {jwtToken} = useAppContext();
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const [selectedUser, setSelectedUser] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [users,setUsers] = useState(null);
 
-    const users = [
-        { id: 1, name: 'John Doe', email: 'john@example.com', role: 'User', status: 'Active', joinedDate: '2023-01-15', problemsSolved: 45 },
-        { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Admin', status: 'Active', joinedDate: '2023-02-20', problemsSolved: 120 },
-        { id: 3, name: 'Bob Wilson', email: 'bob@example.com', role: 'User', status: 'Banned', joinedDate: '2023-03-10', problemsSolved: 12 },
-        { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'User', status: 'Active', joinedDate: '2023-04-05', problemsSolved: 89 },
-        { id: 5, name: 'Charlie Day', email: 'charlie@example.com', role: 'User', status: 'Active', joinedDate: '2023-05-12', problemsSolved: 67 },
-    ];
+    // const users = [
+    //     { id: 1, name: 'John Doe', email: 'john@example.com', role: 'User', status: 'Active', joinedDate: '2023-01-15', problemsSolved: 45 },
+    //     { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Admin', status: 'Active', joinedDate: '2023-02-20', problemsSolved: 120 },
+    //     { id: 3, name: 'Bob Wilson', email: 'bob@example.com', role: 'User', status: 'Banned', joinedDate: '2023-03-10', problemsSolved: 12 },
+    //     { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'User', status: 'Active', joinedDate: '2023-04-05', problemsSolved: 89 },
+    //     { id: 5, name: 'Charlie Day', email: 'charlie@example.com', role: 'User', status: 'Active', joinedDate: '2023-05-12', problemsSolved: 67 },
+    // ];
 
-    const filteredUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+
+    useEffect(()=>{
+
+        async function getAllUsers(){
+            const result = await axios.get(`${BACKEND_URL}/admin/fetchUsers`,{
+                headers:{
+                    Authorization : `Bearer ${jwtToken}`
+                }
+            });
+            console.log(result.data);
+            setUsers(result.data);
+        }
+
+        getAllUsers();
+
+    },[]);
+
+
+    const filteredUsers = users?.filter(user =>
+        user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -125,37 +148,35 @@ const UserManagement = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {filteredUsers.map((user) => (
-                            <tr key={user.id} className="hover:bg-gray-50/50 transition-colors">
+                        {filteredUsers?.map((user) => (
+                            <tr key={user.joined} className="hover:bg-gray-50/50 transition-colors">
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 rounded-full bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">
-                                            {user.name.charAt(0)}
+                                            {user.username[0]}
                                         </div>
                                         <div>
-                                            <p className="font-medium text-gray-900">{user.name}</p>
+                                            <p className="font-medium text-gray-900">{user.username}</p>
                                             <p className="text-xs text-gray-500">{user.email}</p>
                                         </div>
                                     </div>
                                 </td>
                                 <td className="px-6 py-4">
                                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
-                                        ${user.role === 'Admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}
+                                        ${user.admin == true ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}
                                     `}>
-                                        {user.role === 'Admin' && <Shield size={12} />}
-                                        {user.role}
+                                        {user.admin == true && <Shield size={12} />}
+                                        {user.admin == true?"Admin":"User"}
                                     </span>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
-                                        ${user.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}
-                                    `}>
-                                        <div className={`w-1.5 h-1.5 rounded-full ${user.status === 'Active' ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                                        {user.status}
+                                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium`}>
+                                        <div className={`w-1.5 h-1.5 rounded-full `}></div>
+                                        {"user.status"}
                                     </span>
                                 </td>
                                 <td className="px-6 py-4 text-sm text-gray-600">
-                                    {user.joinedDate}
+                                    {user.joined}
                                 </td>
                                 <td className="px-6 py-4 text-right">
                                     <div className="flex justify-end gap-2">
