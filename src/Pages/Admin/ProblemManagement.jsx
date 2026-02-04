@@ -16,6 +16,7 @@ import {Form,Field,Formik} from "formik";
 const ProblemManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddMode, setIsAddMode] = useState(false);
+  const [formId,setFormId] = useState(1); 
 
   const validateSchema = yup.object({
     "title": yup.string().required(`**problem title is required`),
@@ -110,7 +111,7 @@ const ProblemManagement = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-screen">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
@@ -131,11 +132,18 @@ const ProblemManagement = () => {
 
       {/* yup form */}
       {isAddMode && (
-        <div>
-          <button onClick={()=>setIsAddMode(false)} className="bg-orange-300 rounded-md hover:bg-orange-500 duration-300 ease-in-out text-white px-2 py-1">Close</button>
-          <Formik initialValues={{}}>
-            <Form></Form>
-          </Formik>
+        <div className="bg-green-400 w-1/2 flex flex-col gap-3 h-auto rounded-2xl p-3">
+          <div className="w-full bg-pink-400  h-[60%] flex justify-around">
+            <button onClick={()=>setFormId(1)} className="hover:bg-green-100">Basic info</button>
+            <button onClick={()=>setFormId(2)} className="hover:bg-green-200">Detail</button>
+            <button onClick={()=>setFormId(3)} className="hover:bg-green-300">Testcases</button>
+            <button onClick={()=>setFormId(4)} className="hover:bg-green-400">solution</button>
+          </div>
+          {formId==1 && <p className="bg-red-100 rounded-2xl p-3">form 1 for basic data</p>}
+          {formId==2 && <p className="bg-red-100 rounded-2xl p-3">form 2 for detailed</p>}
+          {formId==3 && <p className="bg-red-100 rounded-2xl p-3">form 3 for testcases input</p>}
+          {formId==4 && <p className="bg-red-100 rounded-2xl p-3">form 4 for adding solution/editorial</p>}
+          <button onClick={()=>setIsAddMode(false)} className=" bg-orange-300 rounded-md hover:bg-orange-500 duration-300 ease-in-out text-white px-2 py-1">Close</button>
         </div>
       )}
 
