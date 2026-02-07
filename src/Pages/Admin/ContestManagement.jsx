@@ -3,28 +3,28 @@ import { Plus, Calendar, Clock, Users, MoreHorizontal, Trophy, X, Edit2, Trash2 
 
 const ContestManagement = () => {
     const [contests, setContests] = useState([
-        { title: 'Weekly Contest 45', description: 'Weekly coding challenge', startTime: '2023-11-20T14:00', duration: '2h', participants: 120, status: 'Upcoming' },
-        { title: 'Bi-Weekly Contest 12', description: 'Bi-weekly coding challenge', startTime: '2023-11-18T10:00', duration: '1h 30m', participants: 85, status: 'Completed' },
-        { title: 'CodeArena Cup 2023', description: 'Annual coding cup', startTime: '2023-12-01T09:00', duration: '3h', participants: 450, status: 'Registration Open' },
+        { id: 1, contestName: 'Weekly Contest 45', contestDescription: 'Weekly coding challenge', startTime: '2023-11-20T14:00', duration: '2h', participants: 120, status: 'Upcoming' },
+        { id: 2, contestName: 'Bi-Weekly Contest 12', contestDescription: 'Bi-weekly coding challenge', startTime: '2023-11-18T10:00', duration: '1h 30m', participants: 85, status: 'Completed' },
+        { id: 3, contestName: 'CodeArena Cup 2023', contestDescription: 'Annual coding cup', startTime: '2023-12-01T09:00', duration: '3h', participants: 450, status: 'Registration Open' },
     ]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('create');
-    const [editIndex, setEditIndex] = useState(null);
+    const [editingId, setEditingId] = useState(null);
     const [currentContest, setCurrentContest] = useState({
-        title: '',
-        description: '',
+        contestName: '',
+        contestDescription: '',
         startTime: '',
         duration: ''
     });
 
-    const [activeMenuIndex, setActiveMenuIndex] = useState(null);
+    const [activeMenuId, setActiveMenuId] = useState(null);
     const menuRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setActiveMenuIndex(null);
+                setActiveMenuId(null);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -33,22 +33,27 @@ const ContestManagement = () => {
 
     const handleCreateClick = () => {
         setModalMode('create');
-        setEditIndex(null);
-        setCurrentContest({ title: '', description: '', startTime: '', duration: '' });
+        setEditingId(null);
+        setCurrentContest({ contestName: '', contestDescription: '', startTime: '', duration: '' });
         setIsModalOpen(true);
     };
 
-    const handleEditClick = (contest, index) => {
+    const handleEditClick = (contest) => {
         setModalMode('edit');
-        setEditIndex(index);
-        setCurrentContest({ ...contest });
+        setEditingId(contest.id);
+        setCurrentContest({
+            contestName: contest.contestName,
+            contestDescription: contest.contestDescription,
+            startTime: contest.startTime,
+            duration: contest.duration
+        });
         setIsModalOpen(true);
-        setActiveMenuIndex(null);
+        setActiveMenuId(null);
     };
 
-    const handleDeleteClick = (index) => {
-        setContests(contests.filter((_, i) => i !== index));
-        setActiveMenuIndex(null);
+    const handleDeleteClick = (id) => {
+        setContests(contests.filter(c => c.id !== id));
+        setActiveMenuId(null);
     };
 
     const handleSave = (e) => {
@@ -56,21 +61,20 @@ const ContestManagement = () => {
         if (modalMode === 'create') {
             const newContest = {
                 ...currentContest,
+                id: contests.length + 1,
                 participants: 0,
                 status: 'Upcoming'
             };
             setContests([...contests, newContest]);
         } else {
-            const updatedContests = [...contests];
-            updatedContests[editIndex] = { ...updatedContests[editIndex], ...currentContest };
-            setContests(updatedContests);
+            setContests(contests.map(c => c.id === editingId ? { ...c, ...currentContest } : c));
         }
         setIsModalOpen(false);
     };
 
-    const toggleMenu = (index, e) => {
+    const toggleMenu = (id, e) => {
         e.stopPropagation();
-        setActiveMenuIndex(activeMenuIndex === index ? null : index);
+        setActiveMenuId(activeMenuId === id ? null : id);
     };
 
     return (
@@ -90,8 +94,8 @@ const ContestManagement = () => {
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {contests.map((contest, index) => (
-                    <div key={index} className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-visible relative group">
+                {contests.map((contest) => (
+                    <div key={contest.id} className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-visible relative group">
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-4">
                                 <div className="p-3 bg-purple-50 rounded-xl group-hover:bg-purple-100 transition-colors">
@@ -105,7 +109,7 @@ const ContestManagement = () => {
                                 </span>
                             </div>
 
-                            <h3 className="text-lg font-bold text-gray-900 mb-2">{contest.title}</h3>
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">{contest.contestName}</h3>
 
                             <div className="space-y-2 text-sm text-gray-500">
                                 <div className="flex items-center gap-2">
@@ -125,30 +129,30 @@ const ContestManagement = () => {
 
                         <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center relative">
                             <button
-                                onClick={() => handleEditClick(contest, index)}
+                                onClick={() => handleEditClick(contest)}
                                 className="text-sm font-medium text-purple-600 hover:text-purple-700"
                             >
                                 Edit Details
                             </button>
                             <div className="relative">
                                 <button
-                                    onClick={(e) => toggleMenu(index, e)}
+                                    onClick={(e) => toggleMenu(contest.id, e)}
                                     className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-200 transition-colors"
                                 >
                                     <MoreHorizontal size={20} />
                                 </button>
 
-                                {activeMenuIndex === index && (
+                                {activeMenuId === contest.id && (
                                     <div ref={menuRef} className="absolute right-0 bottom-full mb-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 z-10 overflow-hidden animate-in fade-in zoom-in duration-200">
                                         <button
-                                            onClick={() => handleEditClick(contest, index)}
+                                            onClick={() => handleEditClick(contest)}
                                             className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 flex items-center gap-2 transition-colors"
                                         >
                                             <Edit2 size={16} />
                                             Modify
                                         </button>
                                         <button
-                                            onClick={() => handleDeleteClick(index)}
+                                            onClick={() => handleDeleteClick(contest.id)}
                                             className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors border-t border-gray-50"
                                         >
                                             <Trash2 size={16} />
@@ -183,8 +187,8 @@ const ContestManagement = () => {
                                 <input
                                     type="text"
                                     required
-                                    value={currentContest.title}
-                                    onChange={(e) => setCurrentContest({ ...currentContest, title: e.target.value })}
+                                    value={currentContest.contestName}
+                                    onChange={(e) => setCurrentContest({ ...currentContest, contestName: e.target.value })}
                                     className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
                                     placeholder="Enter contest name"
                                 />
@@ -194,8 +198,8 @@ const ContestManagement = () => {
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                                 <textarea
                                     rows="3"
-                                    value={currentContest.description}
-                                    onChange={(e) => setCurrentContest({ ...currentContest, description: e.target.value })}
+                                    value={currentContest.contestDescription}
+                                    onChange={(e) => setCurrentContest({ ...currentContest, contestDescription: e.target.value })}
                                     className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all resize-none"
                                     placeholder="Enter contest description"
                                 />
