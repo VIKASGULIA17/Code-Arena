@@ -3,14 +3,14 @@ import { Plus, Calendar, Clock, Users, MoreHorizontal, Trophy, X, Edit2, Trash2 
 
 const ContestManagement = () => {
     const [contests, setContests] = useState([
-        { id: 1, contestName: 'Weekly Contest 45', contestDescription: 'Weekly coding challenge', startTime: '2023-11-20T14:00', duration: '2h', participants: 120, status: 'Upcoming' },
-        { id: 2, contestName: 'Bi-Weekly Contest 12', contestDescription: 'Bi-weekly coding challenge', startTime: '2023-11-18T10:00', duration: '1h 30m', participants: 85, status: 'Completed' },
-        { id: 3, contestName: 'CodeArena Cup 2023', contestDescription: 'Annual coding cup', startTime: '2023-12-01T09:00', duration: '3h', participants: 450, status: 'Registration Open' },
+        { contestName: 'Weekly Contest 45', contestDescription: 'Weekly coding challenge', startTime: '2023-11-20T14:00', duration: '2h', participants: 120, status: 'Upcoming' },
+        { contestName: 'Bi-Weekly Contest 12', contestDescription: 'Bi-weekly coding challenge', startTime: '2023-11-18T10:00', duration: '1h 30m', participants: 85, status: 'Completed' },
+        { contestName: 'CodeArena Cup 2023', contestDescription: 'Annual coding cup', startTime: '2023-12-01T09:00', duration: '3h', participants: 450, status: 'Registration Open' },
     ]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('create');
-    const [editingId, setEditingId] = useState(null);
+    const [editingContestName, setEditingContestName] = useState(null);
     const [currentContest, setCurrentContest] = useState({
         contestName: '',
         contestDescription: '',
@@ -18,13 +18,13 @@ const ContestManagement = () => {
         duration: ''
     });
 
-    const [activeMenuId, setActiveMenuId] = useState(null);
+    const [activeMenuContestName, setActiveMenuContestName] = useState(null);
     const menuRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setActiveMenuId(null);
+                setActiveMenuContestName(null);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -33,14 +33,14 @@ const ContestManagement = () => {
 
     const handleCreateClick = () => {
         setModalMode('create');
-        setEditingId(null);
+        setEditingContestName(null);
         setCurrentContest({ contestName: '', contestDescription: '', startTime: '', duration: '' });
         setIsModalOpen(true);
     };
 
     const handleEditClick = (contest) => {
         setModalMode('edit');
-        setEditingId(contest.id);
+        setEditingContestName(contest.contestName);
         setCurrentContest({
             contestName: contest.contestName,
             contestDescription: contest.contestDescription,
@@ -48,12 +48,12 @@ const ContestManagement = () => {
             duration: contest.duration
         });
         setIsModalOpen(true);
-        setActiveMenuId(null);
+        setActiveMenuContestName(null);
     };
 
-    const handleDeleteClick = (id) => {
-        setContests(contests.filter(c => c.id !== id));
-        setActiveMenuId(null);
+    const handleDeleteClick = (name) => {
+        setContests(contests.filter(c => c.contestName !== name));
+        setActiveMenuContestName(null);
     };
 
     const handleSave = (e) => {
@@ -61,20 +61,19 @@ const ContestManagement = () => {
         if (modalMode === 'create') {
             const newContest = {
                 ...currentContest,
-                id: contests.length + 1,
                 participants: 0,
                 status: 'Upcoming'
             };
             setContests([...contests, newContest]);
         } else {
-            setContests(contests.map(c => c.id === editingId ? { ...c, ...currentContest } : c));
+            setContests(contests.map(c => c.contestName === editingContestName ? { ...c, ...currentContest } : c));
         }
         setIsModalOpen(false);
     };
 
-    const toggleMenu = (id, e) => {
+    const toggleMenu = (name, e) => {
         e.stopPropagation();
-        setActiveMenuId(activeMenuId === id ? null : id);
+        setActiveMenuContestName(activeMenuContestName === name ? null : name);
     };
 
     return (
@@ -95,7 +94,7 @@ const ContestManagement = () => {
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {contests.map((contest) => (
-                    <div key={contest.id} className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-visible relative group">
+                    <div key={contest.contestName} className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-visible relative group">
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-4">
                                 <div className="p-3 bg-purple-50 rounded-xl group-hover:bg-purple-100 transition-colors">
@@ -136,13 +135,13 @@ const ContestManagement = () => {
                             </button>
                             <div className="relative">
                                 <button
-                                    onClick={(e) => toggleMenu(contest.id, e)}
+                                    onClick={(e) => toggleMenu(contest.contestName, e)}
                                     className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-200 transition-colors"
                                 >
                                     <MoreHorizontal size={20} />
                                 </button>
 
-                                {activeMenuId === contest.id && (
+                                {activeMenuContestName === contest.contestName && (
                                     <div ref={menuRef} className="absolute right-0 bottom-full mb-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 z-10 overflow-hidden animate-in fade-in zoom-in duration-200">
                                         <button
                                             onClick={() => handleEditClick(contest)}
@@ -152,7 +151,7 @@ const ContestManagement = () => {
                                             Modify
                                         </button>
                                         <button
-                                            onClick={() => handleDeleteClick(contest.id)}
+                                            onClick={() => handleDeleteClick(contest.contestName)}
                                             className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors border-t border-gray-50"
                                         >
                                             <Trash2 size={16} />
