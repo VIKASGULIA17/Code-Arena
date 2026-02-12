@@ -7,8 +7,9 @@ export const useAppContext = () => useContext(AppContext);
 export const AppProvider = (props) => {
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const [userDetails,setuserDetails] = useState(null);
-  const [isLoggedIn,setisLoggedIn] = useState(()=>{
+  const [userDetails, setuserDetails] = useState(null);
+  console.log(userDetails);
+  const [isLoggedIn, setisLoggedIn] = useState(() => {
     return localStorage.getItem("jwtToken") != null;
   });
 
@@ -25,31 +26,31 @@ export const AppProvider = (props) => {
   });
 
   const getUserData = async () => {
-    
-    if(isLoggedIn==false || !isJwtExist) {
+
+    if (isLoggedIn == false || !isJwtExist) {
       setuserDetails(null);
       return;
     }
 
-    const res = await axios.get(`${BACKEND_URL}/user/currentUser`,{
-      headers:{
+    const res = await axios.get(`${BACKEND_URL}/user/currentUser`, {
+      headers: {
         Authorization: `Bearer ${jwtToken}`
       }
     });
 
-    if(res.data!=null && res.data!==undefined){
+    if (res.data != null && res.data !== undefined) {
       setuserDetails(res.data);
     }
-    else{
+    else {
       setuserDetails(null);
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getUserData();
-  },[isLoggedIn]);
+  }, [isLoggedIn]);
 
-  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails };
+  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin, setuserDetails, setisLoggedIn, getUserData, userDetails };
 
   return (
     <AppContext.Provider value={values}>{props.children}</AppContext.Provider>
