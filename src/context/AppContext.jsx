@@ -1,3 +1,5 @@
+
+
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -7,9 +9,9 @@ export const useAppContext = () => useContext(AppContext);
 export const AppProvider = (props) => {
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const [userDetails, setuserDetails] = useState(null);
-  console.log(userDetails);
-  const [isLoggedIn, setisLoggedIn] = useState(() => {
+  const [userDetails,setuserDetails] = useState(null);
+  const [userProfile,setuserProfile] = useState(null);
+  const [isLoggedIn,setisLoggedIn] = useState(()=>{
     return localStorage.getItem("jwtToken") != null;
   });
 
@@ -26,31 +28,52 @@ export const AppProvider = (props) => {
   });
 
   const getUserData = async () => {
-
-    if (isLoggedIn == false || !isJwtExist) {
+    
+    if(isLoggedIn==false || !isJwtExist) {
       setuserDetails(null);
       return;
     }
 
-    const res = await axios.get(`${BACKEND_URL}/user/currentUser`, {
-      headers: {
+    const res = await axios.get(`${BACKEND_URL}/user/currentUser`,{
+      headers:{
         Authorization: `Bearer ${jwtToken}`
       }
     });
 
-    if (res.data != null && res.data !== undefined) {
+    if(res.data!=null && res.data!==undefined){
       setuserDetails(res.data);
     }
-    else {
+    else{
       setuserDetails(null);
     }
   }
 
-  useEffect(() => {
-    getUserData();
-  }, [isLoggedIn]);
+  const getUserProfileData = async () => {
+    try{
+      const res = await axios.get(`${BACKEND_URL}/userProfile/get`,{
+        headers:{
+          Authorization : `Bearer ${jwtToken}`
+        }
+      })
+      console.log(res);
+      if(res.data.status===1){
+        setuserProfile(res.data.data);
+      }
+      else{
+        setuserProfile(null);
+      }
+    }
+    catch(e){
+      throw new Error();
+    }
+  }
 
-  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin, setuserDetails, setisLoggedIn, getUserData, userDetails };
+  useEffect(()=>{
+    getUserData();
+    getUserProfileData();
+  },[isLoggedIn]);
+
+  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile };
 
   return (
     <AppContext.Provider value={values}>{props.children}</AppContext.Provider>

@@ -1,8 +1,12 @@
-import React, { useMemo } from 'react'
+
+
+import React, { useEffect, useMemo, useState } from 'react'
 import { dsaProblems } from '../data/dsaProblem'
 import { Button } from '../components/ui/button'
 import { Trophy, Zap, Bug, Lock, MapPin, School, BarChart3, User2 } from 'lucide-react'
 import Navbar from '../components/Navbar'
+import axios from 'axios'
+import { useAppContext } from '../context/AppContext'
 
 const Donut = ({ percent = 0, color = '#4f46e5' }) => {
   const radius = 42
@@ -43,6 +47,10 @@ const Profile = () => {
 
   const solvedPercent = (solved.length / total) * 100
 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const {getUserProfileData} = useAppContext();
+  const {userProfile} = useAppContext();
+
   return (
     <div className="p-6 bg-linear-to-b from-violet-50/60 to-blue-50/60 dark:from-zinc-900 dark:to-zinc-950 min-h-screen">
         <Navbar />
@@ -54,18 +62,17 @@ const Profile = () => {
               <img src="https://i.pravatar.cc/100?img=5" alt="avatar" className="h-16 w-16 rounded-xl object-cover" />
               <div>
                 <div className="inline-flex items-center gap-2">
-                  <h2 className="text-lg font-bold">AlexDev</h2>
-                  <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">Lvl 42</span>
+                  <h2 className="text-lg font-bold">{userProfile?.fullName}</h2>
                 </div>
-                <p className="text-xs text-indigo-600">Grandmaster</p>
+                <p className="text-xs text-indigo-600">{userProfile?.username}</p>
               </div>
             </div>
-            <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">Full-stack wizard turning coffee into clean code. Open source enthusiast.</p>
+            <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">{userProfile?.bio}</p>
             <Button className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white">Edit Profile</Button>
             <div className="mt-4 space-y-2 text-sm text-zinc-600">
-              <div className="flex items-center gap-2"><BarChart3 className="h-4 w-4"/> Rank <span className="ml-auto font-semibold">#456</span></div>
-              <div className="flex items-center gap-2"><MapPin className="h-4 w-4"/> Country <span className="ml-auto font-semibold">United States</span></div>
-              <div className="flex items-center gap-2"><School className="h-4 w-4"/> School <span className="ml-auto font-semibold">MIT</span></div>
+              <div className="flex items-center gap-2"><BarChart3 className="h-4 w-4"/> Rank <span className="ml-auto font-semibold">#{userProfile?.overallRank}</span></div>
+              <div className="flex items-center gap-2"><MapPin className="h-4 w-4"/> Country <span className="ml-auto font-semibold">{userProfile?.location}</span></div>
+              <div className="flex items-center gap-2"><School className="h-4 w-4"/> School <span className="ml-auto font-semibold">{userProfile?.schoolName}</span></div>
             </div>
           </div>
 
