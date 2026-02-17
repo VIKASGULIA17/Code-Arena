@@ -1,13 +1,16 @@
-
-
 import React, { useEffect, useMemo, useState } from 'react'
 import { dsaProblems } from '../data/dsaProblem'
 import { Button } from '../components/ui/button'
 import { Trophy, Zap, Bug, Lock, MapPin, School, BarChart3, User2 } from 'lucide-react'
 import Navbar from '../components/Navbar'
-import axios from 'axios'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { useAppContext } from '../context/AppContext'
-
+import { useParams } from 'react-router-dom'
+import { user } from '@heroui/theme'
+import axios from 'axios'
+import Loading from '../components/others/Loading'
+import NotFound from '../Pages/NotFound'
+2
 const Donut = ({ percent = 0, color = '#4f46e5' }) => {
   const radius = 42
   const stroke = 10
@@ -35,6 +38,24 @@ const Donut = ({ percent = 0, color = '#4f46e5' }) => {
 }
 
 const Profile = () => {
+
+
+  const { userName } = useParams();
+  const [userExists, setUserExists] = useState(true);
+  const [loading, setloading] = useState(false);
+
+  const { user,authHeader } = useAppContext();
+
+
+  let currentUsername='';
+
+  if(user){
+    currentUsername=user['userName']
+    console.log(currentUsername)
+  }
+  
+
+  const [isEditOpen, setIsEditOpen] = useState(false)
   const solved = useMemo(() => dsaProblems.filter(p => p.status), [])
   const total = dsaProblems.length
   const easy = useMemo(() => dsaProblems.filter(p => p.difficulty === 'Easy'), [])
@@ -47,32 +68,140 @@ const Profile = () => {
 
   const solvedPercent = (solved.length / total) * 100
 
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const AVATAR_OPTIONS = [
+    // Toon Heads
+    "https://api.dicebear.com/9.x/toon-head/svg?seed=hello",
+    "https://api.dicebear.com/9.x/toon-head/svg?seed=ava",
+    "https://api.dicebear.com/9.x/toon-head/svg?seed=Max",
+
+    // Fun Emojis
+    "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Joy",
+    "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Cool",
+    "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Star",
+
+    // Bottts (Neutral)
+    "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Terminator",
+    "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=WallE",
+    "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=R2D2",
+
+    // A few more colorful ones
+    "https://api.dicebear.com/9.x/toon-head/svg?seed=Luna",
+    "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Nerd",
+    "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Bender"
+  ];
+
+  //usestate to hold values
+  const [userProfileInfo, setUserProfileInfo] = useState({
+    full_name: '',
+    bio: '',
+    avatar_link: '',
+    school_name: '',
+    country: '',
+    website_link: '',
+    overall_rank:null ,
+    contest_rank:null,
+    badges: []
+  })
+
+   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const {getUserProfileData} = useAppContext();
   const {userProfile} = useAppContext();
 
+  //function to fetch user info 
+
+  useEffect(() => {
+
+    const fetchProfile = async () => {
+
+      try {
+        setloading(true);
+        const response = await axios.get(`http://localhost:8080/public/profiles/${userName}`);
+        if (response.data) {
+          setUserProfileInfo(response.data);
+          setUserExists(true);
+          // console.log(response.data);
+        }
+      }
+      catch (error) {
+        if (error.response && error.response.status === 404) {
+        setUserExists(false);
+      }
+      }
+      finally {
+        setloading(false)
+      };
+
+    };
+
+    if (userName) {
+      fetchProfile();
+    }
+  }, [userName])
+
+
+  //function to patch user values
+
+  const handleProfileUpgradation = async (values, { setSubmitting }) => {
+    try {
+      const response = await axios.patch("http://localhost:8080/profile/update",
+        values,
+        {
+          headers: { Authorization: authHeader },
+        }
+      );
+
+      if (response.status == 200) {
+        setUserProfileInfo((prev) => ({ ...prev, ...values }));
+        setIsEditOpen(false);
+      }
+    }
+    catch (error) {
+      console.log("this error ocured while updating", error);
+    }
+    finally {
+      setSubmitting(false)
+    }
+  };
+
+
+  if (loading) {
+    return <Loading />
+  }
+
+
+  if (!userExists) {
+    return <NotFound />
+  }
+
+  // console.log(userProfileInfo)
   return (
+
     <div className="p-6 bg-linear-to-b from-violet-50/60 to-blue-50/60 dark:from-zinc-900 dark:to-zinc-950 min-h-screen">
-        <Navbar />
+      <Navbar />
+
       <div className="max-w-7xl mt-17 mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Sidebar */}
         <aside className="lg:col-span-3 space-y-6">
           <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
             <div className="flex items-center gap-4">
-              <img src="https://i.pravatar.cc/100?img=5" alt="avatar" className="h-16 w-16 rounded-xl object-cover" />
+              <img src={userProfileInfo.avatar_link} alt="avatar" className="h-16 w-16 rounded-xl object-cover" />
               <div>
                 <div className="inline-flex items-center gap-2">
-                  <h2 className="text-lg font-bold">{userProfile?.fullName}</h2>
+                  <h2 className="text-lg font-bold">{userName}</h2>
+                  <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">Lvl 42</span>
                 </div>
-                <p className="text-xs text-indigo-600">{userProfile?.username}</p>
+                <p className="text-xs text-indigo-600">Grandmaster</p>
               </div>
             </div>
-            <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">{userProfile?.bio}</p>
-            <Button className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white">Edit Profile</Button>
+            <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">{userProfileInfo.bio}</p>
+            {currentUsername ===userName && (
+              <Button onClick={() => setIsEditOpen(true)}
+               className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white">Edit Profile</Button>
+            )}
             <div className="mt-4 space-y-2 text-sm text-zinc-600">
-              <div className="flex items-center gap-2"><BarChart3 className="h-4 w-4"/> Rank <span className="ml-auto font-semibold">#{userProfile?.overallRank}</span></div>
-              <div className="flex items-center gap-2"><MapPin className="h-4 w-4"/> Country <span className="ml-auto font-semibold">{userProfile?.location}</span></div>
-              <div className="flex items-center gap-2"><School className="h-4 w-4"/> School <span className="ml-auto font-semibold">{userProfile?.schoolName}</span></div>
+              <div className="flex items-center gap-2"><BarChart3 className="h-4 w-4" /> Rank <span className="ml-auto font-semibold">{userProfileInfo.overall_rank}</span></div>
+              <div className="flex items-center gap-2"><MapPin className="h-4 w-4" /> Country <span className="ml-auto font-semibold">{userProfileInfo.country}</span></div>
+              <div className="flex items-center gap-2"><School className="h-4 w-4" /> School <span className="ml-auto font-semibold text-end">{userProfileInfo.school_name}</span></div>
             </div>
           </div>
 
@@ -80,14 +209,14 @@ const Profile = () => {
             <h3 className="font-semibold mb-4">Languages</h3>
             <div className="space-y-4">
               {[
-                {name:'Python', pct:75, color:'bg-emerald-500'},
-                {name:'C++', pct:45, color:'bg-sky-500'},
-                {name:'JavaScript', pct:30, color:'bg-amber-500'},
-              ].map((l)=> (
+                { name: 'Python', pct: 75, color: 'bg-emerald-500' },
+                { name: 'C++', pct: 45, color: 'bg-sky-500' },
+                { name: 'JavaScript', pct: 30, color: 'bg-amber-500' },
+              ].map((l) => (
                 <div key={l.name}>
                   <div className="flex justify-between text-sm mb-1"><span>{l.name}</span><span>{l.pct}%</span></div>
                   <div className="h-2 w-full bg-zinc-200 rounded-full overflow-hidden">
-                    <div className={`h-full ${l.color}`} style={{width:`${l.pct}%`}}></div>
+                    <div className={`h-full ${l.color}`} style={{ width: `${l.pct}%` }}></div>
                   </div>
                 </div>
               ))}
@@ -97,9 +226,9 @@ const Profile = () => {
           <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
             <h3 className="font-semibold mb-4">Community</h3>
             <div className="space-y-3 text-sm">
-              <div className="flex items-center gap-2"><User2 className="h-4 w-4 text-emerald-600"/> 15.2k <span className="text-zinc-500">Profile views</span></div>
-              <div className="flex items-center gap-2"><Trophy className="h-4 w-4 text-indigo-600"/> 1,250 <span className="text-zinc-500">Reputation</span></div>
-              <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-amber-500"/> 85 <span className="text-zinc-500">Discussions</span></div>
+              <div className="flex items-center gap-2"><User2 className="h-4 w-4 text-emerald-600" /> 15.2k <span className="text-zinc-500">Profile views</span></div>
+              <div className="flex items-center gap-2"><Trophy className="h-4 w-4 text-indigo-600" /> 1,250 <span className="text-zinc-500">Reputation</span></div>
+              <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-amber-500" /> 85 <span className="text-zinc-500">Discussions</span></div>
             </div>
           </div>
         </aside>
@@ -118,9 +247,9 @@ const Profile = () => {
               <div className="mt-4 grid grid-cols-2 gap-4 items-center">
                 <Donut percent={solvedPercent} />
                 <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-emerald-500"/> Easy <span className="ml-auto">{solvedEasy} / {easy.length}</span></div>
-                  <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-amber-500"/> Medium <span className="ml-auto">{solvedMed} / {medium.length}</span></div>
-                  <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-rose-500"/> Hard <span className="ml-auto">{solvedHard} / {hard.length}</span></div>
+                  <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-emerald-500" /> Easy <span className="ml-auto">{solvedEasy} / {easy.length}</span></div>
+                  <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-amber-500" /> Medium <span className="ml-auto">{solvedMed} / {medium.length}</span></div>
+                  <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-rose-500" /> Hard <span className="ml-auto">{solvedHard} / {hard.length}</span></div>
                 </div>
               </div>
             </div>
@@ -131,12 +260,12 @@ const Profile = () => {
                   <h3 className="font-semibold">Contest Rating</h3>
                   <p className="text-xs text-emerald-600">Top 5%</p>
                 </div>
-                <div className="text-3xl font-extrabold">1,850</div>
+                <div className="text-3xl font-extrabold">{userProfileInfo.contest_rank}</div>
               </div>
               <div className="mt-6 h-28 w-full rounded-lg bg-linear-to-t from-indigo-50 to-white dark:from-zinc-800 dark:to-zinc-900 relative overflow-hidden">
                 <div className="absolute inset-0 flex items-end gap-2 p-3">
                   {[...Array(12)].map((_, i) => (
-                    <div key={i} className="flex-1 bg-indigo-500/20 rounded-t" style={{height: `${30 + (i*5)%70}%`}}></div>
+                    <div key={i} className="flex-1 bg-indigo-500/20 rounded-t" style={{ height: `${30 + (i * 5) % 70}%` }}></div>
                   ))}
                 </div>
               </div>
@@ -154,26 +283,14 @@ const Profile = () => {
               <button className="text-xs text-indigo-600">View All</button>
             </div>
             <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
-              <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-orange-50 text-orange-600">
-                <Trophy className="h-8 w-8"/>
-                <p className="mt-2 text-sm font-medium">Winner 2023</p>
-              </div>
-              <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-blue-50 text-blue-600">
-                <Zap className="h-8 w-8"/>
-                <p className="mt-2 text-sm font-medium">100 Streak</p>
-              </div>
-              <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-violet-50 text-violet-600">
-                <BarChart3 className="h-8 w-8"/>
-                <p className="mt-2 text-sm font-medium">Problem Solver</p>
-              </div>
-              <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-emerald-50 text-emerald-600">
-                <Bug className="h-8 w-8"/>
-                <p className="mt-2 text-sm font-medium">Bug Hunter</p>
-              </div>
-              <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-zinc-100 text-zinc-400">
-                <Lock className="h-8 w-8"/>
-                <p className="mt-2 text-sm font-medium">Locked</p>
-              </div>
+
+              {/* {userProfileInfo.badges.map((obj, idx) => {
+
+                return <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-orange-50 text-orange-600">
+                  <Trophy className="h-8 w-8" />
+                  <p className="mt-2 text-sm font-medium">Winner 2023</p>
+                </div>
+              })} */}
             </div>
           </div>
 
@@ -191,12 +308,12 @@ const Profile = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {solved.slice(0,10).map((p,idx) => (
+                  {solved.slice(0, 10).map((p, idx) => (
                     <tr key={p.id} className="border-t border-zinc-200 dark:border-zinc-800">
                       <td className="py-3">{p.title}</td>
                       <td className="py-3"><span className="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-700">Accepted</span></td>
                       <td className="py-3">Python 3</td>
-                      <td className="py-3">{10+idx*3}ms</td>
+                      <td className="py-3">{10 + idx * 3}ms</td>
                       <td className="py-3">{idx === 0 ? '2 hours ago' : `${idx} days ago`}</td>
                     </tr>
                   ))}
@@ -206,11 +323,135 @@ const Profile = () => {
           </div>
         </main>
       </div>
+
+      {isEditOpen  && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setIsEditOpen(false)} />
+          <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Edit Profile</h2>
+              <button onClick={() => setIsEditOpen(false)} className="text-zinc-500 hover:text-zinc-700">✕</button>
+            </div>
+
+            <Formik
+              enableReinitialize={true}
+              initialValues={{
+                full_name: userProfileInfo.full_name || '',
+                bio: userProfileInfo.bio || '',
+                avatar_link: userProfileInfo.avatar_link || '',
+                school_name: userProfileInfo.school_name || '',
+                country: userProfileInfo.country || '',
+                website_link: userProfileInfo.website_link || '',
+              }}
+              validate={(values) => {
+                const errors = {}
+                if (values.website_link && !/^https?:\/\//i.test(values.website_link)) {
+                  errors.website_link = 'Must start with http:// or https://'
+                }
+                return errors
+              }}
+              onSubmit={handleProfileUpgradation}
+            >
+              {({ isSubmitting, values, setFieldValue }) => (
+                <Form className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    {/* Full Name */}
+                    <div className="space-y-1">
+                      <label className="text-sm font-medium" htmlFor="full_name">Full Name</label>
+                      <Field id="full_name" name="full_name" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="John Doe" />
+                      <ErrorMessage name="full_name" component="div" className="text-xs text-rose-600" />
+                    </div>
+
+                    {/* Country */}
+                    <div className="space-y-1">
+                      <label className="text-sm font-medium" htmlFor="country">Country</label>
+                      <Field id="country" name="country" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="United States" />
+                      <ErrorMessage name="country" component="div" className="text-xs text-rose-600" />
+                    </div>
+
+                    {/* Bio */}
+                    <div className="sm:col-span-2 space-y-1">
+                      <label className="text-sm font-medium" htmlFor="bio">Bio</label>
+                      <Field as="textarea" id="bio" name="bio" rows="3" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Tell something about yourself" />
+                      <ErrorMessage name="bio" component="div" className="text-xs text-rose-600" />
+                    </div>
+
+                    {/* School Name */}
+                    <div className="space-y-1">
+                      <label className="text-sm font-medium" htmlFor="school_name">School Name</label>
+                      <Field id="school_name" name="school_name" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="MIT" />
+                      <ErrorMessage name="school_name" component="div" className="text-xs text-rose-600" />
+                    </div>
+
+                    {/* Avatar Selection Grid */}
+                    <div className="sm:col-span-2 space-y-3">
+                      <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                        Pick Your Character
+                      </label>
+
+                      <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                        {AVATAR_OPTIONS.map((url) => (
+                          <button
+                            key={url}
+                            type="button"
+                            onClick={() => setFieldValue('avatar_link', url)}
+                            className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${values.avatar_link === url
+                                ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500/20'
+                                : 'border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300'
+                              }`}
+                          >
+                            <img src={url} alt="avatar" className="w-full h-full object-contain p-1" />
+
+                            {values.avatar_link === url && (
+                              <div className="absolute top-1 right-1 bg-indigo-600 rounded-full p-0.5 shadow-sm">
+                                <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
+                                </svg>
+                              </div>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                      <ErrorMessage name="avatar_link" component="div" className="text-xs text-rose-600" />
+                    </div>
+
+                    {/* Website Link */}
+                    <div className="sm:col-span-2 space-y-1">
+                      <label className="text-sm font-medium" htmlFor="website_link">Website Link</label>
+                      <Field id="website_link" name="website_link" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="https://your.site" />
+                      <ErrorMessage name="website_link" component="div" className="text-xs text-rose-600" />
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="mt-2 flex items-center justify-end gap-2">
+                    <Button
+                      type="button"
+                      onClick={() => setIsEditOpen(false)}
+                      className="bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                    >
+                      {isSubmitting ? 'Saving...' : 'Save Changes'}
+                    </Button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
-const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const daysInMonth = (year, monthIndex) => new Date(year, monthIndex + 1, 0).getDate()
 
 const MonthActivityGrid = () => {
