@@ -53,8 +53,9 @@ export const AppProvider = (props) => {
           Authorization : `Bearer ${jwtToken}`
         }
       })
-      console.log(res);
       if(res.data.status===1){
+        // console.log("User Profile Data : ");
+        // console.log(res.data.data);
         setuserProfile(res.data.data);
       }
       else{
@@ -71,7 +72,7 @@ export const AppProvider = (props) => {
     getUserProfileData();
   },[isLoggedIn]);
 
-  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile };
+  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData};
 
   return (
     <AppContext.Provider value={values}>{props.children}</AppContext.Provider>

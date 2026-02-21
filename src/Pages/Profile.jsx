@@ -9,6 +9,7 @@ import axios from 'axios'
 import { useAppContext } from '../context/AppContext'
 import {Form,Formik,Field,ErrorMessage} from "formik";
 import * as yup from "yup";
+import {toast,ToastContainer} from "react-toastify";
 
 
 const Donut = ({ percent = 0, color = '#4f46e5' }) => {
@@ -51,9 +52,8 @@ const Profile = () => {
   const solvedPercent = (solved.length / total) * 100
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const {getUserProfileData} = useAppContext();
+  const {getUserProfileData,jwtToken,userProfile} = useAppContext();
 
-  const {userProfile} = useAppContext();
    const AVATAR_OPTIONS = [
     // Toon Heads
     "https://api.dicebear.com/9.x/toon-head/svg?seed=hello",
@@ -82,18 +82,45 @@ const Profile = () => {
     setisEditOpen(true);
   }
 
-  const handleSubmit = async (values) => {
-    console.log(values);
+  const saveUpdateToSpringMongo = async (values) => {
+    const res = await axios.post(`${BACKEND_URL}/userProfile/update`,values,{
+      headers:{
+        Authorization: `Bearer ${jwtToken}`
+      }
+    });
+    return res.data;
+  }
+
+  const handleSubmit = async (values,helper) => {
+    // console.log("values is : ");
+    // console.log(values);
+    try{
+      const result = await saveUpdateToSpringMongo(values);
+      if(result.status===1){
+        toast.success(`User Profile updated..`);
+        helper.resetForm();
+        setisEditOpen(false);
+        console.log("Function calling...");
+        getUserProfileData();   // to reflect the changes in profile page after update
+      }
+      else{
+        throw new Error();
+      }
+    }
+    catch(err){
+      toast.error(`Profile not updated`);
+    }
   }
 
   return (
     <>
+    <ToastContainer/>
         {isEditOpen && <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setIsEditOpen(false)} />
           <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 shadow-xl">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Edit Profile</h2>
-              <button onClick={() => setIsEditOpen(false)} className="text-zinc-500 hover:text-zinc-700">✕</button>
+              <button onClick={() => setisEditOpen(false)} className="text-zinc-500  hover:text-zinc-700">✕</button>
             </div>
 
             <Formik
@@ -106,13 +133,14 @@ const Profile = () => {
               location: userProfile?.location || "",
               schoolName: userProfile?.schoolName || "",
               gender: userProfile?.gender || "",
+              avatarLink : userProfile?.avatarLink || "",
               websiteLink: userProfile?.websiteLink || ""
             }}
 
             onSubmit={handleSubmit}
               
             >
-              {({ isSubmitting, values }) => (
+              {({ isSubmitting, values,setFieldValue }) => (
                 <Form className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
@@ -162,15 +190,15 @@ const Profile = () => {
                           <button
                             key={url}
                             type="button"
-                            onClick={() => setFieldValue('avatar_link', url)}
-                            className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${values?.avatar_link === url
+                            onClick={() => setFieldValue('avatarLink', url)}
+                            className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${values?.avatarLink === url
                                 ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500/20'
                                 : 'border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300'
                               }`}
                           >
-                            <img src={url} alt="avatar" className="w-full h-full object-contain p-1" />
+                            <img src={url} alt="avatarLink" className="w-full h-full object-contain p-1" />
 
-                            {values?.avatar_link === url && (
+                            {values?.avatarLink === url && (
                               <div className="absolute top-1 right-1 bg-indigo-600 rounded-full p-0.5 shadow-sm">
                                 <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
@@ -180,7 +208,7 @@ const Profile = () => {
                           </button>
                         ))}
                       </div>
-                      <ErrorMessage name="avatar_link" component="div" className="text-xs text-rose-600" />
+                      <ErrorMessage name="avatarLink" component="div" className="text-xs text-rose-600" />
                     </div>
 
                     {/* Website Link */}
@@ -221,7 +249,7 @@ const Profile = () => {
         <aside className="lg:col-span-3 space-y-6">
           <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
             <div className="flex items-center gap-4">
-              <img src="https://i.pravatar.cc/100?img=5" alt="avatar" className="h-16 w-16 rounded-xl object-cover" />
+              <img src={userProfile?.avatarLink?userProfile?.avatarLink:"https://i.pravatar.cc/100?img=5"} alt="avatar" className="h-16 w-16 rounded-xl object-cover" />
               <div>
                 <div className="inline-flex items-center gap-2">
                   <h2 className="text-lg font-bold">{userProfile?.fullName}</h2>
