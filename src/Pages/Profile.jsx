@@ -8,6 +8,8 @@ import Navbar from '../components/Navbar'
 import axios from 'axios'
 import { useAppContext } from '../context/AppContext'
 import {Form,Formik,Field,ErrorMessage} from "formik";
+import * as yup from "yup";
+
 
 const Donut = ({ percent = 0, color = '#4f46e5' }) => {
   const radius = 42
@@ -50,6 +52,7 @@ const Profile = () => {
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const {getUserProfileData} = useAppContext();
+
   const {userProfile} = useAppContext();
    const AVATAR_OPTIONS = [
     // Toon Heads
@@ -79,6 +82,10 @@ const Profile = () => {
     setisEditOpen(true);
   }
 
+  const handleSubmit = async (values) => {
+    console.log(values);
+  }
+
   return (
     <>
         {isEditOpen && <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -90,40 +97,37 @@ const Profile = () => {
             </div>
 
             <Formik
-              enableReinitialize={true}
-              // initialValues={{
-                // full_name: userProfileInfo.full_name || '',
-                // bio: userProfileInfo.bio || '',
-                // avatar_link: userProfileInfo.avatar_link || '',
-                // school_name: userProfileInfo.school_name || '',
-                // country: userProfileInfo.country || '',
-                // website_link: userProfileInfo.website_link || '',
-              // }}
-              // validate={(values) => {
-              //   const errors = {}
-              //   if (values.website_link && !/^https?:\/\//i.test(values.website_link)) {
-              //     errors.website_link = 'Must start with http:// or https://'
-              //   }
-              //   return errors
-              // }}
-              // onSubmit={handleProfileUpgradation}
+
+            enableReinitialize
+            initialValues={{
+              bio: userProfile?.bio || "",
+              fullName: userProfile?.fullName || "",
+              username: userProfile?.username || "",
+              location: userProfile?.location || "",
+              schoolName: userProfile?.schoolName || "",
+              gender: userProfile?.gender || "",
+              websiteLink: userProfile?.websiteLink || ""
+            }}
+
+            onSubmit={handleSubmit}
+              
             >
-              {({ isSubmitting, values, setFieldValue }) => (
+              {({ isSubmitting, values }) => (
                 <Form className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                    {/* Full Name */}
+                    {/* User Name */}
                     <div className="space-y-1">
-                      <label className="text-sm font-medium" htmlFor="full_name">Full Name</label>
-                      <Field id="full_name" name="full_name" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="John Doe" />
-                      <ErrorMessage name="full_name" component="div" className="text-xs text-rose-600" />
+                      <label className="text-sm font-medium" htmlFor="username">Username</label>
+                      <Field id="username" name="username" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.username?userProfile?.username:"JohnDoe_123"} />
+                      <ErrorMessage name="username" component="div" className="text-xs text-rose-600" />
                     </div>
 
-                    {/* Country */}
+                    {/* Full Name */}
                     <div className="space-y-1">
-                      <label className="text-sm font-medium" htmlFor="country">Country</label>
-                      <Field id="country" name="country" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="United States" />
-                      <ErrorMessage name="country" component="div" className="text-xs text-rose-600" />
+                      <label className="text-sm font-medium" htmlFor="fullName">Full Name</label>
+                      <Field id="fullName" name="fullName" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.fullName?userProfile?.fullName:"John Doe"} />
+                      <ErrorMessage name="fullName" component="div" className="text-xs text-rose-600" />
                     </div>
 
                     {/* Bio */}
@@ -135,9 +139,16 @@ const Profile = () => {
 
                     {/* School Name */}
                     <div className="space-y-1">
-                      <label className="text-sm font-medium" htmlFor="school_name">School Name</label>
-                      <Field id="school_name" name="school_name" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="MIT" />
-                      <ErrorMessage name="school_name" component="div" className="text-xs text-rose-600" />
+                      <label className="text-sm font-medium" htmlFor="schoolName">School Name</label>
+                      <Field id="schoolName" name="schoolName" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.schoolName?userProfile?.schoolName:"MIT"} />
+                      <ErrorMessage name="schoolName" component="div" className="text-xs text-rose-600" />
+                    </div>
+
+                    {/* Country */}
+                    <div className="space-y-1">
+                      <label className="text-sm font-medium" htmlFor="location">Country</label>
+                      <Field id="location" name="location" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.location?userProfile?.location:"United States"} />
+                      <ErrorMessage name="location" component="div" className="text-xs text-rose-600" />
                     </div>
 
                     {/* Avatar Selection Grid */}
@@ -174,9 +185,9 @@ const Profile = () => {
 
                     {/* Website Link */}
                     <div className="sm:col-span-2 space-y-1">
-                      <label className="text-sm font-medium" htmlFor="website_link">Website Link</label>
-                      <Field id="website_link" name="website_link" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="https://your.site" />
-                      <ErrorMessage name="website_link" component="div" className="text-xs text-rose-600" />
+                      <label className="text-sm font-medium" htmlFor="websiteLink">Website Link</label>
+                      <Field id="websiteLink" name="websiteLink" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.websiteLink?userProfile?.websiteLink:"https://your.site"} />
+                      <ErrorMessage name="websiteLink" component="div" className="text-xs text-rose-600" />
                     </div>
                   </div>
 
