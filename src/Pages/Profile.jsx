@@ -10,6 +10,7 @@ import { useAppContext } from '../context/AppContext'
 import {Form,Formik,Field,ErrorMessage} from "formik";
 import * as yup from "yup";
 import {toast,ToastContainer} from "react-toastify";
+import { useNavigate } from 'react-router-dom'
 
 
 const Donut = ({ percent = 0, color = '#4f46e5' }) => {
@@ -44,6 +45,7 @@ const Profile = () => {
   const easy = useMemo(() => dsaProblems.filter(p => p.difficulty === 'Easy'), [])
   const medium = useMemo(() => dsaProblems.filter(p => p.difficulty === 'Medium'), [])
   const hard = useMemo(() => dsaProblems.filter(p => p.difficulty === 'Hard'), [])
+  const navigate = useNavigate();
 
   const solvedEasy = solved.filter(p => p.difficulty === 'Easy').length
   const solvedMed = solved.filter(p => p.difficulty === 'Medium').length
@@ -263,7 +265,7 @@ const Profile = () => {
               <div className="flex items-center gap-2"><BarChart3 className="h-4 w-4"/> Rank <span className="ml-auto font-semibold">#{userProfile?.overallRank}</span></div>
               <div className="flex items-center gap-2"><MapPin className="h-4 w-4"/> Country <span className="ml-auto font-semibold">{userProfile?.location}</span></div>
               <div className="flex items-center gap-2"><School className="h-4 w-4"/> School <span className="ml-auto font-semibold">{userProfile?.schoolName}</span></div>
-              <div className="flex items-center gap-2"><Globe className="h-4 w-4"/> <span className="ml-auto font-semibold">{userProfile?.websiteLink}</span></div>
+              <div className="flex items-center gap-2"><Globe className="h-4 w-4"/> <span onClick={()=>navigate(userProfile?.websiteLink)} className="ml-auto font-semibold hover:text-blue-600 hover:underline cursor-pointer">{userProfile?.websiteLink}</span></div>
             </div>
           </div>
 
