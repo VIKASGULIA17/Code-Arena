@@ -63,7 +63,7 @@ export const AppProvider = (props) => {
       }
     }
     catch(e){
-      throw new Error();
+      setuserProfile(null);
     }
   }
 
