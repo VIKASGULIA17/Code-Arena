@@ -50,6 +50,7 @@ const Profile = () => {
   const solvedEasy = solved.filter(p => p.difficulty === 'Easy').length
   const solvedMed = solved.filter(p => p.difficulty === 'Medium').length
   const solvedHard = solved.filter(p => p.difficulty === 'Hard').length
+  const [avatarMedia,setAvatarMedia] = useState(null);
 
   const solvedPercent = (solved.length / total) * 100
 
@@ -78,6 +79,8 @@ const Profile = () => {
     "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Bender"
   ];
 
+  // console.log(userProfile);
+
   const [isEditOpen,setisEditOpen] = useState(false);
 
   const handleEditDialogBox = () => {
@@ -85,10 +88,14 @@ const Profile = () => {
   }
 
   const saveUpdateToSpringMongo = async (values) => {
-    const res = await axios.post(`${BACKEND_URL}/userProfile/update`,values,{
+    const formData = new FormData();
+    formData.append("userProfileJson",JSON.stringify(values));
+    formData.append("avatarMedia",avatarMedia);
+    const res = await axios.post(`${BACKEND_URL}/userProfile/update`,formData,{
       headers:{
-        Authorization: `Bearer ${jwtToken}`
-      }
+        Authorization: `Bearer ${jwtToken}`,
+        "Content-Type" : "multipart/form-data"
+     }
     });
     return res.data;
   }
@@ -101,10 +108,10 @@ const Profile = () => {
     try{
       const result = await saveUpdateToSpringMongo(values);
       if(result.status===1){
-        toast.success(`User Profile updated..`);
+        // toast.success(`User Profile updated..`);
         helper.resetForm();
         setisEditOpen(false);
-        console.log("Function calling...");
+        // console.log("Function calling...");
         getUserProfileData();   // to reflect the changes in profile page after update
       }
       else{
@@ -176,6 +183,8 @@ const Profile = () => {
                       <ErrorMessage name="schoolName" component="div" className="text-xs text-rose-600" />
                     </div>
 
+                    
+
                     {/* Country */}
                     <div className="space-y-1">
                       <label className="text-sm font-medium" htmlFor="location">Country</label>
@@ -191,8 +200,12 @@ const Profile = () => {
 
                       <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800">
                       <div className='relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200' >
-                          <img alt="current avatar profile image" className='object-contain h-full w-full' src={values.avatarLink}/>
-                          <input type="file" id="inputAvatar" alt="Current avatar profile image" className='hidden'/>
+                          <img alt="current avatar profile image"  className='object-cover h-full w-full' src={values.avatarLink}/>
+                          <input type="file" id="inputAvatar" accept='image/*' alt="Current avatar profile image" className='hidden' onChange={(e)=>{
+                            const file = e.target.files[0];
+                            setAvatarMedia(file);
+                            setFieldValue('avatarLink',URL.createObjectURL(file));
+                          }}/>
                           <label htmlFor="inputAvatar" className='absolute bottom-0 right-0 bg-blue-600 p-1 cursor-pointer rounded-full text-white'><Camera/></label>
                       </div>
                         {AVATAR_OPTIONS.map((url) => (
