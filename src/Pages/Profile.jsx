@@ -70,7 +70,6 @@ const Profile = () => {
 
     // Bottts (Neutral)
     "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Terminator",
-    "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=WallE",
     "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=R2D2",
 
     // A few more colorful ones
