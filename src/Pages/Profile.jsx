@@ -198,14 +198,14 @@ const Profile = () => {
                       </label>
 
                       <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                      <div className='relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200' >
-                          <img alt="current avatar profile image"  className='object-cover h-full w-full' src={values.avatarLink}/>
+                      <div className='relative aspect-square rounded-xl border-2 transition-all duration-200' >
+                          <img alt="current avatar profile image"  className='aspect-square rounded-xl object-cover h-full w-full' src={values.avatarLink}/>
                           <input type="file" id="inputAvatar" accept='image/*' alt="Current avatar profile image" className='hidden' onChange={(e)=>{
                             const file = e.target.files[0];
                             setAvatarMedia(file);
                             setFieldValue('avatarLink',URL.createObjectURL(file));
                           }}/>
-                          <label htmlFor="inputAvatar" className='absolute bottom-0 right-0 bg-blue-600 p-1 cursor-pointer rounded-full text-white'><Camera/></label>
+                          <label htmlFor="inputAvatar" className='ml-3 absolute -bottom-2 -right-2 bg-blue-600 p-1 hover:bg-blue-700 cursor-pointer rounded-full text-white'><Camera size={16}/></label>
                       </div>
                         {AVATAR_OPTIONS.map((url) => (
                           <button
@@ -219,7 +219,7 @@ const Profile = () => {
                                 : 'border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300'
                               }`}
                           >
-                            <img src={url} alt="avatarLink" className="w-full h-full object-contain p-1" />
+                            <img src={url} alt="avatarLink" className="aspect-square rounded-xl w-full h-full object-contain p-1" />
 
                             {values?.avatarLink === url && (
                               <div className="absolute top-1 right-1 bg-indigo-600 rounded-full p-0.5 shadow-sm">
