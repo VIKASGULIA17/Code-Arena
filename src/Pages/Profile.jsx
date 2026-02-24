@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { dsaProblems } from '../data/dsaProblem'
 import { Button } from '../components/ui/button'
-import { Trophy, Zap, Bug, Globe, Lock, MapPin, School, BarChart3, User2 } from 'lucide-react'
+import { Trophy, Zap, Bug, Globe, Lock, MapPin, School, BarChart3, User2,Camera } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import axios from 'axios'
 import { useAppContext } from '../context/AppContext'
@@ -92,6 +92,8 @@ const Profile = () => {
     });
     return res.data;
   }
+
+  // console.log(userProfile?.avatarLink);
 
   const handleSubmit = async (values,helper) => {
     // console.log("values is : ");
@@ -188,11 +190,18 @@ const Profile = () => {
                       </label>
 
                       <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                      <div className='relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200' >
+                          <img alt="current avatar profile image" className='object-contain h-full w-full' src={values.avatarLink}/>
+                          <input type="file" id="inputAvatar" alt="Current avatar profile image" className='hidden'/>
+                          <label htmlFor="inputAvatar" className='absolute bottom-0 right-0 bg-blue-600 p-1 cursor-pointer rounded-full text-white'><Camera/></label>
+                      </div>
                         {AVATAR_OPTIONS.map((url) => (
                           <button
                             key={url}
                             type="button"
-                            onClick={() => setFieldValue('avatarLink', url)}
+                            onClick={() => {
+                              setFieldValue('avatarLink', url)
+                            }}
                             className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${values?.avatarLink === url
                                 ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500/20'
                                 : 'border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300'
