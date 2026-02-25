@@ -6,6 +6,7 @@ import {
   FileText,
   Lightbulb,
   MessagesSquare,
+  History
 } from "lucide-react";
 import { problemInfo } from "../../data/dsaProblem";
 import { Button } from "../ui/button";
@@ -14,6 +15,8 @@ import Description from "./problemPages/Description";
 import Solution from "./problemPages/Solution";
 import Discussion from "./problemPages/Discussion";
 import NotFound from "../../Pages/NotFound";
+import Submission from "./problemPages/Submission";
+
 
 const ProblemDetails = ({ isContest, problemId }) => {
 
@@ -78,6 +81,8 @@ const ProblemDetails = ({ isContest, problemId }) => {
                 label="Discussion"
                 icon={MessagesSquare}
               />
+
+              <TabButton label="Submissions" icon={History} />
             </div>
           }
           <div className="flex gap-2 items-center">
@@ -90,15 +95,15 @@ const ProblemDetails = ({ isContest, problemId }) => {
           </div>
         </div>
 
-        {currentTopBar == "Description" ? (
-          <Description id={id} />
-        ) : (
-          (currentTopBar === 'Solution'
-            ?
+        {currentTopBar === "Description" ? (
+            <Description id={id} />
+          ) : currentTopBar === "Solution" ? (
             <Solution id={id} />
-            : <Discussion id={id} />
-          )
-        )}
+          ) : currentTopBar === "Discussion" ? (
+            <Discussion id={id} />
+          ) : (
+            <Submission id={id} />
+          )}
       </div>
 
       <div className="w-full lg:w-1/2 md:border-l border-t md:border-t-0 h-auto md:h-screen md:overflow-y-auto">

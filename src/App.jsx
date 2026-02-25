@@ -19,6 +19,8 @@ import UserManagement from './Pages/Admin/UserManagement'
 import ProblemManagement from './Pages/Admin/ProblemManagement'
 import ContestManagement from './Pages/Admin/ContestManagement'
 import Analysis from './Pages/Admin/Analysis'
+import SharedSubmission from './components/problem/problemPages/SharedSubmission'
+
 
 const App = () => {
   return (
@@ -30,7 +32,8 @@ const App = () => {
         <Route path='contest' element={<Contest />} />
         <Route path='contest/registration' element={<ContestRegistration />} />
         <Route path='contest/:contestName' element={<OngoingContestPage />} />
-        <Route path='profile' element={<Profile />} />
+        <Route path='profile/:userName' element={<Profile />} />
+        <Route path="/submission/:slug" element={<SharedSubmission />} />
         <Route path='login' element={<Login />} />
         <Route path='signup' element={<Signup />} />
         <Route path='algovisualizer' element={<AlgoVisualizer />} />
