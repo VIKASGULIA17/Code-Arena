@@ -10,7 +10,7 @@ const CodeEditor = ({ problemId=1,isContest }) => {
 
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);   //all the language and versions
   // const [Language, setLanguage] = useState(LanguageList[0]);  // current slected language 
-  const [Language, setLanguage] = useState(LanguageList[3]); 
+  const [Language, setLanguage] = useState(LanguageList[0]); 
   const CodeEditorRef = useRef(); //refrence ot code editor
   const [Output, setOutput] = useState(null); // output (here because if i want to reset the code ,testcases get reset too)
 

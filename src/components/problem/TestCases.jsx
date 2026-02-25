@@ -1,169 +1,33 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { CloudUpload, Play, CheckCircle, XCircle } from "lucide-react";
-import { executeCode } from "../../api/api";
-import { testCases } from "../../data/testCases";
-import { userCode } from "../../data/UserCodeTemplate";
-import { driverCodeTemplate } from "../../data/driverCode";
-import { dsaProblems, problemInfo } from "../../data/dsaProblem";
+import { useTestRunner } from '../../hooks/useTestRunner';
 
 
 const TestCases = ({ Language, value, problemId, Output, setOutput, isContest }) => {
 
+  const [isActive, setIsActive] = useState(0);
+  const {
+    runCode,
+    submitCode,
+    isLoading,
+    isSubmitting,
+    isError,
+    submissionStatus,
+    setSubmissionStatus,
+    firstFailedTestCase,
+    executionStats,
+    visibleTestCases,
+    hiddenTestCases
+  } = useTestRunner(problemId, Language, value, setOutput);
 
   // data variables
-  const [isError, setisError] = useState(false); // for any error in execution ,so that i can show it in red or green 
-  const [isActive, setIsActive] = useState(0); //to display current testcase info 
-  const [isLoading, setIsLoading] = useState(false); // when clicked on submit button 
-  const [isSubmitting, setIsSubmitting] = useState(false); // New state for submit loading
-  const [submissionStatus, setSubmissionStatus] = useState(null); // To show "Accepted" or "Wrong Answer"
-
-  const [firstFailedTestCase, setfirstFailedTestCase] = useState([])
-
-  const currentProblemTestcases = testCases[problemId] || { //just in case there are no testcases 
-    visible: [],
-    hidden: [],
-  };
-  const visibleTestCases = currentProblemTestcases.visible; // for run
-  const hiddenTestCases = currentProblemTestcases.hidden; //for submit
-
-  const type=dsaProblems[problemId-1].type;
-  // console.log(type)
-  // console.log(driverCodeTemplate[type][Language[0]])
-
-  // RUN CODE (Visible Cases)
-  const runCode = async () => {
-    const userCode = value;
-    const lang = Language[0];
-    const type=dsaProblems[problemId-1].type;
-    const fnName=dsaProblems[problemId-1].fnName;
-    const problemInfo=dsaProblems[problemId-1];
-
-
-    if (!userCode) return;
-    setIsLoading(true);
-    setisError(false);
-    setOutput(null);
-    setSubmissionStatus(null); // Clear previous submission status
-
-    try {
-      const driverCode = driverCodeTemplate[type][lang];
-      console.log(driverCode)
-
-      if (!driverCode) {
-        setisError(true);
-        setOutput([{ status: "Error", error: "Runtime Environment not Found" }]);
-        return;
-      }
-
-      // 1. Generate code using VISIBLE cases
-      const fullSourceCode = driverCode(fnName,userCode, visibleTestCases,problemInfo);
-      // this will get data from the api
-      const data = await executeCode(Language, fullSourceCode);
-
-      if (data.run.stderr) {
-        setisError(true);
-        setOutput([{ status: "Error", error: data.run.stderr }]);
-        return;
-      }
-
-      try {
-        const outputLines = data.run.output.trim().split("\n");
-        const lastLine = outputLines[outputLines.length - 1];
-        const parsedOutput = JSON.parse(lastLine);
-        setOutput(parsedOutput);
-        setisError(false);
-      } catch (err) {
-        setisError(true);
-        setOutput([{ status: "Error", error: "Output Parse Failed" }]);
-      }
-    } catch (error) {
-      setisError(true);
-      setOutput([{ status: "Error", error: "Server Connection Failed" }]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  //  SUBMIT CODE (Hidden Cases)
-  const submitCode = async () => {
-    const userCode = value;
-    const lang = Language[0];
-    const type=dsaProblems[problemId-1].type;
-    const fnName=dsaProblems[problemId-1].fnName;
-
-    if (!userCode) return;
-
-    setIsSubmitting(true);
-    setisError(false);
-    setOutput(null);
-    setSubmissionStatus(null);
-
-    try {
-      const driverCode = driverCodeTemplate[type][lang];
-      console.log(driverCode)
-
-      if (!driverCode) {
-        setisError(true);
-        setSubmissionStatus("Runtime Environment Not Found");
-        return;
-      }
-
-      // 1.  HIDDEN cases
-      const fullSourceCode = driverCode(fnName,userCode, hiddenTestCases);
-
-      // 2. Execute 
-      const data = await executeCode(Language, fullSourceCode);
-
-      // 3. Handle Compilation Errors
-      if (data.run.stderr) {
-        setisError(true);
-        setSubmissionStatus("Runtime Error");
-        console.error("Submission Error:", data.run.stderr);
-        return;
-      }
-
-      // 4. Parse Hidden Results
-      try {
-        const outputLines = data.run.output.trim().split("\n");
-        const lastLine = outputLines[outputLines.length - 1];
-        const parsedHiddenResults = JSON.parse(lastLine);
-
-        console.log("Hidden Test Case Results:", parsedHiddenResults);
-
-        // 5. Calculate Final Status
-        // Check if every single test case passed
-        const allPassed = parsedHiddenResults.every(
-          (res) => res.status === "Passed"
-        );
-
-        if (allPassed) {
-          setSubmissionStatus("Accepted");
-        } else {
-          //  first failure to display if needed
-          const firstFail = parsedHiddenResults.find(
-            (res) => res.status === "Failed"
-          );
-          setSubmissionStatus(`Wrong Answer`);
-          setfirstFailedTestCase(firstFail)
-          console.log("Failed at input:", firstFail);
-        }
-      } catch (err) {
-        setisError(true);
-        setSubmissionStatus("Format Error");
-      }
-    } catch (error) {
-      setSubmissionStatus("Network Error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
 
   const currentResult = Output && Output[isActive] ? Output[isActive] : null;
 
   return (
-    <div className="h-[45vh] flex flex-col">
+    <div className="h-full flex flex-col">
       {/* HEADER */}
       <div className="flex items-center justify-between px-6 py-3 border-y-2 bg-white">
         <h1 className="font-bold text-gray-700">TestCases</h1>
@@ -335,37 +199,32 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
             {/* ACTUAL OUTPUT DISPLAY (Only after Run) */}
             {currentResult && (
               <div className="py-2 animate-in slide-in-from-top-2">
-                <h1 className="font-semibold uppercase text-xs text-gray-500">
-                  Actual Output
-                </h1>
+                <div className="flex justify-between items-end">
+                  <h1 className="font-semibold uppercase text-xs text-gray-500">Actual Output</h1>
+                  
+                  {/* NEW: Display Judge0 Stats on individual Run test cases */}
+                  {!isError && currentResult.status !== "Error" && (
+                    <div className="flex gap-2 text-xs font-mono text-gray-500">
+                      <span className="bg-gray-100 px-2 py-1 rounded">Time: {(executionStats.time * 1000).toFixed(0)} ms</span>
+                      <span className="bg-gray-100 px-2 py-1 rounded">Mem: {(executionStats.memory / 1024).toFixed(1)} MB</span>
+                    </div>
+                  )}
+                </div>
 
-                <div
-                  className={`rounded-lg my-2 py-3 px-4 font-mono text-sm border 
-                  ${currentResult.status === "Passed"
-                      ? "bg-green-50 border-green-200 text-green-900"
-                      : currentResult.status === "Failed"
-                        ? "bg-red-50 border-red-200 text-red-900"
-                        : "bg-yellow-50 border-yellow-200 text-yellow-900"
-                    }`}
-                >
-                  {currentResult.status === "Error" ? (
-                    <span className="text-red-600 whitespace-pre-wrap">
-                      {currentResult.error}
-                    </span>
+                <div className={`rounded-lg my-2 py-3 px-4 font-mono text-sm border 
+                  ${currentResult.status === "Passed" ? "bg-green-50 border-green-200 text-green-900"
+                    : currentResult.status === "Failed" ? "bg-red-50 border-red-200 text-red-900"
+                    : "bg-yellow-50 border-yellow-200 text-yellow-900"
+                  }`}>
+                  {currentResult.status === "Error" || isError ? (
+                    <span className="text-red-600 whitespace-pre-wrap">{currentResult.error}</span>
                   ) : (
                     <div className="flex flex-col gap-1">
-                      <span
-                        className={`font-bold ${currentResult.status === "Passed"
-                          ? "text-green-600"
-                          : "text-red-600"
-                          }`}
-                      >
+                      <span className={`font-bold ${currentResult.status === "Passed" ? "text-green-600" : "text-red-600"}`}>
                         {currentResult.status}
                       </span>
                       {currentResult.actual !== undefined && (
-                        <span className="font-mono">
-                          {JSON.stringify(currentResult.actual)}
-                        </span>
+                        <span className="font-mono">{JSON.stringify(currentResult.actual)}</span>
                       )}
                     </div>
                   )}

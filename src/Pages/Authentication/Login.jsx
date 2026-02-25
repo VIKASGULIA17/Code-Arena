@@ -119,47 +119,64 @@ const Login = () => {
               validationSchema={validateData}
               onSubmit={handleSubmit}
             >
-              {({ isSubmitted }) => (
-                <Form className="flex flex-col gap-4">
-                  <div className="space-y-1">
-                    <Field
-                      name="username"
-                      type="text"
-                      placeholder="Username"
-                      className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 outline-none transition-all placeholder:text-gray-400 text-black"
-                    />
-                    <ErrorMessage
-                      component="p"
-                      name="username"
-                      className="text-sm text-red-500 pl-1"
-                    />
-                  </div>
+              {({ values, isSubmitting }) => {
+                const isFilled = values.username.length > 0 && values.password.length > 0;
 
-                  <div className="space-y-1">
-                    <Field
-                      name="password"
-                      type="password"
-                      placeholder="••••••"
-                      className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 outline-none transition-all placeholder:text-gray-400 text-black"
-                    />
-                    <ErrorMessage
-                      component="p"
-                      name="password"
-                      className="text-sm text-red-500 pl-1"
-                    />
-                  </div>
+                return (
+                  <Form className="flex flex-col gap-4">
+                    <div className="space-y-1">
+                      <Field
+                        name="username"
+                        type="text"
+                        placeholder="Username"
+                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 outline-none transition-all placeholder:text-gray-400 text-black"
+                      />
+                      <ErrorMessage
+                        component="p"
+                        name="username"
+                        className="text-sm text-red-500 pl-1"
+                      />
+                    </div>
 
-                  <button
-                    disabled={isSubmitted}
-                    type="submit"
-                    className="w-full mt-2 bg-amber-200 hover:bg-amber-300 text-amber-900 font-bold py-3 rounded-xl transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitted ? "Logging in..." : "Log In"}
-                  </button>
-                </Form>
-              )}
+                    <div className="space-y-1">
+                      <Field
+                        name="password"
+                        type="password"
+                        placeholder="••••••"
+                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 outline-none transition-all placeholder:text-gray-400 text-black"
+                      />
+                      <ErrorMessage
+                        component="p"
+                        name="password"
+                        className="text-sm text-red-500 pl-1"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`w-full mt-2 font-bold py-3 rounded-xl transition-all duration-300 flex justify-center items-center gap-2
+            ${isSubmitting ? "cursor-not-allowed opacity-70" : ""}
+            ${isFilled
+                          ? "bg-amber-400 text-amber-950 shadow-md" 
+                          : "bg-amber-100 text-amber-700"          
+                        }
+            hover:bg-amber-500 hover:text-white
+          `}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-amber-900 border-t-transparent rounded-full animate-spin"></div>
+                          Logging in...
+                        </>
+                      ) : (
+                        "Log In"
+                      )}
+                    </button>
+                  </Form>
+                );
+              }}
             </Formik>
-
             {/* Footer */}
             <div className="mt-8 text-center text-sm text-gray-600">
               Don't have an account?{" "}
