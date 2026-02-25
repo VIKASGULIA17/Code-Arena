@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import Navbar from "../../Navbar";
 
-// ─── Status config ─────────────────────────────────────────────────────────
 const STATUS_CONFIG = {
     ACCEPTED: {
         label: "Accepted",
@@ -85,7 +84,6 @@ const LANG_COLORS = {
     java: "bg-orange-100 text-orange-700 border-orange-200",
 };
 
-// ─── Stat Pill ──────────────────────────────────────────────────────────────
 const StatPill = ({ icon: Icon, label, value, iconClass = "text-gray-400" }) => (
     <div className="flex flex-col items-center gap-1 px-6 py-4 bg-white rounded-2xl border border-gray-200 shadow-sm min-w-[100px]">
         <Icon size={20} className={iconClass} />
@@ -94,7 +92,6 @@ const StatPill = ({ icon: Icon, label, value, iconClass = "text-gray-400" }) => 
     </div>
 );
 
-// ─── Loading skeleton ───────────────────────────────────────────────────────
 const LoadingSkeleton = () => (
     <div className="min-h-screen bg-gray-50">
         <Navbar />
@@ -110,7 +107,6 @@ const LoadingSkeleton = () => (
     </div>
 );
 
-// ─── Error state ─────────────────────────────────────────────────────────────
 const ErrorState = () => (
     <div className="min-h-screen bg-gray-50">
         <Navbar />
@@ -133,7 +129,6 @@ const ErrorState = () => (
     </div>
 );
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 const SharedSubmission = () => {
     const { slug } = useParams();
     const [submission, setSubmission] = useState(null);
@@ -199,7 +194,6 @@ const SharedSubmission = () => {
 
             <div className="max-w-5xl mx-auto px-4 pt-24 pb-16 flex flex-col gap-6">
 
-                {/* ── Back button ── */}
                 <div>
                     <Link
                         to="/problem"
@@ -209,13 +203,10 @@ const SharedSubmission = () => {
                         Back to Problems
                     </Link>
                 </div>
-
-                {/* ── Hero banner ── */}
                 <div
                     className={`rounded-2xl border ${cfg.heroBorder} bg-linear-to-br ${cfg.heroBg} p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm`}
                 >
                     <div className="flex flex-col gap-3">
-                        {/* Status */}
                         <div className="flex items-center gap-3">
                             <div className={`h-3 w-3 rounded-full ${cfg.dot} animate-pulse`} />
                             <StatusIcon size={26} className={cfg.textColor} />
@@ -224,9 +215,8 @@ const SharedSubmission = () => {
                             </h1>
                         </div>
 
-                        {/* Meta row */}
                         <div className="flex flex-wrap items-center gap-3 text-sm">
-                            {/* Author */}
+                           
                             <Link
                                 to={`/profile/${submission.username}`}
                                 className="inline-flex items-center gap-1.5 text-gray-600 hover:text-blue-600 transition-colors font-medium"
@@ -237,7 +227,6 @@ const SharedSubmission = () => {
 
                             <span className="text-gray-300">·</span>
 
-                            {/* Language */}
                             <span
                                 className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full border ${langColor}`}
                             >
@@ -247,15 +236,12 @@ const SharedSubmission = () => {
 
                             <span className="text-gray-300">·</span>
 
-                            {/* Date */}
                             <span className="inline-flex items-center gap-1.5 text-gray-500">
                                 <Calendar size={13} />
                                 {formattedDate}
                             </span>
                         </div>
                     </div>
-
-                    {/* CTA */}
                     <Link
                         to={`/problem/${submission.problemId}`}
                         className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-xl border border-gray-200 shadow-sm font-semibold text-gray-700 hover:bg-gray-50 hover:shadow-md transition-all text-sm"
@@ -264,7 +250,6 @@ const SharedSubmission = () => {
                     </Link>
                 </div>
 
-                {/* ── Stat pills ── */}
                 <div className="flex flex-wrap gap-10">
                     <StatPill
                         icon={Zap}
@@ -300,12 +285,9 @@ const SharedSubmission = () => {
                     />
                 </div>
 
-                {/* ── Code editor card ── */}
                 <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-md">
-                    {/* Toolbar */}
                     <div className="flex items-center justify-between px-5 py-3 bg-white border-b border-gray-700">
                         <div className="flex items-center gap-2">
-                            {/* Traffic lights */}
                             <span className="h-3 w-3 rounded-full bg-red-500" />
                             <span className="h-3 w-3 rounded-full bg-yellow-400" />
                             <span className="h-3 w-3 rounded-full bg-green-500" />
@@ -315,7 +297,6 @@ const SharedSubmission = () => {
                         </div>
 
                         <div className="flex items-center gap-2">
-                            {/* Share link */}
                             <button
                                 onClick={handleCopyLink}
                                 className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-black transition-colors cursor-pointer px-3 py-1.5 rounded-lg hover:bg-white/10"
@@ -333,7 +314,6 @@ const SharedSubmission = () => {
                                 )}
                             </button>
 
-                            {/* Copy code */}
                             <button
                                 onClick={handleCopyCode}
                                 className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-black transition-colors cursor-pointer px-3 py-1.5 rounded-lg hover:bg-white/10"
@@ -353,7 +333,6 @@ const SharedSubmission = () => {
                         </div>
                     </div>
 
-                    {/* Monaco editor */}
                     <div className="h-[58vh]">
                         <Editor
                             height="100%"
@@ -374,7 +353,6 @@ const SharedSubmission = () => {
                     </div>
                 </div>
 
-                {/* ── Footer note ── */}
                 <p className="text-center text-xs text-gray-400">
                     Shared via{" "}
                     <span className="font-semibold text-brand-gradient bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">

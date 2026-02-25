@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import axios from "axios";
 
-// ─── Status config 
 const STATUS_CONFIG = {
     ACCEPTED: {
         label: "Accepted",
@@ -60,7 +59,6 @@ const STATUS_CONFIG = {
     },
 };
 
-// ─── Language badge colours 
 const LANG_COLORS = {
     python: "bg-blue-100 text-blue-700 border-blue-200",
     "c++": "bg-purple-100 text-purple-700 border-purple-200",
@@ -77,7 +75,6 @@ const LANG_LABELS = {
 
 
 
-// ─── Single Submission Card 
 const SubmissionCard = ({ submission }) => {
     const [expanded, setExpanded] = useState(false);
     const [copied, setCopied] = useState(false);
@@ -119,7 +116,6 @@ const SubmissionCard = ({ submission }) => {
         <div
             className={`rounded-2xl border ${cfg.border} ${cfg.glow} shadow-md overflow-hidden transition-all duration-300`}
         >
-            {/* ── Header strip ── */}
             <div className={`${cfg.bg} px-5 py-4 flex items-center justify-between`}>
                 {/* Status */}
                 <div className="flex items-center gap-2">
@@ -139,7 +135,6 @@ const SubmissionCard = ({ submission }) => {
                 </button>
             </div>
 
-            {/* ── Meta row ── */}
             <div className="bg-white px-5 py-3 flex flex-wrap gap-x-6 gap-y-2 border-t border-gray-100">
                 {/* Language */}
                 <span
@@ -181,7 +176,6 @@ const SubmissionCard = ({ submission }) => {
                 )}
             </div>
 
-            {/* ── Expandable code block ── */}
             {expanded && (
                 <div className="bg-slate-200 relative rounded-xl">
                     {/* Toolbar */}
@@ -190,7 +184,6 @@ const SubmissionCard = ({ submission }) => {
                             {langLabel}
                         </span>
                         <div className="flex items-center gap-2">
-                            {/* Share / copy link */}
                             <button
                                 onClick={handleShareLink}
                                 className="flex items-center gap-1.5 text-xs text-black hover:text-black transition-colors cursor-pointer px-2 py-1 rounded-md hover:bg-white/10"
@@ -239,12 +232,6 @@ const SubmissionCard = ({ submission }) => {
                         </div>
                     </div>
 
-                    {/* Code */}
-                    {/* <pre className="text-sm font-mono text-gray-100 p-5 overflow-x-auto leading-relaxed whitespace-pre-wrap">
-            {submission.userCode}
-            
-          </pre> */}
-
 
                     <Editor
                         height="50vh"
@@ -272,7 +259,6 @@ const SubmissionCard = ({ submission }) => {
 
 
 
-// ─── Submissions List Page ────────────────────────────────────────────────────
 const Submission = ({ id }) => {
     const [filter, setFilter] = useState("ALL");
 
@@ -318,7 +304,6 @@ const Submission = ({ id }) => {
 
     return (
         <div className="py-6 px-1 flex flex-col gap-5">
-            {/* ── Summary banner ── */}
             <div className="rounded-2xl bg-linear-to-r from-blue-500 via-purple-600 to-pink-500 p-px shadow-lg">
                 <div className="rounded-[calc(1rem-1px)] bg-white px-6 py-4 flex flex-wrap items-center gap-6">
                     <div className="flex flex-col">
@@ -348,7 +333,6 @@ const Submission = ({ id }) => {
                         </span>
                     </div>
 
-                    {/* Mini progress bar */}
                     <div className="ml-auto flex-1 min-w-[120px] max-w-[200px]">
                         <div className="flex justify-between text-xs text-gray-400 mb-1">
                             <span>Accepted / Total</span>
@@ -364,7 +348,6 @@ const Submission = ({ id }) => {
                 </div>
             </div>
 
-            {/* ── Filter chips ── */}
             <div className="flex flex-wrap gap-2">
                 {statusOptions.map((opt) => {
                     const isActive = filter === opt.value;
@@ -386,7 +369,6 @@ const Submission = ({ id }) => {
                 })}
             </div>
 
-            {/* ── Submission cards ── */}
             {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 gap-3 text-gray-400">
                     <Code2 size={40} className="opacity-30" />
