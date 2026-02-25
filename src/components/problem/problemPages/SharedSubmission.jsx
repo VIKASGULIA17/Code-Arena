@@ -136,14 +136,16 @@ const SharedSubmission = () => {
     const [error, setError] = useState(false);
     const [copied, setCopied] = useState(false);
     const [linkCopied, setLinkCopied] = useState(false);
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         const fetchSharedCode = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8080/public/shared/${slug}`
+                    `${BACKEND_URL}/submission/getSharedSubmission/${slug}`
                 );
-                setSubmission(response.data);
+                // console.log(response.data)
+                setSubmission(response.data.data);
             } catch (err) {
                 setError(true);
             } finally {
@@ -153,6 +155,7 @@ const SharedSubmission = () => {
         fetchSharedCode();
     }, [slug]);
 
+    console.log(submission)
     if (loading) return <LoadingSkeleton />;
     if (error || !submission) return <ErrorState />;
 
@@ -173,8 +176,19 @@ const SharedSubmission = () => {
         })
         : "—";
 
-    const monacoLang =
-        submission.language === "c++" ? "cpp" : submission.language;
+    const rawLang = (submission?.language || "javascript").toLowerCase();
+
+    const MONACO_LANG_MAP = {
+        "c++": "cpp",
+        "cpp": "cpp",
+        "javascript": "javascript",
+        "js": "javascript",
+        "python": "python",
+        "py": "python",
+        "java": "java"
+    };
+
+    const monacoLang = MONACO_LANG_MAP[rawLang] || rawLang;
 
     const handleCopyCode = () => {
         navigator.clipboard.writeText(submission.userCode);
@@ -216,7 +230,7 @@ const SharedSubmission = () => {
                         </div>
 
                         <div className="flex flex-wrap items-center gap-3 text-sm">
-                           
+
                             <Link
                                 to={`/profile/${submission.username}`}
                                 className="inline-flex items-center gap-1.5 text-gray-600 hover:text-blue-600 transition-colors font-medium"
