@@ -1,6 +1,6 @@
 export const dsaProblems = [
   {
-    id: 1,
+    id: '6999fc5f2cef23952fd2f00d',
     status: true,
     title: "Two Sum",
     type: "Array",
@@ -707,7 +707,7 @@ export const dsaProblems = [
 ];
 
 export const problemInfo = {
-  1: {
+  '6999fc5f2cef23952fd2f00d': {
     id: 1,
     title: "Two Sum",
     difficulty: "Easy",

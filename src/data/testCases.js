@@ -3,7 +3,7 @@
 
 export const testCases = {
   // Problem 1: Two Sum
-  1: {
+  '6999fc5f2cef23952fd2f00d': {
     visible: [
       {
         input: { nums: [2, 7, 11, 15], target: 9 },

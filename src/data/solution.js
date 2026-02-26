@@ -1,5 +1,5 @@
 export const problemApproaches = {
-  1: {
+  '6999fc5f2cef23952fd2f00d': {
     id: 1,
     title: "Two Sum Solution: Optimal Approach using Hash Map",
     description: "This approach utilizes a Hash Map to store previously visited numbers and their indices, allowing us to find the target pair in a single pass. Instead of checking every combination with nested loops, we calculate the required 'complement' (target - current) for each number. If this complement exists in our map, we have found the solution instantly.",
@@ -1329,7 +1329,7 @@ export const problemApproaches = {
 };
 
 export const problemSolutions = {
-  1: {
+  '6999fc5f2cef23952fd2f00d': {
     javascript: `/**
  * @param {number[]} nums
  * @param {number} target

@@ -19,6 +19,7 @@ import {
     BookOpenCheck,
 } from "lucide-react";
 import axios from "axios";
+import { useAppContext } from "../../../context/AppContext";
 
 const STATUS_CONFIG = {
     ACCEPTED: {
@@ -261,14 +262,17 @@ const SubmissionCard = ({ submission }) => {
 
 const Submission = ({ id }) => {
     const [filter, setFilter] = useState("ALL");
-
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const [submissions, setSubmissions] = useState([]);
-
+    const { jwtToken } = useAppContext();
+    const value="two-sum-101";
     const fetchSubmissions = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/submissions/problem/${id}`, {
+            console.log(id)
+            const response = await axios.get(`${BACKEND_URL}/submission/get/${value}`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                    Authorization: `Bearer ${jwtToken}`,
+                    "Content-Type": "multipart/form-data"
                 }
             })
             setSubmissions(response.data)
@@ -357,10 +361,10 @@ const Submission = ({ id }) => {
                             key={opt.value}
                             onClick={() => setFilter(opt.value)}
                             className={`cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-full border transition-all duration-200 ${isActive
-                                    ? cfg
-                                        ? `${cfg.badge} shadow-sm`
-                                        : "bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 text-white border-transparent shadow-sm"
-                                    : "bg-gray-50 text-gray-500 border-gray-200 hover:border-gray-400"
+                                ? cfg
+                                    ? `${cfg.badge} shadow-sm`
+                                    : "bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 text-white border-transparent shadow-sm"
+                                : "bg-gray-50 text-gray-500 border-gray-200 hover:border-gray-400"
                                 }`}
                         >
                             {opt.label}

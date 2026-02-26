@@ -1,5 +1,5 @@
 export const userCode = {
-    1: {
+    '6999fc5f2cef23952fd2f00d': {
         javascript: {
             boilerplate: `/**
  * @param {number[]} nums
