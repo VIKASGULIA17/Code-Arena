@@ -32,7 +32,7 @@ const App = () => {
         <Route path='contest' element={<Contest />} />
         <Route path='contest/registration' element={<ContestRegistration />} />
         <Route path='contest/:contestName' element={<OngoingContestPage />} />
-        <Route path='profile/:userName' element={<Profile />} />
+        <Route path='profile' element={<Profile />} />
         <Route path="/submission/:slug" element={<SharedSubmission />} />
         <Route path='login' element={<Login />} />
         <Route path='signup' element={<Signup />} />

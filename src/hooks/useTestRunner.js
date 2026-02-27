@@ -72,6 +72,7 @@ export const useTestRunner = (problemId, Language, value, setOutput) => {
     setIsSubmitting(true);
     setSubmissionStatus(null);
     setExecutionStats({ time: "0", memory: "0" }); 
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
     try {
       const driver = driverCodeTemplate[currentProblem.type][Language[0]];
@@ -114,7 +115,7 @@ export const useTestRunner = (problemId, Language, value, setOutput) => {
       // We do this in a separate try/catch so that if the DB goes down, 
       // the user still sees their code execution results.
       try {
-        await axios.post("http://localhost:8080/submissions", {
+        await axios.post(`${BACKEND_URL}/submission/create`, {
           problemId: currentProblem.id,  // The string ID, e.g., '65cb9a1e...'
           language: Language[0] === "cpp" ? "c++" : Language[0], // Ensure it matches your UI config
           userCode: value,
@@ -123,7 +124,7 @@ export const useTestRunner = (problemId, Language, value, setOutput) => {
           memory: data.memory ? parseFloat(data.memory) : null
         }, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
           }
         });
         console.log("Submission successfully saved to database!");

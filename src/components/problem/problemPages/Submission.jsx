@@ -265,20 +265,27 @@ const Submission = ({ id }) => {
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const [submissions, setSubmissions] = useState([]);
     const { jwtToken } = useAppContext();
-    const value="two-sum-101";
+    // const value="two-sum-101";
     const fetchSubmissions = async () => {
         try {
-            console.log(id)
-            const response = await axios.get(`${BACKEND_URL}/submission/get/${value}`, {
+            const response = await axios.get(`${BACKEND_URL}/submission/get/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${jwtToken}`,
-                    "Content-Type": "multipart/form-data"
-                }
-            })
-            setSubmissions(response.data)
-            // console.log(response.data)
+            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+          }
+            });
+            
+            // THE BULLETPROOF FIX: Check if the data is actually an array
+            if (Array.isArray(response.data)) {
+                setSubmissions(response.data);
+            } else {
+                console.warn("Backend did not return an array. Defaulting to empty array.");
+                setSubmissions([]);
+            }
+            
         } catch (error) {
-            console.log(error)
+            console.error("Failed to fetch submissions:", error);
+            // If the network fails or gives a 500 error, don't leave the state broken
+            setSubmissions([]); 
         }
     }
 
