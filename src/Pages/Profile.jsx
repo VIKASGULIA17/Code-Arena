@@ -3,13 +3,19 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { dsaProblems } from '../data/dsaProblem'
 import { Button } from '../components/ui/button'
-import { Trophy, Zap, Bug, Globe, Lock, MapPin, School, BarChart3, User2,Camera } from 'lucide-react'
+import { Trophy, Zap, Bug, Globe, Lock, MapPin, School, BarChart3, User2, Camera } from 'lucide-react'
+import {
+  CheckCircle2,
+  XCircle,
+  Clock,
+  AlertTriangle,
+} from "lucide-react";
 import Navbar from '../components/Navbar'
 import axios from 'axios'
 import { useAppContext } from '../context/AppContext'
-import {Form,Formik,Field,ErrorMessage} from "formik";
+import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
-import {toast,ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from 'react-router-dom'
 
 
@@ -50,14 +56,30 @@ const Profile = () => {
   const solvedEasy = solved.filter(p => p.difficulty === 'Easy').length
   const solvedMed = solved.filter(p => p.difficulty === 'Medium').length
   const solvedHard = solved.filter(p => p.difficulty === 'Hard').length
-  const [avatarMedia,setAvatarMedia] = useState(null);
+  const [avatarMedia, setAvatarMedia] = useState(null);
+  const [submissions, setSubmissions] = useState([]);
 
   const solvedPercent = (solved.length / total) * 100
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const {getUserProfileData,jwtToken,userProfile} = useAppContext();
+  const { getUserProfileData, jwtToken, userProfile } = useAppContext();
+  // console.log(userProfile)
 
-   const AVATAR_OPTIONS = [
+  const LANG_COLORS = {
+    python: "bg-blue-100 text-blue-700 border-blue-200",
+    "c++": "bg-purple-100 text-purple-700 border-purple-200",
+    js: "bg-yellow-100 text-yellow-700 border-yellow-200",
+    java: "bg-orange-100 text-orange-700 border-orange-200",
+  };
+
+  const LANG_LABELS = {
+    python: "Python",
+    "c++": "C++",
+    js: "JavaScript",
+    java: "Java",
+  };
+
+  const AVATAR_OPTIONS = [
     // Toon Heads
     "https://api.dicebear.com/9.x/toon-head/svg?seed=hello",
     "https://api.dicebear.com/9.x/toon-head/svg?seed=ava",
@@ -78,9 +100,47 @@ const Profile = () => {
     "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Bender"
   ];
 
+  const STATUS_CONFIG = {
+    ACCEPTED: {
+      label: "Accepted",
+      icon: CheckCircle2,
+      color: "text-green-600",
+      bg: "bg-green-50",
+      border: "border-green-200",
+      badge: "bg-green-100 text-green-700 border-green-300",
+      glow: "shadow-green-100",
+    },
+    WRONG_ANSWER: {
+      label: "Wrong Answer",
+      icon: XCircle,
+      color: "text-red-500",
+      bg: "bg-red-50",
+      border: "border-red-200",
+      badge: "bg-red-100 text-red-700 border-red-300",
+      glow: "shadow-red-100",
+    },
+    TIME_LIMIT_EXCEEDED: {
+      label: "Time Limit Exceeded",
+      icon: Clock,
+      color: "text-yellow-600",
+      bg: "bg-yellow-50",
+      border: "border-yellow-200",
+      badge: "bg-yellow-100 text-yellow-700 border-yellow-300",
+      glow: "shadow-yellow-100",
+    },
+    COMPILATION_ERROR: {
+      label: "Compilation Error",
+      icon: AlertTriangle,
+      color: "text-orange-600",
+      bg: "bg-orange-50",
+      border: "border-orange-200",
+      badge: "bg-orange-100 text-orange-700 border-orange-300",
+      glow: "shadow-orange-100",
+    },
+  };
   // console.log(userProfile);
 
-  const [isEditOpen,setisEditOpen] = useState(false);
+  const [isEditOpen, setisEditOpen] = useState(false);
 
   const handleEditDialogBox = () => {
     setisEditOpen(true);
@@ -88,52 +148,70 @@ const Profile = () => {
 
   const saveUpdateToSpringMongo = async (values) => {
     const formData = new FormData();
-    formData.append("userProfileJson",JSON.stringify(values));
-    formData.append("avatarMedia",avatarMedia);
-    const res = await axios.post(`${BACKEND_URL}/userProfile/update`,formData,{
-      headers:{
+    formData.append("userProfileJson", JSON.stringify(values));
+    formData.append("avatarMedia", avatarMedia);
+    const res = await axios.post(`${BACKEND_URL}/userProfile/update`, formData, {
+      headers: {
         Authorization: `Bearer ${jwtToken}`,
-        "Content-Type" : "multipart/form-data"
-     }
+        "Content-Type": "multipart/form-data"
+      }
     });
     return res.data;
   }
 
   // console.log(userProfile?.avatarLink);
 
-  const handleSubmit = async (values,helper) => {
+  const handleSubmit = async (values, helper) => {
     // console.log("values is : ");
     // console.log(values);
-    try{
+    try {
       const result = await saveUpdateToSpringMongo(values);
-      if(result.status===1){
+      if (result.status === 1) {
         // toast.success(`User Profile updated..`);
         helper.resetForm();
         setisEditOpen(false);
         // console.log("Function calling...");
         getUserProfileData();   // to reflect the changes in profile page after update
       }
-      else{
+      else {
         throw new Error();
       }
     }
-    catch(err){
+    catch (err) {
       toast.error(`Profile not updated`);
     }
   }
 
+  const fetchSubmissions = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/submission/getAll`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+        }
+      })
+      setSubmissions(response.data)
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchSubmissions();
+  }, [userProfile]);
+
   return (
     <>
-    <ToastContainer/>
-        {isEditOpen && <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setIsEditOpen(false)} />
-          <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 shadow-xl">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold">Edit Profile</h2>
-              <button onClick={() => setisEditOpen(false)} className="text-zinc-500  hover:text-zinc-700">✕</button>
-            </div>
+      <ToastContainer />
+      {isEditOpen && <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/50" onClick={() => setIsEditOpen(false)} />
+        <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 shadow-xl">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold">Edit Profile</h2>
+            <button onClick={() => setisEditOpen(false)} className="text-zinc-500  hover:text-zinc-700">✕</button>
+          </div>
 
-            <Formik
+          <Formik
 
             enableReinitialize
             initialValues={{
@@ -143,288 +221,352 @@ const Profile = () => {
               location: userProfile?.location || "",
               schoolName: userProfile?.schoolName || "",
               gender: userProfile?.gender || "",
-              avatarLink : userProfile?.avatarLink || "",
+              avatarLink: userProfile?.avatarLink || "",
               websiteLink: userProfile?.websiteLink || ""
             }}
 
             onSubmit={handleSubmit}
-              
-            >
-              {({ isSubmitting, values,setFieldValue }) => (
-                <Form className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                    {/* User Name */}
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium" htmlFor="username">Username</label>
-                      <Field id="username" name="username" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.username?userProfile?.username:"JohnDoe_123"} />
-                      <ErrorMessage name="username" component="div" className="text-xs text-rose-600" />
-                    </div>
+          >
+            {({ isSubmitting, values, setFieldValue }) => (
+              <Form className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-                    {/* Full Name */}
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium" htmlFor="fullName">Full Name</label>
-                      <Field id="fullName" name="fullName" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.fullName?userProfile?.fullName:"John Doe"} />
-                      <ErrorMessage name="fullName" component="div" className="text-xs text-rose-600" />
-                    </div>
+                  {/* User Name */}
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium" htmlFor="username">Username</label>
+                    <Field id="username" name="username" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.username ? userProfile?.username : "JohnDoe_123"} />
+                    <ErrorMessage name="username" component="div" className="text-xs text-rose-600" />
+                  </div>
 
-                    {/* Bio */}
-                    <div className="sm:col-span-2 space-y-1">
-                      <label className="text-sm font-medium" htmlFor="bio">Bio</label>
-                      <Field as="textarea" id="bio" name="bio" rows="3" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Tell something about yourself" />
-                      <ErrorMessage name="bio" component="div" className="text-xs text-rose-600" />
-                    </div>
+                  {/* Full Name */}
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium" htmlFor="fullName">Full Name</label>
+                    <Field id="fullName" name="fullName" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.fullName ? userProfile?.fullName : "John Doe"} />
+                    <ErrorMessage name="fullName" component="div" className="text-xs text-rose-600" />
+                  </div>
 
-                    {/* School Name */}
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium" htmlFor="schoolName">School Name</label>
-                      <Field id="schoolName" name="schoolName" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.schoolName?userProfile?.schoolName:"MIT"} />
-                      <ErrorMessage name="schoolName" component="div" className="text-xs text-rose-600" />
-                    </div>
+                  {/* Bio */}
+                  <div className="sm:col-span-2 space-y-1">
+                    <label className="text-sm font-medium" htmlFor="bio">Bio</label>
+                    <Field as="textarea" id="bio" name="bio" rows="3" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Tell something about yourself" />
+                    <ErrorMessage name="bio" component="div" className="text-xs text-rose-600" />
+                  </div>
 
-                    
+                  {/* School Name */}
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium" htmlFor="schoolName">School Name</label>
+                    <Field id="schoolName" name="schoolName" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.schoolName ? userProfile?.schoolName : "MIT"} />
+                    <ErrorMessage name="schoolName" component="div" className="text-xs text-rose-600" />
+                  </div>
 
-                    {/* Country */}
-                    <div className="space-y-1">
-                      <label className="text-sm font-medium" htmlFor="location">Country</label>
-                      <Field id="location" name="location" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.location?userProfile?.location:"United States"} />
-                      <ErrorMessage name="location" component="div" className="text-xs text-rose-600" />
-                    </div>
 
-                    {/* Avatar Selection Grid */}
-                    <div className="sm:col-span-2 space-y-3">
-                      <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                        Pick Your Character
-                      </label>
 
-                      <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                  {/* Country */}
+                  <div className="space-y-1">
+                    <label className="text-sm font-medium" htmlFor="location">Country</label>
+                    <Field id="location" name="location" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.location ? userProfile?.location : "United States"} />
+                    <ErrorMessage name="location" component="div" className="text-xs text-rose-600" />
+                  </div>
+
+                  {/* Avatar Selection Grid */}
+                  <div className="sm:col-span-2 space-y-3">
+                    <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                      Pick Your Character
+                    </label>
+
+                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800">
                       <div className='relative aspect-square rounded-xl border-2 transition-all duration-200' >
-                          <img alt="current avatar profile image"  className='aspect-square rounded-xl object-cover h-full w-full' src={values.avatarLink}/>
-                          <input type="file" id="inputAvatar" accept='image/*' alt="Current avatar profile image" className='hidden' onChange={(e)=>{
-                            const file = e.target.files[0];
-                            setAvatarMedia(file);
-                            setFieldValue('avatarLink',URL.createObjectURL(file));
-                          }}/>
-                          <label htmlFor="inputAvatar" className='ml-3 absolute -bottom-2 -right-2 bg-blue-600 p-1 hover:bg-blue-700 cursor-pointer rounded-full text-white'><Camera size={16}/></label>
+                        <img alt="current avatar profile image" className='aspect-square rounded-xl object-cover h-full w-full' src={values.avatarLink} />
+                        <input type="file" id="inputAvatar" accept='image/*' alt="Current avatar profile image" className='hidden' onChange={(e) => {
+                          const file = e.target.files[0];
+                          setAvatarMedia(file);
+                          setFieldValue('avatarLink', URL.createObjectURL(file));
+                        }} />
+                        <label htmlFor="inputAvatar" className='ml-3 absolute -bottom-2 -right-2 bg-blue-600 p-1 hover:bg-blue-700 cursor-pointer rounded-full text-white'><Camera size={16} /></label>
                       </div>
-                        {AVATAR_OPTIONS.map((url) => (
-                          <button
-                            key={url}
-                            type="button"
-                            onClick={() => {
-                              setFieldValue('avatarLink', url)
-                            }}
-                            className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${values?.avatarLink === url
-                                ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500/20'
-                                : 'border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300'
-                              }`}
-                          >
-                            <img src={url} alt="avatarLink" className="aspect-square rounded-xl w-full h-full object-contain p-1" />
+                      {AVATAR_OPTIONS.map((url) => (
+                        <button
+                          key={url}
+                          type="button"
+                          onClick={() => {
+                            setFieldValue('avatarLink', url)
+                          }}
+                          className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${values?.avatarLink === url
+                            ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500/20'
+                            : 'border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300'
+                            }`}
+                        >
+                          <img src={url} alt="avatarLink" className="aspect-square rounded-xl w-full h-full object-contain p-1" />
 
-                            {values?.avatarLink === url && (
-                              <div className="absolute top-1 right-1 bg-indigo-600 rounded-full p-0.5 shadow-sm">
-                                <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
-                                </svg>
-                              </div>
-                            )}
-                          </button>
-                        ))}
-                      </div>
-                      <ErrorMessage name="avatarLink" component="div" className="text-xs text-rose-600" />
+                          {values?.avatarLink === url && (
+                            <div className="absolute top-1 right-1 bg-indigo-600 rounded-full p-0.5 shadow-sm">
+                              <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                          )}
+                        </button>
+                      ))}
                     </div>
-
-                    {/* Website Link */}
-                    <div className="sm:col-span-2 space-y-1">
-                      <label className="text-sm font-medium" htmlFor="websiteLink">Website Link</label>
-                      <Field id="websiteLink" name="websiteLink" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.websiteLink?userProfile?.websiteLink:"https://your.site"} />
-                      <ErrorMessage name="websiteLink" component="div" className="text-xs text-rose-600" />
-                    </div>
+                    <ErrorMessage name="avatarLink" component="div" className="text-xs text-rose-600" />
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="mt-2 flex items-center justify-end gap-2">
-                    <Button
-                      type="button"
-                      onClick={() => setisEditOpen(false)}
-                      className="bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white"
-                    >
-                      {isSubmitting ? 'Saving...' : 'Save Changes'}
-                    </Button>
+                  {/* Website Link */}
+                  <div className="sm:col-span-2 space-y-1">
+                    <label className="text-sm font-medium" htmlFor="websiteLink">Website Link</label>
+                    <Field id="websiteLink" name="websiteLink" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.websiteLink ? userProfile?.websiteLink : "https://your.site"} />
+                    <ErrorMessage name="websiteLink" component="div" className="text-xs text-rose-600" />
                   </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        </div>}
-    {/* </div> */}
-    <div className="p-6 bg-linear-to-b from-violet-50/60 to-blue-50/60 dark:from-zinc-900 dark:to-zinc-950 min-h-screen">
+                </div>
+
+                {/* Action Buttons */}
+                <div className="mt-2 flex items-center justify-end gap-2">
+                  <Button
+                    type="button"
+                    onClick={() => setisEditOpen(false)}
+                    className="bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                  >
+                    {isSubmitting ? 'Saving...' : 'Save Changes'}
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>}
+      {/* </div> */}
+      <div className="p-6 bg-linear-to-b from-violet-50/60 to-blue-50/60 dark:from-zinc-900 dark:to-zinc-950 min-h-screen">
         <Navbar />
-      <div className="max-w-7xl mt-17 mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Sidebar */}
-        <aside className="lg:col-span-3 space-y-6">
-          <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
-            <div className="flex items-center gap-4">
-              <img src={userProfile?.avatarLink?userProfile?.avatarLink:"https://i.pravatar.cc/100?img=5"} alt="avatar" className="h-16 w-16 rounded-xl object-cover" />
-              <div>
-                <div className="inline-flex items-center gap-2">
-                  <h2 className="text-lg font-bold">{userProfile?.fullName}</h2>
+        <div className="max-w-7xl mt-17 mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Sidebar */}
+          <aside className="lg:col-span-3 space-y-6">
+            <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+              <div className="flex items-center gap-4">
+                <img src={userProfile?.avatarLink ? userProfile?.avatarLink : "https://i.pravatar.cc/100?img=5"} alt="avatar" className="h-16 w-16 rounded-xl object-cover" />
+                <div>
+                  <div className="inline-flex items-center gap-2">
+                    <h2 className="text-lg font-bold">{userProfile?.fullName}</h2>
+                  </div>
+                  <p className="text-xs text-indigo-600">{userProfile?.username}</p>
                 </div>
-                <p className="text-xs text-indigo-600">{userProfile?.username}</p>
+              </div>
+              <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">{userProfile?.bio}</p>
+              <Button onClick={handleEditDialogBox} className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white">Edit Profile</Button>
+              <div className="mt-4 space-y-2 text-sm text-zinc-600">
+                <div className="flex items-center gap-2"><BarChart3 className="h-4 w-4" /> Rank <span className="ml-auto font-semibold">#{userProfile?.overallRank}</span></div>
+                <div className="flex items-center gap-2"><MapPin className="h-4 w-4" /> Country <span className="ml-auto font-semibold">{userProfile?.location}</span></div>
+                <div className="flex items-center gap-2"><School className="h-4 w-4" /> School <span className="ml-auto font-semibold">{userProfile?.schoolName}</span></div>
+                <div className="flex items-center gap-2"><Globe className="h-4 w-4" /> Link <span onClick={() => navigate(userProfile?.websiteLink)} className="ml-auto font-semibold hover:text-blue-600 hover:underline cursor-pointer">{userProfile?.websiteLink}</span></div>
               </div>
             </div>
-            <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">{userProfile?.bio}</p>
-            <Button onClick={handleEditDialogBox} className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white">Edit Profile</Button>
-            <div className="mt-4 space-y-2 text-sm text-zinc-600">
-              <div className="flex items-center gap-2"><BarChart3 className="h-4 w-4"/> Rank <span className="ml-auto font-semibold">#{userProfile?.overallRank}</span></div>
-              <div className="flex items-center gap-2"><MapPin className="h-4 w-4"/> Country <span className="ml-auto font-semibold">{userProfile?.location}</span></div>
-              <div className="flex items-center gap-2"><School className="h-4 w-4"/> School <span className="ml-auto font-semibold">{userProfile?.schoolName}</span></div>
-              <div className="flex items-center gap-2"><Globe className="h-4 w-4"/> Link <span onClick={()=>navigate(userProfile?.websiteLink)} className="ml-auto font-semibold hover:text-blue-600 hover:underline cursor-pointer">{userProfile?.websiteLink}</span></div>
-            </div>
-          </div>
 
-          <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
-            <h3 className="font-semibold mb-4">Languages</h3>
-            <div className="space-y-4">
-              {[
-                {name:'Python', pct:75, color:'bg-emerald-500'},
-                {name:'C++', pct:45, color:'bg-sky-500'},
-                {name:'JavaScript', pct:30, color:'bg-amber-500'},
-              ].map((l)=> (
-                <div key={l.name}>
-                  <div className="flex justify-between text-sm mb-1"><span>{l.name}</span><span>{l.pct}%</span></div>
-                  <div className="h-2 w-full bg-zinc-200 rounded-full overflow-hidden">
-                    <div className={`h-full ${l.color}`} style={{width:`${l.pct}%`}}></div>
+            <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+              <h3 className="font-semibold mb-4">Languages</h3>
+              <div className="space-y-4">
+                {[
+                  { name: 'Python', pct: 75, color: 'bg-emerald-500' },
+                  { name: 'C++', pct: 45, color: 'bg-sky-500' },
+                  { name: 'JavaScript', pct: 30, color: 'bg-amber-500' },
+                ].map((l) => (
+                  <div key={l.name}>
+                    <div className="flex justify-between text-sm mb-1"><span>{l.name}</span><span>{l.pct}%</span></div>
+                    <div className="h-2 w-full bg-zinc-200 rounded-full overflow-hidden">
+                      <div className={`h-full ${l.color}`} style={{ width: `${l.pct}%` }}></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+              <h3 className="font-semibold mb-4">Community</h3>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-2"><User2 className="h-4 w-4 text-emerald-600" /> 15.2k <span className="text-zinc-500">Profile views</span></div>
+                <div className="flex items-center gap-2"><Trophy className="h-4 w-4 text-indigo-600" /> 1,250 <span className="text-zinc-500">Reputation</span></div>
+                <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-amber-500" /> 85 <span className="text-zinc-500">Discussions</span></div>
+              </div>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <main className="lg:col-span-9 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-semibold">Solved Problems</h3>
+                    <p className="text-xs text-zinc-500">Total solved</p>
+                  </div>
+                  <div className="text-3xl font-extrabold">{solved.length}</div>
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-4 items-center">
+                  <Donut percent={solvedPercent} />
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-emerald-500" /> Easy <span className="ml-auto">{solvedEasy} / {easy.length}</span></div>
+                    <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-amber-500" /> Medium <span className="ml-auto">{solvedMed} / {medium.length}</span></div>
+                    <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-rose-500" /> Hard <span className="ml-auto">{solvedHard} / {hard.length}</span></div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
-            <h3 className="font-semibold mb-4">Community</h3>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center gap-2"><User2 className="h-4 w-4 text-emerald-600"/> 15.2k <span className="text-zinc-500">Profile views</span></div>
-              <div className="flex items-center gap-2"><Trophy className="h-4 w-4 text-indigo-600"/> 1,250 <span className="text-zinc-500">Reputation</span></div>
-              <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-amber-500"/> 85 <span className="text-zinc-500">Discussions</span></div>
+              <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold">Contest Rating</h3>
+                    <p className="text-xs text-emerald-600">Top 5%</p>
+                  </div>
+                  <div className="text-3xl font-extrabold">1,850</div>
+                </div>
+                <div className="mt-6 h-28 w-full rounded-lg bg-linear-to-t from-indigo-50 to-white dark:from-zinc-800 dark:to-zinc-900 relative overflow-hidden">
+                  <div className="absolute inset-0 flex items-end gap-2 p-3">
+                    {[...Array(12)].map((_, i) => (
+                      <div key={i} className="flex-1 bg-indigo-500/20 rounded-t" style={{ height: `${30 + (i * 5) % 70}%` }}></div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </aside>
 
-        {/* Main Content */}
-        <main className="lg:col-span-9 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-semibold">Solved Problems</h3>
-                  <p className="text-xs text-zinc-500">Total solved</p>
-                </div>
-                <div className="text-3xl font-extrabold">{solved.length}</div>
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-4 items-center">
-                <Donut percent={solvedPercent} />
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-emerald-500"/> Easy <span className="ml-auto">{solvedEasy} / {easy.length}</span></div>
-                  <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-amber-500"/> Medium <span className="ml-auto">{solvedMed} / {medium.length}</span></div>
-                  <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-rose-500"/> Hard <span className="ml-auto">{solvedHard} / {hard.length}</span></div>
-                </div>
-              </div>
+              <h3 className="font-semibold">Submission Activity</h3>
+              <MonthActivityGrid />
             </div>
 
             <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
               <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold">Contest Rating</h3>
-                  <p className="text-xs text-emerald-600">Top 5%</p>
+                <h3 className="font-semibold">Badges & Achievements</h3>
+                <button className="text-xs text-indigo-600">View All</button>
+              </div>
+              <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-orange-50 text-orange-600">
+                  <Trophy className="h-8 w-8" />
+                  <p className="mt-2 text-sm font-medium">Winner 2023</p>
                 </div>
-                <div className="text-3xl font-extrabold">1,850</div>
-              </div>
-              <div className="mt-6 h-28 w-full rounded-lg bg-linear-to-t from-indigo-50 to-white dark:from-zinc-800 dark:to-zinc-900 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-end gap-2 p-3">
-                  {[...Array(12)].map((_, i) => (
-                    <div key={i} className="flex-1 bg-indigo-500/20 rounded-t" style={{height: `${30 + (i*5)%70}%`}}></div>
-                  ))}
+                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-blue-50 text-blue-600">
+                  <Zap className="h-8 w-8" />
+                  <p className="mt-2 text-sm font-medium">100 Streak</p>
+                </div>
+                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-violet-50 text-violet-600">
+                  <BarChart3 className="h-8 w-8" />
+                  <p className="mt-2 text-sm font-medium">Problem Solver</p>
+                </div>
+                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-emerald-50 text-emerald-600">
+                  <Bug className="h-8 w-8" />
+                  <p className="mt-2 text-sm font-medium">Bug Hunter</p>
+                </div>
+                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-zinc-100 text-zinc-400">
+                  <Lock className="h-8 w-8" />
+                  <p className="mt-2 text-sm font-medium">Locked</p>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
-            <h3 className="font-semibold">Submission Activity</h3>
-            <MonthActivityGrid />
-          </div>
-
-          <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold">Badges & Achievements</h3>
-              <button className="text-xs text-indigo-600">View All</button>
-            </div>
-            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
-              <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-orange-50 text-orange-600">
-                <Trophy className="h-8 w-8"/>
-                <p className="mt-2 text-sm font-medium">Winner 2023</p>
+            <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold">Recent Submissions</h3>
+                <span className="text-xs text-zinc-400">{submissions.length} total</span>
               </div>
-              <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-blue-50 text-blue-600">
-                <Zap className="h-8 w-8"/>
-                <p className="mt-2 text-sm font-medium">100 Streak</p>
-              </div>
-              <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-violet-50 text-violet-600">
-                <BarChart3 className="h-8 w-8"/>
-                <p className="mt-2 text-sm font-medium">Problem Solver</p>
-              </div>
-              <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-emerald-50 text-emerald-600">
-                <Bug className="h-8 w-8"/>
-                <p className="mt-2 text-sm font-medium">Bug Hunter</p>
-              </div>
-              <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-zinc-100 text-zinc-400">
-                <Lock className="h-8 w-8"/>
-                <p className="mt-2 text-sm font-medium">Locked</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
-            <h3 className="font-semibold mb-4">Recent Submissions</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="text-left text-zinc-600">
-                  <tr>
-                    <th className="py-2">Problem</th>
-                    <th className="py-2">Status</th>
-                    <th className="py-2">Language</th>
-                    <th className="py-2">Time</th>
-                    <th className="py-2">Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {solved.slice(0,10).map((p,idx) => (
-                    <tr key={p.id} className="border-t border-zinc-200 dark:border-zinc-800">
-                      <td className="py-3">{p.title}</td>
-                      <td className="py-3"><span className="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-700">Accepted</span></td>
-                      <td className="py-3">Python 3</td>
-                      <td className="py-3">{10+idx*3}ms</td>
-                      <td className="py-3">{idx === 0 ? '2 hours ago' : `${idx} days ago`}</td>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="text-left text-zinc-500 border-b border-zinc-200 dark:border-zinc-700">
+                    <tr>
+                      <th className="pb-2 font-medium">Problem</th>
+                      <th className="pb-2 font-medium">Status</th>
+                      <th className="pb-2 font-medium">Language</th>
+                      <th className="pb-2 font-medium">Time</th>
+                      <th className="pb-2 font-medium">Date</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {submissions.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="py-10 text-center text-zinc-400 text-xs">
+                          No submissions yet
+                        </td>
+                      </tr>
+                    ) : (
+                      submissions.slice(0, 10).map((sub, idx) => {
+                        const cfg = STATUS_CONFIG[sub.status] || STATUS_CONFIG.WRONG_ANSWER;
+                        const langLabel = LANG_LABELS[sub.language] || sub.language;
+                        const hasSlug = sub.slug && sub.slug !== "null";
+
+                        const rawProblemId = typeof sub.problemId === 'object' && sub.problemId !== null
+                          ? (sub.problemId.$oid || sub.problemId.id || sub.problemId._id || JSON.stringify(sub.problemId))
+                          : sub.problemId;
+
+                        const problemInfo = dsaProblems.find(
+                          (p) => String(p.id) === String(rawProblemId)
+                        );
+
+                        // 2. Safely extract the title, with a fallback just in case it's missing
+                        const problemName = problemInfo?.title || `Unknown Problem (${rawProblemId})`;
+
+                        const formattedDate = sub.submittedAt
+                          ? new Date(sub.submittedAt).toLocaleString("en-IN", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                          : "—";
+
+                        const rowContent = (
+                          <>
+                            <td className="py-3 pr-4 font-medium text-zinc-700 dark:text-zinc-200">
+                              {problemName}
+                            </td>
+                            <td className="py-3 pr-4">
+                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full border ${cfg.badge}`}>
+                                {cfg.label}
+                              </span>
+                            </td>
+                            <td className="py-3 pr-4">
+                              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${LANG_COLORS[sub.language] || "bg-gray-100 text-gray-600 border-gray-200"}`}>
+                                {langLabel}
+                              </span>
+                            </td>
+                            <td className="py-3 pr-4 text-zinc-500">
+                              {sub.time != null ? `${sub.time} ms` : "—"}
+                            </td>
+                            <td className="py-3 text-zinc-400 whitespace-nowrap">{formattedDate}</td>
+                          </>
+                        );
+
+                        return hasSlug ? (
+                          <tr
+                            key={sub.slug}
+                            className="border-t border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors"
+                            onClick={() => window.location.href = `/submission/${sub.slug}`}
+                          >
+                            {rowContent}
+                          </tr>
+                        ) : (
+                          <tr key={idx} className="border-t border-zinc-200 dark:border-zinc-800">
+                            {rowContent}
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        </main>
-      </div>
-    </div></>
+          </main>
+        </div>
+      </div></>
   )
 }
 
-const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const daysInMonth = (year, monthIndex) => new Date(year, monthIndex + 1, 0).getDate()
 
 const MonthActivityGrid = () => {
