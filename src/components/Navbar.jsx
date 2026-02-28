@@ -9,7 +9,7 @@ const Navbar = () => {
   const [MenuOpen, setMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [user, setuser] = useState(null);
-  const { isJwtExist, setisJwtExist, setjwtToken, isAdmin, userDetails,setisLoggedIn,getUserData } =
+  const { isJwtExist, setisJwtExist, username, setjwtToken, isAdmin, userDetails,setisLoggedIn,getUserData } =
     useAppContext();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Navbar = () => {
     { label: "Contest", path: "/Contest" },
     { label: "algo visualizer", path: "/algovisualizer" },
     { label: "Interview", path: "/interview" },
-    { label: "Profile", path: "/profile" },
+    { label: "Profile", path: `/profile/${username}` },
     { label: "Admin Panel", path: "/admin" },
   ];
 

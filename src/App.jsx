@@ -20,9 +20,11 @@ import ProblemManagement from './Pages/Admin/ProblemManagement'
 import ContestManagement from './Pages/Admin/ContestManagement'
 import Analysis from './Pages/Admin/Analysis'
 import SharedSubmission from './components/problem/problemPages/SharedSubmission'
+import { useAppContext } from './context/AppContext'
 
 
 const App = () => {
+
   return (
     <>
       <Routes>
@@ -32,7 +34,7 @@ const App = () => {
         <Route path='contest' element={<Contest />} />
         <Route path='contest/registration' element={<ContestRegistration />} />
         <Route path='contest/:contestName' element={<OngoingContestPage />} />
-        <Route path='profile' element={<Profile />} />
+        <Route path='/profile/:username' element={<Profile />} />
         <Route path="/submission/:slug" element={<SharedSubmission />} />
         <Route path='login' element={<Login />} />
         <Route path='signup' element={<Signup />} />

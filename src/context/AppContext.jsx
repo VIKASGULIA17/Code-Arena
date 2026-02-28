@@ -9,6 +9,7 @@ export const AppProvider = (props) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [userDetails,setuserDetails] = useState(null);
   const [userProfile,setuserProfile] = useState(null);
+  const [username,setUsername] = useState(null);
   const [isLoggedIn,setisLoggedIn] = useState(()=>{
     return localStorage.getItem("jwtToken") != null;
   });
@@ -39,6 +40,8 @@ export const AppProvider = (props) => {
     });
 
     if(res.data!=null && res.data!==undefined){
+      // console.log(res.data.username);
+      setUsername(res.data.username);
       setuserDetails(res.data);
     }
     else{
@@ -72,7 +75,7 @@ export const AppProvider = (props) => {
     getUserProfileData();
   },[isLoggedIn]);
 
-  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData};
+  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData,username};
 
   return (
     <AppContext.Provider value={values}>{props.children}</AppContext.Provider>
