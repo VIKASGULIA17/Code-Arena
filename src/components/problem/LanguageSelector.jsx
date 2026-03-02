@@ -16,7 +16,7 @@ const LanguageSelector = ({
   setLanguage,
   LanguageList,
   setCode,
-  problemId,
+  codeTemplates,
   setOutput,
   onReset,
 }) => {
@@ -40,8 +40,9 @@ const LanguageSelector = ({
     // const newBoilerplate =
       // userCode[problemId]?.[lang]?.boilerplate || "";
 
-      const newBoilerplate = problemSolutions[problemId]?.[lang] || "";
-    setCode(newBoilerplate);
+      // const newBoilerplate = problemSolutions[problemId]?.[lang] || "";
+      const newBoilerPlate=codeTemplates?.[lang]|| "NO template"
+    setCode(newBoilerPlate);
   };
 
   return (

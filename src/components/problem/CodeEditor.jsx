@@ -6,11 +6,13 @@ import TestCases from "./TestCases";
 import { userCode } from "../../data/UserCodeTemplate";
 import { problemSolutions } from "../../data/solution";
 
-const CodeEditor = ({ problemId=1,isContest }) => {
+const CodeEditor = ({ codeTemplates,isContest }) => {
 
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);   //all the language and versions
-  // const [Language, setLanguage] = useState(LanguageList[0]);  // current slected language 
   const [Language, setLanguage] = useState(LanguageList[0]); 
+
+
+
   const CodeEditorRef = useRef(); //refrence ot code editor
   const [Output, setOutput] = useState(null); // output (here because if i want to reset the code ,testcases get reset too)
 
@@ -22,26 +24,23 @@ const CodeEditor = ({ problemId=1,isContest }) => {
   };
 
 
+  const template = codeTemplates?.[currentLang] || " no template found";
 
-  // const template = userCode[problemId][currentLang]['boilerplate']||" ";
 
-  const template = problemSolutions[problemId][currentLang] || "";
-
-  // const fetchedTemplate = getProblemTemplate(problemId, Language[0]);  //basic teplate 
   const [Code, setCode] = useState(template); //current code of the user 
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    const newLang=Language[0]
-    const new_template = userCode[problemId][newLang]['boilerplate'];
-    setCode(new_template)
-    setOutput(null)
+  //   const newLang=Language[0]
+  //   // const new_template = userCode[problemId][newLang]['boilerplate'];
+  //   // setCode(new_template)
+  //   setOutput(null)
 
-    if(CodeEditorRef.current){
-      CodeEditorRef.current.setValue(new_template);
-    }
+  //   if(CodeEditorRef.current){
+  //     // CodeEditorRef.current.setValue(new_template);
+  //   }
   
-  }, [problemId,Language])
+  // }, [problemId,Language])
   
 
   useEffect(() => {
@@ -51,8 +50,7 @@ const CodeEditor = ({ problemId=1,isContest }) => {
   }, [Language]); 
 
   const handleReset = () => {
-    const freshTemplate = userCode[problemId]?.[Language[0]]?.boilerplate || "";
-    
+    const freshTemplate = codeTemplates?.[currentLang] || " no template found"
     // 2. Update state
     setCode(freshTemplate);
     setOutput(null);
@@ -66,10 +64,11 @@ const CodeEditor = ({ problemId=1,isContest }) => {
       <LanguageSelector
         LanguageList={LanguageList}
         Language={Language}
+        codeTemplates={codeTemplates}
         setLanguage={setLanguage}
         setCode={setCode}
         onReset={handleReset}
-        problemId={problemId}
+        // problemId={problemId}
         Output={Output}
         setOutput={setOutput}
       />
@@ -98,14 +97,14 @@ const CodeEditor = ({ problemId=1,isContest }) => {
           }}
         />
 
-        <TestCases 
+        {/* <TestCases 
             Language={Language} 
             value={Code} 
             problemId={problemId} 
             Output={Output}
             setOutput={setOutput}
             isContest={isContest}
-        />
+        /> */}
       </div>
     </div>
   );

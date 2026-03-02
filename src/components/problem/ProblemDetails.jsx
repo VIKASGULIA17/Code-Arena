@@ -74,8 +74,9 @@ const ProblemDetails = ({ isContest, problemId }) => {
   const description = problemDetailsInfo?.description;
   const editorial = problemDetailsInfo?.editorial;
   const codeImplementation = problemDetailsInfo?.solutions;
+  const codeTemplates = problemDetailsInfo?.templates;
 
-  console.log(codeImplementation)
+  console.log(codeTemplates)
 
   const TabButton = ({ label, icon: Icon }) => { //its for description ,solution and discussion (gradient underline)
     const isActive = currentTopBar === label;
@@ -142,7 +143,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
 
       <div className="w-full lg:w-1/2 md:border-l border-t md:border-t-0 h-auto md:h-screen md:overflow-y-auto">
         {/* right  */}
-        <CodeEditor problemId={id} isContest={isContest} />
+        <CodeEditor codeTemplates={codeTemplates} isContest={isContest} />
       </div>
     </div>
   );
