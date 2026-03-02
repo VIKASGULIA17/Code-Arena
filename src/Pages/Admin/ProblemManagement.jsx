@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Plus,
   Edit2,
@@ -16,11 +16,36 @@ import { motion, AnimatePresence } from "framer-motion";
 import * as yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import { Form, Field, Formik, FieldArray, ErrorMessage } from "formik";
+import axios from "axios";
+import { useAppContext } from "../../context/AppContext";
 
 const ProblemManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddMode, setIsAddMode] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
+  const [allProblem,setallProblems] = useState(null);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const {jwtToken} = useAppContext();
+
+  async function showAllProblems(){
+    const result = await axios.get(`${BACKEND_URL}/problem/fetch`,{
+      headers : {
+        Authorization : `Bearer ${jwtToken}`
+      }
+    })
+    if(result.data!=null){
+      setallProblems(result.data);
+    }
+    else{
+      setallProblems(null);
+    }
+  }
+
+  useEffect(()=>{
+    showAllProblems();
+  },[]);
+
+  console.log(allProblem);
 
   // Initial values for the form
   const initialValues = {
@@ -168,7 +193,7 @@ const ProblemManagement = () => {
 
                     {/* Tabs */}
                     <div className="flex border-b border-gray-200 bg-white sticky top-0 z-10">
-                      {tabs.map((tab) => (
+                      {allProblem.map((tab) => (
                         <button
                           key={tab.id}
                           type="button"
@@ -178,7 +203,7 @@ const ProblemManagement = () => {
                             : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                             }`}
                         >
-                          {tab.label}
+                          {tab.title}
                           {activeTab === tab.id && (
                             <motion.div
                               layoutId="activeTab"
