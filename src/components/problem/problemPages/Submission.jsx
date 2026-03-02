@@ -270,7 +270,8 @@ const Submission = ({ id }) => {
         try {
             const response = await axios.get(`${BACKEND_URL}/submission/get/${id}`, {
                 headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
+            Authorization: 
+            `Bearer ${localStorage.getItem("jwtToken")}`
           }
             });
             
