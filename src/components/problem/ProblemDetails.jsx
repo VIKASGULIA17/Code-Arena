@@ -121,7 +121,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
         </div>
 
         {currentTopBar === "Description" ? (
-            <Description id={id} />
+            <Description description={description} />
           ) : currentTopBar === "Solution" ? (
             <Solution id={id} />
           ) : currentTopBar === "Discussion" ? (

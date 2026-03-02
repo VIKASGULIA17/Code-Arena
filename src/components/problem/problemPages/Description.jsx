@@ -1,84 +1,22 @@
-import React, { useState } from "react";
-import { problemInfo } from "../../../data/dsaProblem";
-import { Button } from "../../ui/button";
+import React from "react";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw"; 
 
-
-const Description = ({id}) => {
-
-  const problem = problemInfo[id];
-  
-
+const Description = ({ description }) => {
   return (
-    <div>
-      <div className="py-7  flex flex-col gap-5">
-        <h1 className="text-3xl font-semibold">
-          {problem.id}. {problem.title}
-        </h1>
-        <div className="flex items-center">
-          <Button
-            className={`mr-3 border ${problem.difficulty === "Easy" ? "border-green-400 bg-green-200 text-green-600" : problem.difficulty === "Medium" ? "border-yellow-400 bg-yellow-100 text-yellow-600" : "border-red-400 bg-red-200 text-red-600"}`}
-          >
-            {problem.difficulty}
-          </Button>
-          {problem.tags.map((obj, idx) => {
-            return (
-              <Button
-                key={idx}
-                className="flex items-center ml-3 border h-8 border-purple-300 text-sm px-2 bg-purple-100 rounded-full"
-              >
-                {obj}
-              </Button>
-            );
-          })}
-        </div>
-      </div>
-      <p className="text-gray-700 mx-3 text-justify mb-10">
-        {problem.description}
-      </p>
-      {problem.examples.map((obj, idx) => {
-        return (
-          <div key={idx} className="mx-3 py-2">
-            <div className="py-1">
-              <h1 className="text-xl font-semibold text-gray-700">
-                Example {idx + 1}:
-              </h1>
-            </div>
-            <div className="w-full border py-4 px-4 h-auto  bg-gray-100 rounded-2xl">
-              <div className="flex gap-2">
-                <h3 className="capitalize text-gray-600 font-light">Input:</h3>
-                <p className=" font-mono text-black "> {obj.input}</p>
-              </div>
-              <div className="flex gap-2">
-                <h3 className="capitalize text-gray-600 font-light">Output:</h3>
-                <p className="font-mono"> {obj.output}</p>
-              </div>
-              {obj.explanation && (
-                <div className="flex gap-2">
-                  <h3 className="capitalize text-gray-600 font-light">
-                    Explanation:
-                  </h3>
-                  <p className="font-medium"> {obj.explanation}</p>
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      })}
-
-      <div className="py-5 mx-4">
-        <h3 className="font-semibold text-lg text-zinc-700 pb-3">
-          Constraints
-        </h3>
-        <div className="mx-4 flex flex-col gap-2">
-          {problem.constraints.map((obj, idx) => {
-            return (
-              <li key={idx} className="marker:text-purple-500 text-gray-500 ">
-                {obj}
-              </li>
-            );
-          })}
-        </div>
-      </div>
+    <div className="mt-10 text-gray-700 mx-3 text-justify mb-10 font-sans 
+        [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-gray-800 [&>h3]:mt-8 [&>h3]:mb-4
+        [&>p]:mb-4 [&>p]:leading-relaxed
+        [&>ul]:list-disc [&>ul]:ml-6 [&>ul]:mb-6
+        [&>li]:mb-2 [&>li]:marker:text-gray-400
+        [&>pre]:bg-gray-100 [&>pre]:p-4 [&>pre]:rounded-xl [&>pre]:overflow-x-auto [&>pre]:mb-6 [&>pre]:border [&>pre]:border-gray-200
+        [&_code]:bg-gray-100 [&_code]:text-gray-800 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-md [&_code]:font-mono [&_code]:text-sm
+        [&>strong]:font-semibold [&>strong]:text-gray-900
+      ">
+        {/* 2. Tell ReactMarkdown to allow HTML */}
+        <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+            {description}
+        </ReactMarkdown>
     </div>
   );
 };
