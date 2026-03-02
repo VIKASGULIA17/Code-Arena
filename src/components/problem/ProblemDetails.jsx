@@ -60,7 +60,11 @@ const ProblemDetails = ({ isContest, problemId }) => {
     }, [id]);
 
     const description=problemDetailsInfo?.description;
-    console.log(description)
+    const editorial=problemDetailsInfo?.editorial;
+    const codeImplementation=problemDetailsInfo?.solutions;
+
+    console.log(codeImplementation)
+
   const TabButton = ({ label, icon: Icon }) => { //its for description ,solution and discussion (gradient underline)
     const isActive = currentTopBar === label;
     return (
@@ -123,7 +127,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
         {currentTopBar === "Description" ? (
             <Description description={description} />
           ) : currentTopBar === "Solution" ? (
-            <Solution id={id} />
+            <Solution editorial={editorial} implementation={codeImplementation} />
           ) : currentTopBar === "Discussion" ? (
             <Discussion id={id} />
           ) : (
