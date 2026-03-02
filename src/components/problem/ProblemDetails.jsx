@@ -39,20 +39,18 @@ const ProblemDetails = ({ isContest, problemId }) => {
   }
   
 
-  const [problemDetailsInfo, setProblemDetailsInfo] = useState([])
+  const [problemDetailsInfo, setProblemDetailsInfo] = useState({})
 
 
   const fetchProblemDetail = async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/public/fetchProblemDetail/${id}`);
             
-            // THE BULLETPROOF FIX: Check if the data is actually an array
            console.log(response.data.data)
            setProblemDetailsInfo(response.data.data)
             
         } catch (error) {
             console.error("Failed to fetch submissions:", error);
-            // If the network fails or gives a 500 error, don't leave the state broken
             setProblemDetailsInfo([]); 
         }
     }
@@ -61,6 +59,8 @@ const ProblemDetails = ({ isContest, problemId }) => {
         fetchProblemDetail();
     }, [id]);
 
+    const description=problemDetailsInfo?.description;
+    console.log(description)
   const TabButton = ({ label, icon: Icon }) => { //its for description ,solution and discussion (gradient underline)
     const isActive = currentTopBar === label;
     return (
