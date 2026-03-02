@@ -13,7 +13,6 @@ const Description = ({ description }) => {
         [&_code]:bg-gray-100 [&_code]:text-gray-800 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded-md [&_code]:font-mono [&_code]:text-sm
         [&>strong]:font-semibold [&>strong]:text-gray-900
       ">
-        {/* 2. Tell ReactMarkdown to allow HTML */}
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>
             {description}
         </ReactMarkdown>
