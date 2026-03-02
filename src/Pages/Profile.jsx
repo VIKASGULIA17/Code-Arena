@@ -149,7 +149,10 @@ const Profile = () => {
   const saveUpdateToSpringMongo = async (values) => {
     const formData = new FormData();
     formData.append("userProfileJson", JSON.stringify(values));
-    formData.append("avatarMedia", avatarMedia);
+
+    if(avatarMedia!=null) formData.append("avatarMedia", avatarMedia);
+    else if(values.avatarLink!=null && values.avatarLink.length>0 && values.avatarLink) formData.append("cloudinaryLink",values.avatarLink);
+    
     const res = await axios.post(`${BACKEND_URL}/userProfile/update`, formData, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -170,6 +173,7 @@ const Profile = () => {
         // toast.success(`User Profile updated..`);
         helper.resetForm();
         setisEditOpen(false);
+        setAvatarMedia(null);
         // console.log("Function calling...");
         getUserProfileData();   // to reflect the changes in profile page after update
       }
