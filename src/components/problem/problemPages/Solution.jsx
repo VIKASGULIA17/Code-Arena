@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { Editor } from "@monaco-editor/react";
 import { ToastContainer, toast } from "react-toastify";
+import { FileQuestion, Code2, ArrowLeft } from "lucide-react";
 
 // const formatText = (text) => {
 //   // Splits by backticks, single quotes, or double quotes
@@ -32,11 +33,43 @@ import { ToastContainer, toast } from "react-toastify";
 //   });
 // };
 
-const Solution = ({ implementation, editorial }) => {
+const Solution = ({ implementation, editorial,setcurrentTopBar }) => {
 
 
-  if (!implementation || !editorial) { //returning early if solutoin is not there
-    return <div className="p-10 text-center">Problem Solution not found!</div>;
+  if (!implementation || !editorial) { 
+    return <div className="flex flex-col items-center justify-center min-h-[50vh] bg-gray-50/50 rounded-2xl border-2 border-dashed border-gray-200 p-8 m-4 transition-all">
+      
+      <div className="w-16 h-16 bg-white shadow-sm rounded-full flex items-center justify-center mb-5 text-gray-400 border border-gray-100 relative">
+        <FileQuestion size={32} />
+        <div className="absolute top-0 right-0 w-3 h-3 bg-red-400 rounded-full border-2 border-white"></div>
+      </div>
+
+      <h2 className="text-xl font-bold text-gray-800 mb-2">
+        Solution Not Yet Available
+      </h2>
+      <p className="text-gray-500 max-w-sm text-center mb-6 text-sm leading-relaxed">
+        We haven't published the official editorial and implementation for this problem yet. Check back later or try cracking it yourself!
+      </p>
+
+      <div className="flex items-center gap-3 mt-2">
+        <button 
+          onClick={() => window.history.back()} 
+          className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors shadow-sm cursor-pointer"
+        >
+          <ArrowLeft size={16} />
+          Go Back
+        </button>
+        
+        <button 
+            onClick={() => setcurrentTopBar("Description")}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors shadow-sm cursor-pointer"
+          >
+            <Code2 size={16} />
+            Write Code
+          </button>
+      </div>
+      
+    </div>
   }
   const [active, setactive] = useState("javascript"); // this is to select language of the code solution 
   const [currentCode, setcurrentCode] = useState(implementation[active]); // this is the code which will be displayed on the code editor 
