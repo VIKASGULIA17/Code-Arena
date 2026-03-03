@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Search, MoreVertical, Shield, Ban, Eye, Mail, Calendar } from 'lucide-react';
+import { Search, MoreVertical, Shield,User2, Ban, Eye, Mail, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { useAppContext } from '../../context/AppContext';
@@ -166,6 +166,7 @@ const UserManagement = () => {
                                         ${user.admin == true ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}
                                     `}>
                                         {user.admin == true && <Shield size={12} />}
+                                        {user.admin == false && <User2 size={12} />}
                                         {user.admin == true?"Admin":"User"}
                                     </span>
                                 </td>
@@ -187,12 +188,7 @@ const UserManagement = () => {
                                         >
                                             <Eye size={18} />
                                         </button>
-                                        <button
-                                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                            title="Ban User"
-                                        >
-                                            <Ban size={18} />
-                                        </button>
+                                        
                                     </div>
                                 </td>
                             </tr>

@@ -11,6 +11,7 @@ import {
   Save,
   ChevronRight,
   ChevronDown,
+  AlertTriangle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import * as yup from "yup";
@@ -26,9 +27,17 @@ const ProblemManagement = () => {
   const [editingProblem, setEditingProblem] = useState(null);
   const [activeTab, setActiveTab] = useState("basic");
   const [editActiveTab, setEditActiveTab] = useState("basic");
+  const [IsDeleteOpen,setIsDeleteOpen] = useState(false);
+  const [deleteTarget,setdeleteTarget] = useState(null);
+  const [deleteConfirmText,setdeleteConfirmText] = useState("");
 
-  console.log("problemManagement.jsx");
-  console.log(allProblem ? allProblem[0].topicTags : "");
+  // console.log("problemManagement.jsx");
+  console.log(deleteTarget);
+
+  function handleDeleteOpen(problem){
+    setIsDeleteOpen(true);
+    setdeleteTarget(problem);
+  }
 
   const handleEditProblem = async (values, { resetForm }) => {
     try {
@@ -183,6 +192,111 @@ const ProblemManagement = () => {
 
   return (
     <div className="space-y-6 min-h-screen relative">
+      <AnimatePresence>
+        {IsDeleteOpen && (
+          <motion.div
+            key="delete-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            // onClick={(e) => e.target === e.currentTarget && cancelDelete()}
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.92, opacity: 0, y: 20 }}
+              transition={{ type: "spring", stiffness: 320, damping: 25 }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+            >
+              {/* Header */}
+              <div className="bg-red-50 border-b border-red-100 px-6 py-5 flex items-start gap-4">
+                <div className="p-2.5 bg-red-100 rounded-xl shrink-0">
+                  <AlertTriangle size={22} className="text-red-600" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-lg font-bold text-gray-900">Delete Problem</h2>
+                  <p className="text-sm text-gray-500 mt-0.5">This action is permanent and cannot be undone.</p>
+                </div>
+                <button
+                  onClick={()=>setIsDeleteOpen(false)}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="px-6 py-6 space-y-5">
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  You are about to permanently delete{" "}
+                  <span className="font-semibold text-gray-900">"{deleteTarget.title}"</span>.
+                  All test cases, solutions, and submissions will be lost forever.
+                </p>
+
+                {/* Problem preview card */}
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-1.5">
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Problem</p>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${deleteTarget.difficulty === "Easy" ? "bg-green-100 text-green-700" :
+                      deleteTarget.difficulty === "Medium" ? "bg-yellow-100 text-yellow-700" :
+                        "bg-red-100 text-red-700"
+                      }`}>{deleteTarget.difficulty}</span>
+                    <span className="text-sm font-semibold text-gray-800 truncate">{deleteTarget.title}</span>
+                  </div>
+                  <p className="text-xs text-gray-400">{deleteTarget.topicTags} · Acceptance: {deleteTarget.acceptanceRate}</p>
+                </div>
+
+                {/* Name confirmation input */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Type the problem name to confirm:
+                  </label>
+                  <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all">
+                    {deleteTarget.title}
+                  </div>
+                  <input
+                    type="text"
+                    value={deleteConfirmText}
+                    onChange={(e) => setDeleteConfirmText(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && confirmDelete()}
+                    placeholder="Type the problem name exactly..."
+                    autoFocus
+                    className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${deleteConfirmText.length > 0
+                      ? deleteConfirmText === deleteTarget.title
+                        ? "border-green-400 ring-2 ring-green-100 bg-green-50"
+                        : "border-red-300 ring-2 ring-red-100"
+                      : "border-gray-300 focus:ring-2 focus:ring-red-300 focus:border-red-400"
+                      }`}
+                  />
+                  {deleteConfirmText.length > 0 && deleteConfirmText !== deleteTarget.title && (
+                    <p className="text-xs text-red-500">Name doesn't match. Please type it exactly.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="px-6 pb-6 flex gap-3 justify-end">
+                <button
+                  onClick={()=>setdeleteTarget(false)}
+                  className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  // onClick={confirmDelete}
+                  // disabled={deleteConfirmText !== deleteTarget.title}
+                  className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all bg-red-200 text-red-400 cursor-not-allowed
+                    `}
+                >
+                  <Trash2 size={14} />
+                  Delete Problem
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
@@ -333,41 +447,6 @@ const ProblemManagement = () => {
                               component="div"
                               className="text-red-500 text-sm"
                             />
-                          </div>
-
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">
-                              Algorithm Steps
-                            </label>
-                            <FieldArray name="algorithmSteps">
-                              {({ push, remove }) => (
-                                <div className="space-y-3">
-                                  {values.algorithmSteps.map((step, index) => (
-                                    <div key={index} className="flex gap-2">
-                                      <Field
-                                        name={`algorithmSteps.${index}`}
-                                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                        placeholder={`Step ${index + 1}`}
-                                      />
-                                      <button
-                                        type="button"
-                                        onClick={() => remove(index)}
-                                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                      >
-                                        <Trash2 size={18} />
-                                      </button>
-                                    </div>
-                                  ))}
-                                  <button
-                                    type="button"
-                                    onClick={() => push("")}
-                                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
-                                  >
-                                    <Plus size={16} /> Add Step
-                                  </button>
-                                </div>
-                              )}
-                            </FieldArray>
                           </div>
 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -960,7 +1039,7 @@ const ProblemManagement = () => {
                   <Edit2 size={18} />
                 </button>
                 <button
-                  onClick={() => handleDelete(problem.id)}
+                  onClick={() => handleDeleteOpen(problem)}
                   className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                 >
                   <Trash2 size={18} />
