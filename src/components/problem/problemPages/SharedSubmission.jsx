@@ -274,7 +274,7 @@ const SharedSubmission = () => {
                     <StatPill
                         icon={MemoryStick}
                         label="Memory"
-                        value={submission.memory != null ? `${submission.memory} MB` : null}
+                        value={submission.memory != null ? `${parseFloat(submission.memory/1024).toFixed(2)} MB` : null}
                         iconClass="text-purple-400"
                     />
                     <StatPill

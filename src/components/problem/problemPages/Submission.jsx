@@ -172,7 +172,7 @@ const SubmissionCard = ({ submission }) => {
                 {submission.memory != null && submission.memory > 0 && (
                     <span className="inline-flex items-center gap-1.5 text-xs text-gray-500">
                         <MemoryStick size={12} className="text-purple-400" />
-                        {submission.memory} MB
+                        {parseFloat(submission.memory/1024).toFixed(2)} MB
                     </span>
                 )}
             </div>
@@ -264,6 +264,9 @@ const Submission = ({ id }) => {
     const [filter, setFilter] = useState("ALL");
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const [submissions, setSubmissions] = useState([]);
+    const handleReverse=()=>{
+        setSubmissions(prevSubmissions=>[...prevSubmissions].reverse());
+    }
     const { jwtToken } = useAppContext();
     // const value="two-sum-101";
     const fetchSubmissions = async () => {
@@ -278,6 +281,7 @@ const Submission = ({ id }) => {
             // THE BULLETPROOF FIX: Check if the data is actually an array
             if (Array.isArray(response.data)) {
                 setSubmissions(response.data);
+                handleReverse()
             } else {
                 console.warn("Backend did not return an array. Defaulting to empty array.");
                 setSubmissions([]);
@@ -293,6 +297,7 @@ const Submission = ({ id }) => {
     useEffect(() => {
         fetchSubmissions();
     }, [id]);
+    
 
     const statusOptions = [
         { value: "ALL", label: "All" },

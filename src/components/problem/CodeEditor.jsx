@@ -6,7 +6,7 @@ import TestCases from "./TestCases";
 import { userCode } from "../../data/UserCodeTemplate";
 import { problemSolutions } from "../../data/solution";
 
-const CodeEditor = ({ codeTemplates,isContest }) => {
+const CodeEditor = ({ problemId,codeTemplates,isContest }) => {
 
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);   //all the language and versions
   const [Language, setLanguage] = useState(LanguageList[0]); 
@@ -97,14 +97,14 @@ const CodeEditor = ({ codeTemplates,isContest }) => {
           }}
         />
 
-        {/* <TestCases 
+        <TestCases 
             Language={Language} 
             value={Code} 
             problemId={problemId} 
             Output={Output}
             setOutput={setOutput}
             isContest={isContest}
-        /> */}
+        />
       </div>
     </div>
   );
