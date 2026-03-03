@@ -1018,16 +1018,7 @@ const ProblemManagement = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              <div
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${problem.status === "Published" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}
-              >
-                {problem.status === "Published" ? (
-                  <CheckCircle size={14} />
-                ) : (
-                  <XCircle size={14} />
-                )}
-                {problem.status}
-              </div>
+             
               <div className="flex gap-2 border-l pl-4 border-gray-200">
                 <button
                   className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
