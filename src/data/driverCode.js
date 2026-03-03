@@ -66,7 +66,7 @@ print(json.dumps(results))
 import java.util.*;
 import java.util.stream.*;
 
-public class Solution {
+public class Main {
     public static void main(String[] args) {
         List<String> results = new ArrayList<>();
         UserLogic solution = new UserLogic();
@@ -74,40 +74,47 @@ public class Solution {
         ${cases.map((t, i) => {
             // --- JS HELPER FUNCTIONS ---
 
-            // 1. Detect if we need char[][] (specifically for Sudoku)
             const isCharBoard = (val) => {
                 return Array.isArray(val) && val.length > 0 &&
-                    Array.isArray(val[0]) &&
+                    Array.isArray(val[0]) && val[0].length > 0 &&
                     typeof val[0][0] === "string" && val[0][0].length === 1;
             };
 
-            // 2. Generate Java Type String based on value content
+            // Enhanced type deduction for nested arrays and empty arrays
             const getJavaType = (val) => {
                 if (val === null) return "Object";
                 if (Array.isArray(val)) {
-                    // Check for 2D Arrays
-                    if (val.length > 0 && Array.isArray(val[0])) {
+                    if (val.length === 0) return "int[]"; // Default fallback
+                    
+                    if (Array.isArray(val[0])) {
                         if (isCharBoard(val)) return "char[][]";
-                        // If it contains numbers, assume int[][] unless decimals found
-                        if (typeof val[0][0] === "number") return "int[][]";
-                        return "Object[][]"; // Fallback
+                        if (val[0].length === 0) return "int[][]"; // Empty inner fallback
+                        
+                        // Check if any element in the 2D array is a float/double
+                        const isDouble = val.some(row => row.some(n => typeof n === 'number' && !Number.isInteger(n)));
+                        if (isDouble) return "double[][]";
+                        if (typeof val[0][0] === "string") return "String[][]";
+                        
+                        return "int[][]"; 
                     }
-                    // 1D Arrays
-                    if (val.length > 0 && typeof val[0] === "string") return "String[]";
-                    return "int[]"; // Default 1D number array
+                    
+                    const isDouble = val.some(n => typeof n === 'number' && !Number.isInteger(n));
+                    if (isDouble) return "double[]";
+                    if (typeof val[0] === "string") return "String[]";
+                    if (typeof val[0] === "boolean") return "boolean[]";
+                    
+                    return "int[]"; 
                 }
                 if (typeof val === "string") return "String";
                 if (typeof val === "boolean") return "boolean";
-                if (Number.isInteger(val)) return "int";
-                if (typeof val === "number") return "double";
+                if (typeof val === "number") return Number.isInteger(val) ? "int" : "double";
                 return "Object";
             };
 
-            // 3. Format Value to valid Java Literal with explicit type
+            // Fixed recursive inner type formatting
             const formatJavaVal = (val, type) => {
                 if (val === null) return "null";
 
-                // Handle Sudoku Board (char[][])
                 if (type === "char[][]") {
                     const rows = val.map(row =>
                         "{" + row.map(c => "'" + c + "'").join(',') + "}"
@@ -115,14 +122,14 @@ public class Solution {
                     return "new char[][]{" + rows + "}";
                 }
 
-                // Handle Arrays (Always use new Type[]{...} syntax for safety with Object)
                 if (Array.isArray(val)) {
                     if (val.length === 0) return "new " + type + "{}";
 
                     let inner = "";
                     if (Array.isArray(val[0])) {
-                        // 2D generic - Recursive to handle nested new int[] correctly
-                        inner = val.map(v => formatJavaVal(v, getJavaType(v))).join(',');
+                        // Extract inner type (e.g., int[][] -> int[]) for recursive calls
+                        const innerType = type.substring(0, type.length - 2); 
+                        inner = val.map(v => formatJavaVal(v, innerType)).join(',');
                     } else if (typeof val[0] === "string") {
                         inner = val.map(s => '"' + s + '"').join(',');
                     } else {
@@ -132,24 +139,21 @@ public class Solution {
                     return "new " + type + "{" + inner + "}";
                 }
 
-                // Primitives
                 if (typeof val === "string") return '"' + val + '"';
                 if (typeof val === "boolean") return val.toString();
 
-                return val; // numbers
+                return val; // Numbers
             };
             // --- END JS HELPERS ---
 
             const isVoid = problemInfo?.returnType === "void";
 
-            // Generate Input Definitions
             const inputDefs = Object.entries(t.input).map(([key, val]) => {
                 const type = getJavaType(val);
                 const value = formatJavaVal(val, type);
                 return `${type} ${key} = ${value};`;
             }).join('\n            ');
 
-            // Generate Expected Value
             const expectedValRaw = t.expected;
             const expectedTypeRaw = getJavaType(expectedValRaw);
             const expectedValueStr = formatJavaVal(expectedValRaw, expectedTypeRaw);
@@ -161,7 +165,6 @@ public class Solution {
         try {
             // 1. Setup Inputs
             ${inputDefs}
-            // Use Object for expected to avoid type mismatch if user returns List but we expect Array
             Object expected = ${expectedValueStr};
 
             // 2. Execute User Function
@@ -171,7 +174,7 @@ public class Solution {
                     : `result = solution.${fnName}(${callArgs});`
                 }
 
-            // 3. Compare Results using Robust Helper
+            // 3. Compare Results
             boolean passed = TestHelper.isEqual(result, expected);
             String status = passed ? "Passed" : "Failed";
             
@@ -179,16 +182,15 @@ public class Solution {
             String actualStr = TestHelper.serialize(result);
             String expectedStr = TestHelper.serialize(expected);
             
-            // Escape JSON quotes (Fixed escaping: \\" becomes \" in Java source)
-            actualStr = actualStr.replace("\\"", "\\\\\\\"");
-            expectedStr = expectedStr.replace("\\"", "\\\\\\\"");
-            
-            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": \\"%s\\", \\"expected\\": \\"%s\\"}", 
+            // FIX: Removed the quotes around %s for actual/expected so JSON arrays remain arrays!
+            String json = String.format("{\\"id\\": %d, \\"status\\": \\"%s\\", \\"actual\\": %s, \\"expected\\": %s}", 
                 ${i + 1}, status, actualStr, expectedStr);
             results.add(json);
 
         } catch (Exception e) {
-            results.add("{\\"id\\": ${i + 1}, \\"status\\": \\"Error\\", \\"error\\": \\"" + e.toString().replace("\\"", "\\\\\\\"") + "\\"}");
+            // Safely escape the error string for JSON
+            String errorMsg = e.toString().replace("\\"", "\\\\\\\"").replace("\\n", " ");
+            results.add(String.format("{\\"id\\": %d, \\"status\\": \\"Error\\", \\"error\\": \\"%s\\"}", ${i + 1}, errorMsg));
         }`;
         }).join('\n')}
 
@@ -196,14 +198,12 @@ public class Solution {
     }
 }
 
-// --- Helper Class to handle Type Comparison (List vs Array, Integer vs Double) ---
+// --- Helper Class ---
 class TestHelper {
-    // Robust comparison of two objects (Array, List, Primitive)
     public static boolean isEqual(Object a, Object b) {
         if (a == null && b == null) return true;
         if (a == null || b == null) return false;
 
-        // Convert Lists to Arrays for unified comparison
         if (a instanceof List) a = listToArray((List) a);
         if (b instanceof List) b = listToArray((List) b);
 
@@ -218,7 +218,6 @@ class TestHelper {
             return true;
         }
         
-        // Handle Number comparisons (Double vs Integer)
         if (a instanceof Number && b instanceof Number) {
             return Math.abs(((Number) a).doubleValue() - ((Number) b).doubleValue()) < 1e-9;
         }
@@ -226,7 +225,6 @@ class TestHelper {
         return a.equals(b);
     }
 
-    // Convert List/Nested Lists to Object[]
     private static Object listToArray(List list) {
         Object[] arr = new Object[list.size()];
         for (int i = 0; i < list.size(); i++) {
@@ -237,7 +235,6 @@ class TestHelper {
         return arr;
     }
 
-    // Serialize object to String for JSON output
     public static String serialize(Object o) {
         if (o == null) return "null";
         if (o instanceof List) return serialize(listToArray((List) o));
@@ -252,7 +249,10 @@ class TestHelper {
             sb.append("]");
             return sb.toString();
         }
+        
         if (o instanceof String) return "\\"" + o + "\\"";
+        if (o instanceof Character) return "\\"" + o + "\\""; // FIX: Added char support for valid JSON
+        
         return o.toString();
     }
 }
@@ -278,38 +278,49 @@ using namespace std;
 template<typename T> string valToStr(T val);
 string valToStr(bool val);
 string valToStr(const string& val);
+string valToStr(const char* val);
 string valToStr(double val);
-
+template<typename T> string valToStr(const vector<T>& v);
 template<typename T> string vecToStr(const vector<T>& v);
 
 // --- Implementations ---
 template<typename T> 
 string valToStr(T val) { return to_string(val); }
+
 string valToStr(bool val) { return val ? "true" : "false"; }
+
 string valToStr(const string& val) { return "\\"" + val + "\\""; }
+
+string valToStr(const char* val) { return "\\"" + string(val) + "\\""; }
+
 string valToStr(double val) { 
     stringstream ss; 
     ss << fixed << setprecision(6) << val; 
     string s = ss.str();
-    s.erase(s.find_last_not_of('0') + 1, string::npos);
-    if(s.back() == '.') s.pop_back();
+    if (s.find('.') != string::npos) {
+        s.erase(s.find_last_not_of('0') + 1, string::npos);
+        if(s.back() == '.') s.pop_back();
+    }
     return s;
 }
 
+// By overloading valToStr for vectors, it naturally handles recursion!
 template<typename T>
-string vecToStr(const vector<T>& v) {
-    stringstream ss; ss << "[";
+string valToStr(const vector<T>& v) {
+    stringstream ss; 
+    ss << "[";
     for(size_t i=0; i<v.size(); ++i) {
-        if constexpr (is_same_v<T, int> || is_same_v<T, long long> || is_same_v<T, double> || is_same_v<T, bool>) {
-            ss << valToStr(v[i]);
-        } else if constexpr (is_same_v<T, string>) {
-            ss << "\\"" << v[i] << "\\"";
-        } else {
-            ss << vecToStr(v[i]);
-        }
+        ss << valToStr(v[i]); // C++ automatically picks the right overload
         if(i < v.size()-1) ss << ",";
     }
-    ss << "]"; return ss.str();
+    ss << "]"; 
+    return ss.str();
+}
+
+// Wrapper to keep your JS logic intact
+template<typename T>
+string vecToStr(const vector<T>& v) {
+    return valToStr(v);
 }
 
 // --- Robust Comparison ---

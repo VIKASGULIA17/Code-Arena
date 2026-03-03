@@ -17,6 +17,7 @@ import Discussion from "./problemPages/Discussion";
 import NotFound from "../../Pages/NotFound";
 import Submission from "./problemPages/Submission";
 import axios from "axios";
+import Loading from "../../components/others/Loading"
 
 
 const ProblemDetails = ({ isContest, problemId }) => {
@@ -25,11 +26,11 @@ const ProblemDetails = ({ isContest, problemId }) => {
 
   const id = isContest ? problemId : paramId;
 
-  
+
   const problem = problemInfo[id]; //to get problem info(desciption on the left)
   const [currentTopBar, setcurrentTopBar] = useState("Description"); //to manage between description ,solution and discussion 
-  
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     setcurrentTopBar("Description");
   }, [id]);
@@ -37,29 +38,45 @@ const ProblemDetails = ({ isContest, problemId }) => {
   if (!problem) {
     return <NotFound />
   }
-  
 
-  const [problemDetailsInfo, setProblemDetailsInfo] = useState([])
 
+  const [problemDetailsInfo, setProblemDetailsInfo] = useState({})
+  const [loading, setloading] = useState(true)
 
   const fetchProblemDetail = async () => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/public/fetchProblemDetail/${id}`);
-            
-            // THE BULLETPROOF FIX: Check if the data is actually an array
-           console.log(response.data.data)
-           setProblemDetailsInfo(response.data.data)
-            
-        } catch (error) {
-            console.error("Failed to fetch submissions:", error);
-            // If the network fails or gives a 500 error, don't leave the state broken
-            setProblemDetailsInfo([]); 
-        }
-    }
+    try {
+      const response = await axios.get(`${BACKEND_URL}/public/fetchProblemDetail/${id}`);
+      setloading(false);
+      //  console.log(response.data.data)
+      setProblemDetailsInfo(response.data.data)
 
-    useEffect(() => {
-        fetchProblemDetail();
-    }, [id]);
+    } catch (error) {
+      setloading(false)
+      console.error("Failed to fetch submissions:", error);
+      setProblemDetailsInfo([]);
+    }
+  }
+
+  useEffect(() => {
+    fetchProblemDetail();
+  }, [id]);
+
+  
+
+  if(loading){
+    return <Loading />
+  }
+
+  if(!problemDetailsInfo){
+    return <NotFound />
+  }
+
+  const description = problemDetailsInfo?.description;
+  const editorial = problemDetailsInfo?.editorial;
+  const codeImplementation = problemDetailsInfo?.solutions;
+  const codeTemplates = problemDetailsInfo?.templates;
+
+  console.log(codeTemplates)
 
   const TabButton = ({ label, icon: Icon }) => { //its for description ,solution and discussion (gradient underline)
     const isActive = currentTopBar === label;
@@ -110,30 +127,23 @@ const ProblemDetails = ({ isContest, problemId }) => {
               <TabButton label="Submissions" icon={History} />
             </div>
           }
-          <div className="flex gap-2 items-center">
-            <Link to={`/problem/${Number(id) - 1}`}>
-              <ArrowLeft className="cursor-pointer hover:text-blue-500 transition-colors" />
-            </Link >
-            <Link to={`/problem/${Number(id) + 1}`}>
-              <ArrowRight className="cursor-pointer hover:text-blue-500 transition-colors" />
-            </Link>
-          </div>
         </div>
 
         {currentTopBar === "Description" ? (
-            <Description id={id} />
-          ) : currentTopBar === "Solution" ? (
-            <Solution id={id} />
-          ) : currentTopBar === "Discussion" ? (
-            <Discussion id={id} />
-          ) : (
-            <Submission id={id} />
-          )}
+          <Description description={description} />
+        ) : currentTopBar === "Solution" ? (
+          <Solution editorial={editorial} implementation={codeImplementation} />
+          // <Solution editorial={""} implementation={""} setcurrentTopBar={setcurrentTopBar} />
+        ) : currentTopBar === "Discussion" ? (
+          <Discussion id={id} />
+        ) : (
+          <Submission id={id} />
+        )}
       </div>
 
       <div className="w-full lg:w-1/2 md:border-l border-t md:border-t-0 h-auto md:h-screen md:overflow-y-auto">
         {/* right  */}
-        <CodeEditor problemId={id} isContest={isContest} />
+        <CodeEditor codeTemplates={codeTemplates} problemId={id} isContest={isContest} />
       </div>
     </div>
   );
