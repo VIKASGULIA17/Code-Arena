@@ -314,7 +314,7 @@ const ProblemManagement = () => {
           <span>Add Problem</span>
         </button>
       </div>
-      <p>{allProblem ? allProblem[1].title : "dummy"}</p>
+      {/* <p>{allProblem ? allProblem[1].title : "dummy"}</p> */}
 
       <AnimatePresence>
         {editingProblem && (
