@@ -11,7 +11,7 @@ import {
   Save,
   ChevronRight,
   ChevronDown,
-  AlertTriangle
+  AlertTriangle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import * as yup from "yup";
@@ -27,14 +27,14 @@ const ProblemManagement = () => {
   const [editingProblem, setEditingProblem] = useState(null);
   const [activeTab, setActiveTab] = useState("basic");
   const [editActiveTab, setEditActiveTab] = useState("basic");
-  const [IsDeleteOpen,setIsDeleteOpen] = useState(false);
-  const [deleteTarget,setdeleteTarget] = useState(null);
-  const [deleteConfirmText,setdeleteConfirmText] = useState("");
+  const [IsDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deleteTarget, setdeleteTarget] = useState(null);
+  const [deleteConfirmText, setdeleteConfirmText] = useState("");
 
   // console.log("problemManagement.jsx");
   console.log(deleteTarget);
 
-  function handleDeleteOpen(problem){
+  function handleDeleteOpen(problem) {
     setIsDeleteOpen(true);
     setdeleteTarget(problem);
   }
@@ -215,11 +215,15 @@ const ProblemManagement = () => {
                   <AlertTriangle size={22} className="text-red-600" />
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-lg font-bold text-gray-900">Delete Problem</h2>
-                  <p className="text-sm text-gray-500 mt-0.5">This action is permanent and cannot be undone.</p>
+                  <h2 className="text-lg font-bold text-gray-900">
+                    Delete Problem
+                  </h2>
+                  <p className="text-sm text-gray-500 mt-0.5">
+                    This action is permanent and cannot be undone.
+                  </p>
                 </div>
                 <button
-                  onClick={()=>setIsDeleteOpen(false)}
+                  onClick={() => setIsDeleteOpen(false)}
                   className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
                 >
                   <X size={18} />
@@ -230,21 +234,46 @@ const ProblemManagement = () => {
               <div className="px-6 py-6 space-y-5">
                 <p className="text-sm text-gray-600 leading-relaxed">
                   You are about to permanently delete{" "}
-                  <span className="font-semibold text-gray-900">"{deleteTarget.title}"</span>.
-                  All test cases, solutions, and submissions will be lost forever.
+                  <span className="font-semibold text-gray-900">
+                    "{deleteTarget.title}"
+                  </span>
+                  . All test cases, solutions, and submissions will be lost
+                  forever.
                 </p>
 
                 {/* Problem preview card */}
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-1.5">
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Problem</p>
+                 <div className="flex gap-2"> <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                    Problem
+                  </p>
+                  <span
+                      className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
+                        deleteTarget.difficulty.toLowerCase() === "easy"
+                          ? "bg-green-100 text-green-700"
+                          : deleteTarget.difficulty === "medium"
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {deleteTarget.difficulty}
+                    </span>
+                    </div>
                   <div className="flex items-center gap-2">
-                    <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${deleteTarget.difficulty === "Easy" ? "bg-green-100 text-green-700" :
-                      deleteTarget.difficulty === "Medium" ? "bg-yellow-100 text-yellow-700" :
-                        "bg-red-100 text-red-700"
-                      }`}>{deleteTarget.difficulty}</span>
-                    <span className="text-sm font-semibold text-gray-800 truncate">{deleteTarget.title}</span>
+                    
+                    <span className="text-sm font-semibold text-gray-800 truncate">
+                      {deleteTarget.title}
+                    </span>
                   </div>
-                  <p className="text-xs text-gray-400">{deleteTarget.topicTags} · Acceptance: {deleteTarget.acceptanceRate}</p>
+                  <div className="flex gap-3 bg-transparent">
+                    {(deleteTarget.topicTags)?.map((tag,index)=>{
+                      return <p key={index} className="px-1 py-0.5 rounded text-[10px] font-light bg-blue-100 text-blue-500">
+                      {tag}
+                    </p>
+                    })}
+                  </div>
+                    <p className="text-xs text-gray-400">
+                      · Acceptance: {deleteTarget.acceptanceRate}%
+                    </p>
                 </div>
 
                 {/* Name confirmation input */}
@@ -258,27 +287,31 @@ const ProblemManagement = () => {
                   <input
                     type="text"
                     value={deleteConfirmText}
-                    onChange={(e) => setDeleteConfirmText(e.target.value)}
+                    onChange={(e) => setdeleteConfirmText(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && confirmDelete()}
                     placeholder="Type the problem name exactly..."
                     autoFocus
-                    className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${deleteConfirmText.length > 0
-                      ? deleteConfirmText === deleteTarget.title
-                        ? "border-green-400 ring-2 ring-green-100 bg-green-50"
-                        : "border-red-300 ring-2 ring-red-100"
-                      : "border-gray-300 focus:ring-2 focus:ring-red-300 focus:border-red-400"
-                      }`}
+                    className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${
+                      deleteConfirmText.length > 0
+                        ? deleteConfirmText === deleteTarget.title
+                          ? "border-green-400 ring-2 ring-green-100 bg-green-50"
+                          : "border-red-300 ring-2 ring-red-100"
+                        : "border-gray-300 focus:ring-2 focus:ring-red-300 focus:border-red-400"
+                    }`}
                   />
-                  {deleteConfirmText.length > 0 && deleteConfirmText !== deleteTarget.title && (
-                    <p className="text-xs text-red-500">Name doesn't match. Please type it exactly.</p>
-                  )}
+                  {deleteConfirmText.length > 0 &&
+                    deleteConfirmText !== deleteTarget.title && (
+                      <p className="text-xs text-red-500">
+                        Name doesn't match. Please type it exactly.
+                      </p>
+                    )}
                 </div>
               </div>
 
               {/* Footer */}
               <div className="px-6 pb-6 flex gap-3 justify-end">
                 <button
-                  onClick={()=>setdeleteTarget(false)}
+                  onClick={() => setdeleteTarget(false)}
                   className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
                 >
                   Cancel
@@ -1018,7 +1051,6 @@ const ProblemManagement = () => {
             </div>
 
             <div className="flex items-center gap-4">
-             
               <div className="flex gap-2 border-l pl-4 border-gray-200">
                 <button
                   className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
