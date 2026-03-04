@@ -3,8 +3,8 @@ import { Button } from "../../ui/button";
 import { Clock, Copy, Cpu, TrendingUp } from "lucide-react";
 import { Kbd } from "@/components/ui/kbd";
 
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
+// import ReactMarkdown from "react-markdown";
+// import rehypeRaw from "rehype-raw";
 import { Editor } from "@monaco-editor/react";
 import { ToastContainer, toast } from "react-toastify";
 import { FileQuestion, Code2, ArrowLeft } from "lucide-react";
