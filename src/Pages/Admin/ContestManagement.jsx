@@ -9,10 +9,13 @@ import {
   X,
   Edit2,
   Trash2,
+  AlertTriangle,
 } from "lucide-react";
 import axios from "axios";
+import * as yup from "yup";
 import { useAppContext } from "../../context/AppContext";
 import { toast, ToastContainer } from "react-toastify";
+import { AnimatePresence, motion } from "framer-motion";
 
 const ContestManagement = () => {
   const [contests, setContests] = useState([
@@ -23,28 +26,15 @@ const ContestManagement = () => {
       duration: "2h",
       participants: 120,
       status: "Upcoming",
-    },
-    {
-      contestName: "Bi-Weekly Contest 12",
-      contestDescription: "Bi-weekly coding challenge",
-      startTime: "2023-11-18T10:00",
-      duration: "1h 30m",
-      participants: 85,
-      status: "Completed",
-    },
-    {
-      contestName: "CodeArena Cup 2023",
-      contestDescription: "Annual coding cup",
-      startTime: "2023-12-01T09:00",
-      duration: "3h",
-      participants: 450,
-      status: "Registration Open",
-    },
+    }
   ]);
+  const [deleteTarget, setdeleteTarget] = useState("contest")
+  const [deleteConfirmText, setDeleteConfirmText] = useState("")
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("create");
   const [editingContestName, setEditingContestName] = useState(null);
+
   const [currentContest, setCurrentContest] = useState({
     contestName: "",
     contestDescription: "",
@@ -52,10 +42,27 @@ const ContestManagement = () => {
     duration: "",
   });
 
+  const initialValues = {
+    contestName: "",
+    contestDescription: "",
+    startTime: "",
+    duration: "",
+  };
+  
+
+  const validationSchema = yup.object({
+    contestName: yup.string().required("Contest Name is required"),
+    contestDescription: yup.string().required("Contest Description is required"),
+    startTime: yup.string().required("Start time for contest is required"),
+    duration: yup.string().required("Duration is required")
+  });
+
+  // console.log(isAdmin)
   const [activeMenuContestName, setActiveMenuContestName] = useState(null);
   const menuRef = useRef(null);
   const { jwtToken } = useAppContext();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -85,14 +92,22 @@ const ContestManagement = () => {
     setEditingContestName(null);
     setIsModalOpen(true);
   };
+  const confirmDelete = () => {
+    setModalMode("create");
+    setEditingContestName(null);
+    setIsModalOpen(true);
+  };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+
     try {
-      // console.log("Submitting contest:", currentContest);
-      // console.log("Using JWT token:", jwtToken);
-      // console.log("Backend URL:", BACKEND_URL);
+      await validationSchema.validate(currentContest, { abortEarly: false });
+      console.log("Submitting contest:", currentContest);
+      setErrors({});
+
       const res = await axios.post(
-        `${BACKEND_URL}/contest/createContest`,
+        `${BACKEND_URL}/admin/createContest`,
         currentContest,
         {
           headers: {
@@ -100,50 +115,82 @@ const ContestManagement = () => {
           },
         },
       );
+      
       const result = res.data;
-      // console.log(result);
       if (result.status == 1) {
         toast.success(`Contest saved...`);
         setIsModalOpen(false);
+        setCurrentContest(initialValues);
       } else {
         throw new Error();
       }
     } catch (e) {
-      toast.error("Contest not added");
+      if (e.name === "ValidationError") {
+        const validationErrors = {}; 
+        e.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        setErrors(validationErrors);
+      } else {
+        console.log(e);
+        toast.error("Contest not added");
+        setCurrentContest(initialValues);
+      }
     }
-    setCurrentContest({
-      contestName: "",
-      contestDescription: "",
-      startTime: "",
-      duration: "",
-    });
   };
 
+
+  const handleDelete = async (name) => {
+    e.preventDefault(); 
+    
+
+    try {
+      await validationSchema.validate(currentContest, { abortEarly: false });
+      console.log("Submitting contest:", currentContest);
+      setErrors({});
+
+      const res = await axios.post(
+        `${BACKEND_URL}/admin/createContest`,
+        currentContest,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        },
+      );
+      
+      const result = res.data;
+      if (result.status == 1) {
+        toast.success(`Contest saved...`);
+        setIsModalOpen(false);
+        setCurrentContest(initialValues);
+      } else {
+        throw new Error();
+      }
+    } catch (e) {
+      if (e.name === "ValidationError") {
+        const validationErrors = {}; 
+        e.inner.forEach((error) => {
+          validationErrors[error.path] = error.message;
+        });
+        setErrors(validationErrors);
+      } else {
+        console.log(e);
+        toast.error("Contest not added");
+        setCurrentContest(initialValues);
+      }
+    }
+  };
+
+
   const handleDeleteClick = (name) => {
-    setContests(contests.filter((c) => c.contestName !== name));
+    // setContests(contests.filter((c) => c.contestName !== name));
+    setdeleteTarget(true)
+
     setActiveMenuContestName(null);
   };
 
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (modalMode === "create") {
-      const newContest = {
-        ...currentContest,
-        participants: 0,
-        status: "Upcoming",
-      };
-      setContests([...contests, newContest]);
-    } else {
-      setContests(
-        contests.map((c) =>
-          c.contestName === editingContestName
-            ? { ...c, ...currentContest }
-            : c,
-        ),
-      );
-    }
-    setIsModalOpen(false);
-  };
+
 
   const toggleMenu = (name, e) => {
     e.stopPropagation();
@@ -184,13 +231,12 @@ const ContestManagement = () => {
                     <Trophy className="w-6 h-6 text-purple-600" />
                   </div>
                   <span
-                    className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                      contest.status === "Upcoming"
-                        ? "bg-blue-100 text-blue-700"
-                        : contest.status === "Completed"
-                          ? "bg-gray-100 text-gray-600"
-                          : "bg-green-100 text-green-700"
-                    }`}
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium ${contest.status === "Upcoming"
+                      ? "bg-blue-100 text-blue-700"
+                      : contest.status === "Completed"
+                        ? "bg-gray-100 text-gray-600"
+                        : "bg-green-100 text-green-700"
+                      }`}
                   >
                     {contest.status}
                   </span>
@@ -252,6 +298,7 @@ const ContestManagement = () => {
                       </button>
                     </div>
                   )}
+                  
                 </div>
               </div>
             </div>
@@ -275,14 +322,14 @@ const ContestManagement = () => {
                 </button>
               </div>
 
-              <form onSubmit={handleSave} className="p-6 space-y-4">
+              <form className="p-6 space-y-4">
+                {/* CONTEST NAME */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Contest Name
                   </label>
                   <input
                     type="text"
-                    required
                     value={currentContest.contestName}
                     onChange={(e) =>
                       setCurrentContest({
@@ -290,11 +337,15 @@ const ContestManagement = () => {
                         contestName: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${
+                      errors.contestName ? "border-red-500" : "border-gray-300"
+                    }`}
                     placeholder="Enter contest name"
                   />
+                  {errors.contestName && <p className="text-red-500 text-xs mt-1">{errors.contestName}</p>}
                 </div>
 
+                {/* DESCRIPTION */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Description
@@ -308,11 +359,15 @@ const ContestManagement = () => {
                         contestDescription: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all resize-none"
+                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all resize-none ${
+                      errors.contestDescription ? "border-red-500" : "border-gray-300"
+                    }`}
                     placeholder="Enter contest description"
                   />
+                  {errors.contestDescription && <p className="text-red-500 text-xs mt-1">{errors.contestDescription}</p>}
                 </div>
 
+                {/* START TIME & DURATION */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -320,7 +375,6 @@ const ContestManagement = () => {
                     </label>
                     <input
                       type="datetime-local"
-                      required
                       value={currentContest.startTime}
                       onChange={(e) =>
                         setCurrentContest({
@@ -328,16 +382,18 @@ const ContestManagement = () => {
                           startTime: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${
+                        errors.startTime ? "border-red-500" : "border-gray-300"
+                      }`}
                     />
+                    {errors.startTime && <p className="text-red-500 text-xs mt-1">{errors.startTime}</p>}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Duration
+                      Duration (in minutes)
                     </label>
                     <input
-                      type="text"
-                      required
+                      type="number"
                       value={currentContest.duration}
                       onChange={(e) =>
                         setCurrentContest({
@@ -345,16 +401,23 @@ const ContestManagement = () => {
                           duration: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
-                      placeholder="e.g. 2h 30m"
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${
+                        errors.duration ? "border-red-500" : "border-gray-300"
+                      }`}
+                      placeholder="e.g. 90"
                     />
+                    {errors.duration && <p className="text-red-500 text-xs mt-1">{errors.duration}</p>}
                   </div>
                 </div>
 
+                {/* BUTTONS */}
                 <div className="pt-4 flex justify-end gap-3">
                   <button
                     type="button"
-                    onClick={() => setIsModalOpen(false)}
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setErrors({}); // Clear errors on cancel
+                    }}
                     className="px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
                   >
                     Cancel
@@ -371,6 +434,112 @@ const ContestManagement = () => {
             </div>
           </div>
         )}
+        <AnimatePresence>
+        {deleteTarget && (
+          <motion.div
+            key="delete-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={(e) => e.target === e.currentTarget
+              //  && cancelDelete()
+              }
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.92, opacity: 0, y: 20 }}
+              transition={{ type: "spring", stiffness: 320, damping: 25 }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+            >
+              {/* Header */}
+              <div className="bg-red-50 border-b border-red-100 px-6 py-5 flex items-start gap-4">
+                <div className="p-2.5 bg-red-100 rounded-xl shrink-0">
+                  <AlertTriangle size={22} className="text-red-600" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-lg font-bold text-gray-900">Delete Contest</h2>
+                  <p className="text-sm text-gray-500 mt-0.5">This action is permanent and cannot be undone.</p>
+                </div>
+                <button
+                  // onClick={cancelDelete}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="px-6 py-6 space-y-5">
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  You are about to permanently delete {" "}
+                  <span className="font-semibold text-gray-900">"{deleteTarget.title}"</span>.
+                  All ranking, solutions, and submissions will be lost forever.
+                </p>
+
+                {/* Problem preview card */}
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-1.5">
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Contest</p>
+                  <div className="flex items-center gap-2">
+                    
+                    <span className="text-sm font-semibold text-gray-800 truncate">{deleteTarget.contestName}</span>
+                  </div>
+                  <p className="text-xs text-gray-400">{deleteTarget.registeredUsers} · Registered Users: {deleteTarget.contestDescription}</p>
+                </div>
+
+                {/* Name confirmation input */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">
+                    Type the contest name to confirm:
+                  </label>
+                  <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all">
+                    {deleteTarget.title}
+                  </div>
+                  <input
+                    type="text"
+                    value={deleteConfirmText}
+                    onChange={(e) => setDeleteConfirmText(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && confirmDelete()}
+                    placeholder="Type the Contest name exactly..."
+                    autoFocus
+                    className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${deleteConfirmText.length > 0
+                      ? deleteConfirmText === deleteTarget.title
+                        ? "border-green-400 ring-2 ring-green-100 bg-green-50"
+                        : "border-red-300 ring-2 ring-red-100"
+                      : "border-gray-300 focus:ring-2 focus:ring-red-300 focus:border-red-400"
+                      }`}
+                  />
+                  {deleteConfirmText.length > 0 && deleteConfirmText !== deleteTarget.title && (
+                    <p className="text-xs text-red-500">Name doesn't match. Please type it exactly.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="px-6 pb-6 flex gap-3 justify-end">
+                <button
+                  // onClick={cancelDelete}
+                  className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  disabled={deleteConfirmText !== deleteTarget.title}
+                  className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all ${deleteConfirmText === deleteTarget.title
+                    ? "bg-red-600 hover:bg-red-700 text-white shadow-sm"
+                    : "bg-red-200 text-red-400 cursor-not-allowed"
+                    }`}
+                >
+                  <Trash2 size={14} />
+                  Delete Contest
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       </div>
     </>
   );
