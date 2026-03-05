@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Navbar from '../Navbar'
+import {EnhancedNavbar} from '../Navbar'
 import ProblemDetails from '../problem/ProblemDetails'
 import { dsaProblems } from '../../data/dsaProblem'
 import { Button } from '../ui/button'

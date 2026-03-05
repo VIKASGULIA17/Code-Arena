@@ -143,7 +143,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
 
       <div className="w-full lg:w-1/2 md:border-l border-t md:border-t-0 h-auto md:h-screen md:overflow-y-auto">
         {/* right  */}
-        <CodeEditor codeTemplates={codeTemplates} problemId={id} isContest={isContest} />
+        <CodeEditor codeTemplates={codeTemplates} problemId={id} setcurrentTopBar={setcurrentTopBar} isContest={isContest} />
       </div>
     </div>
   );

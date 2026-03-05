@@ -4,7 +4,7 @@ import { CloudUpload, Play, CheckCircle, XCircle } from "lucide-react";
 import { useTestRunner } from '../../hooks/useTestRunner';
 
 
-const TestCases = ({ Language, value, problemId, Output, setOutput, isContest }) => {
+const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,setcurrentTopBar }) => {
 
   const [isActive, setIsActive] = useState(0);
   const {
@@ -19,7 +19,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest })
     executionStats,
     visibleTestCases,
     hiddenTestCases
-  } = useTestRunner(problemId, Language, value, setOutput);
+  } = useTestRunner(problemId, Language, value, setOutput,setcurrentTopBar);
 
   // data variables
 

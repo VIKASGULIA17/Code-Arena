@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import Countdown from "../components/others/CountDown";
 import { Button } from "../components/ui/button";
-import Navbar from "../components/Navbar";
+import {EnhancedNavbar} from "../components/Navbar";
 import { BsTriangleFill } from "react-icons/bs";
 import { topSolvers } from "../data/ContestData";
 
@@ -45,7 +45,7 @@ const Contest = () => {
 
   return (
     <div className="w-full  bg-gray-100 overflow-x-hidden">
-      <Navbar />
+      <EnhancedNavbar />
       <div className="w-full h-full window:flex mt-26 px-4 window:mx-10 lg:px-10">
         <div className="w-full window:w-[70%]  ">
           {/* left div -  */}

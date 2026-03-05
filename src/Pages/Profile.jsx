@@ -10,7 +10,7 @@ import {
   Clock,
   AlertTriangle,
 } from "lucide-react";
-import Navbar from '../components/Navbar'
+import {EnhancedNavbar} from '../components/Navbar'
 import axios from 'axios'
 import { useAppContext } from '../context/AppContext'
 import { Form, Formik, Field, ErrorMessage } from "formik";
@@ -348,7 +348,7 @@ const Profile = () => {
       </div>}
       {/* </div> */}
       <div className="p-6 bg-linear-to-b from-violet-50/60 to-blue-50/60 dark:from-zinc-900 dark:to-zinc-950 min-h-screen">
-        <Navbar />
+        <EnhancedNavbar />
         <div className="max-w-7xl mt-17 mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Sidebar */}
           <aside className="lg:col-span-3 space-y-6">

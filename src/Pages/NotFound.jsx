@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
+import {EnhancedNavbar} from '../components/Navbar';
 import NotFoundRobot from '../assets/NotFoundRobot.png';
 import { Button } from '../components/ui/button';
 import { useNavigate } from 'react-router-dom'; 
@@ -10,7 +10,7 @@ const NotFound = () => {
 
     return (
         <div>
-            <Navbar />
+            <EnhancedNavbar />
             <div className='my-40'>
                 <h1 className='text-9xl mt-18 font-medium text-center text-blue-200 '>404</h1>
                 <div className='flex justify-center'>

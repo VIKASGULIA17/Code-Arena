@@ -1,213 +1,268 @@
-import React, { useEffect, useState } from "react";
-import { Code2, Menu, X } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Button } from "./ui/button";
-import { useAppContext } from "../context/AppContext";
+import React, { useState, useEffect, useRef } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import {
+  Code2,
+  BookOpen,
+  User,
+  Home,
+  Moon,
+  Sun,
+  PlayCircle,
+  Trophy,
+  Code,
+  Play,
+  ChevronDown,
+  LogOut,
+  Settings,
+  BarChart3,
+  Menu,
+  X
+} from 'lucide-react'
+import { useAppContext } from '../context/AppContext'
 
-const Navbar = () => {
-  const [MenuOpen, setMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [user, setuser] = useState(null);
-  const { isJwtExist, setisJwtExist, username, setjwtToken, isAdmin, userDetails,setisLoggedIn,getUserData } =
-    useAppContext();
+export function EnhancedNavbar() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { isLoggedIn, user, logout } = useAppContext()
+  const userMenuRef = useRef(null)
 
+  const isAdmin = user?.authorities?.some(item => item.authority === 'ROLE_ADMIN')
+  const username = user?.username || ''
+
+  const navItems = [
+    { name: 'Home', link: '/', icon: Home },
+    { name: 'Problems', link: '/problem', icon: Code },
+    { name: 'Contest', link: '/Contest', icon: Trophy },
+    { name: 'Algo Visualizer', link: '/algovisualizer', icon: PlayCircle },
+    { name: 'Revision', link: '/revision', icon: BookOpen },
+  ]
+
+  if (isLoggedIn) {
+    navItems.push({ name: 'Profile', link: `/profile/${username}`, icon: User })
+  }
+  if (isAdmin) {
+    navItems.push({ name: 'Admin Panel', link: '/admin', icon: Settings })
+  }
+
+  // Close user menu when clicking outside
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-  
-  const navBarContent = [
-    { label: "Home", path: "/" },
-    { label: "Problem Arena", path: "/problem" },
-    { label: "Contest", path: "/Contest" },
-    { label: "algo visualizer", path: "/algovisualizer" },
-    { label: "Interview", path: "/interview" },
-    { label: "Profile", path: `/profile/${username}` },
-    { label: "Admin Panel", path: "/admin" },
-  ];
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setIsUserMenuOpen(false)
+      }
+    }
+    if (isUserMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isUserMenuOpen])
 
-  const location = useLocation();
-
-  function isActive(path) {
-    if (path === "/") return location.pathname === "/";
-    return location.pathname.startsWith(path);
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/'
+    return location.pathname.startsWith(path)
   }
 
-  function clearJwtToken() {
-    localStorage.removeItem("jwtToken");
-    setisJwtExist(false);
-    setisLoggedIn(false);
-    setjwtToken(null);
+  const handleLogout = () => {
+    logout()
+    setIsUserMenuOpen(false)
+    setIsMobileMenuOpen(false)
+    navigate('/')
   }
-
-  const NAVBAR_HEIGHT = "64px";
 
   return (
-    <>
-      {/* 1. Main Navbar Header */}
-      <motion.div
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        style={{ height: NAVBAR_HEIGHT }}
-        className="w-full fixed top-0 z-50 text-sm bg-white/80 flex justify-around border-b border-border/50 border-grey-100 backdrop-blur-xl duration-200"
-      >
-        <div className="flex gap-10 py-4 items-center">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="bg-linear-to-br from-blue-600 via-purple-600 to-pink-600 rounded-lg">
-              <Code2 className="w-10 h-10 px-2 py-2 text-white" />
-            </div>
-            <h1 className="font-bold text-center text-xl bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Code Arena
-            </h1>
-          </div>
-          {/* Desktop Links */}
-          <div className="hidden lg:flex gap-4">
-            {navBarContent.map((obj, idx) => (
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                key={idx}
-                className={`flex cursor-pointer ${obj.label!="Admin Panel" || (obj.label == "Admin Panel" && (userDetails?.roles || []).includes("ADMIN")) ? "" : "hidden"} capitalize rounded-sm text-white`}
-              >
-                <Link to={obj.path}>
-                  <p
-                    className={`rounded-sm px-3 py-2 ${
-                      isActive(obj.path)
-                        ? "bg-blue-400 text-white"
-                        : "text-black hover:bg-blue-400 duration-200 hover:text-white"
-                    }`}
-                  >
-                    {obj.label}
-                  </p>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
-        {/*  Mobile Icons */}
-        <div className="hidden lg:flex py-4">
-          {user ? (
-            <div className="">
-              <img
-                src="https://i.pravatar.cc"
-                alt=""
-                className="w-8 h-8 rounded-full"
-              />
+        {/* Logo */}
+        <Link to="/" className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+            <Code2 size={18} className="text-white" />
+          </div>
+          <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Code Arena
+          </span>
+        </Link>
+
+        {/* Desktop Nav Links */}
+        <nav className="hidden lg:flex items-center space-x-1">
+          {navItems.map((item, idx) => {
+            const Icon = item.icon
+            const active = isActive(item.link)
+            return (
+              <Link
+                key={`nav-link-${idx}`}
+                to={item.link}
+                className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${active
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                  }`}
+              >
+                <Icon size={15} />
+                <span>{item.name}</span>
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* Desktop Right Side */}
+        <div className="hidden lg:flex items-center gap-3">
+          {isLoggedIn ? (
+            /* User Menu */
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+              >
+                <img
+                  src={user?.avatar || 'https://i.pravatar.cc/150'}
+                  alt="Avatar"
+                  className="w-7 h-7 rounded-full border border-gray-200 object-cover"
+                />
+                <span className="font-medium text-sm">{user?.fullName || username}</span>
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {/* Dropdown */}
+              {isUserMenuOpen && (
+                <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-xl shadow-xl z-50 py-1 overflow-hidden">
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <p className="text-xs text-gray-400">Signed in as</p>
+                    <p className="text-sm font-semibold text-gray-900 truncate">{username}</p>
+                  </div>
+                  <Link
+                    to={`/profile/${username}`}
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                  >
+                    <User size={15} />
+                    <span>Profile</span>
+                  </Link>
+                  <Link
+                    to="/statistics"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                  >
+                    <BarChart3 size={15} />
+                    <span>Statistics</span>
+                  </Link>
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                    >
+                      <Settings size={15} />
+                      <span>Admin Panel</span>
+                    </Link>
+                  )}
+                  <div className="border-t border-gray-100 mt-1 pt-1">
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center space-x-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors w-full text-left"
+                    >
+                      <LogOut size={15} />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
-            <div className="flex gap-4">
-              <Link to="/login">
-                <Button
-                  className={`${isJwtExist ? "hidden" : "block"} border bg-black text-white`}
-                >
-                  Login
-                </Button>
-              </Link>
-              <Link to="/signup">
-                <Button
-                  className={`${isJwtExist ? "hidden" : "block"} border bg-white border-black text-black`}
-                >
-                  Signup
-                </Button>
-              </Link>
-              <Button
-                onClick={clearJwtToken}
-                className={`${isJwtExist ? "block" : "hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}
+            /* Auth Buttons */
+            <div className="flex items-center space-x-2">
+              <Link
+                to="/login"
+                className="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:border-blue-500 hover:text-blue-600 transition-colors"
               >
-                Logout
-              </Button>
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+              >
+                Sign Up
+              </Link>
             </div>
           )}
         </div>
-        <div
-          className={` ${MenuOpen ? "hidden" : "flex"} items-center my-4 px-2 lg:hidden rounded-lg hover:text-white`}
-        >
-          <Menu
-            onClick={() => {
-              setMenuOpen(true);
-            }}
-            className="cursor-pointer hover:text-blue-400"
-          />
-        </div>
-        <div
-          className={` ${MenuOpen ? "flex" : "hidden"} items-center my-4 px-2 rounded-lg hover:text-white`}
-        >
-          <X
-            onClick={() => {
-              setMenuOpen(false);
-            }}
-            className="cursor-pointer hover:text-blue-400"
-          />
-        </div>
-      </motion.div>
 
-      {/* 3. Mobile Menu Content */}
-      <div
-        style={{ paddingTop: NAVBAR_HEIGHT }}
-        className={` 
-          w-screen fixed top-0 left-0 h-auto lg:hidden bg-white z-40 
-          transform transition-transform duration-500 ease-in-out
-          ${MenuOpen ? "translate-y-0" : "-translate-y-full"}
-        `}
-      >
-        <div className="w-full pb-4">
-          {navBarContent.map((obj, idx) => (
-            <div
-              key={idx}
-              className={`w-full flex py-1 cursor-pointer capitalize text-white ${obj.adminOnly && !isAdmin ? "hidden" : ""}`}
-            >
-              <Link
-                to={obj.path}
-                className="w-full mx-10"
-                onClick={() => setMenuOpen(false)}
-              >
-                <p
-                  className={`rounded-md px-3 py-2 ${
-                    isActive(obj.path)
-                      ? "bg-blue-400 text-white"
-                      : "text-black hover:bg-blue-400 duration-200 hover:text-white"
-                  }`}
-                >
-                  {obj.label}
-                </p>
-              </Link>
-            </div>
-          ))}
-          <div className="flex flex-col w-full">
-            <div className="flex flex-col gap-2 border-t py-3 border-gray-500 mx-10 mt-2">
-              <Link to="/login">
-                <h2
-                  className={`hover:bg-blue-400 duration-200 hover:text-white px-3 py-2 rounded-lg cursor-pointer text-center border bg-black text-white ${isJwtExist ? "hidden" : "block"}`}
-                >
-                  Login
-                </h2>
-              </Link>
-              <Link to="/signup">
-                <h2
-                  className={`bg-blue-400 text-white text-center px-3 py-2 rounded-lg cursor-pointer ${isJwtExist ? "hidden" : "block"}`}
-                >
-                  Sign up
-                </h2>
-              </Link>
-              <Button
-                onClick={clearJwtToken}
-                className={`${isJwtExist ? "block" : "hidden"} border bg-white border-black text-black hover:bg-black hover:text-white`}
-              >
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
+        {/* Mobile Menu Toggle */}
+        <button
+          className="lg:hidden p-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
       </div>
-    </>
-  );
-};
 
-export default Navbar;
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
+          <nav className="flex flex-col p-4 space-y-1">
+            {navItems.map((item, idx) => {
+              const Icon = item.icon
+              const active = isActive(item.link)
+              return (
+                <Link
+                  key={`mobile-link-${idx}`}
+                  to={item.link}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all ${active
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                    }`}
+                >
+                  <Icon size={18} />
+                  <span>{item.name}</span>
+                </Link>
+              )
+            })}
+
+            <div className="pt-3 border-t border-gray-100 mt-2 space-y-2">
+              {isLoggedIn ? (
+                <>
+                  <div className="px-4 py-2 text-sm text-gray-400">
+                    Signed in as <span className="text-gray-700 font-medium">{username}</span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center space-x-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg transition-all w-full text-left font-medium"
+                  >
+                    <LogOut size={18} />
+                    <span>Sign Out</span>
+                  </button>
+                </>
+              ) : (
+                <div className="flex flex-col space-y-2">
+                  <Link
+                    to="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="px-4 py-3 text-center text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:border-blue-500 hover:text-blue-600 transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="px-4 py-3 text-center text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
+  )
+}

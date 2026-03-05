@@ -7,7 +7,7 @@ import {
   FaFacebook,
   FaApple,
 } from "react-icons/fa";
-import Navbar from "../../components/Navbar";
+import {EnhancedNavbar} from "../../components/Navbar";
 import ReCAPTCHA from "react-google-recaptcha";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -56,7 +56,7 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen w-full bg-gray-50 flex flex-col">
-      <Navbar />
+      <EnhancedNavbar />
 
       <div className="flex-1 flex items-center justify-center my-20 p-4 sm:p-6 lg:py-10">
         

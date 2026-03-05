@@ -7,7 +7,7 @@ import {
   FaApple,
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import {EnhancedNavbar} from "../../components/Navbar";
 import * as yup from "yup";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import axios from "axios";
@@ -67,7 +67,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen w-full bg-gray-50 flex flex-col">
-      <Navbar />
+      <EnhancedNavbar />
 
       <div className="flex-1 flex items-center justify-center my-20 p-4 sm:p-6">
         
