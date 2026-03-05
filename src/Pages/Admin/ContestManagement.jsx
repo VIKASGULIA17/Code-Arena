@@ -28,7 +28,7 @@ const ContestManagement = () => {
       status: "Upcoming",
     }
   ]);
-  const [deleteTarget, setdeleteTarget] = useState("contest")
+  const [deleteTarget, setdeleteTarget] = useState("")
   const [deleteConfirmText, setDeleteConfirmText] = useState("")
 
   const [isModalOpen, setIsModalOpen] = useState(false);

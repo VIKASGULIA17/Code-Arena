@@ -17,7 +17,7 @@ import {
     Check,
     Share2,
 } from "lucide-react";
-import Navbar from "../../Navbar";
+import {EnhancedNavbar} from "../../Navbar";
 
 const STATUS_CONFIG = {
     ACCEPTED: {
@@ -94,7 +94,7 @@ const StatPill = ({ icon: Icon, label, value, iconClass = "text-gray-400" }) => 
 
 const LoadingSkeleton = () => (
     <div className="min-h-screen bg-gray-50">
-        <Navbar />
+        <EnhancedNavbar />
         <div className="max-w-5xl mx-auto px-4 pt-24 pb-12 flex flex-col gap-6 animate-pulse">
             <div className="h-40 rounded-2xl bg-gray-200" />
             <div className="flex gap-4">

@@ -5,7 +5,7 @@ import { driverCodeTemplate } from "../data/driverCode";
 import { dsaProblems } from "../data/dsaProblem";
 import axios from "axios";
 
-export const useTestRunner = (problemId, Language, value, setOutput) => {
+export const useTestRunner = (problemId, Language, value, setOutput,setcurrentTopBar) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -139,6 +139,7 @@ export const useTestRunner = (problemId, Language, value, setOutput) => {
         setSubmissionStatus("Server Error");
       }
     } finally {
+      setcurrentTopBar("Submissions")
       setIsSubmitting(false);
     }
   };

@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
+import {EnhancedNavbar} from "../components/Navbar";
 import {
   MoveRight,
   ArrowLeft,
@@ -84,7 +84,7 @@ const Problems = () => {
 
   return (
     <div className=" bg-gray-100 overflow-hidden">
-      <Navbar />
+      <EnhancedNavbar />
 
       <div className="lg:px-20 pt-16 w-screen window:flex lg:gap-20">
         <div className="w-full window:w-[70%] px-5 lg:px-0 my-6 ">

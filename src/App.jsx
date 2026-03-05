@@ -21,6 +21,10 @@ import ContestManagement from './Pages/Admin/ContestManagement'
 import Analysis from './Pages/Admin/Analysis'
 import SharedSubmission from './components/problem/problemPages/SharedSubmission'
 import { useAppContext } from './context/AppContext'
+import HomePage from './components/DsaRevision/HomePage'
+import DSAHubPage from './components/DsaRevision/DsaHubPage'
+import TopicPage from './components/DsaRevision/TopicsPage'
+import { MainLayout } from './components/layouts/MainLayout'
 
 
 const App = () => {
@@ -39,6 +43,13 @@ const App = () => {
         <Route path='login' element={<Login />} />
         <Route path='signup' element={<Signup />} />
         <Route path='algovisualizer' element={<AlgoVisualizer />} />
+        <Route path='revision' element={<HomePage />} />
+        <Route path='dsa-hub' element={<DSAHubPage />} />
+        <Route path="/topic/:categoryId/:topicId" element={
+                <MainLayout>
+                  <TopicPage />
+                </MainLayout>
+              } />
         <Route path='*' element={<NotFound />} />
         <Route path='/sessionExpired' element={<SessionExpired />} />
 
