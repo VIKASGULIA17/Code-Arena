@@ -5,12 +5,9 @@ import {
   BookOpen,
   User,
   Home,
-  Moon,
-  Sun,
   PlayCircle,
   Trophy,
   Code,
-  Play,
   ChevronDown,
   LogOut,
   Settings,
@@ -22,15 +19,23 @@ import { useAppContext } from '../context/AppContext'
 
 export function EnhancedNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(true)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
-  const { isLoggedIn, user, logout } = useAppContext()
   const userMenuRef = useRef(null)
 
-  const isAdmin = user?.authorities?.some(item => item.authority === 'ROLE_ADMIN')
-  const username = user?.username || ''
+  // 1. Pulled the exact variables from your OLD working code
+  const { 
+    isJwtExist, 
+    setisJwtExist, 
+    username, 
+    setjwtToken, 
+    userDetails, 
+    setisLoggedIn 
+  } = useAppContext()
+
+  // 2. Fixed the Admin check based on your old code's logic
+  const isAdmin = (userDetails?.roles || []).includes("ADMIN") || (userDetails?.roles || []).includes("ROLE_ADMIN")
 
   const navItems = [
     { name: 'Home', link: '/', icon: Home },
@@ -40,7 +45,8 @@ export function EnhancedNavbar() {
     { name: 'Revision', link: '/revision', icon: BookOpen },
   ]
 
-  if (isLoggedIn) {
+  // 3. Changed condition from isLoggedIn to isJwtExist
+  if (isJwtExist) {
     navItems.push({ name: 'Profile', link: `/profile/${username}`, icon: User })
   }
   if (isAdmin) {
@@ -67,11 +73,15 @@ export function EnhancedNavbar() {
     return location.pathname.startsWith(path)
   }
 
+  // 4. Brought back your old clearJwtToken logic for a bulletproof logout
   const handleLogout = () => {
-    logout()
-    setIsUserMenuOpen(false)
-    setIsMobileMenuOpen(false)
-    navigate('/')
+    localStorage.removeItem("jwtToken");
+    setisJwtExist(false);
+    setisLoggedIn(false);
+    setjwtToken(null);
+    setIsUserMenuOpen(false);
+    setIsMobileMenuOpen(false);
+    navigate('/');
   }
 
   return (
@@ -111,7 +121,7 @@ export function EnhancedNavbar() {
 
         {/* Desktop Right Side */}
         <div className="hidden lg:flex items-center gap-3">
-          {isLoggedIn ? (
+          {isJwtExist ? ( // Changed to isJwtExist
             /* User Menu */
             <div className="relative" ref={userMenuRef}>
               <button
@@ -119,11 +129,11 @@ export function EnhancedNavbar() {
                 className="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
               >
                 <img
-                  src={user?.avatar || 'https://i.pravatar.cc/150'}
+                  src={userDetails?.avatar || 'https://i.pravatar.cc/150'}
                   alt="Avatar"
                   className="w-7 h-7 rounded-full border border-gray-200 object-cover"
                 />
-                <span className="font-medium text-sm">{user?.fullName || username}</span>
+                <span className="font-medium text-sm capitalize">{userDetails?.fullName || username}</span>
                 <ChevronDown
                   size={14}
                   className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`}
@@ -228,7 +238,7 @@ export function EnhancedNavbar() {
             })}
 
             <div className="pt-3 border-t border-gray-100 mt-2 space-y-2">
-              {isLoggedIn ? (
+              {isJwtExist ? ( // Changed to isJwtExist
                 <>
                   <div className="px-4 py-2 text-sm text-gray-400">
                     Signed in as <span className="text-gray-700 font-medium">{username}</span>
