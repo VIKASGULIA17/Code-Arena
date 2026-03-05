@@ -18,18 +18,14 @@ import { toast, ToastContainer } from "react-toastify";
 import { AnimatePresence, motion } from "framer-motion";
 
 const ContestManagement = () => {
-  const [contests, setContests] = useState([
-    {
-      contestName: "Weekly Contest 45",
-      contestDescription: "Weekly coding challenge",
-      startTime: "2023-11-20T14:00",
-      duration: "2h",
-      participants: 120,
-      status: "Upcoming",
-    }
-  ]);
+  const {allContest,showAllContest} = useAppContext();
   const [deleteTarget, setdeleteTarget] = useState("")
   const [deleteConfirmText, setDeleteConfirmText] = useState("")
+  const [targetContestDelete,settargetContestDelete] = useState({
+    contestId : "",
+    contestName : "",
+    countOfParticipants : 0
+  }) 
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("create");
@@ -48,6 +44,8 @@ const ContestManagement = () => {
     startTime: "",
     duration: "",
   };
+
+  console.log(allContest);
   
 
   const validationSchema = yup.object({
@@ -120,6 +118,7 @@ const ContestManagement = () => {
       if (result.status == 1) {
         toast.success(`Contest saved...`);
         setIsModalOpen(false);
+        showAllContest();
         setCurrentContest(initialValues);
       } else {
         throw new Error();
@@ -140,55 +139,19 @@ const ContestManagement = () => {
   };
 
 
-  const handleDelete = async (name) => {
-    e.preventDefault(); 
-    
-
-    try {
-      await validationSchema.validate(currentContest, { abortEarly: false });
-      console.log("Submitting contest:", currentContest);
-      setErrors({});
-
-      const res = await axios.post(
-        `${BACKEND_URL}/admin/createContest`,
-        currentContest,
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        },
-      );
-      
-      const result = res.data;
-      if (result.status == 1) {
-        toast.success(`Contest saved...`);
-        setIsModalOpen(false);
-        setCurrentContest(initialValues);
-      } else {
-        throw new Error();
-      }
-    } catch (e) {
-      if (e.name === "ValidationError") {
-        const validationErrors = {}; 
-        e.inner.forEach((error) => {
-          validationErrors[error.path] = error.message;
-        });
-        setErrors(validationErrors);
-      } else {
-        console.log(e);
-        toast.error("Contest not added");
-        setCurrentContest(initialValues);
-      }
-    }
+  const handleDelete = async () => {
+    e.preventDefault();
   };
 
 
-  const handleDeleteClick = (name) => {
+  const handleDeleteClick = (contest) => {
     // setContests(contests.filter((c) => c.contestName !== name));
     setdeleteTarget(true)
-
+    settargetContestDelete({...targetContestDelete,contestName:contest.contestName,contestId:contest.contestId,countOfParticipants:contest.registeredUsers.length});
     setActiveMenuContestName(null);
   };
+
+  console.log(targetContestDelete);
 
 
 
@@ -220,7 +183,7 @@ const ContestManagement = () => {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {contests.map((contest) => (
+          {allContest?.map((contest) => (
             <div
               key={contest.contestName}
               className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-visible relative group"
@@ -253,11 +216,11 @@ const ContestManagement = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock size={16} className="text-gray-400" />
-                    <span>{contest.duration}</span>
+                    <span>{contest.duration} hours</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Users size={16} className="text-gray-400" />
-                    <span>{contest.participants} Participants</span>
+                    <span>{contest.registeredUsers.length>0?contest.registeredUsers.length:0} Participants</span>
                   </div>
                 </div>
               </div>
@@ -290,7 +253,7 @@ const ContestManagement = () => {
                         Modify
                       </button>
                       <button
-                        onClick={() => handleDeleteClick(contest.contestName)}
+                        onClick={() => handleDeleteClick(contest)}
                         className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors border-t border-gray-50"
                       >
                         <Trash2 size={16} />
@@ -416,7 +379,7 @@ const ContestManagement = () => {
                     type="button"
                     onClick={() => {
                       setIsModalOpen(false);
-                      setErrors({}); // Clear errors on cancel
+                      setErrors({}); 
                     }}
                     className="px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
                   >
@@ -463,8 +426,8 @@ const ContestManagement = () => {
                   <p className="text-sm text-gray-500 mt-0.5">This action is permanent and cannot be undone.</p>
                 </div>
                 <button
-                  // onClick={cancelDelete}
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
+                  onClick={()=>setdeleteTarget(false)}
+                  className="p-1.5 rounded-lg cursor-pointer text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
                 >
                   <X size={18} />
                 </button>
@@ -474,7 +437,7 @@ const ContestManagement = () => {
               <div className="px-6 py-6 space-y-5">
                 <p className="text-sm text-gray-600 leading-relaxed">
                   You are about to permanently delete {" "}
-                  <span className="font-semibold text-gray-900">"{deleteTarget.title}"</span>.
+                  <span className="font-semibold text-gray-900">"{targetContestDelete.contestName}"</span>.
                   All ranking, solutions, and submissions will be lost forever.
                 </p>
 
@@ -483,9 +446,9 @@ const ContestManagement = () => {
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Contest</p>
                   <div className="flex items-center gap-2">
                     
-                    <span className="text-sm font-semibold text-gray-800 truncate">{deleteTarget.contestName}</span>
+                    <span className="text-sm font-semibold text-gray-800 truncate">{targetContestDelete.contestName}</span>
                   </div>
-                  <p className="text-xs text-gray-400">{deleteTarget.registeredUsers} · Registered Users: {deleteTarget.contestDescription}</p>
+                  <p className="text-xs text-gray-400">· Registered Users: {targetContestDelete.countOfParticipants}</p>
                 </div>
 
                 {/* Name confirmation input */}
@@ -494,7 +457,7 @@ const ContestManagement = () => {
                     Type the contest name to confirm:
                   </label>
                   <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all">
-                    {deleteTarget.title}
+                    {targetContestDelete.contestName}
                   </div>
                   <input
                     type="text"
@@ -504,13 +467,13 @@ const ContestManagement = () => {
                     placeholder="Type the Contest name exactly..."
                     autoFocus
                     className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${deleteConfirmText.length > 0
-                      ? deleteConfirmText === deleteTarget.title
+                      ? deleteConfirmText.toLowerCase().trim() === targetContestDelete.contestName.toLowerCase()
                         ? "border-green-400 ring-2 ring-green-100 bg-green-50"
                         : "border-red-300 ring-2 ring-red-100"
                       : "border-gray-300 focus:ring-2 focus:ring-red-300 focus:border-red-400"
                       }`}
                   />
-                  {deleteConfirmText.length > 0 && deleteConfirmText !== deleteTarget.title && (
+                  {deleteConfirmText.length > 0 && deleteConfirmText.toLowerCase().trim() !== targetContestDelete.contestName.toLowerCase() && (
                     <p className="text-xs text-red-500">Name doesn't match. Please type it exactly.</p>
                   )}
                 </div>
@@ -519,16 +482,16 @@ const ContestManagement = () => {
               {/* Footer */}
               <div className="px-6 pb-6 flex gap-3 justify-end">
                 <button
-                  // onClick={cancelDelete}
-                  className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
+                  onClick={()=>setdeleteTarget(false)}
+                  className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors  cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={confirmDelete}
-                  disabled={deleteConfirmText !== deleteTarget.title}
-                  className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all ${deleteConfirmText === deleteTarget.title
-                    ? "bg-red-600 hover:bg-red-700 text-white shadow-sm"
+                  onClick={handleDelete}
+                  disabled={deleteConfirmText.toLowerCase().trim() !== targetContestDelete.contestName.toLowerCase()}
+                  className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all ${deleteConfirmText.toLowerCase().trim() === targetContestDelete.contestName.toLowerCase()
+                    ? "bg-red-600 cursor-pointer hover:bg-red-700 text-white shadow-sm"
                     : "bg-red-200 text-red-400 cursor-not-allowed"
                     }`}
                 >

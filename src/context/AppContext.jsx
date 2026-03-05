@@ -11,6 +11,7 @@ export const AppProvider = (props) => {
   const [userProfile,setuserProfile] = useState(null);
   const [username,setUsername] = useState(null);
   const [allProblem,setallProblems] = useState(null);
+  const [allContest,setallContest] = useState(null);
   const [isLoggedIn,setisLoggedIn] = useState(()=>{
     return localStorage.getItem("jwtToken") != null;
   });
@@ -65,6 +66,22 @@ export const AppProvider = (props) => {
       }
     }
 
+
+    async function showAllContest(){
+      const result = await axios.get(`${BACKEND_URL}/public/fetchAllContest`,{
+        headers : {
+          Authorization : `Bearer ${jwtToken}`
+        }
+      })
+      if(result.data!=null){
+        // console.log(result.data);
+        setallContest(result.data);
+      }
+      else{
+        setallContest(null);
+      }
+    }
+
   const getUserProfileData = async () => {
     try{
       const res = await axios.get(`${BACKEND_URL}/userProfile/get`,{
@@ -90,10 +107,10 @@ export const AppProvider = (props) => {
     getUserData();
     getUserProfileData();
     showAllProblems();
-    console.log("show all problems");
+    showAllContest();
   },[isLoggedIn]);
 
-  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData,username,allProblem};
+  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData,username,allProblem,allContest,showAllContest};
 
   return (
     <AppContext.Provider value={values}>{props.children}</AppContext.Provider>
