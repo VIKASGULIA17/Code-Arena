@@ -141,6 +141,43 @@ const ContestManagement = () => {
 
   const handleDelete = async () => {
     e.preventDefault();
+
+    // try {
+    //   await validationSchema.validate(currentContest, { abortEarly: false });
+    //   console.log("Submitting contest:", currentContest);
+    //   setErrors({});
+
+    //   const res = await axios.post(
+    //     `${BACKEND_URL}/admin/createContest`,
+    //     currentContest,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${jwtToken}`,
+    //       },
+    //     },
+    //   );
+      
+    //   const result = res.data;
+    //   if (result.status == 1) {
+    //     toast.success(`Contest saved...`);
+    //     setIsModalOpen(false);
+    //     setCurrentContest(initialValues);
+    //   } else {
+    //     throw new Error();
+    //   }
+    // } catch (e) {
+    //   if (e.name === "ValidationError") {
+    //     const validationErrors = {}; 
+    //     e.inner.forEach((error) => {
+    //       validationErrors[error.path] = error.message;
+    //     });
+    //     setErrors(validationErrors);
+    //   } else {
+    //     console.log(e);
+    //     toast.error("Contest not added");
+    //     setCurrentContest(initialValues);
+    //   }
+    // }
   };
 
 
