@@ -16,6 +16,9 @@ import { useAppContext } from "../../context/AppContext";
 const UserModal = ({ user, onClose }) => {
   if (!user) return null;
 
+//   console.log("Selected user is : ");
+//   console.log(user);
+
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <motion.div
@@ -80,9 +83,9 @@ const UserModal = ({ user, onClose }) => {
           <div className="grid grid-cols-2 gap-6">
             <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
               <p className="text-sm text-gray-500 mb-1">Joined Date</p>
-              <div className="flex items-center gap-2 font-medium text-gray-900">
+              <div className="flex items-center gap-2 text-sm text-gray-400">
                 <Calendar size={18} className="text-gray-400" />
-                {user.joinedDate}
+                {user.joined}
               </div>
             </div>
             <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
@@ -136,7 +139,7 @@ const UserManagement = () => {
           Authorization: `Bearer ${jwtToken}`,
         },
       });
-      console.log(result.data);
+    //   console.log(result.data);
       setUsers(result.data);
     }
 
