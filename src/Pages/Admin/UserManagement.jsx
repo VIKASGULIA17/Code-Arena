@@ -41,7 +41,7 @@ const UserModal = ({ user, onClose }) => {
                                     {user.status}
                                 </span>
                                 <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-                                    {user.role}
+                                    {user.admin?"ADMIN":"USER"}
                                 </span>
                             </div>
                         </div>
