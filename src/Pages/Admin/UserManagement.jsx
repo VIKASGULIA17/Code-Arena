@@ -66,7 +66,7 @@ const UserModal = ({ user, onClose }) => {
                 </div>
 
                 <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-                    <button onClick={onClose} className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-200 rounded-lg transition-colors">
+                    <button onClick={onClose} className="px-4 cursor-pointer py-2 text-gray-600 font-medium hover:bg-gray-200 rounded-lg transition-colors">
                         Close
                     </button>
                     <button className="px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2">
