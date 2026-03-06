@@ -63,11 +63,11 @@ const UserModal = ({ user, onClose }) => {
                   className={`px-3 py-1 rounded-full text-xs font-medium ${user.admin==false? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"}`}
                 >
                   {user.admin ? (
-                    <div className="flex">
+                    <div className="flex items-center">
                       <Shield size={12} /> <span>Admin</span>
                     </div>
                   ) : (
-                    <div className="flex">
+                    <div className="flex items-center">
                       <User2 size={12} />
                       <span>User</span>
                     </div>
