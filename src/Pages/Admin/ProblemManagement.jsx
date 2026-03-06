@@ -223,7 +223,7 @@ const ProblemManagement = () => {
                   </p>
                 </div>
                 <button
-                  onClick={() => setIsDeleteOpen(false)}
+                  onClick={() => {setIsDeleteOpen(false);setdeleteTarget(null);setdeleteConfirmText("")}}
                   className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
                 >
                   <X size={18} />
@@ -293,9 +293,9 @@ const ProblemManagement = () => {
                     autoFocus
                     className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${
                       deleteConfirmText.length > 0
-                        ? deleteConfirmText.trim() === deleteTarget.title
-                          ? "border-green-400 ring-2 ring-green-100 bg-green-50"
-                          : "border-red-300 ring-2 ring-red-100"
+                        ? deleteConfirmText.toLowerCase().trim() === deleteTarget.title.toLowerCase()
+                          ? "border-green-400 ring-2 cursor-pointer ring-green-100 bg-green-50"
+                          : "border-red-300 cursor-not-allowed ring-2 ring-red-100"
                         : "border-gray-300 focus:ring-2 focus:ring-red-300 focus:border-red-400"
                     }`}
                   />
@@ -311,15 +311,15 @@ const ProblemManagement = () => {
               {/* Footer */}
               <div className="px-6 pb-6 flex gap-3 justify-end">
                 <button
-                  onClick={() => setdeleteTarget(false)}
+                  onClick={() => {setdeleteConfirmText("");setIsDeleteOpen(false);setdeleteTarget(null);}}
                   className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   // onClick={confirmDelete}
-                  disabled = {deleteConfirmText.trim() != deleteTarget.title}
-                  className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all bg-red-200 text-red-400 cursor-not-allowed
+                  disabled = {deleteConfirmText.toLowerCase().trim() != deleteTarget.title.toLowerCase()}
+                  className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all bg-red-200 text-red-400 cursor-not-allowed ${deleteConfirmText.toLowerCase().trim() === deleteTarget.title.toLowerCase() ? "bg-red-600 cursor-pointer hover:bg-red-700 text-white shadow-sm":"bg-red-200 text-red-400 cursor-not-allowed"}
                     `}
                 >
                   <Trash2 size={14} />

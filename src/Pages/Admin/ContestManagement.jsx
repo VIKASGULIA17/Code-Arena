@@ -139,6 +139,8 @@ const ContestManagement = () => {
     }
   };
 
+  console.log(allContest);
+
   const deleteContestToSpringboot = async () => {
     const result = await axios.delete(
       `${BACKEND_URL}/admin/deleteContestByContestId/${targetContestDelete.contestId}`,
@@ -230,14 +232,14 @@ const ContestManagement = () => {
                   </div>
                   <span
                     className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                      contest.status === "Upcoming"
+                      contest.contestStatus === "Upcoming"
                         ? "bg-blue-100 text-blue-700"
-                        : contest.status === "Completed"
+                        : contest.contestStatus === "Completed"
                           ? "bg-gray-100 text-gray-600"
                           : "bg-green-100 text-green-700"
                     }`}
                   >
-                    {contest.status}
+                    {contest.contestStatus}
                   </span>
                 </div>
 
