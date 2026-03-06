@@ -40,7 +40,8 @@ const UserModal = ({ user, onClose }) => {
         <div className="p-8">
           <div className="flex items-center gap-6 mb-8">
             <img
-              src={`https://ui-avatars.com/api/?name=${user.name}&background=random`}
+              src={`https://ui-avatars.com/api/?name=${user.username}&background=random`}
+              
               alt={user.name}
               className="w-24 h-24 rounded-full ring-4 ring-gray-50"
             />
