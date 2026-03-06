@@ -17,7 +17,7 @@ const UserModal = ({ user, onClose }) => {
             >
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                     <h2 className="text-xl font-bold text-gray-900">User Details</h2>
-                    <button onClick={onClose} className="cursor-pointertext-gray-400 hover:text-gray-600">
+                    <button onClick={onClose} className="cursor-pointer text-gray-400 hover:text-gray-600">
                         <span className="text-2xl">×</span>
                     </button>
                 </div>
