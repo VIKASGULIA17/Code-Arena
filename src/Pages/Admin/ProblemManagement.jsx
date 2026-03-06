@@ -23,7 +23,8 @@ import { useAppContext } from "../../context/AppContext";
 const ProblemManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddMode, setIsAddMode] = useState(false);
-  const { jwtToken, allProblem } = useAppContext();
+  const { jwtToken, allProblem,showAllProblems } = useAppContext();
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [editingProblem, setEditingProblem] = useState(null);
   const [activeTab, setActiveTab] = useState("basic");
   const [editActiveTab, setEditActiveTab] = useState("basic");
@@ -31,13 +32,44 @@ const ProblemManagement = () => {
   const [deleteTarget, setdeleteTarget] = useState(null);
   const [deleteConfirmText, setdeleteConfirmText] = useState("");
 
-  // console.log("problemManagement.jsx");
-  console.log(deleteTarget);
+  console.log("problemManagement.jsx");
+  console.log(allProblem);
 
   function handleDeleteOpen(problem) {
     setIsDeleteOpen(true);
     setdeleteTarget(problem);
   }
+
+  const sendDeletionToSpring = async () => {
+    const res = await axios.delete(
+      `${BACKEND_URL}/problem/deleteEntireProblem/${deleteTarget.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      },
+    );
+    return res.data;
+  };
+
+  const confirmDelete = async () => {
+    try {
+      const res = await sendDeletionToSpring();
+
+      if (res.status === 1) {
+        toast.success("Problem deleted successfully...");
+        setIsDeleteOpen(false);
+        setdeleteConfirmText("");
+        setdeleteTarget(null);
+        showAllProblems();
+      } else {
+        throw new Error();
+      }
+    } catch (e) {
+      toast.error("Problem not deleted");
+    } finally {
+    }
+  };
 
   const handleEditProblem = async (values, { resetForm }) => {
     try {
@@ -171,6 +203,7 @@ const ProblemManagement = () => {
   };
 
   const difficultyColor = (diff) => {
+    if (!diff) return "gray";
     switch (diff.toLowerCase()) {
       case "easy":
         return "text-green-600 bg-green-100";
@@ -191,888 +224,911 @@ const ProblemManagement = () => {
   ];
 
   return (
-    <div className="space-y-6 min-h-screen relative">
-      <AnimatePresence>
-        {IsDeleteOpen && (
-          <motion.div
-            key="delete-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            // onClick={(e) => e.target === e.currentTarget && cancelDelete()}
-          >
+    <>
+      <ToastContainer />
+      <div className="space-y-6 min-h-screen relative">
+        <AnimatePresence>
+          {IsDeleteOpen && (
             <motion.div
-              initial={{ scale: 0.92, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.92, opacity: 0, y: 20 }}
-              transition={{ type: "spring", stiffness: 320, damping: 25 }}
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+              key="delete-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              // onClick={(e) => e.target === e.currentTarget && cancelDelete()}
             >
-              {/* Header */}
-              <div className="bg-red-50 border-b border-red-100 px-6 py-5 flex items-start gap-4">
-                <div className="p-2.5 bg-red-100 rounded-xl shrink-0">
-                  <AlertTriangle size={22} className="text-red-600" />
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-lg font-bold text-gray-900">
-                    Delete Problem
-                  </h2>
-                  <p className="text-sm text-gray-500 mt-0.5">
-                    This action is permanent and cannot be undone.
-                  </p>
-                </div>
-                <button
-                  onClick={() => {setIsDeleteOpen(false);setdeleteTarget(null);setdeleteConfirmText("")}}
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              {/* Body */}
-              <div className="px-6 py-6 space-y-5">
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  You are about to permanently delete{" "}
-                  <span className="font-semibold text-gray-900">
-                    "{deleteTarget.title}"
-                  </span>
-                  . All test cases, solutions, and submissions will be lost
-                  forever.
-                </p>
-
-                {/* Problem preview card */}
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-1.5">
-                 <div className="flex gap-2"> <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                    Problem
-                  </p>
-                  <span
-                      className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
-                        deleteTarget.difficulty.toLowerCase() === "easy"
-                          ? "bg-green-100 text-green-700"
-                          : deleteTarget.difficulty === "medium"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {deleteTarget.difficulty}
-                    </span>
-                    </div>
-                  <div className="flex items-center gap-2">
-                    
-                    <span className="text-sm font-semibold text-gray-800 truncate">
-                      {deleteTarget.title}
-                    </span>
+              <motion.div
+                initial={{ scale: 0.92, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.92, opacity: 0, y: 20 }}
+                transition={{ type: "spring", stiffness: 320, damping: 25 }}
+                className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+              >
+                {/* Header */}
+                <div className="bg-red-50 border-b border-red-100 px-6 py-5 flex items-start gap-4">
+                  <div className="p-2.5 bg-red-100 rounded-xl shrink-0">
+                    <AlertTriangle size={22} className="text-red-600" />
                   </div>
-                  <div className="flex gap-3 bg-transparent">
-                    {(deleteTarget.topicTags)?.map((tag,index)=>{
-                      return <p key={index} className="px-1 py-0.5 rounded text-[10px] font-light bg-blue-100 text-blue-500">
-                      {tag}
+                  <div className="flex-1">
+                    <h2 className="text-lg font-bold text-gray-900">
+                      Delete Problem
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-0.5">
+                      This action is permanent and cannot be undone.
                     </p>
-                    })}
                   </div>
+                  <button
+                    onClick={() => {
+                      setIsDeleteOpen(false);
+                      setdeleteTarget(null);
+                      setdeleteConfirmText("");
+                    }}
+                    className="p-1.5 cursor-pointer rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {/* Body */}
+                <div className="px-6 py-6 space-y-5">
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    You are about to permanently delete{" "}
+                    <span className="font-semibold text-gray-900">
+                      "{deleteTarget.title}"
+                    </span>
+                    . All test cases, solutions, and submissions will be lost
+                    forever.
+                  </p>
+
+                  {/* Problem preview card */}
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-1.5">
+                    <div className="flex gap-2">
+                      {" "}
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                        Problem
+                      </p>
+                      <span
+                        className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
+                          deleteTarget.difficulty.toLowerCase() === "easy"
+                            ? "bg-green-100 text-green-700"
+                            : deleteTarget.difficulty === "medium"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {deleteTarget.difficulty}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-gray-800 truncate">
+                        {deleteTarget.title}
+                      </span>
+                    </div>
+                    <div className="flex gap-3 bg-transparent">
+                      {deleteTarget.topicTags?.map((tag, index) => {
+                        return (
+                          <p
+                            key={index}
+                            className="px-1 py-0.5 rounded text-[10px] font-light bg-blue-100 text-blue-500"
+                          >
+                            {tag}
+                          </p>
+                        );
+                      })}
+                    </div>
                     <p className="text-xs text-gray-400">
                       · Acceptance: {deleteTarget.acceptanceRate}%
                     </p>
-                </div>
-
-                {/* Name confirmation input */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Type the problem name to confirm:
-                  </label>
-                  <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all">
-                    {deleteTarget.title}
                   </div>
-                  <input
-                    type="text"
-                    value={deleteConfirmText}
-                    onChange={(e) => setdeleteConfirmText(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && confirmDelete()}
-                    placeholder="Type the problem name exactly..."
-                    autoFocus
-                    className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${
-                      deleteConfirmText.length > 0
-                        ? deleteConfirmText.toLowerCase().trim() === deleteTarget.title.toLowerCase()
-                          ? "border-green-400 ring-2 cursor-pointer ring-green-100 bg-green-50"
-                          : "border-red-300 cursor-not-allowed ring-2 ring-red-100"
-                        : "border-gray-300 focus:ring-2 focus:ring-red-300 focus:border-red-400"
-                    }`}
-                  />
-                  {deleteConfirmText.length > 0 &&
-                    deleteConfirmText.trim() !== deleteTarget.title && (
-                      <p className="text-xs text-red-500">
-                        Name doesn't match. Please type it exactly.
-                      </p>
-                    )}
+
+                  {/* Name confirmation input */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Type the problem name to confirm:
+                    </label>
+                    <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all">
+                      {deleteTarget.title}
+                    </div>
+                    <input
+                      type="text"
+                      value={deleteConfirmText}
+                      onChange={(e) => setdeleteConfirmText(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter"}
+                      placeholder="Type the problem name exactly..."
+                      autoFocus
+                      className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${
+                        deleteConfirmText.length > 0
+                          ? deleteConfirmText.toLowerCase().trim() ===
+                            deleteTarget.title.toLowerCase()
+                            ? "border-green-400 ring-2 cursor-pointer ring-green-100 bg-green-50"
+                            : "border-red-300 cursor-not-allowed ring-2 ring-red-100"
+                          : "border-gray-300 focus:ring-2 focus:ring-red-300 focus:border-red-400"
+                      }`}
+                    />
+                    {deleteConfirmText.length > 0 &&
+                      deleteConfirmText.trim() !== deleteTarget.title && (
+                        <p className="text-xs text-red-500">
+                          Name doesn't match. Please type it exactly.
+                        </p>
+                      )}
+                  </div>
                 </div>
-              </div>
 
-              {/* Footer */}
-              <div className="px-6 pb-6 flex gap-3 justify-end">
-                <button
-                  onClick={() => {setdeleteConfirmText("");setIsDeleteOpen(false);setdeleteTarget(null);}}
-                  className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  // onClick={confirmDelete}
-                  disabled = {deleteConfirmText.toLowerCase().trim() != deleteTarget.title.toLowerCase()}
-                  className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all bg-red-200 text-red-400 cursor-not-allowed ${deleteConfirmText.toLowerCase().trim() === deleteTarget.title.toLowerCase() ? "bg-red-600 cursor-pointer hover:bg-red-700 text-white shadow-sm":"bg-red-200 text-red-400 cursor-not-allowed"}
+                {/* Footer */}
+                <div className="px-6 pb-6 flex gap-3 justify-end">
+                  <button
+                    onClick={() => {
+                      setdeleteConfirmText("");
+                      setIsDeleteOpen(false);
+                      setdeleteTarget(null);
+                    }}
+                    className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmDelete}
+                    disabled={
+                      deleteConfirmText.toLowerCase().trim() !=
+                      deleteTarget.title.toLowerCase()
+                    }
+                    className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all bg-red-200 text-red-400 cursor-not-allowed ${deleteConfirmText.toLowerCase().trim() === deleteTarget.title.toLowerCase() ? "bg-red-600 cursor-pointer hover:bg-red-700 text-white shadow-sm" : "bg-red-200 text-red-400 cursor-not-allowed"}
                     `}
-                >
-                  <Trash2 size={14} />
-                  Delete Problem
-                </button>
-              </div>
+                  >
+                    <Trash2 size={14} />
+                    Delete Problem
+                  </button>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Problem Management
-          </h1>
-          <p className="text-gray-500 mt-2">
-            Create and manage coding problems.
-          </p>
-        </div>
-        <button
-          onClick={() => setIsAddMode(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
-        >
-          <Plus size={20} />
-          <span>Add Problem</span>
-        </button>
-      </div>
-      {/* <p>{allProblem ? allProblem[1].title : "dummy"}</p> */}
-
-      <AnimatePresence>
-        {editingProblem && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden">
-              <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Edit Problem
-                </h2>
-                <button
-                  onClick={() => setEditingProblem(null)}
-                  className="p-2 hover:bg-white rounded-full transition-colors text-gray-500 hover:text-gray-700 shadow-sm"
-                >
-                  <X size={24} />
-                </button>
-              </div>
-
-              <Formik
-                initialValues={getEditInitialValues(editingProblem)}
-                validationSchema={validationSchema}
-                onSubmit={handleEditProblem}
-                enableReinitialize
-              >
-                {({ values }) => (
-                  <Form className="flex flex-col flex-1 overflow-hidden">
-                    {/* Persistent Title Field */}
-                    <div className="p-6 pb-0 bg-white">
-                      <FormGroup
-                        label="Problem Title"
-                        name="title"
-                        placeholder="e.g., Two Sum"
-                      />
-                    </div>
-
-                    {/* Tabs */}
-                    <div className="flex border-b border-gray-200 bg-white sticky top-0 z-10">
-                      {tabs.map((tab) => (
-                        <button
-                          key={tab.id}
-                          type="button"
-                          onClick={() => setEditActiveTab(tab.id)}
-                          className={`flex-1 py-4 text-sm font-medium transition-colors relative ${
-                            editActiveTab === tab.id
-                              ? "text-blue-600 bg-blue-50/50"
-                              : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                          }`}
-                        >
-                          {tab.label}
-                          {editActiveTab === tab.id && (
-                            <motion.div
-                              layoutId="editActiveTab"
-                              className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600"
-                            />
-                          )}
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="flex-1 overflow-y-auto p-6 bg-gray-50/30">
-                      {/* Basic Info Tab */}
-                      {editActiveTab === "basic" && (
-                        <div className="space-y-6">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <FormGroup
-                              label="Slug"
-                              name="slug"
-                              placeholder="e.g., two-sum"
-                            />
-                            <FormGroup
-                              label="Tags"
-                              name="tags"
-                              placeholder="e.g., Array, Hash Table"
-                            />
-
-                            <div className="space-y-2">
-                              <label className="block text-sm font-medium text-gray-700">
-                                Difficulty
-                              </label>
-                              <Field
-                                as="select"
-                                name="difficulty"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                              >
-                                <option value="Easy">Easy</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Hard">Hard</option>
-                              </Field>
-                            </div>
-
-                            <FormGroup
-                              label="Problem Topic"
-                              name="problemTopic"
-                              placeholder="e.g., Algorithms"
-                            />
-                            <FormGroup
-                              label="Function Name"
-                              name="functionName"
-                              placeholder="e.g., twoSum"
-                            />
-                            <FormGroup
-                              label="Input Type"
-                              name="inputType"
-                              placeholder="e.g., nums: int[], target: int"
-                            />
-                            <FormGroup
-                              label="Return Type"
-                              name="returnType"
-                              placeholder="e.g., int[]"
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Details Tab */}
-                      {editActiveTab === "details" && (
-                        <div className="space-y-6">
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">
-                              Description
-                            </label>
-                            <Field
-                              as="textarea"
-                              name="description"
-                              rows={5}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
-                              placeholder="Detailed problem description..."
-                            />
-                            <ErrorMessage
-                              name="description"
-                              component="div"
-                              className="text-red-500 text-sm"
-                            />
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
-                              <h3 className="font-semibold text-gray-900">
-                                Time Complexity
-                              </h3>
-                              <FormGroup
-                                label="Value"
-                                name="timeComplexity.value"
-                                placeholder="e.g., O(n)"
-                              />
-                              <FormGroup
-                                label="Explanation"
-                                name="timeComplexity.explanation"
-                                placeholder="Brief explanation..."
-                              />
-                            </div>
-                            <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
-                              <h3 className="font-semibold text-gray-900">
-                                Space Complexity
-                              </h3>
-                              <FormGroup
-                                label="Value"
-                                name="spaceComplexity.value"
-                                placeholder="e.g., O(1)"
-                              />
-                              <FormGroup
-                                label="Explanation"
-                                name="spaceComplexity.explanation"
-                                placeholder="Brief explanation..."
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Test Cases Tab */}
-                      {editActiveTab === "testcases" && (
-                        <div className="space-y-6">
-                          <FieldArray name="testCases">
-                            {({ push, remove }) => (
-                              <div className="space-y-6">
-                                {values.testCases.map((_, index) => (
-                                  <div
-                                    key={index}
-                                    className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm relative group"
-                                  >
-                                    <div className="absolute top-4 right-4">
-                                      <button
-                                        type="button"
-                                        onClick={() => remove(index)}
-                                        className="text-gray-400 hover:text-red-500 transition-colors"
-                                        title="Remove Test Case"
-                                      >
-                                        <Trash2 size={18} />
-                                      </button>
-                                    </div>
-                                    <h4 className="font-medium text-gray-900 mb-4">
-                                      Test Case #{index + 1}
-                                    </h4>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                      <div className="md:col-span-2">
-                                        <FormGroup
-                                          label="Input"
-                                          name={`testCases.${index}.input`}
-                                          placeholder="Input values..."
-                                        />
-                                      </div>
-                                      <FormGroup
-                                        label="Expected Output"
-                                        name={`testCases.${index}.expected`}
-                                        placeholder="Expected result..."
-                                      />
-                                      <FormGroup
-                                        label="Explanation"
-                                        name={`testCases.${index}.explanation`}
-                                        placeholder="Why this output?"
-                                      />
-                                      <div className="flex items-center gap-2 mt-2">
-                                        <Field
-                                          type="checkbox"
-                                          name={`testCases.${index}.hidden`}
-                                          id={`edit-hidden-${index}`}
-                                          className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                                        />
-                                        <label
-                                          htmlFor={`edit-hidden-${index}`}
-                                          className="text-sm text-gray-700"
-                                        >
-                                          Hidden Test Case
-                                        </label>
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    push({
-                                      input: "",
-                                      expected: "",
-                                      explanation: "",
-                                      hidden: false,
-                                    })
-                                  }
-                                  className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-blue-500 hover:text-blue-600 transition-all font-medium flex items-center justify-center gap-2"
-                                >
-                                  <Plus size={20} /> Add Test Case
-                                </button>
-                              </div>
-                            )}
-                          </FieldArray>
-                        </div>
-                      )}
-
-                      {/* Solution Tab */}
-                      {editActiveTab === "solution" && (
-                        <div className="space-y-6">
-                          <div className="grid grid-cols-1 gap-6">
-                            {["javascript", "java", "python", "cpp"].map(
-                              (lang) => (
-                                <div key={lang} className="space-y-2">
-                                  <label className="block text-sm font-medium text-gray-700 capitalize">
-                                    {lang} Solution
-                                  </label>
-                                  <Field
-                                    as="textarea"
-                                    name={`solution.${lang}`}
-                                    rows={6}
-                                    className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
-                                    placeholder={`Paste your ${lang} solution here...`}
-                                  />
-                                </div>
-                              ),
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Footer Actions */}
-                    <div className="p-6 border-t border-gray-200 bg-white flex justify-end gap-3 sticky bottom-0">
-                      <button
-                        type="button"
-                        onClick={() => setEditingProblem(null)}
-                        className="px-6 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/30 flex items-center gap-2"
-                      >
-                        <Save size={18} />
-                        Update Problem
-                      </button>
-                    </div>
-                  </Form>
-                )}
-              </Formik>
-            </div>
+          )}
+        </AnimatePresence>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Problem Management
+            </h1>
+            <p className="text-gray-500 mt-2">
+              Create and manage coding problems.
+            </p>
           </div>
-        )}
-      </AnimatePresence>
+          <button
+            onClick={() => setIsAddMode(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
+          >
+            <Plus size={20} />
+            <span>Add Problem</span>
+          </button>
+        </div>
+        {/* <p>{allProblem ? allProblem[1].title : "dummy"}</p> */}
 
-      <AnimatePresence>
-        {isAddMode && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
-            <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden">
-              <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Add New Problem
-                </h2>
-                <button
-                  onClick={() => setIsAddMode(false)}
-                  className="p-2 hover:bg-white rounded-full transition-colors text-gray-500 hover:text-gray-700 shadow-sm"
+        <AnimatePresence>
+          {editingProblem && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+              <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden">
+                <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Edit Problem
+                  </h2>
+                  <button
+                    onClick={() => setEditingProblem(null)}
+                    className="p-2 hover:bg-white rounded-full transition-colors text-gray-500 hover:text-gray-700 shadow-sm"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
+
+                <Formik
+                  initialValues={getEditInitialValues(editingProblem)}
+                  validationSchema={validationSchema}
+                  onSubmit={handleEditProblem}
+                  enableReinitialize
                 >
-                  <X size={24} />
-                </button>
-              </div>
+                  {({ values }) => (
+                    <Form className="flex flex-col flex-1 overflow-hidden">
+                      {/* Persistent Title Field */}
+                      <div className="p-6 pb-0 bg-white">
+                        <FormGroup
+                          label="Problem Title"
+                          name="title"
+                          placeholder="e.g., Two Sum"
+                        />
+                      </div>
 
-              <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={handleAddProblem}
-              >
-                {({ values }) => (
-                  <Form className="flex flex-col flex-1 overflow-hidden">
-                    {/* Persistent Title Field */}
-                    <div className="p-6 pb-0 bg-white">
-                      <FormGroup
-                        label="Problem Title"
-                        name="title"
-                        placeholder="e.g., Two Sum"
-                      />
-                    </div>
+                      {/* Tabs */}
+                      <div className="flex border-b border-gray-200 bg-white sticky top-0 z-10">
+                        {tabs.map((tab) => (
+                          <button
+                            key={tab.id}
+                            type="button"
+                            onClick={() => setEditActiveTab(tab.id)}
+                            className={`flex-1 py-4 text-sm font-medium transition-colors relative ${
+                              editActiveTab === tab.id
+                                ? "text-blue-600 bg-blue-50/50"
+                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                            }`}
+                          >
+                            {tab.label}
+                            {editActiveTab === tab.id && (
+                              <motion.div
+                                layoutId="editActiveTab"
+                                className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600"
+                              />
+                            )}
+                          </button>
+                        ))}
+                      </div>
 
-                    {/* Tabs */}
-                    <div className="flex border-b border-gray-200 bg-white sticky top-0 z-10">
-                      {allProblem.map((tab) => (
-                        <button
-                          key={tab.id}
-                          type="button"
-                          onClick={() => setActiveTab(tab.id)}
-                          className={`flex-1 py-4 text-sm font-medium transition-colors relative ${
-                            activeTab === tab.id
-                              ? "text-blue-600 bg-blue-50/50"
-                              : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                          }`}
-                        >
-                          {tab.title}
-                          {activeTab === tab.id && (
-                            <motion.div
-                              layoutId="activeTab"
-                              className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600"
-                            />
-                          )}
-                        </button>
-                      ))}
-                    </div>
+                      <div className="flex-1 overflow-y-auto p-6 bg-gray-50/30">
+                        {/* Basic Info Tab */}
+                        {editActiveTab === "basic" && (
+                          <div className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <FormGroup
+                                label="Slug"
+                                name="slug"
+                                placeholder="e.g., two-sum"
+                              />
+                              <FormGroup
+                                label="Tags"
+                                name="tags"
+                                placeholder="e.g., Array, Hash Table"
+                              />
 
-                    <div className="flex-1 overflow-y-auto p-6 bg-gray-50/30">
-                      {/* Basic Info Tab */}
-                      {activeTab === "basic" && (
-                        <div className="space-y-6">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <FormGroup
-                              label="Slug"
-                              name="slug"
-                              placeholder="e.g., two-sum"
-                            />
-                            <FormGroup
-                              label="Tags"
-                              name="tags"
-                              placeholder="e.g., Array, Hash Table"
-                            />
+                              <div className="space-y-2">
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Difficulty
+                                </label>
+                                <Field
+                                  as="select"
+                                  name="difficulty"
+                                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                >
+                                  <option value="Easy">Easy</option>
+                                  <option value="Medium">Medium</option>
+                                  <option value="Hard">Hard</option>
+                                </Field>
+                              </div>
 
+                              <FormGroup
+                                label="Problem Topic"
+                                name="problemTopic"
+                                placeholder="e.g., Algorithms"
+                              />
+                              <FormGroup
+                                label="Function Name"
+                                name="functionName"
+                                placeholder="e.g., twoSum"
+                              />
+                              <FormGroup
+                                label="Input Type"
+                                name="inputType"
+                                placeholder="e.g., nums: int[], target: int"
+                              />
+                              <FormGroup
+                                label="Return Type"
+                                name="returnType"
+                                placeholder="e.g., int[]"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Details Tab */}
+                        {editActiveTab === "details" && (
+                          <div className="space-y-6">
                             <div className="space-y-2">
                               <label className="block text-sm font-medium text-gray-700">
-                                Difficulty
+                                Description
                               </label>
                               <Field
-                                as="select"
-                                name="difficulty"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                              >
-                                <option value="Easy">Easy</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Hard">Hard</option>
-                              </Field>
+                                as="textarea"
+                                name="description"
+                                rows={5}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+                                placeholder="Detailed problem description..."
+                              />
+                              <ErrorMessage
+                                name="description"
+                                component="div"
+                                className="text-red-500 text-sm"
+                              />
                             </div>
 
-                            <FormGroup
-                              label="Problem Topic"
-                              name="problemTopic"
-                              placeholder="e.g., Algorithms"
-                            />
-                            <FormGroup
-                              label="Function Name"
-                              name="functionName"
-                              placeholder="e.g., twoSum"
-                            />
-                            <FormGroup
-                              label="Input Type"
-                              name="inputType"
-                              placeholder="e.g., nums: int[], target: int"
-                            />
-                            <FormGroup
-                              label="Return Type"
-                              name="returnType"
-                              placeholder="e.g., int[]"
-                            />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
+                                <h3 className="font-semibold text-gray-900">
+                                  Time Complexity
+                                </h3>
+                                <FormGroup
+                                  label="Value"
+                                  name="timeComplexity.value"
+                                  placeholder="e.g., O(n)"
+                                />
+                                <FormGroup
+                                  label="Explanation"
+                                  name="timeComplexity.explanation"
+                                  placeholder="Brief explanation..."
+                                />
+                              </div>
+                              <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
+                                <h3 className="font-semibold text-gray-900">
+                                  Space Complexity
+                                </h3>
+                                <FormGroup
+                                  label="Value"
+                                  name="spaceComplexity.value"
+                                  placeholder="e.g., O(1)"
+                                />
+                                <FormGroup
+                                  label="Explanation"
+                                  name="spaceComplexity.explanation"
+                                  placeholder="Brief explanation..."
+                                />
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      {/* Details Tab */}
-                      {activeTab === "details" && (
-                        <div className="space-y-6">
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">
-                              Description
-                            </label>
-                            <Field
-                              as="textarea"
-                              name="description"
-                              rows={5}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
-                              placeholder="Detailed problem description..."
-                            />
-                            <ErrorMessage
-                              name="description"
-                              component="div"
-                              className="text-red-500 text-sm"
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">
-                              Algorithm Steps
-                            </label>
-                            <FieldArray name="algorithmSteps">
+                        {/* Test Cases Tab */}
+                        {editActiveTab === "testcases" && (
+                          <div className="space-y-6">
+                            <FieldArray name="testCases">
                               {({ push, remove }) => (
-                                <div className="space-y-3">
-                                  {values.algorithmSteps.map((step, index) => (
-                                    <div key={index} className="flex gap-2">
-                                      <Field
-                                        name={`algorithmSteps.${index}`}
-                                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                        placeholder={`Step ${index + 1}`}
-                                      />
-                                      <button
-                                        type="button"
-                                        onClick={() => remove(index)}
-                                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                      >
-                                        <Trash2 size={18} />
-                                      </button>
+                                <div className="space-y-6">
+                                  {values.testCases.map((_, index) => (
+                                    <div
+                                      key={index}
+                                      className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm relative group"
+                                    >
+                                      <div className="absolute top-4 right-4">
+                                        <button
+                                          type="button"
+                                          onClick={() => remove(index)}
+                                          className="text-gray-400 hover:text-red-500 transition-colors"
+                                          title="Remove Test Case"
+                                        >
+                                          <Trash2 size={18} />
+                                        </button>
+                                      </div>
+                                      <h4 className="font-medium text-gray-900 mb-4">
+                                        Test Case #{index + 1}
+                                      </h4>
+                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="md:col-span-2">
+                                          <FormGroup
+                                            label="Input"
+                                            name={`testCases.${index}.input`}
+                                            placeholder="Input values..."
+                                          />
+                                        </div>
+                                        <FormGroup
+                                          label="Expected Output"
+                                          name={`testCases.${index}.expected`}
+                                          placeholder="Expected result..."
+                                        />
+                                        <FormGroup
+                                          label="Explanation"
+                                          name={`testCases.${index}.explanation`}
+                                          placeholder="Why this output?"
+                                        />
+                                        <div className="flex items-center gap-2 mt-2">
+                                          <Field
+                                            type="checkbox"
+                                            name={`testCases.${index}.hidden`}
+                                            id={`edit-hidden-${index}`}
+                                            className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                                          />
+                                          <label
+                                            htmlFor={`edit-hidden-${index}`}
+                                            className="text-sm text-gray-700"
+                                          >
+                                            Hidden Test Case
+                                          </label>
+                                        </div>
+                                      </div>
                                     </div>
                                   ))}
                                   <button
                                     type="button"
-                                    onClick={() => push("")}
-                                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                                    onClick={() =>
+                                      push({
+                                        input: "",
+                                        expected: "",
+                                        explanation: "",
+                                        hidden: false,
+                                      })
+                                    }
+                                    className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-blue-500 hover:text-blue-600 transition-all font-medium flex items-center justify-center gap-2"
                                   >
-                                    <Plus size={16} /> Add Step
+                                    <Plus size={20} /> Add Test Case
                                   </button>
                                 </div>
                               )}
                             </FieldArray>
                           </div>
+                        )}
 
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
-                              <h3 className="font-semibold text-gray-900">
-                                Time Complexity
-                              </h3>
-                              <FormGroup
-                                label="Value"
-                                name="timeComplexity.value"
-                                placeholder="e.g., O(n)"
-                              />
-                              <FormGroup
-                                label="Explanation"
-                                name="timeComplexity.explanation"
-                                placeholder="Brief explanation..."
-                              />
-                            </div>
-                            <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
-                              <h3 className="font-semibold text-gray-900">
-                                Space Complexity
-                              </h3>
-                              <FormGroup
-                                label="Value"
-                                name="spaceComplexity.value"
-                                placeholder="e.g., O(1)"
-                              />
-                              <FormGroup
-                                label="Explanation"
-                                name="spaceComplexity.explanation"
-                                placeholder="Brief explanation..."
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Test Cases Tab */}
-                      {activeTab === "testcases" && (
-                        <div className="space-y-6">
-                          <FieldArray name="testCases">
-                            {({ push, remove }) => (
-                              <div className="space-y-6">
-                                {values.testCases.map((_, index) => (
-                                  <div
-                                    key={index}
-                                    className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm relative group"
-                                  >
-                                    <div className="absolute top-4 right-4">
-                                      <button
-                                        type="button"
-                                        onClick={() => remove(index)}
-                                        className="text-gray-400 hover:text-red-500 transition-colors"
-                                        title="Remove Test Case"
-                                      >
-                                        <Trash2 size={18} />
-                                      </button>
-                                    </div>
-                                    <h4 className="font-medium text-gray-900 mb-4">
-                                      Test Case #{index + 1}
-                                    </h4>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                      <div className="md:col-span-2">
-                                        <FormGroup
-                                          label="Input"
-                                          name={`testCases.${index}.input`}
-                                          placeholder="Input values..."
-                                        />
-                                      </div>
-                                      <FormGroup
-                                        label="Expected Output"
-                                        name={`testCases.${index}.expected`}
-                                        placeholder="Expected result..."
-                                      />
-                                      <FormGroup
-                                        label="Explanation"
-                                        name={`testCases.${index}.explanation`}
-                                        placeholder="Why this output?"
-                                      />
-                                      <div className="flex items-center gap-2 mt-2">
-                                        <Field
-                                          type="checkbox"
-                                          name={`testCases.${index}.hidden`}
-                                          id={`hidden-${index}`}
-                                          className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                                        />
-                                        <label
-                                          htmlFor={`hidden-${index}`}
-                                          className="text-sm text-gray-700"
-                                        >
-                                          Hidden Test Case
-                                        </label>
-                                      </div>
-                                    </div>
+                        {/* Solution Tab */}
+                        {editActiveTab === "solution" && (
+                          <div className="space-y-6">
+                            <div className="grid grid-cols-1 gap-6">
+                              {["javascript", "java", "python", "cpp"].map(
+                                (lang) => (
+                                  <div key={lang} className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 capitalize">
+                                      {lang} Solution
+                                    </label>
+                                    <Field
+                                      as="textarea"
+                                      name={`solution.${lang}`}
+                                      rows={6}
+                                      className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
+                                      placeholder={`Paste your ${lang} solution here...`}
+                                    />
                                   </div>
-                                ))}
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    push({
-                                      input: "",
-                                      expected: "",
-                                      explanation: "",
-                                      hidden: false,
-                                    })
-                                  }
-                                  className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-blue-500 hover:text-blue-600 transition-all font-medium flex items-center justify-center gap-2"
-                                >
-                                  <Plus size={20} /> Add Test Case
-                                </button>
-                              </div>
-                            )}
-                          </FieldArray>
-                        </div>
-                      )}
-
-                      {/* Solution Tab */}
-                      {activeTab === "solution" && (
-                        <div className="space-y-6">
-                          <div className="grid grid-cols-1 gap-6">
-                            {["javascript", "java", "python", "cpp"].map(
-                              (lang) => (
-                                <div key={lang} className="space-y-2">
-                                  <label className="block text-sm font-medium text-gray-700 capitalize">
-                                    {lang} Solution
-                                  </label>
-                                  <Field
-                                    as="textarea"
-                                    name={`solution.${lang}`}
-                                    rows={6}
-                                    className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
-                                    placeholder={`Paste your ${lang} solution here...`}
-                                  />
-                                </div>
-                              ),
-                            )}
+                                ),
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
 
-                    {/* Footer Actions */}
-                    <div className="p-6 border-t border-gray-200 bg-white flex justify-end gap-3 sticky bottom-0">
-                      <button
-                        type="button"
-                        onClick={() => setIsAddMode(false)}
-                        className="px-6 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/30 flex items-center gap-2"
-                      >
-                        <Save size={18} />
-                        Save Problem
-                      </button>
-                    </div>
-                  </Form>
-                )}
-              </Formik>
-            </div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      <div className="flex gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Search problems..."
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <select className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-          <option>All Difficulties</option>
-          <option>Easy</option>
-          <option>Medium</option>
-          <option>Hard</option>
-        </select>
-        <select className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-          <option>All Categories</option>
-          <option>Arrays</option>
-          <option>Strings</option>
-          <option>Linked List</option>
-          <option>Trees</option>
-        </select>
-      </div>
-
-      <div className="grid gap-4">
-        {allProblem?.map((problem) => (
-          <motion.div
-            key={problem.id}
-            layout
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <Code className="w-6 h-6 text-gray-400" />
+                      {/* Footer Actions */}
+                      <div className="p-6 border-t border-gray-200 bg-white flex justify-end gap-3 sticky bottom-0">
+                        <button
+                          type="button"
+                          onClick={() => setEditingProblem(null)}
+                          className="px-6 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/30 flex items-center gap-2"
+                        >
+                          <Save size={18} />
+                          Update Problem
+                        </button>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
               </div>
-              <div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isAddMode && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+              <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden">
+                <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
+                  <h2 className="text-2xl font-bold text-gray-800">
+                    Add New Problem
+                  </h2>
+                  <button
+                    onClick={() => setIsAddMode(false)}
+                    className="p-2 hover:bg-white rounded-full transition-colors text-gray-500 hover:text-gray-700 shadow-sm"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
+
+                <Formik
+                  initialValues={initialValues}
+                  validationSchema={validationSchema}
+                  onSubmit={handleAddProblem}
+                >
+                  {({ values }) => (
+                    <Form className="flex flex-col flex-1 overflow-hidden">
+                      {/* Persistent Title Field */}
+                      <div className="p-6 pb-0 bg-white">
+                        <FormGroup
+                          label="Problem Title"
+                          name="title"
+                          placeholder="e.g., Two Sum"
+                        />
+                      </div>
+
+                      {/* Tabs */}
+                      <div className="flex border-b border-gray-200 bg-white sticky top-0 z-10">
+                        {allProblem.length>0 && allProblem.map((tab) => (
+                          <button
+                            key={tab.id}
+                            type="button"
+                            onClick={() => setActiveTab(tab.id)}
+                            className={`flex-1 py-4 text-sm font-medium transition-colors relative ${
+                              activeTab === tab.id
+                                ? "text-blue-600 bg-blue-50/50"
+                                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                            }`}
+                          >
+                            {tab.title}
+                            {activeTab === tab.id && (
+                              <motion.div
+                                layoutId="activeTab"
+                                className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600"
+                              />
+                            )}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="flex-1 overflow-y-auto p-6 bg-gray-50/30">
+                        {/* Basic Info Tab */}
+                        {activeTab === "basic" && (
+                          <div className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <FormGroup
+                                label="Slug"
+                                name="slug"
+                                placeholder="e.g., two-sum"
+                              />
+                              <FormGroup
+                                label="Tags"
+                                name="tags"
+                                placeholder="e.g., Array, Hash Table"
+                              />
+
+                              <div className="space-y-2">
+                                <label className="block text-sm font-medium text-gray-700">
+                                  Difficulty
+                                </label>
+                                <Field
+                                  as="select"
+                                  name="difficulty"
+                                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                >
+                                  <option value="Easy">Easy</option>
+                                  <option value="Medium">Medium</option>
+                                  <option value="Hard">Hard</option>
+                                </Field>
+                              </div>
+
+                              <FormGroup
+                                label="Problem Topic"
+                                name="problemTopic"
+                                placeholder="e.g., Algorithms"
+                              />
+                              <FormGroup
+                                label="Function Name"
+                                name="functionName"
+                                placeholder="e.g., twoSum"
+                              />
+                              <FormGroup
+                                label="Input Type"
+                                name="inputType"
+                                placeholder="e.g., nums: int[], target: int"
+                              />
+                              <FormGroup
+                                label="Return Type"
+                                name="returnType"
+                                placeholder="e.g., int[]"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Details Tab */}
+                        {activeTab === "details" && (
+                          <div className="space-y-6">
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium text-gray-700">
+                                Description
+                              </label>
+                              <Field
+                                as="textarea"
+                                name="description"
+                                rows={5}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+                                placeholder="Detailed problem description..."
+                              />
+                              <ErrorMessage
+                                name="description"
+                                component="div"
+                                className="text-red-500 text-sm"
+                              />
+                            </div>
+
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium text-gray-700">
+                                Algorithm Steps
+                              </label>
+                              <FieldArray name="algorithmSteps">
+                                {({ push, remove }) => (
+                                  <div className="space-y-3">
+                                    {values.algorithmSteps.map(
+                                      (step, index) => (
+                                        <div key={index} className="flex gap-2">
+                                          <Field
+                                            name={`algorithmSteps.${index}`}
+                                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                            placeholder={`Step ${index + 1}`}
+                                          />
+                                          <button
+                                            type="button"
+                                            onClick={() => remove(index)}
+                                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                          >
+                                            <Trash2 size={18} />
+                                          </button>
+                                        </div>
+                                      ),
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() => push("")}
+                                      className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                                    >
+                                      <Plus size={16} /> Add Step
+                                    </button>
+                                  </div>
+                                )}
+                              </FieldArray>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
+                                <h3 className="font-semibold text-gray-900">
+                                  Time Complexity
+                                </h3>
+                                <FormGroup
+                                  label="Value"
+                                  name="timeComplexity.value"
+                                  placeholder="e.g., O(n)"
+                                />
+                                <FormGroup
+                                  label="Explanation"
+                                  name="timeComplexity.explanation"
+                                  placeholder="Brief explanation..."
+                                />
+                              </div>
+                              <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
+                                <h3 className="font-semibold text-gray-900">
+                                  Space Complexity
+                                </h3>
+                                <FormGroup
+                                  label="Value"
+                                  name="spaceComplexity.value"
+                                  placeholder="e.g., O(1)"
+                                />
+                                <FormGroup
+                                  label="Explanation"
+                                  name="spaceComplexity.explanation"
+                                  placeholder="Brief explanation..."
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Test Cases Tab */}
+                        {activeTab === "testcases" && (
+                          <div className="space-y-6">
+                            <FieldArray name="testCases">
+                              {({ push, remove }) => (
+                                <div className="space-y-6">
+                                  {values.testCases.map((_, index) => (
+                                    <div
+                                      key={index}
+                                      className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm relative group"
+                                    >
+                                      <div className="absolute top-4 right-4">
+                                        <button
+                                          type="button"
+                                          onClick={() => remove(index)}
+                                          className="text-gray-400 hover:text-red-500 transition-colors"
+                                          title="Remove Test Case"
+                                        >
+                                          <Trash2 size={18} />
+                                        </button>
+                                      </div>
+                                      <h4 className="font-medium text-gray-900 mb-4">
+                                        Test Case #{index + 1}
+                                      </h4>
+                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="md:col-span-2">
+                                          <FormGroup
+                                            label="Input"
+                                            name={`testCases.${index}.input`}
+                                            placeholder="Input values..."
+                                          />
+                                        </div>
+                                        <FormGroup
+                                          label="Expected Output"
+                                          name={`testCases.${index}.expected`}
+                                          placeholder="Expected result..."
+                                        />
+                                        <FormGroup
+                                          label="Explanation"
+                                          name={`testCases.${index}.explanation`}
+                                          placeholder="Why this output?"
+                                        />
+                                        <div className="flex items-center gap-2 mt-2">
+                                          <Field
+                                            type="checkbox"
+                                            name={`testCases.${index}.hidden`}
+                                            id={`hidden-${index}`}
+                                            className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                                          />
+                                          <label
+                                            htmlFor={`hidden-${index}`}
+                                            className="text-sm text-gray-700"
+                                          >
+                                            Hidden Test Case
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      push({
+                                        input: "",
+                                        expected: "",
+                                        explanation: "",
+                                        hidden: false,
+                                      })
+                                    }
+                                    className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-blue-500 hover:text-blue-600 transition-all font-medium flex items-center justify-center gap-2"
+                                  >
+                                    <Plus size={20} /> Add Test Case
+                                  </button>
+                                </div>
+                              )}
+                            </FieldArray>
+                          </div>
+                        )}
+
+                        {/* Solution Tab */}
+                        {activeTab === "solution" && (
+                          <div className="space-y-6">
+                            <div className="grid grid-cols-1 gap-6">
+                              {["javascript", "java", "python", "cpp"].map(
+                                (lang) => (
+                                  <div key={lang} className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 capitalize">
+                                      {lang} Solution
+                                    </label>
+                                    <Field
+                                      as="textarea"
+                                      name={`solution.${lang}`}
+                                      rows={6}
+                                      className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
+                                      placeholder={`Paste your ${lang} solution here...`}
+                                    />
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Footer Actions */}
+                      <div className="p-6 border-t border-gray-200 bg-white flex justify-end gap-3 sticky bottom-0">
+                        <button
+                          type="button"
+                          onClick={() => setIsAddMode(false)}
+                          className="px-6 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/30 flex items-center gap-2"
+                        >
+                          <Save size={18} />
+                          Save Problem
+                        </button>
+                      </div>
+                    </Form>
+                  )}
+                </Formik>
+              </div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        <div className="flex gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search problems..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <select className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+            <option>All Difficulties</option>
+            <option>Easy</option>
+            <option>Medium</option>
+            <option>Hard</option>
+          </select>
+          <select className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+            <option>All Categories</option>
+            <option>Arrays</option>
+            <option>Strings</option>
+            <option>Linked List</option>
+            <option>Trees</option>
+          </select>
+        </div>
+
+        <div className="grid gap-4">
+          {allProblem?.length > 0 && allProblem?.map((problem) => (
+            <motion.div
+              key={problem.id}
+              layout
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between"
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gray-50 rounded-lg">
+                  <Code className="w-6 h-6 text-gray-400" />
+                </div>
                 <div>
-                  <div className="flex gap-2 items-center">
-                    <h3 className="font-bold text-gray-900 text-lg">
-                      {problem.title}
-                    </h3>
-                    <span
-                      className={`px-2 py-0.5 rounded text-xs font- medium ${difficultyColor(problem.difficulty)}`}
-                    >
-                      {problem.difficulty}
+                  <div>
+                    <div className="flex gap-2 items-center">
+                      <h3 className="font-bold text-gray-900 text-lg">
+                        {problem.title}
+                      </h3>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font- medium ${difficultyColor(problem.difficulty)}`}
+                      >
+                        {problem.difficulty}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 mt-1">
+                    <span className="text-sm text-gray-500 flex flex-row gap-3">
+                      {problem.topicTags.map((tag, index) => {
+                        return (
+                          <p
+                            key={index}
+                            className="px-2 py-0.5 rounded text-xs font- medium bg-blue-100 text-blue-500"
+                          >
+                            {tag}
+                          </p>
+                        );
+                      })}
+                    </span>
+                    <span className="text-sm text-gray-400">•</span>
+                    <span className="text-sm text-gray-500">
+                      Acceptance: {problem.acceptanceRate}%
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="text-sm text-gray-500 flex flex-row gap-3">
-                    {problem.topicTags.map((tag, index) => {
-                      return (
-                        <p
-                          key={index}
-                          className="px-2 py-0.5 rounded text-xs font- medium bg-blue-100 text-blue-500"
-                        >
-                          {tag}
-                        </p>
-                      );
-                    })}
-                  </span>
-                  <span className="text-sm text-gray-400">•</span>
-                  <span className="text-sm text-gray-500">
-                    Acceptance: {problem.acceptanceRate}%
-                  </span>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="flex gap-2 border-l pl-4 border-gray-200">
+                  <button
+                    className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    onClick={() => {
+                      setEditingProblem(problem);
+                      setEditActiveTab("basic");
+                    }}
+                  >
+                    <Edit2 size={18} />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteOpen(problem)}
+                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    <Trash2 size={18} />
+                  </button>
                 </div>
               </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <div className="flex gap-2 border-l pl-4 border-gray-200">
-                <button
-                  className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  onClick={() => {
-                    setEditingProblem(problem);
-                    setEditActiveTab("basic");
-                  }}
-                >
-                  <Edit2 size={18} />
-                </button>
-                <button
-                  onClick={() => handleDeleteOpen(problem)}
-                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

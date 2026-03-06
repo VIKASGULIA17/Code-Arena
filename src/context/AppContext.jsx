@@ -58,7 +58,7 @@ export const AppProvider = (props) => {
         }
       })
       if(result.data!=null){
-        // console.log(result.data);
+        console.log(result.data);
         setallProblems(result.data);
       }
       else{
@@ -110,7 +110,7 @@ export const AppProvider = (props) => {
     showAllContest();
   },[isLoggedIn]);
 
-  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData,username,allProblem,allContest,showAllContest};
+  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData,username,allProblem,allContest,showAllContest,showAllProblems};
 
   return (
     <AppContext.Provider value={values}>{props.children}</AppContext.Provider>
