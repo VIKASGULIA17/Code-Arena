@@ -60,7 +60,7 @@ const UserModal = ({ user, onClose }) => {
                   {user.status}
                 </span>
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${!user.admin ? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"}`}
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${user.admin==false? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"}`}
                 >
                   {user.admin ? (
                     <div className="flex">
