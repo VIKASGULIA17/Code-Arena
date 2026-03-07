@@ -41,7 +41,7 @@ const UserModal = ({ user, onClose }) => {
           <div className="flex items-center gap-6 mb-8">
             <img
               src={`https://ui-avatars.com/api/?name=${user.username}&background=random`}
-              
+
               alt={user.name}
               className="w-24 h-24 rounded-full ring-4 ring-gray-50"
             />
@@ -119,12 +119,11 @@ const UserModal = ({ user, onClose }) => {
 };
 
 const UserManagement = () => {
-  const { jwtToken } = useAppContext();
+  const { getAllUsers,users } = useAppContext();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [users, setUsers] = useState(null);
-
+  
   // const users = [
   //     { id: 1, name: 'John Doe', email: 'john@example.com', role: 'User', status: 'Active', joinedDate: '2023-01-15', problemsSolved: 45 },
   //     { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Admin', status: 'Active', joinedDate: '2023-02-20', problemsSolved: 120 },
@@ -132,20 +131,6 @@ const UserManagement = () => {
   //     { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'User', status: 'Active', joinedDate: '2023-04-05', problemsSolved: 89 },
   //     { id: 5, name: 'Charlie Day', email: 'charlie@example.com', role: 'User', status: 'Active', joinedDate: '2023-05-12', problemsSolved: 67 },
   // ];
-
-  useEffect(() => {
-    async function getAllUsers() {
-      const result = await axios.get(`${BACKEND_URL}/admin/fetchUsers`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
-    //   console.log(result.data);
-      setUsers(result.data);
-    }
-
-    getAllUsers();
-  }, []);
 
   const filteredUsers = users?.filter(
     (user) =>
@@ -228,7 +213,7 @@ const UserManagement = () => {
                     className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium`}
                   >
                     <div className={`w-1.5 h-1.5 rounded-full `}></div>
-                    {"user.status"}
+                    {user.ban?"Banned":"Active"}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">

@@ -1,7 +1,11 @@
 import React from 'react';
 import { BarChart2, TrendingUp, Users } from 'lucide-react';
+import { useAppContext } from '../../context/AppContext';
 
 const Analysis = () => {
+
+    const {totalActiveUsers} = useAppContext();
+
     return (
         <div className="space-y-6">
             <div>
@@ -24,7 +28,7 @@ const Analysis = () => {
                         <Users className="w-8 h-8 text-purple-600" />
                     </div>
                     <h3 className="text-lg font-bold text-gray-900">Active Users</h3>
-                    <p className="text-3xl font-bold text-purple-600 mt-2">854</p>
+                    <p className="text-3xl font-bold text-purple-600 mt-2">{totalActiveUsers}</p>
                     <p className="text-sm text-gray-500 mt-1">Daily active users</p>
                 </div>
 
