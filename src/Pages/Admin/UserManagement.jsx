@@ -1,129 +1,177 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import {
   Search,
   MoreVertical,
   Shield,
   User2,
   Ban,
+  UserCheck,
   Eye,
   Mail,
   Calendar,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 import { useAppContext } from "../../context/AppContext";
 
 const UserModal = ({ user, onClose }) => {
   if (!user) return null;
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const { jwtToken, getAllUsers } = useAppContext();
+  const [isLoading, setisLoading] = useState(false);
 
-//   console.log("Selected user is : ");
-//   console.log(user);
+  const banUnbanToSpring = async () => {
+    // console.log(BACKEND_URL);
+    // console.log(jwtToken);
+    // console.log(user.userId);
+
+
+    const res = await axios.delete(
+      `${BACKEND_URL}/admin/banUnbanUser/${user.userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      },
+    );
+    return res.data;
+  };
+
+  // console.log("user");
+  // console.log(user);
+
+  const banUnbanUser = async () => {
+    setisLoading(true);
+
+    try {
+      const result = await banUnbanToSpring();
+      if (result.status == 1) {
+        getAllUsers();
+        toast.success(`User ${!user.ban ? "banned" : "unbanned"}`);
+        setTimeout(() => {
+          setisLoading(false);
+          onClose();
+        }, [2000]);
+      } else {
+        setisLoading(false);
+        throw new Error();
+      }
+    } catch (e) {
+      toast.error(`User not ${!user.ban ? "banned" : "unbanned"}`);
+    }
+  };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl"
-      >
-        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-          <h2 className="text-xl font-bold text-gray-900">User Details</h2>
-          <button
-            onClick={onClose}
-            className="cursor-pointer text-gray-400 hover:text-gray-600"
-          >
-            <span className="text-2xl">×</span>
-          </button>
-        </div>
+    <>
+      <ToastContainer />
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          className="bg-white rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl"
+        >
+          <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h2 className="text-xl font-bold text-gray-900">User Details</h2>
+            <button
+              onClick={onClose}
+              className="cursor-pointer text-gray-400 hover:text-gray-600"
+            >
+              <span className="text-2xl">×</span>
+            </button>
+          </div>
 
-        <div className="p-8">
-          <div className="flex items-center gap-6 mb-8">
-            <img
-              src={`https://ui-avatars.com/api/?name=${user.username}&background=random`}
-
-              alt={user.name}
-              className="w-24 h-24 rounded-full ring-4 ring-gray-50"
-            />
-            <div>
-              <h3 className="text-2xl font-bold text-gray-900">
-                {user.username}
-              </h3>
-              <div className="flex items-center gap-2 text-gray-500 mt-1">
-                <Mail size={16} />
-                <span>{user.email}</span>
+          <div className="p-8">
+            <div className="flex items-center gap-6 mb-8">
+              <img
+                src={`https://ui-avatars.com/api/?name=${user.username}&background=random`}
+                alt={user.name}
+                className="w-24 h-24 rounded-full ring-4 ring-gray-50"
+              />
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">
+                  {user.username}
+                </h3>
+                <div className="flex items-center gap-2 text-gray-500 mt-1">
+                  <Mail size={16} />
+                  <span>{user.email}</span>
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      user.status === "Active"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {user.status}
+                  </span>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${user.admin == false ? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"}`}
+                  >
+                    {user.admin ? (
+                      <div className="flex gap-1.5 items-center">
+                        <Shield size={12} /> <span>Admin</span>
+                      </div>
+                    ) : (
+                      <div className="flex gap-1.5 items-center">
+                        <User2 size={12} />
+                        <span>User</span>
+                      </div>
+                    )}
+                  </span>
+                </div>
               </div>
-              <div className="flex gap-2 mt-4">
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    user.status === "Active"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  }`}
-                >
-                  {user.status}
-                </span>
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${user.admin==false? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"}`}
-                >
-                  {user.admin ? (
-                    <div className="flex gap-1.5 items-center">
-                      <Shield size={12} /> <span>Admin</span>
-                    </div>
-                  ) : (
-                    <div className="flex gap-1.5 items-center">
-                      <User2 size={12} />
-                      <span>User</span>
-                    </div>
-                  )}
-                </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                <p className="text-sm text-gray-500 mb-1">Joined Date</p>
+                <div className="flex items-center gap-2 text-sm text-gray-400">
+                  <Calendar size={18} className="text-gray-400" />
+                  {user.joined}
+                </div>
+              </div>
+              <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                <p className="text-sm text-gray-500 mb-1">Problems Solved</p>
+                <div className="flex items-center gap-2 font-medium text-gray-900">
+                  <span className="text-lg font-bold text-blue-600">
+                    {user.problemsSolved}
+                  </span>
+                  <span className="text-sm text-gray-400">problems</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
-            <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-              <p className="text-sm text-gray-500 mb-1">Joined Date</p>
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <Calendar size={18} className="text-gray-400" />
-                {user.joined}
-              </div>
-            </div>
-            <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-              <p className="text-sm text-gray-500 mb-1">Problems Solved</p>
-              <div className="flex items-center gap-2 font-medium text-gray-900">
-                <span className="text-lg font-bold text-blue-600">
-                  {user.problemsSolved}
-                </span>
-                <span className="text-sm text-gray-400">problems</span>
-              </div>
-            </div>
+          <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+            <button
+              onClick={onClose}
+              className="px-4 cursor-pointer py-2 text-gray-600 font-medium hover:bg-gray-200 rounded-lg transition-colors"
+            >
+              Close
+            </button>
+            <button
+              className="px-4 cursor-pointer py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
+              onClick={banUnbanUser}
+            >
+              <Ban size={16} />
+              {isLoading?"wait..":!user.ban ? "Ban User" : "Unban User"}
+            </button>
           </div>
-        </div>
-
-        <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 cursor-pointer py-2 text-gray-600 font-medium hover:bg-gray-200 rounded-lg transition-colors"
-          >
-            Close
-          </button>
-          <button className="px-4 cursor-pointer py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2">
-            <Ban size={16} />
-            Ban User
-          </button>
-        </div>
-      </motion.div>
-    </div>
+        </motion.div>
+      </div>
+    </>
   );
 };
 
 const UserManagement = () => {
-  const { getAllUsers,users } = useAppContext();
+  const { getAllUsers, users } = useAppContext();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   // const users = [
   //     { id: 1, name: 'John Doe', email: 'john@example.com', role: 'User', status: 'Active', joinedDate: '2023-01-15', problemsSolved: 45 },
   //     { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Admin', status: 'Active', joinedDate: '2023-02-20', problemsSolved: 120 },
@@ -201,7 +249,7 @@ const UserManagement = () => {
                   <span
                     className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium
                                         ${user.admin == true ? "bg-purple-100 text-purple-700" : "bg-blue-100 text-blue-700"}
-                                    `}
+                              `}
                   >
                     {user.admin == true && <Shield size={12} />}
                     {user.admin == false && <User2 size={12} />}
@@ -213,7 +261,7 @@ const UserManagement = () => {
                     className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium`}
                   >
                     <div className={`w-1.5 h-1.5 rounded-full `}></div>
-                    {user.ban?"Banned":"Active"}
+                    {user.ban ? <span className="flex gap-1.5 justify-center"><Ban size={12}/>Banned</span> : <span className="flex gap-1.5 justify-center"><UserCheck size={12}/>Active</span>}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
