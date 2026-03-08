@@ -47,11 +47,11 @@ const UserModal = ({ user, onClose }) => {
     try {
       const result = await banUnbanToSpring();
       if (result.status == 1) {
-        getAllUsers();
         toast.success(`User ${!user.ban ? "banned" : "unbanned"}`);
         setTimeout(() => {
           setisLoading(false);
           onClose();
+          getAllUsers();
         }, [2000]);
       } else {
         setisLoading(false);
@@ -230,7 +230,7 @@ const UserManagement = () => {
             {filteredUsers?.map((user) => (
               <tr
                 key={user.joined}
-                className="hover:bg-gray-50/50 transition-colors"
+                className={` ${user.ban?"bg-slate-300":"bg-gray-50/50"} transition-colors`}
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
