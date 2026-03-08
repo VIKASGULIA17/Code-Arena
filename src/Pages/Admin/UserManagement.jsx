@@ -261,7 +261,7 @@ const UserManagement = () => {
                     className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium`}
                   >
                     <div className={`w-1.5 h-1.5 rounded-full `}></div>
-                    {user.ban ? <span className="flex gap-1.5 justify-center"><Ban size={12}/>Banned</span> : <span className="flex gap-1.5 justify-center"><UserCheck size={12}/>Active</span>}
+                    {user.ban ? <span className="flex gap-1.5 items-center hover:text-red-500"><Ban size={12}/>Banned</span> : <span className="flex gap-1.5 items-center hover:text-green-500"><UserCheck size={12}/>Active</span>}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
