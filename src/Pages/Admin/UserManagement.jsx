@@ -230,7 +230,7 @@ const UserManagement = () => {
             {filteredUsers?.map((user) => (
               <tr
                 key={user.joined}
-                className={` ${user.ban?"bg-slate-300":"bg-gray-50/50"} transition-colors`}
+                className={` ${user.ban?"bg-red-50":"bg-gray-50/50"} transition-colors`}
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaGoogle,
   FaDiscord,
@@ -18,6 +18,8 @@ import Image from "../../assets/authentication.gif"
 const Login = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
+  const [isHighlightOpen,setisHighlightOpen] = useState(false);
+  const [bannedUser,setbannedUser] = useState("");      //if user is banned
   const { setjwtToken, setisJwtExist,setuserDetails,setisLoggedIn,getUserData } = useAppContext();
 
   const validateData = yup.object({
@@ -55,7 +57,12 @@ const Login = () => {
         getUserData();
         toast.success(`User logged in..`);
         navigate("/");
-      } else {
+      } 
+      else if(res.status == -1){        //user is banned
+        setisHighlightOpen(true);
+        setbannedUser(values.username);
+      }
+      else{
         throw new Error();
       }
     } catch (e) {
@@ -173,6 +180,7 @@ const Login = () => {
                         "Log In"
                       )}
                     </button>
+                    {isHighlightOpen && <p className="text-red-600 text-[13px] font-semibold mx-auto">***{bannedUser} is banned***</p>}
                   </Form>
                 );
               }}
