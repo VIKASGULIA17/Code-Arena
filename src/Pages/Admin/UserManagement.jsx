@@ -235,7 +235,7 @@ const UserManagement = () => {
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">
-                      {user.username[0]}
+                      {user.username[0].toUpperCase()}
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">
