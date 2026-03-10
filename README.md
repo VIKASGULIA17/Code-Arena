@@ -1,110 +1,118 @@
 # ⚔️ Code Arena
 
-Code Arena is a full-stack competitive programming and algorithm practice platform. Built with a modern tech stack, it allows users to solve coding challenges, execute code in multiple languages in real-time, and track their submission history—much like LeetCode.
+**Code Arena** is a premium, full-stack competitive programming and algorithm practice platform. It provides a seamless environment for users to solve coding challenges, visualize algorithms, and master Data Structures and Algorithms (DSA) through a dedicated learning hub.
+
+![Code Arena Banner](https://raw.githubusercontent.com/VIKASGULIA17/Code-Arena/main/public/banner.png) *(Note: Replace with actual banner if available)*
+
+## 🚀 Overview
+
+Code Arena is designed to emulate the experience of top-tier platforms like LeetCode and Codeforces, featuring real-time code execution, an integrated learning management system, and an advanced administrative suite for content management.
+
+---
 
 ## ✨ Key Features
 
-* **Real-Time Code Execution:** Securely compile and run code in C++, Java, Python, and JavaScript using the Judge0 API.
-* **Rich Code Editor:** Integrated Monaco Editor with syntax highlighting, auto-indentation, and a read-only mode for viewing past submissions.
-* **User Authentication & Profiles:** JWT-based secure login, customizable user profiles, avatars (via DiceBear), and global ranking statistics.
-* **Submission Tracking:** View detailed submission history including status (Accepted, Wrong Answer, TLE, Compilation Error), execution time (ms), and memory usage (MB).
-* **Shareable Solutions:** Generate unique, read-only links to share specific code submissions with others.
-* **Robust Data Handling:** Base64 encoding for code payloads to ensure safe UTF-8 transmission of complex symbols and formatting.
+### 💻 Core Platform
+*   **Real-Time Code Execution:** Securely compile and run code in **C++, Java, Python, and JavaScript** using the Judge0 CE API.
+*   **Monaco Code Editor:** A high-performance editor with syntax highlighting, auto-completion, and custom themes.
+*   **Submissions & Analytics:** Detailed tracking of execution time, memory usage, and status (Accepted, WA, TLE, CE).
+*   **Shared Submissions:** Generate unique, shareable links for your solutions to collaborate or showcase work.
+
+### 🎓 Learning & Revision
+*   **DSA Learning Hub:** A comprehensive categorized library of Data Structures and Algorithms with:
+    *   In-depth theory and complexity analysis.
+    *   Code templates in multiple languages.
+    *   Difficulty-based progression (Beginner to Advanced).
+*   **Algorithm Visualizer:** Interactive 1D and 2D visualizations for:
+    *   Sorting Algorithms (Bubble, Merge, Quick, etc.)
+    *   Graph Traversals (BFS, DFS)
+    *   Tree Structures
+    *   Recursion Depth and Flow
+
+### 🛡️ Admin Suite
+*   **Unified Dashboard:** Real-time stats on user growth, problem activity, and system health.
+*   **Content Management:** Full CRUD operations for:
+    *   **Problems:** Manage descriptions, constraints, and test cases.
+    *   **Contests:** Schedule and monitor live coding competitions.
+*   **User Management:** Overview of active participants and their performance metrics.
+
+---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-
-* **Framework:** React (Vite)
-* **Styling:** Tailwind CSS
-* **Code Editor:** `@monaco-editor/react`
-* **HTTP Client:** Axios
-* **Icons:** Lucide React
-* **Routing:** React Router DOM
-
-### Backend
-
-* **Framework:** Java Spring Boot
-* **Security:** Spring Security with JWT Authentication
-* **Database:** MongoDB (Spring Data MongoDB)
-* **Code Execution Engine:** Judge0 CE (Dockerized)
-* **JSON Serialization:** Jackson (with custom `ToStringSerializer` for MongoDB ObjectIds)
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React 19, Vite, Tailwind CSS 4, Framer Motion, Lucide Icons |
+| **State Management** | React Context API (`AppContext`) |
+| **Editor** | `@monaco-editor/react` |
+| **Backend** | Java Spring Boot, Spring Security |
+| **Database** | MongoDB |
+| **Authentication** | JWT (JSON Web Tokens) |
+| **Execution** | Judge0 CE (API / Docker) |
 
 ---
 
-## 🚀 Getting Started
+## 📂 Project Structure
+
+```text
+Code-Arena/
+├── src/
+│   ├── api/             # API service configurations
+│   ├── components/      # Reusable UI & Feature-specific components
+│   │   ├── admin/       # Admin-only components
+│   │   ├── Algovisualizer/ # Visualization logic
+│   │   ├── Contest/     # Contest-related logic
+│   │   └── DsaRevision/ # DSA Hub components
+│   ├── context/         # AppContext for global state
+│   ├── data/            # Static data, templates, and constants
+│   ├── Pages/           # Main route pages (Home, Problems, etc.)
+│   └── hooks/           # Custom React hooks
+├── public/              # Static assets
+└── ...configs           # Vite, Tailwind, ESLint, PostCSS
+```
+
+---
+
+## 🏁 Getting Started
 
 ### Prerequisites
+*   **Node.js** (v18+)
+*   **JDK** (17+)
+*   **MongoDB** (Local or Atlas)
+*   **Judge0 API Key** (RapidAPI) or a local Docker instance.
 
-* Node.js (v18+)
-* Java (JDK 17+)
-* MongoDB (Local or Atlas)
-* Judge0 API Access (Self-hosted via Docker or RapidAPI)
-
-### 1. Backend Setup (Spring Boot)
-
-1. Navigate to the backend directory.
-2. Update your `application.properties` or `application.yml` with your MongoDB URI and JWT Secret:
-```properties
-spring.data.mongodb.uri=mongodb://localhost:27017/codearena
-jwt.secret=your_super_secret_key_here
-
-```
-
-
-3. Run the Spring Boot application:
+### 1. Installation
 ```bash
-./mvnw spring-boot:run
+# Clone the repository
+git clone https://github.com/VIKASGULIA17/Code-Arena.git
+cd Code-Arena
 
-```
-
-
-*The backend will start on `http://localhost:8080`.*
-
-### 2. Frontend Setup (React/Vite)
-
-1. Navigate to the frontend directory.
-2. Install the dependencies:
-```bash
+# Install dependencies
 npm install
-
 ```
 
-
-3. Create a `.env` file in the root of the frontend directory and configure your backend and execution engine URLs:
+### 2. Environment Variables
+Create a `.env` file in the root:
 ```env
 VITE_BACKEND_URL=http://localhost:8080
-VITE_JUDGE0_URL=http://localhost:2358  # Or your hosted Judge0 URL
-
+VITE_JUDGE0_URL=https://judge0-ce.p.rapidapi.com # Or local URL
+VITE_JUDGE0_HOST=judge0-ce.p.rapidapi.com
+VITE_JUDGE0_KEY=your_rapidapi_key
 ```
 
-
-4. Start the development server:
+### 3. Run Development Server
 ```bash
 npm run dev
-
 ```
 
-
-*The frontend will start on `http://localhost:5173` (or 5174).*
-
 ---
 
-## 📂 Architecture Highlights
+## 📄 Documentation
 
-* **CORS Configuration:** The backend is configured to allow cross-origin requests specifically from the Vite development ports to ensure smooth local development.
-* **Submission Flow:** 1. User writes code in the Monaco Editor.
-2. Code is Base64 encoded and sent to Judge0 with `?wait=true`.
-3. The execution result (stdout, stderr, time, memory) is decoded and returned to the React frontend.
-4. The frontend calculates the final status (e.g., Passed, Failed) and sends the payload to the Spring Boot backend to be saved in MongoDB.
-* **Driver Code Injection:** Hidden boilerplate and driver code is appended to user submissions at runtime to test logic against hidden test cases without cluttering the user's editor.
-
----
+For a deep dive into the architecture, API endpoints, and internal logic, please refer to the [DOCUMENTATION.md](./DOCUMENTATION.md) file.
 
 ## 🤝 Contributing
+Feel free to fork the project and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.
 
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
-
-## 📝 License
-
-This project is licensed under the MIT License.
+## 📜 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
