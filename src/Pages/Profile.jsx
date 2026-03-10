@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { dsaProblems } from '../data/dsaProblem'
 import { Button } from '../components/ui/button'
-import { Trophy, Zap, Bug, Globe, Lock, MapPin, School, BarChart3, User2, Camera } from 'lucide-react'
+import { Trophy, Zap, Bug, Globe, Lock, MapPin, School, BarChart3, User2, Camera, X, Trash2 } from 'lucide-react'
 import {
   CheckCircle2,
   XCircle,
@@ -17,6 +17,7 @@ import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion';
 
 
 const Donut = ({ percent = 0, color = '#4f46e5' }) => {
@@ -58,6 +59,9 @@ const Profile = () => {
   const solvedHard = solved.filter(p => p.difficulty === 'Hard').length
   const [avatarMedia, setAvatarMedia] = useState(null);
   const [submissions, setSubmissions] = useState([]);
+
+
+  const [IsDeleteOpen, setIsDeleteOpen] = useState(true)
 
   const solvedPercent = (solved.length / total) * 100
 
@@ -208,7 +212,7 @@ const Profile = () => {
     <>
       <ToastContainer />
       {isEditOpen && <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <div className="absolute inset-0 bg-black/50" onClick={() => setIsEditOpen(false)} />
+        <div className="absolute inset-0 bg-black/50" onClick={() => setisEditOpen(false)} />
         <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Edit Profile</h2>
@@ -325,6 +329,17 @@ const Profile = () => {
                 </div>
 
                 {/* Action Buttons */}
+                <div className='flex w-full justify-between'>
+
+                <div>
+                      <Button
+                    type="button"
+                    onClick={() => setIsDeleteOpen(true)}
+                    className="bg-red-100 text-red-700 hover:bg-zinc-200 dark:bg-red-800 dark:text-red-200 dark:hover:bg-zinc-700"
+                  >
+                    Delete
+                  </Button>
+                </div>
                 <div className="mt-2 flex items-center justify-end gap-2">
                   <Button
                     type="button"
@@ -341,11 +356,13 @@ const Profile = () => {
                     {isSubmitting ? 'Saving...' : 'Save Changes'}
                   </Button>
                 </div>
+                </div>
               </Form>
             )}
           </Formik>
         </div>
       </div>}
+      {/* <AnimatePresence */}
       {/* </div> */}
       <div className="p-6 bg-linear-to-b from-violet-50/60 to-blue-50/60 dark:from-zinc-900 dark:to-zinc-950 min-h-screen">
         <EnhancedNavbar />
@@ -566,6 +583,112 @@ const Profile = () => {
             </div>
           </main>
         </div>
+        <AnimatePresence>
+          {IsDeleteOpen && (
+            <motion.div
+              key="delete-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              // onClick={(e) => e.target === e.currentTarget && cancelDelete()}
+            >
+              <motion.div
+                initial={{ scale: 0.92, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.92, opacity: 0, y: 20 }}
+                transition={{ type: "spring", stiffness: 320, damping: 25 }}
+                className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+              >
+                {/* Header */}
+                <div className="bg-red-50 border-b border-red-100 px-6 py-5 flex items-start gap-4">
+                  <div className="p-2.5 bg-red-100 rounded-xl shrink-0">
+                    <AlertTriangle size={22} className="text-red-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-lg font-bold text-gray-900">
+                      Delete Profile
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-0.5">
+                      This action is permanent and cannot be undone.
+                    </p>
+                  </div>
+                  <button
+                   
+                    className="p-1.5 cursor-pointer rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
+                  >
+                    <X size={18} 
+                    onClick={()=>{
+                      setIsDeleteOpen(false)
+                    }}
+                    />
+                  </button>
+                </div>
+
+                {/* Body */}
+                <div className="px-6 py-6 space-y-5">
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    You are about to permanently delete your profile{" "}
+                    <span className="font-semibold text-gray-900">
+                    </span>
+                    . All ratings, solutions, and submissions will be lost
+                    forever.
+                  </p>
+
+                  
+
+                  {/* Name confirmation input */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Type the username to confirm:
+                    </label>
+                    <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all">
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Type the username name exactly..."
+                      autoFocus
+                      className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${
+                       
+                            "border-red-300 cursor-not-allowed ring-2 ring-red-100"
+                      }`}
+                    />
+                    
+                        <p className="text-xs text-red-500">
+                          Name doesn't match. Please type it exactly.
+                        </p>
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="px-6 pb-6 flex gap-3 justify-end">
+                  <button
+
+                      onClick={()=>{
+                        setIsDeleteOpen(false);
+                      }}
+                    className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
+                  >
+                    Cancel
+                    
+                  </button>
+                  <button
+                    // onClick={confirmDelete}
+                    // disabled={
+                    //   deleteConfirmText.toLowerCase().trim() !=
+                    //   deleteTarget.title.toLowerCase()
+                    // }
+                    className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all bg-red-200 text-red-400 cursor-not-allowed bg-red-200 text-red-400 cursor-not-allowed"}
+                    `}
+                  >
+                    <Trash2 size={14} />
+                    Delete Profile
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div></>
   )
 }
