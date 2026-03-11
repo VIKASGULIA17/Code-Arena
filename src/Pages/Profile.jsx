@@ -1,33 +1,45 @@
-
-
-import React, { useEffect, useMemo, useState } from 'react'
-import { dsaProblems } from '../data/dsaProblem'
-import { Button } from '../components/ui/button'
-import { Trophy, Zap, Bug, Globe, Lock, MapPin, School, BarChart3, User2, Camera, X, Trash2 } from 'lucide-react'
+import React, { useEffect, useMemo, useState } from "react";
+import { dsaProblems } from "../data/dsaProblem";
+import { Button } from "../components/ui/button";
 import {
-  CheckCircle2,
-  XCircle,
-  Clock,
-  AlertTriangle,
+  Trophy,
+  Zap,
+  Bug,
+  Globe,
+  Lock,
+  MapPin,
+  School,
+  BarChart3,
+  User2,
+  Camera,
+  X,
+  Trash2,
 } from "lucide-react";
-import {EnhancedNavbar} from '../components/Navbar'
-import axios from 'axios'
-import { useAppContext } from '../context/AppContext'
+import { CheckCircle2, XCircle, Clock, AlertTriangle } from "lucide-react";
+import { EnhancedNavbar } from "../components/Navbar";
+import axios from "axios";
+import { useAppContext } from "../context/AppContext";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
-import { useNavigate } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion';
+import { useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 
-
-const Donut = ({ percent = 0, color = '#4f46e5' }) => {
-  const radius = 42
-  const stroke = 10
-  const c = 2 * Math.PI * radius
-  const dash = (percent / 100) * c
+const Donut = ({ percent = 0, color = "#4f46e5" }) => {
+  const radius = 42;
+  const stroke = 10;
+  const c = 2 * Math.PI * radius;
+  const dash = (percent / 100) * c;
   return (
     <svg width="120" height="120" viewBox="0 0 120 120">
-      <circle cx="60" cy="60" r={radius} stroke="#e5e7eb" strokeWidth={stroke} fill="none" />
+      <circle
+        cx="60"
+        cy="60"
+        r={radius}
+        stroke="#e5e7eb"
+        strokeWidth={stroke}
+        fill="none"
+      />
       <circle
         cx="60"
         cy="60"
@@ -39,31 +51,46 @@ const Donut = ({ percent = 0, color = '#4f46e5' }) => {
         strokeDasharray={`${dash} ${c - dash}`}
         transform="rotate(-90 60 60)"
       />
-      <text x="60" y="64" textAnchor="middle" className="fill-zinc-700 dark:fill-zinc-200" fontSize="18" fontWeight="700">
+      <text
+        x="60"
+        y="64"
+        textAnchor="middle"
+        className="fill-zinc-700 dark:fill-zinc-200"
+        fontSize="18"
+        fontWeight="700"
+      >
         {Math.round(percent)}%
       </text>
     </svg>
-  )
-}
+  );
+};
 
 const Profile = () => {
-  const solved = useMemo(() => dsaProblems.filter(p => p.status), [])
-  const total = dsaProblems.length
-  const easy = useMemo(() => dsaProblems.filter(p => p.difficulty === 'Easy'), [])
-  const medium = useMemo(() => dsaProblems.filter(p => p.difficulty === 'Medium'), [])
-  const hard = useMemo(() => dsaProblems.filter(p => p.difficulty === 'Hard'), [])
+  const solved = useMemo(() => dsaProblems.filter((p) => p.status), []);
+  const total = dsaProblems.length;
+  const easy = useMemo(
+    () => dsaProblems.filter((p) => p.difficulty === "Easy"),
+    [],
+  );
+  const medium = useMemo(
+    () => dsaProblems.filter((p) => p.difficulty === "Medium"),
+    [],
+  );
+  const hard = useMemo(
+    () => dsaProblems.filter((p) => p.difficulty === "Hard"),
+    [],
+  );
   const navigate = useNavigate();
 
-  const solvedEasy = solved.filter(p => p.difficulty === 'Easy').length
-  const solvedMed = solved.filter(p => p.difficulty === 'Medium').length
-  const solvedHard = solved.filter(p => p.difficulty === 'Hard').length
+  const solvedEasy = solved.filter((p) => p.difficulty === "Easy").length;
+  const solvedMed = solved.filter((p) => p.difficulty === "Medium").length;
+  const solvedHard = solved.filter((p) => p.difficulty === "Hard").length;
   const [avatarMedia, setAvatarMedia] = useState(null);
   const [submissions, setSubmissions] = useState([]);
 
+  const [IsDeleteOpen, setIsDeleteOpen] = useState(true);
 
-  const [IsDeleteOpen, setIsDeleteOpen] = useState(true)
-
-  const solvedPercent = (solved.length / total) * 100
+  const solvedPercent = (solved.length / total) * 100;
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const { getUserProfileData, jwtToken, userProfile } = useAppContext();
@@ -101,7 +128,7 @@ const Profile = () => {
     // A few more colorful ones
     "https://api.dicebear.com/9.x/toon-head/svg?seed=Luna",
     "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Nerd",
-    "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Bender"
+    "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Bender",
   ];
 
   const STATUS_CONFIG = {
@@ -148,23 +175,52 @@ const Profile = () => {
 
   const handleEditDialogBox = () => {
     setisEditOpen(true);
-  }
+  };
 
   const saveUpdateToSpringMongo = async (values) => {
     const formData = new FormData();
     formData.append("userProfileJson", JSON.stringify(values));
 
-    if(avatarMedia!=null) formData.append("avatarMedia", avatarMedia);
-    else if(values.avatarLink!=null && values.avatarLink.length>0 && values.avatarLink) formData.append("cloudinaryLink",values.avatarLink);
-    
-    const res = await axios.post(`${BACKEND_URL}/userProfile/update`, formData, {
+    if (avatarMedia != null) formData.append("avatarMedia", avatarMedia);
+    else if (
+      values.avatarLink != null &&
+      values.avatarLink.length > 0 &&
+      values.avatarLink
+    )
+      formData.append("cloudinaryLink", values.avatarLink);
+
+    const res = await axios.post(
+      `${BACKEND_URL}/userProfile/update`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+    return res.data;
+  };
+
+  const sendDeleteProfileToSpring = async () => {
+    const res = await axios.delete(`${BACKEND_URL}/userProfile/delete`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
-        "Content-Type": "multipart/form-data"
-      }
+      },
     });
     return res.data;
-  }
+  };
+
+  const handleDeleteUserProfile = async () => {
+    // try {
+    //   const res = await sendDeleteProfileToSpring();
+    //   if(res.status == 1){
+
+    //   }
+    // } catch (e) {
+
+    // }
+  };
 
   // console.log(userProfile?.avatarLink);
 
@@ -179,30 +235,28 @@ const Profile = () => {
         setisEditOpen(false);
         setAvatarMedia(null);
         // console.log("Function calling...");
-        getUserProfileData();   // to reflect the changes in profile page after update
-      }
-      else {
+        getUserProfileData(); // to reflect the changes in profile page after update
+      } else {
         throw new Error();
       }
-    }
-    catch (err) {
+    } catch (err) {
       toast.error(`Profile not updated`);
     }
-  }
+  };
 
   const fetchSubmissions = async () => {
     try {
       const response = await axios.get(`${BACKEND_URL}/submission/getAll`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
-        }
-      })
-      setSubmissions(response.data)
+          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+        },
+      });
+      setSubmissions(response.data);
       // console.log(response.data)
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchSubmissions();
@@ -211,157 +265,292 @@ const Profile = () => {
   return (
     <>
       <ToastContainer />
-      {isEditOpen && <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <div className="absolute inset-0 bg-black/50" onClick={() => setisEditOpen(false)} />
-        <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 shadow-xl">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Edit Profile</h2>
-            <button onClick={() => setisEditOpen(false)} className="text-zinc-500  hover:text-zinc-700">✕</button>
-          </div>
+      {isEditOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setisEditOpen(false)}
+          />
+          <div className="relative z-10 w-full max-w-xl rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Edit Profile</h2>
+              <button
+                onClick={() => setisEditOpen(false)}
+                className="text-zinc-500  hover:text-zinc-700"
+              >
+                ✕
+              </button>
+            </div>
 
-          <Formik
-
-            enableReinitialize
-            initialValues={{
-              bio: userProfile?.bio || "",
-              fullName: userProfile?.fullName || "",
-              username: userProfile?.username || "",
-              location: userProfile?.location || "",
-              schoolName: userProfile?.schoolName || "",
-              gender: userProfile?.gender || "",
-              avatarLink: userProfile?.avatarLink || "",
-              websiteLink: userProfile?.websiteLink || ""
-            }}
-
-            onSubmit={handleSubmit}
-
-          >
-            {({ isSubmitting, values, setFieldValue }) => (
-              <Form className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                  {/* User Name */}
-                  <div className="space-y-1">
-                    <label className="text-sm font-medium" htmlFor="username">Username</label>
-                    <Field id="username" name="username" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.username ? userProfile?.username : "JohnDoe_123"} />
-                    <ErrorMessage name="username" component="div" className="text-xs text-rose-600" />
-                  </div>
-
-                  {/* Full Name */}
-                  <div className="space-y-1">
-                    <label className="text-sm font-medium" htmlFor="fullName">Full Name</label>
-                    <Field id="fullName" name="fullName" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.fullName ? userProfile?.fullName : "John Doe"} />
-                    <ErrorMessage name="fullName" component="div" className="text-xs text-rose-600" />
-                  </div>
-
-                  {/* Bio */}
-                  <div className="sm:col-span-2 space-y-1">
-                    <label className="text-sm font-medium" htmlFor="bio">Bio</label>
-                    <Field as="textarea" id="bio" name="bio" rows="3" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Tell something about yourself" />
-                    <ErrorMessage name="bio" component="div" className="text-xs text-rose-600" />
-                  </div>
-
-                  {/* School Name */}
-                  <div className="space-y-1">
-                    <label className="text-sm font-medium" htmlFor="schoolName">School Name</label>
-                    <Field id="schoolName" name="schoolName" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.schoolName ? userProfile?.schoolName : "MIT"} />
-                    <ErrorMessage name="schoolName" component="div" className="text-xs text-rose-600" />
-                  </div>
-
-
-
-                  {/* Country */}
-                  <div className="space-y-1">
-                    <label className="text-sm font-medium" htmlFor="location">Country</label>
-                    <Field id="location" name="location" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.location ? userProfile?.location : "United States"} />
-                    <ErrorMessage name="location" component="div" className="text-xs text-rose-600" />
-                  </div>
-
-                  {/* Avatar Selection Grid */}
-                  <div className="sm:col-span-2 space-y-3">
-                    <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-                      Pick Your Character
-                    </label>
-
-                    <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                      <div className='relative aspect-square rounded-xl border-2 transition-all duration-200' >
-                        <img alt="current avatar profile image" className='aspect-square rounded-xl object-cover h-full w-full' src={values.avatarLink} />
-                        <input type="file" id="inputAvatar" accept='image/*' alt="Current avatar profile image" className='hidden' onChange={(e) => {
-                          const file = e.target.files[0];
-                          setAvatarMedia(file);
-                          setFieldValue('avatarLink', URL.createObjectURL(file));
-                        }} />
-                        <label htmlFor="inputAvatar" className='ml-3 absolute -bottom-2 -right-2 bg-blue-600 p-1 hover:bg-blue-700 cursor-pointer rounded-full text-white'><Camera size={16} /></label>
-                      </div>
-                      {AVATAR_OPTIONS.map((url) => (
-                        <button
-                          key={url}
-                          type="button"
-                          onClick={() => {
-                            setFieldValue('avatarLink', url)
-                          }}
-                          className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${values?.avatarLink === url
-                            ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500/20'
-                            : 'border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300'
-                            }`}
-                        >
-                          <img src={url} alt="avatarLink" className="aspect-square rounded-xl w-full h-full object-contain p-1" />
-
-                          {values?.avatarLink === url && (
-                            <div className="absolute top-1 right-1 bg-indigo-600 rounded-full p-0.5 shadow-sm">
-                              <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
-                              </svg>
-                            </div>
-                          )}
-                        </button>
-                      ))}
+            <Formik
+              enableReinitialize
+              initialValues={{
+                bio: userProfile?.bio || "",
+                fullName: userProfile?.fullName || "",
+                username: userProfile?.username || "",
+                location: userProfile?.location || "",
+                schoolName: userProfile?.schoolName || "",
+                gender: userProfile?.gender || "",
+                avatarLink: userProfile?.avatarLink || "",
+                websiteLink: userProfile?.websiteLink || "",
+              }}
+              onSubmit={handleSubmit}
+            >
+              {({ isSubmitting, values, setFieldValue }) => (
+                <Form className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* User Name */}
+                    <div className="space-y-1">
+                      <label className="text-sm font-medium" htmlFor="username">
+                        Username
+                      </label>
+                      <Field
+                        id="username"
+                        name="username"
+                        className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder={
+                          userProfile?.username
+                            ? userProfile?.username
+                            : "JohnDoe_123"
+                        }
+                      />
+                      <ErrorMessage
+                        name="username"
+                        component="div"
+                        className="text-xs text-rose-600"
+                      />
                     </div>
-                    <ErrorMessage name="avatarLink" component="div" className="text-xs text-rose-600" />
+
+                    {/* Full Name */}
+                    <div className="space-y-1">
+                      <label className="text-sm font-medium" htmlFor="fullName">
+                        Full Name
+                      </label>
+                      <Field
+                        id="fullName"
+                        name="fullName"
+                        className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder={
+                          userProfile?.fullName
+                            ? userProfile?.fullName
+                            : "John Doe"
+                        }
+                      />
+                      <ErrorMessage
+                        name="fullName"
+                        component="div"
+                        className="text-xs text-rose-600"
+                      />
+                    </div>
+
+                    {/* Bio */}
+                    <div className="sm:col-span-2 space-y-1">
+                      <label className="text-sm font-medium" htmlFor="bio">
+                        Bio
+                      </label>
+                      <Field
+                        as="textarea"
+                        id="bio"
+                        name="bio"
+                        rows="3"
+                        className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Tell something about yourself"
+                      />
+                      <ErrorMessage
+                        name="bio"
+                        component="div"
+                        className="text-xs text-rose-600"
+                      />
+                    </div>
+
+                    {/* School Name */}
+                    <div className="space-y-1">
+                      <label
+                        className="text-sm font-medium"
+                        htmlFor="schoolName"
+                      >
+                        School Name
+                      </label>
+                      <Field
+                        id="schoolName"
+                        name="schoolName"
+                        className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder={
+                          userProfile?.schoolName
+                            ? userProfile?.schoolName
+                            : "MIT"
+                        }
+                      />
+                      <ErrorMessage
+                        name="schoolName"
+                        component="div"
+                        className="text-xs text-rose-600"
+                      />
+                    </div>
+
+                    {/* Country */}
+                    <div className="space-y-1">
+                      <label className="text-sm font-medium" htmlFor="location">
+                        Country
+                      </label>
+                      <Field
+                        id="location"
+                        name="location"
+                        className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder={
+                          userProfile?.location
+                            ? userProfile?.location
+                            : "United States"
+                        }
+                      />
+                      <ErrorMessage
+                        name="location"
+                        component="div"
+                        className="text-xs text-rose-600"
+                      />
+                    </div>
+
+                    {/* Avatar Selection Grid */}
+                    <div className="sm:col-span-2 space-y-3">
+                      <label className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+                        Pick Your Character
+                      </label>
+
+                      <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 p-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                        <div className="relative aspect-square rounded-xl border-2 transition-all duration-200">
+                          <img
+                            alt="current avatar profile image"
+                            className="aspect-square rounded-xl object-cover h-full w-full"
+                            src={values.avatarLink}
+                          />
+                          <input
+                            type="file"
+                            id="inputAvatar"
+                            accept="image/*"
+                            alt="Current avatar profile image"
+                            className="hidden"
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              setAvatarMedia(file);
+                              setFieldValue(
+                                "avatarLink",
+                                URL.createObjectURL(file),
+                              );
+                            }}
+                          />
+                          <label
+                            htmlFor="inputAvatar"
+                            className="ml-3 absolute -bottom-2 -right-2 bg-blue-600 p-1 hover:bg-blue-700 cursor-pointer rounded-full text-white"
+                          >
+                            <Camera size={16} />
+                          </label>
+                        </div>
+                        {AVATAR_OPTIONS.map((url) => (
+                          <button
+                            key={url}
+                            type="button"
+                            onClick={() => {
+                              setFieldValue("avatarLink", url);
+                            }}
+                            className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                              values?.avatarLink === url
+                                ? "border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500/20"
+                                : "border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300"
+                            }`}
+                          >
+                            <img
+                              src={url}
+                              alt="avatarLink"
+                              className="aspect-square rounded-xl w-full h-full object-contain p-1"
+                            />
+
+                            {values?.avatarLink === url && (
+                              <div className="absolute top-1 right-1 bg-indigo-600 rounded-full p-0.5 shadow-sm">
+                                <svg
+                                  className="w-2.5 h-2.5 text-white"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={4}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              </div>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                      <ErrorMessage
+                        name="avatarLink"
+                        component="div"
+                        className="text-xs text-rose-600"
+                      />
+                    </div>
+
+                    {/* Website Link */}
+                    <div className="sm:col-span-2 space-y-1">
+                      <label
+                        className="text-sm font-medium"
+                        htmlFor="websiteLink"
+                      >
+                        Website Link
+                      </label>
+                      <Field
+                        id="websiteLink"
+                        name="websiteLink"
+                        className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder={
+                          userProfile?.websiteLink
+                            ? userProfile?.websiteLink
+                            : "https://your.site"
+                        }
+                      />
+                      <ErrorMessage
+                        name="websiteLink"
+                        component="div"
+                        className="text-xs text-rose-600"
+                      />
+                    </div>
                   </div>
 
-                  {/* Website Link */}
-                  <div className="sm:col-span-2 space-y-1">
-                    <label className="text-sm font-medium" htmlFor="websiteLink">Website Link</label>
-                    <Field id="websiteLink" name="websiteLink" className="w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder={userProfile?.websiteLink ? userProfile?.websiteLink : "https://your.site"} />
-                    <ErrorMessage name="websiteLink" component="div" className="text-xs text-rose-600" />
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className='flex w-full justify-between'>
-
-                <div>
+                  {/* Action Buttons */}
+                  <div className="flex w-full justify-between">
+                    <div>
                       <Button
-                    type="button"
-                    onClick={() => setIsDeleteOpen(true)}
-                    className="bg-red-100 text-red-700 hover:bg-zinc-200 dark:bg-red-800 dark:text-red-200 dark:hover:bg-zinc-700"
-                  >
-                    Delete
-                  </Button>
-                </div>
-                <div className="mt-2 flex items-center justify-end gap-2">
-                  <Button
-                    type="button"
-                    onClick={() => setisEditOpen(false)}
-                    className="bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white"
-                  >
-                    {isSubmitting ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
+                        type="button"
+                        onClick={() => setIsDeleteOpen(true)}
+                        className="bg-red-100 text-red-700 hover:bg-zinc-200 dark:bg-red-800 dark:text-red-200 dark:hover:bg-zinc-700"
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                    <div className="mt-2 flex items-center justify-end gap-2">
+                      <Button
+                        type="button"
+                        onClick={() => setisEditOpen(false)}
+                        className="bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                      >
+                        {isSubmitting ? "Saving..." : "Save Changes"}
+                      </Button>
+                    </div>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
-      </div>}
+      )}
       {/* <AnimatePresence */}
       {/* </div> */}
       <div className="p-6 bg-linear-to-b from-violet-50/60 to-blue-50/60 dark:from-zinc-900 dark:to-zinc-950 min-h-screen">
@@ -371,21 +560,63 @@ const Profile = () => {
           <aside className="lg:col-span-3 space-y-6">
             <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
               <div className="flex items-center gap-4">
-                <img src={userProfile?.avatarLink ? userProfile?.avatarLink : "https://i.pravatar.cc/100?img=5"} alt="avatar" className="h-16 w-16 rounded-xl object-cover" />
+                <img
+                  src={
+                    userProfile?.avatarLink
+                      ? userProfile?.avatarLink
+                      : "https://i.pravatar.cc/100?img=5"
+                  }
+                  alt="avatar"
+                  className="h-16 w-16 rounded-xl object-cover"
+                />
                 <div>
                   <div className="inline-flex items-center gap-2">
-                    <h2 className="text-lg font-bold">{userProfile?.fullName}</h2>
+                    <h2 className="text-lg font-bold">
+                      {userProfile?.fullName}
+                    </h2>
                   </div>
-                  <p className="text-xs text-indigo-600">{userProfile?.username}</p>
+                  <p className="text-xs text-indigo-600">
+                    {userProfile?.username}
+                  </p>
                 </div>
               </div>
-              <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">{userProfile?.bio}</p>
-              <Button onClick={handleEditDialogBox} className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white">Edit Profile</Button>
+              <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-300">
+                {userProfile?.bio}
+              </p>
+              <Button
+                onClick={handleEditDialogBox}
+                className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+              >
+                Edit Profile
+              </Button>
               <div className="mt-4 space-y-2 text-sm text-zinc-600">
-                <div className="flex items-center gap-2"><BarChart3 className="h-4 w-4" /> Rank <span className="ml-auto font-semibold">#{userProfile?.overallRank}</span></div>
-                <div className="flex items-center gap-2"><MapPin className="h-4 w-4" /> Country <span className="ml-auto font-semibold">{userProfile?.location}</span></div>
-                <div className="flex items-center gap-2"><School className="h-4 w-4" /> School <span className="ml-auto font-semibold">{userProfile?.schoolName}</span></div>
-                <div className="flex items-center gap-2"><Globe className="h-4 w-4" /> Link <span onClick={() => navigate(userProfile?.websiteLink)} className="ml-auto font-semibold hover:text-blue-600 hover:underline cursor-pointer">{userProfile?.websiteLink}</span></div>
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" /> Rank{" "}
+                  <span className="ml-auto font-semibold">
+                    #{userProfile?.overallRank}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4" /> Country{" "}
+                  <span className="ml-auto font-semibold">
+                    {userProfile?.location}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <School className="h-4 w-4" /> School{" "}
+                  <span className="ml-auto font-semibold">
+                    {userProfile?.schoolName}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Globe className="h-4 w-4" /> Link{" "}
+                  <span
+                    onClick={() => navigate(userProfile?.websiteLink)}
+                    className="ml-auto font-semibold hover:text-blue-600 hover:underline cursor-pointer"
+                  >
+                    {userProfile?.websiteLink}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -393,14 +624,20 @@ const Profile = () => {
               <h3 className="font-semibold mb-4">Languages</h3>
               <div className="space-y-4">
                 {[
-                  { name: 'Python', pct: 75, color: 'bg-emerald-500' },
-                  { name: 'C++', pct: 45, color: 'bg-sky-500' },
-                  { name: 'JavaScript', pct: 30, color: 'bg-amber-500' },
+                  { name: "Python", pct: 75, color: "bg-emerald-500" },
+                  { name: "C++", pct: 45, color: "bg-sky-500" },
+                  { name: "JavaScript", pct: 30, color: "bg-amber-500" },
                 ].map((l) => (
                   <div key={l.name}>
-                    <div className="flex justify-between text-sm mb-1"><span>{l.name}</span><span>{l.pct}%</span></div>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span>{l.name}</span>
+                      <span>{l.pct}%</span>
+                    </div>
                     <div className="h-2 w-full bg-zinc-200 rounded-full overflow-hidden">
-                      <div className={`h-full ${l.color}`} style={{ width: `${l.pct}%` }}></div>
+                      <div
+                        className={`h-full ${l.color}`}
+                        style={{ width: `${l.pct}%` }}
+                      ></div>
                     </div>
                   </div>
                 ))}
@@ -410,9 +647,18 @@ const Profile = () => {
             <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
               <h3 className="font-semibold mb-4">Community</h3>
               <div className="space-y-3 text-sm">
-                <div className="flex items-center gap-2"><User2 className="h-4 w-4 text-emerald-600" /> 15.2k <span className="text-zinc-500">Profile views</span></div>
-                <div className="flex items-center gap-2"><Trophy className="h-4 w-4 text-indigo-600" /> 1,250 <span className="text-zinc-500">Reputation</span></div>
-                <div className="flex items-center gap-2"><Zap className="h-4 w-4 text-amber-500" /> 85 <span className="text-zinc-500">Discussions</span></div>
+                <div className="flex items-center gap-2">
+                  <User2 className="h-4 w-4 text-emerald-600" /> 15.2k{" "}
+                  <span className="text-zinc-500">Profile views</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Trophy className="h-4 w-4 text-indigo-600" /> 1,250{" "}
+                  <span className="text-zinc-500">Reputation</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Zap className="h-4 w-4 text-amber-500" /> 85{" "}
+                  <span className="text-zinc-500">Discussions</span>
+                </div>
               </div>
             </div>
           </aside>
@@ -431,9 +677,26 @@ const Profile = () => {
                 <div className="mt-4 grid grid-cols-2 gap-4 items-center">
                   <Donut percent={solvedPercent} />
                   <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-emerald-500" /> Easy <span className="ml-auto">{solvedEasy} / {easy.length}</span></div>
-                    <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-amber-500" /> Medium <span className="ml-auto">{solvedMed} / {medium.length}</span></div>
-                    <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-rose-500" /> Hard <span className="ml-auto">{solvedHard} / {hard.length}</span></div>
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 rounded-full bg-emerald-500" />{" "}
+                      Easy{" "}
+                      <span className="ml-auto">
+                        {solvedEasy} / {easy.length}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 rounded-full bg-amber-500" />{" "}
+                      Medium{" "}
+                      <span className="ml-auto">
+                        {solvedMed} / {medium.length}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 rounded-full bg-rose-500" /> Hard{" "}
+                      <span className="ml-auto">
+                        {solvedHard} / {hard.length}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -449,7 +712,11 @@ const Profile = () => {
                 <div className="mt-6 h-28 w-full rounded-lg bg-linear-to-t from-indigo-50 to-white dark:from-zinc-800 dark:to-zinc-900 relative overflow-hidden">
                   <div className="absolute inset-0 flex items-end gap-2 p-3">
                     {[...Array(12)].map((_, i) => (
-                      <div key={i} className="flex-1 bg-indigo-500/20 rounded-t" style={{ height: `${30 + (i * 5) % 70}%` }}></div>
+                      <div
+                        key={i}
+                        className="flex-1 bg-indigo-500/20 rounded-t"
+                        style={{ height: `${30 + ((i * 5) % 70)}%` }}
+                      ></div>
                     ))}
                   </div>
                 </div>
@@ -493,7 +760,9 @@ const Profile = () => {
             <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold">Recent Submissions</h3>
-                <span className="text-xs text-zinc-400">{submissions.length} total</span>
+                <span className="text-xs text-zinc-400">
+                  {submissions.length} total
+                </span>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -509,35 +778,48 @@ const Profile = () => {
                   <tbody>
                     {submissions.length === 0 ? (
                       <tr>
-                        <td colSpan={5} className="py-10 text-center text-zinc-400 text-xs">
+                        <td
+                          colSpan={5}
+                          className="py-10 text-center text-zinc-400 text-xs"
+                        >
                           No submissions yet
                         </td>
                       </tr>
                     ) : (
                       submissions.slice(0, 10).map((sub, idx) => {
-                        const cfg = STATUS_CONFIG[sub.status] || STATUS_CONFIG.WRONG_ANSWER;
-                        const langLabel = LANG_LABELS[sub.language] || sub.language;
+                        const cfg =
+                          STATUS_CONFIG[sub.status] ||
+                          STATUS_CONFIG.WRONG_ANSWER;
+                        const langLabel =
+                          LANG_LABELS[sub.language] || sub.language;
                         const hasSlug = sub.slug && sub.slug !== "null";
 
-                        const rawProblemId = typeof sub.problemId === 'object' && sub.problemId !== null
-                          ? (sub.problemId.$oid || sub.problemId.id || sub.problemId._id || JSON.stringify(sub.problemId))
-                          : sub.problemId;
+                        const rawProblemId =
+                          typeof sub.problemId === "object" &&
+                          sub.problemId !== null
+                            ? sub.problemId.$oid ||
+                              sub.problemId.id ||
+                              sub.problemId._id ||
+                              JSON.stringify(sub.problemId)
+                            : sub.problemId;
 
                         const problemInfo = dsaProblems.find(
-                          (p) => String(p.id) === String(rawProblemId)
+                          (p) => String(p.id) === String(rawProblemId),
                         );
 
                         // 2. Safely extract the title, with a fallback just in case it's missing
-                        const problemName = problemInfo?.title || `Unknown Problem (${rawProblemId})`;
+                        const problemName =
+                          problemInfo?.title ||
+                          `Unknown Problem (${rawProblemId})`;
 
                         const formattedDate = sub.submittedAt
                           ? new Date(sub.submittedAt).toLocaleString("en-IN", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
                           : "—";
 
                         const rowContent = (
@@ -546,19 +828,25 @@ const Profile = () => {
                               {problemName}
                             </td>
                             <td className="py-3 pr-4">
-                              <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full border ${cfg.badge}`}>
+                              <span
+                                className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full border ${cfg.badge}`}
+                              >
                                 {cfg.label}
                               </span>
                             </td>
                             <td className="py-3 pr-4">
-                              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${LANG_COLORS[sub.language] || "bg-gray-100 text-gray-600 border-gray-200"}`}>
+                              <span
+                                className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${LANG_COLORS[sub.language] || "bg-gray-100 text-gray-600 border-gray-200"}`}
+                              >
                                 {langLabel}
                               </span>
                             </td>
                             <td className="py-3 pr-4 text-zinc-500">
                               {sub.time != null ? `${sub.time} ms` : "—"}
                             </td>
-                            <td className="py-3 text-zinc-400 whitespace-nowrap">{formattedDate}</td>
+                            <td className="py-3 text-zinc-400 whitespace-nowrap">
+                              {formattedDate}
+                            </td>
                           </>
                         );
 
@@ -566,12 +854,17 @@ const Profile = () => {
                           <tr
                             key={sub.slug}
                             className="border-t border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors"
-                            onClick={() => window.location.href = `/submission/${sub.slug}`}
+                            onClick={() =>
+                              (window.location.href = `/submission/${sub.slug}`)
+                            }
                           >
                             {rowContent}
                           </tr>
                         ) : (
-                          <tr key={idx} className="border-t border-zinc-200 dark:border-zinc-800">
+                          <tr
+                            key={idx}
+                            className="border-t border-zinc-200 dark:border-zinc-800"
+                          >
                             {rowContent}
                           </tr>
                         );
@@ -606,21 +899,22 @@ const Profile = () => {
                     <AlertTriangle size={22} className="text-red-600" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-lg font-bold text-gray-900">
+                    <button
+                      onClick={handleDeleteUserProfile}
+                      className="text-lg font-bold text-gray-900"
+                    >
                       Delete Profile
-                    </h2>
+                    </button>
                     <p className="text-sm text-gray-500 mt-0.5">
                       This action is permanent and cannot be undone.
                     </p>
                   </div>
-                  <button
-                   
-                    className="p-1.5 cursor-pointer rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
-                  >
-                    <X size={18} 
-                    onClick={()=>{
-                      setIsDeleteOpen(false)
-                    }}
+                  <button className="p-1.5 cursor-pointer rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0">
+                    <X
+                      size={18}
+                      onClick={() => {
+                        setIsDeleteOpen(false);
+                      }}
                     />
                   </button>
                 </div>
@@ -629,48 +923,38 @@ const Profile = () => {
                 <div className="px-6 py-6 space-y-5">
                   <p className="text-sm text-gray-600 leading-relaxed">
                     You are about to permanently delete your profile{" "}
-                    <span className="font-semibold text-gray-900">
-                    </span>
-                    . All ratings, solutions, and submissions will be lost
-                    forever.
+                    <span className="font-semibold text-gray-900"></span>. All
+                    ratings, solutions, and submissions will be lost forever.
                   </p>
-
-                  
 
                   {/* Name confirmation input */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700">
                       Type the username to confirm:
                     </label>
-                    <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all">
-                    </div>
+                    <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all"></div>
                     <input
                       type="text"
                       placeholder="Type the username name exactly..."
                       autoFocus
-                      className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${
-                       
-                            "border-red-300 cursor-not-allowed ring-2 ring-red-100"
-                      }`}
+                      className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${"border-red-300 cursor-not-allowed ring-2 ring-red-100"}`}
                     />
-                    
-                        <p className="text-xs text-red-500">
-                          Name doesn't match. Please type it exactly.
-                        </p>
+
+                    <p className="text-xs text-red-500">
+                      Name doesn't match. Please type it exactly.
+                    </p>
                   </div>
                 </div>
 
                 {/* Footer */}
                 <div className="px-6 pb-6 flex gap-3 justify-end">
                   <button
-
-                      onClick={()=>{
-                        setIsDeleteOpen(false);
-                      }}
+                    onClick={() => {
+                      setIsDeleteOpen(false);
+                    }}
                     className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
                   >
                     Cancel
-                    
                   </button>
                   <button
                     // onClick={confirmDelete}
@@ -689,28 +973,43 @@ const Profile = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </div></>
-  )
-}
+      </div>
+    </>
+  );
+};
 
-const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-const daysInMonth = (year, monthIndex) => new Date(year, monthIndex + 1, 0).getDate()
+const monthNames = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+const daysInMonth = (year, monthIndex) =>
+  new Date(year, monthIndex + 1, 0).getDate();
 
 const MonthActivityGrid = () => {
-  const year = new Date().getFullYear()
+  const year = new Date().getFullYear();
   return (
     <div className="mt-4 overflow-x-auto">
       <div className="flex items-start gap-8 min-w-max pr-2">
         {monthNames.map((m, idx) => {
-          const dim = daysInMonth(year, idx)
-          const cols = Math.ceil(dim / 7)
+          const dim = daysInMonth(year, idx);
+          const cols = Math.ceil(dim / 7);
           return (
             <div key={m} className="flex flex-col items-center">
               <div
                 className="grid gap-1"
                 style={{
-                  gridAutoFlow: 'column',
-                  gridTemplateRows: 'repeat(7, minmax(0, 1fr))',
+                  gridAutoFlow: "column",
+                  gridTemplateRows: "repeat(7, minmax(0, 1fr))",
                   gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
                 }}
               >
@@ -718,18 +1017,20 @@ const MonthActivityGrid = () => {
                   <div
                     key={d}
                     className="h-2.5 w-2.5 rounded-[3px]"
-                    style={{ backgroundColor: `hsl(142, 70%, ${80 - (d % 5) * 10}%)` }}
+                    style={{
+                      backgroundColor: `hsl(142, 70%, ${80 - (d % 5) * 10}%)`,
+                    }}
                     title={`${m} ${d + 1}, ${year}`}
                   />
                 ))}
               </div>
               <span className="mt-2 text-[11px] text-zinc-500">{m}</span>
             </div>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;
