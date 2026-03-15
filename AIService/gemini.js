@@ -4,7 +4,7 @@ const APIKey = import.meta.env.VITE_GEMINI_API_KEY;
 
 const ai = new GoogleGenAI({ apiKey: APIKey });
 
-console.log("API KEY IS : ",APIKey);
+// console.log("API KEY IS : ",APIKey);
 
 async function main(prompt) {
     const response = await ai.models.generateContent({

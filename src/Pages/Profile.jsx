@@ -68,6 +68,7 @@ const Donut = ({ percent = 0, color = "#4f46e5" }) => {
 const Profile = () => {
   const solved = useMemo(() => dsaProblems.filter((p) => p.status), []);
   const total = dsaProblems.length;
+  const [confirmDelete,setConfirmDelete] = useState("");
   const easy = useMemo(
     () => dsaProblems.filter((p) => p.difficulty === "Easy"),
     [],
@@ -88,12 +89,12 @@ const Profile = () => {
   const [avatarMedia, setAvatarMedia] = useState(null);
   const [submissions, setSubmissions] = useState([]);
 
-  const [IsDeleteOpen, setIsDeleteOpen] = useState(true);
+  const [IsDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const solvedPercent = (solved.length / total) * 100;
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const { getUserProfileData, jwtToken, userProfile } = useAppContext();
+  const { getUserProfileData, getUserData, userProfile, jwtToken } = useAppContext();
   // console.log(userProfile)
 
   const LANG_COLORS = {
@@ -202,24 +203,22 @@ const Profile = () => {
     return res.data;
   };
 
-  const sendDeleteProfileToSpring = async () => {
-    const res = await axios.delete(`${BACKEND_URL}/userProfile/delete`, {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    });
-    return res.data;
-  };
-
   const handleDeleteUserProfile = async () => {
-    // try {
-    //   const res = await sendDeleteProfileToSpring();
-    //   if(res.status == 1){
-
-    //   }
-    // } catch (e) {
-
-    // }
+    try {
+      const result = await axios.delete(`${BACKEND_URL}/userProfile/delete`,{
+        headers : {
+          Authorization : `Bearer ${jwtToken}`
+        }
+      });
+      const res = result.data;
+      if(res.status == 1){
+        toast.success(`User Profile deleted..`);
+        getUserProfileData();
+        getUserData();
+      }
+    } catch (e) {
+      toast.error(`User Profile not deleted`);
+    }
   };
 
   // console.log(userProfile?.avatarLink);
@@ -914,6 +913,7 @@ const Profile = () => {
                       size={18}
                       onClick={() => {
                         setIsDeleteOpen(false);
+                        setConfirmDelete("");
                       }}
                     />
                   </button>
@@ -932,17 +932,19 @@ const Profile = () => {
                     <label className="text-sm font-medium text-gray-700">
                       Type the username to confirm:
                     </label>
-                    <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all"></div>
+                    <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all">{userProfile?.username || ""}</div>
                     <input
                       type="text"
                       placeholder="Type the username name exactly..."
                       autoFocus
-                      className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${"border-red-300 cursor-not-allowed ring-2 ring-red-100"}`}
+                      onChange={(e)=>setConfirmDelete(e.target.value)}
+                      value={confirmDelete}
+                      className={`${confirmDelete.trim().toLowerCase()!=(userProfile?.username).trim().toLowerCase()?"bg-red-100 text-red-400 border-red-300 ring-2 ring-red-100":"border-green-300 ring-2  ring-green-100 bg-green-100 text-green-400"} px-4 py-2.5 border rounded-xl text-sm w-full outline-none transition-all`}
                     />
 
-                    <p className="text-xs text-red-500">
+                    {confirmDelete.trim().toLowerCase()!=(userProfile?.username).trim().toLowerCase()  && <p className="text-xs text-red-500">
                       Name doesn't match. Please type it exactly.
-                    </p>
+                    </p>}
                   </div>
                 </div>
 
@@ -951,19 +953,18 @@ const Profile = () => {
                   <button
                     onClick={() => {
                       setIsDeleteOpen(false);
+                      setConfirmDelete("");
                     }}
                     className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
-                    // onClick={confirmDelete}
-                    // disabled={
-                    //   deleteConfirmText.toLowerCase().trim() !=
-                    //   deleteTarget.title.toLowerCase()
-                    // }
-                    className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all bg-red-200 text-red-400 cursor-not-allowed bg-red-200 text-red-400 cursor-not-allowed"}
-                    `}
+                    disabled={
+                      confirmDelete.trim().toLowerCase()!=(userProfile?.username).trim().toLowerCase()
+                    }
+                    onClick={handleDeleteUserProfile}
+                    className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all ${confirmDelete.trim().toLowerCase()!=(userProfile?.username).trim().toLowerCase()?"bg-red-200 text-red-400 cursor-not-allowed":"cursor-pointer bg-green-100 text-green-400 border-green-500"}`}
                   >
                     <Trash2 size={14} />
                     Delete Profile
