@@ -2,7 +2,7 @@ import React from 'react'
 import {EnhancedNavbar} from '../components/Navbar'
 import HeroSection from '../components/home/HeroSection'
 import Footer from '../components/Footer'
-import TestingPage from '../../AIService/testingPage'
+import TestingPage from '../../AIService/TestingPage'
 
 const Home = () => {
   return (
