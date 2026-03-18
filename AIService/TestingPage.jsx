@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 
+
 //theme from github
 const whiteSyntaxTheme = {
   'pre[class*="language-"]': {
@@ -54,8 +55,8 @@ const whiteSyntaxTheme = {
   deleted: { color: "#dc2626" },
 };
 
-const TestingPage = () => {
-  const [code, setCode] = useState("");
+const TestingPage = ({submittedCode="",autoExecute=false}) => {
+  const [code, setCode] = useState(submittedCode);
   const [output, setOutput] = useState(null);
   const [loading, setLoading] = useState(false);
   const lineNumRef = useRef(null);
@@ -69,7 +70,12 @@ const TestingPage = () => {
     if (!ta || !ln) return;
     const handler = () => { ln.scrollTop = ta.scrollTop; };
     ta.addEventListener("scroll", handler);
+
+    if(autoExecute) sendToAI();
+
     return () => ta.removeEventListener("scroll", handler);
+
+    
   }, []);
 
   const sendToAI = async () => {
@@ -86,8 +92,11 @@ const TestingPage = () => {
     }
   };
 
+ 
+  
+
   const handleClear = () => {
-    setCode("");
+    setCode(submittedCode);
     setOutput(null);
   };
 

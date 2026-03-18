@@ -2,14 +2,14 @@ import React from 'react'
 import {EnhancedNavbar} from '../components/Navbar'
 import HeroSection from '../components/home/HeroSection'
 import Footer from '../components/Footer'
-import TestingPage from '../../AIService/TestingPage'
+// import TestingPage from '../../AIService/TestingPage'
 
 const Home = () => {
   return (
     <>
      <div className='overflow-hidden'>
       <EnhancedNavbar />
-      <TestingPage/>
+      {/* <TestingPage/> */}
       <HeroSection />
       <Footer />
       </div>
