@@ -5,7 +5,7 @@ import { driverCodeTemplate } from "../data/driverCode";
 import { dsaProblems } from "../data/dsaProblem";
 import axios from "axios";
 
-export const useTestRunner = (problemId, Language, value, setOutput, setcurrentTopBar) => {
+export const useTestRunner = (problemId, Language, value, setOutput,setcurrentTopBar) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -17,9 +17,10 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
   const currentProblem = dsaProblems.find(p => String(p.id) === String(problemId));
   const cases = testCases[problemId] || { visible: [], hidden: [] };
 
+
   const timeoutPromise = (ms) => new Promise((_, reject) => {
-    setTimeout(() => reject(new Error("TIMEOUT")), ms);
-  });
+  setTimeout(() => reject(new Error("TIMEOUT")), ms);
+});
 
   const runCode = async () => {
     if (!value) return;
@@ -37,28 +38,20 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
         executeCode(Language[0], fullCode),
         timeoutPromise(10000)
       ]);
-      console.log("JDoodle Response:", data);
+      console.log(data)
 
-      // Save JDoodle stats (JDoodle uses cpuTime instead of time)
-      setExecutionStats({ time: data.cpuTime || "0", memory: data.memory || "0" });
+      // Save Judge0 stats
+      setExecutionStats({ time: data.time, memory: data.memory });
 
-      // JDoodle Error Check: statusCode !== 200 means Compile/Runtime Error
-      if (data.statusCode !== 200 || !data.output) {
+      // Judge0 Error Check: ID > 3 means TLE, Runtime Error, Compile Error, etc.
+      if (data.statusCode > 3 || data.stderr) {
         setIsError(true);
-        setOutput([{ status: "Error", error: data.error || data.output || "Execution Failed" }]);
+        setOutput([{ status: "Error", error: data.stderr || data.status }]);
         return;
       }
 
-      // Check for JDoodle's internal timeout message
-      if (data.output.includes("Time Limit Exceeded")) {
-        setIsError(true);
-        setOutput([{ status: "Error", error: "Time Limit Exceeded" }]);
-        return;
-      }
-
-      // Parse from JDoodle's 'output' (driver code prints the JSON array on the last line)
-      const outputLines = data.output.trim().split("\n");
-      const parsed = JSON.parse(outputLines[outputLines.length - 1]);
+      // Parse from Judge0's stdout instead of Piston's data.run.output
+      const parsed = JSON.parse(data.stdout.trim().split("\n").pop());
       setOutput(parsed);
       
     } catch (error) {
@@ -81,64 +74,54 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
     setExecutionStats({ time: "0", memory: "0" }); 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-    let finalStatus = "Runtime Error";
-    let executionData = { cpuTime: null, memory: null };
-
     try {
       const driver = driverCodeTemplate[currentProblem.type][Language[0]];
-      const fullCode = driver(currentProblem.fnName, value, cases.hidden, currentProblem);
+      const fullCode = driver(currentProblem.fnName, value, cases.hidden);
       
-      // 1. Execute code via JDoodle
+      // 1. Execute code via Judge0
       const data = await Promise.race([
         executeCode(Language[0], fullCode),
         timeoutPromise(10000)
       ]);
 
-      executionData = data;
-      setExecutionStats({ time: data.cpuTime || "0", memory: data.memory || "0" });
+      setExecutionStats({ time: data.time, memory: data.memory });
 
       // 2. Determine the final status
-      if (data.statusCode !== 200) {
-        finalStatus = "Runtime Error";
-        setSubmissionStatus("Runtime Error");
-      } else if (data.output && data.output.includes("Time Limit Exceeded")) {
-        finalStatus = "Time Limit Exceeded";
+      let finalStatus = "WRONG_ANSWER";
+      let results = [];
+
+      if (data.statusCode === 5) {
+        finalStatus = "TIME_LIMIT_EXCEEDED";
         setSubmissionStatus("Time Limit Exceeded");
+      } else if (data.statusCode > 3 || data.stderr) {
+        finalStatus = "RUNTIME_ERROR"; // Or COMPILATION_ERROR depending on code
+        setSubmissionStatus("Runtime Error");
       } else {
         // Code ran successfully, now grade the test cases
-        const outputLines = data.output.trim().split("\n");
-        const results = JSON.parse(outputLines[outputLines.length - 1]);
-        
+        results = JSON.parse(data.stdout.trim().split("\n").pop());
         const allPassed = results.every(res => res.status === "Passed");
 
         if (allPassed) {
           finalStatus = "ACCEPTED";
-          setSubmissionStatus("ACCEPTED");
+          setSubmissionStatus("Accepted");
         } else {
           finalStatus = "WRONG_ANSWER";
-          setSubmissionStatus("WRONG_ANSWER");
+          setSubmissionStatus("Wrong Answer");
           setFirstFailedTestCase(results.find(res => res.status === "Failed"));
         }
       }
 
-    } catch (error) {
-      if (error.message === "TIMEOUT") {
-        finalStatus = "TIME_LIMIT_EXCEEDED";
-        setSubmissionStatus("TIME_LIMIT_EXCEEDED");
-      } else {
-        finalStatus = "COMPILATION_ERROR";
-        setSubmissionStatus("COMPILATION_ERROR");
-      }
-    } finally {
-      // 3. Save to Spring Boot Database (Now runs no matter what, even on timeout!)
+      // 3. Save to Spring Boot Database
+      // We do this in a separate try/catch so that if the DB goes down, 
+      // the user still sees their code execution results.
       try {
         await axios.post(`${BACKEND_URL}/submission/create`, {
-          problemId: currentProblem.id, 
-          language: Language[0] === "cpp" ? "c++" : Language[0], 
+          problemId: currentProblem.id,  // The string ID, e.g., '65cb9a1e...'
+          language: Language[0] === "cpp" ? "c++" : Language[0], // Ensure it matches your UI config
           userCode: value,
-          status: finalStatus, // Matches exactly what the Java entity expects
-          time: executionData.cpuTime ? parseFloat(executionData.cpuTime) : 0.0,
-          memory: executionData.memory ? parseFloat(executionData.memory) : 0.0
+          status: finalStatus,
+          time: data.time ? parseFloat(data.time) : null,
+          memory: data.memory ? parseFloat(data.memory) : null
         }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
@@ -146,10 +129,17 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
         });
         console.log("Submission successfully saved to database!");
       } catch (dbError) {
-        console.error("Execution finished, but saving to DB failed:", dbError);
+        console.error("Judge0 worked, but saving to DB failed:", dbError);
       }
 
-      setcurrentTopBar("Submissions");
+    } catch (error) {
+      if (error.message === "TIMEOUT") {
+        setSubmissionStatus("Time Limit Exceeded");
+      } else {
+        setSubmissionStatus("Server Error");
+      }
+    } finally {
+      setcurrentTopBar("Submissions")
       setIsSubmitting(false);
     }
   };

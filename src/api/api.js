@@ -1,46 +1,53 @@
 import axios from "axios";
 
-const API = axios.create({
-  baseURL: "http://localhost:2358",
-});
-
-const LANGUAGE_MAPPING = {
-  python: 71,
-  javascript: 63,
-  cpp: 54,
-  java: 62
+// Map your frontend language names to JDoodle's specific formats
+const getJdoodleConfig = (lang) => {
+  const normalizedLang = lang.toLowerCase();
+  switch (normalizedLang) {
+    case "python":
+    case "python3":
+      return { language: "python3", versionIndex: "3" };
+    case "cpp":
+    case "c++":
+      return { language: "cpp", versionIndex: "5" };
+    case "java":
+      return { language: "java", versionIndex: "4" };
+    case "javascript":
+    case "js":
+      return { language: "nodejs", versionIndex: "4" };
+    default:
+      // Fallback
+      return { language: "nodejs", versionIndex: "4" };
+  }
 };
-
-// Bulletproof Base64 encoders to handle tricky characters without crashing
-const encodeBase64 = (str) => btoa(unescape(encodeURIComponent(str)));
-const decodeBase64 = (str) => str ? decodeURIComponent(escape(atob(str))) : "";
 
 export const executeCode = async (LanguageName, SourceCode) => {
   try {
-    const langId = LANGUAGE_MAPPING[LanguageName.toLowerCase()] || 71;
+    const config = getJdoodleConfig(LanguageName);
 
-    // Notice we changed base64_encoded to TRUE
-    const response = await API.post("/submissions?wait=true&base64_encoded=true", {
-      source_code: encodeBase64(SourceCode), 
-      language_id: langId,
-      stdin: "", 
+    // Make the POST request directly to JDoodle's public API
+    const response = await axios.post("/jdoodle-api", {
+      clientId: import.meta.env.VITE_JDOODLE_CLIENT_ID,
+      clientSecret: import.meta.env.VITE_JDOODLE_CLIENT_SECRET,
+      script: SourceCode,
+      language: config.language,
+      versionIndex: config.versionIndex,
     });
 
-    console.log("Raw Judge0 Response:", response.data);
+    console.log("Raw JDoodle Response:", response.data);
 
-    const { stdout, stderr, compile_output, status, time, memory } = response.data;
-
-    // We must decode the outputs back to normal text
+    // JDoodle returns { output, statusCode, memory, cpuTime, error }
+    // We return it exactly as-is so our useTestRunner hook can read it easily
     return {
-      stdout: decodeBase64(stdout),
-      stderr: decodeBase64(stderr) || decodeBase64(compile_output) || "",
-      status: status?.description || "Processing/Unknown",
-      statusCode: status?.id || 0,
-      time: time || "0.000",
-      memory: memory || 0,
+      output: response.data.output || "",
+      statusCode: response.data.statusCode || 500,
+      cpuTime: response.data.cpuTime || "0",
+      memory: response.data.memory || "0",
+      error: response.data.error || null
     };
+
   } catch (error) {
-    console.error("Judge0 Execution Error:", error);
+    console.error("JDoodle Execution Error:", error);
     throw error;
   }
 };
