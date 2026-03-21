@@ -89,6 +89,9 @@ const Profile = () => {
   const [avatarMedia, setAvatarMedia] = useState(null);
   const [submissions, setSubmissions] = useState([]);
 
+  const [currentPage, setCurrentPage] = useState(1);// for paginatoin 
+  const itemsPerPage = 10;g
+
   const [IsDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const solvedPercent = (solved.length / total) * 100;
@@ -250,7 +253,12 @@ const Profile = () => {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
         },
       });
-      setSubmissions(response.data);
+
+      const sortedData = response.data.sort((a, b) => { // sort based on date 
+        return new Date(b.submittedAt) - new Date(a.submittedAt);
+      });
+      setSubmissions(sortedData);
+      console.table(sortedData)
       // console.log(response.data)
     } catch (error) {
       console.log(error);
@@ -260,6 +268,12 @@ const Profile = () => {
   useEffect(() => {
     fetchSubmissions();
   }, [userProfile]);
+
+  // Calculation indices for pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentSubmissions = submissions.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(submissions.length / itemsPerPage);
 
   return (
     <>
@@ -785,7 +799,7 @@ const Profile = () => {
                         </td>
                       </tr>
                     ) : (
-                      submissions.slice(0, 10).map((sub, idx) => {
+                      currentSubmissions.map((sub, idx) => {
                         const cfg =
                           STATUS_CONFIG[sub.status] ||
                           STATUS_CONFIG.WRONG_ANSWER;
@@ -871,6 +885,36 @@ const Profile = () => {
                     )}
                   </tbody>
                 </table>
+                {/* Pagination Controls */}
+              {submissions.length > itemsPerPage && (
+                <div className="flex items-center justify-between px-2 py-4 border-t border-zinc-200 dark:border-zinc-800">
+                  <span className="text-xs text-zinc-500">
+                    Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, submissions.length)} of {submissions.length} entries
+                  </span>
+                  
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                    >
+                      Previous
+                    </button>
+                    
+                    <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300 px-2">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
               </div>
             </div>
           </main>
