@@ -90,7 +90,7 @@ const Profile = () => {
   const [submissions, setSubmissions] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);// for paginatoin 
-  const itemsPerPage = 10;g
+  const itemsPerPage = 10;
 
   const [IsDeleteOpen, setIsDeleteOpen] = useState(false);
 
