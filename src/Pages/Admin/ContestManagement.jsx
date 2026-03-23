@@ -29,7 +29,7 @@ const ContestManagement = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("create");
-  const [editingContestName, setEditingContestName] = useState(null);
+  const [editingContestId, setEditingContestId] = useState(null);
 
   const [currentContest, setCurrentContest] = useState({
     contestName: "",
@@ -75,7 +75,7 @@ const ContestManagement = () => {
 
   const handleEditClick = (contest) => {
     setModalMode("edit");
-    setEditingContestName(contest.contestName);
+    setEditingContestId(contest.contestId);
     setCurrentContest({
       contestName: contest.contestName,
       contestDescription: contest.contestDescription,
@@ -88,53 +88,88 @@ const ContestManagement = () => {
 
   const handleCreateClick = () => {
     setModalMode("create");
-    setEditingContestName(null);
+    setEditingContestId(null);
     setIsModalOpen(true);
   };
   const confirmDelete = () => {
     setModalMode("create");
-    setEditingContestName(null);
+    setEditingContestId(null);
     setIsModalOpen(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      await validationSchema.validate(currentContest, { abortEarly: false });
-      console.log("Submitting contest:", currentContest);
-      setErrors({});
+    if (modalMode == "create") {
+      // console.log("here in create mode");
+      try {
+        await validationSchema.validate(currentContest, { abortEarly: false });
+        console.log("Submitting contest:", currentContest);
+        setErrors({});
 
-      const res = await axios.post(
-        `${BACKEND_URL}/admin/createContest`,
-        currentContest,
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
+        const res = await axios.post(
+          `${BACKEND_URL}/admin/createContest`,
+          currentContest,
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
           },
-        },
-      );
+        );
 
-      const result = res.data;
-      if (result.status == 1) {
-        toast.success(`Contest saved...`);
-        setIsModalOpen(false);
-        showAllContest();
-        setCurrentContest(initialValues);
-      } else {
-        throw new Error();
+        const result = res.data;
+        if (result.status == 1) {
+          toast.success(`Contest saved...`);
+          setIsModalOpen(false);
+          showAllContest();
+          setCurrentContest(initialValues);
+        } else {
+          throw new Error();
+        }
+      } catch (e) {
+        if (e.name === "ValidationError") {
+          const validationErrors = {};
+          e.inner.forEach((error) => {
+            validationErrors[error.path] = error.message;
+          });
+          setErrors(validationErrors);
+        } else {
+          console.log(e);
+          toast.error("Contest not added");
+          setCurrentContest(initialValues);
+        }
       }
-    } catch (e) {
-      if (e.name === "ValidationError") {
-        const validationErrors = {};
-        e.inner.forEach((error) => {
-          validationErrors[error.path] = error.message;
-        });
-        setErrors(validationErrors);
-      } else {
-        console.log(e);
-        toast.error("Contest not added");
-        setCurrentContest(initialValues);
+    } else if (modalMode == "edit") {
+      // console.log("here in edit mode");
+      console.log(currentContest);
+      console.log(editingContestId);
+      try {
+        const result = await axios.put(
+          `${BACKEND_URL}/admin/updateContest/${editingContestId}`,
+          currentContest,
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          },
+        );
+        if (result.data.status == 1) {
+          toast.success(`Contest Details changes saved...`);
+          setIsModalOpen(false);
+          setModalMode("");
+          setCurrentContest({
+            contestName: "",
+            contestDescription: "",
+            startTime: "",
+            duration: "",
+          });
+          setEditingContestId(null);
+          showAllContest();
+        } else {
+          throw new Error();
+        }
+      } catch (e) {
+        toast.error(`Contest not updated`);
       }
     }
   };
@@ -320,7 +355,15 @@ const ContestManagement = () => {
                     : "Modify Contest"}
                 </h2>
                 <button
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setCurrentContest({
+                      contestName: "",
+                      contestDescription: "",
+                      startTime: "",
+                      duration: "",
+                    });
+                  }}
                   className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
                 >
                   <X size={20} />
@@ -440,6 +483,12 @@ const ContestManagement = () => {
                     onClick={() => {
                       setIsModalOpen(false);
                       setErrors({});
+                      setCurrentContest({
+                        contestName: "",
+                        contestDescription: "",
+                        startTime: "",
+                        duration: "",
+                      });
                     }}
                     className="px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
                   >
