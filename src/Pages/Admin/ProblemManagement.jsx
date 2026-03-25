@@ -99,35 +99,38 @@ const ProblemManagement = () => {
     }
   };
 
-  const getEditInitialValues = (problem) => ({
-    title: problem.title || "",
-    slug: problem.slug || "",
-    tags: problem.tags || "",
-    difficulty: problem.difficulty || "Easy",
-    problemTopic: problem.category || "",
-    inputType: problem.inputType || "",
-    returnType: problem.returnType || "",
-    functionName: problem.functionName || "",
-    description: problem.description || "",
-    algorithmSteps: problem.algorithmSteps || [""],
-    timeComplexity: problem.timeComplexity || { value: "", explanation: "" },
-    spaceComplexity: problem.spaceComplexity || { value: "", explanation: "" },
-    testCases: problem.testCases || [
-      { input: "", expected: "", explanation: "", hidden: false },
-    ],
-    solution: problem.solution || {
-      javascript: "",
-      java: "",
-      python: "",
-      cpp: "",
-    },
-  });
+
+  // start 1
+
+  // const getEditInitialValues = (problem) => ({
+  //   title: problem.title || "",
+  //   slug: problem.slug || "",
+  //   tags: problem.tags || "",
+  //   difficulty: problem.difficulty || "Easy",
+  //   problemTopic: problem.category || "",
+  //   inputType: problem.inputType || "",
+  //   returnType: problem.returnType || "",
+  //   functionName: problem.functionName || "",
+  //   description: problem.description || "",
+  //   algorithmSteps: problem.algorithmSteps || [""],
+  //   timeComplexity: problem.timeComplexity || { value: "", explanation: "" },
+  //   spaceComplexity: problem.spaceComplexity || { value: "", explanation: "" },
+  //   testCases: problem.testCases || [
+  //     { input: "", expected: "", explanation: "", hidden: false },
+  //   ],
+  //   solution: problem.solution || {
+  //     javascript: "",
+  //     java: "",
+  //     python: "",
+  //     cpp: "",
+  //   },
+  // });
 
   // Initial values for the form
   const initialValues = {
     title: "",
     slug: "",
-    tags: "",
+    topicTags: "",
     difficulty: "Easy",
     problemTopic: "",
     inputType: "",
@@ -137,14 +140,16 @@ const ProblemManagement = () => {
     algorithmSteps: [""],
     timeComplexity: { value: "", explanation: "" },
     spaceComplexity: { value: "", explanation: "" },
-    testCases: [{ input: "", expected: "", explanation: "", hidden: false }],
-    solution: {
+    testCases: [{ input: "", output: "", explanation: "", hidden: false }],
+    solutions: {
       javascript: "",
       java: "",
       python: "",
       cpp: "",
     },
   };
+
+  // end 1
 
   // console.log("Initial Values:", initialValues);
 
@@ -160,13 +165,14 @@ const ProblemManagement = () => {
   const handleAddProblem = async (values, { resetForm }) => {
     // console.log("here");
     try {
-      // console.log("Form Values:", values);
-      // toast.success("Problem added successfully! (Check console for data)");
+      console.log("Form Values:", values);
+      console.log("Jwt is : ",jwtToken);
       const result = await axios.post(`${BACKEND_URL}/problem/add`, values, {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         }
       });
+      console.log("API Response:", result.data);
       setIsAddMode(false);
       resetForm();
     } catch (e) {
@@ -432,7 +438,8 @@ const ProblemManagement = () => {
                 </div>
 
                 <Formik
-                  initialValues={getEditInitialValues(editingProblem)}
+                  // initialValues={getEditInitialValues(editingProblem)}
+                  initialValues={editingProblem}
                   validationSchema={validationSchema}
                   onSubmit={handleEditProblem}
                   enableReinitialize
@@ -484,7 +491,7 @@ const ProblemManagement = () => {
                               />
                               <FormGroup
                                 label="Tags"
-                                name="tags"
+                                name="topicTags"
                                 placeholder="e.g., Array, Hash Table"
                               />
 
@@ -503,11 +510,11 @@ const ProblemManagement = () => {
                                 </Field>
                               </div>
 
-                              <FormGroup
+                              {/* <FormGroup
                                 label="Problem Topic"
                                 name="problemTopic"
                                 placeholder="e.g., Algorithms"
-                              />
+                              /> */}
                               <FormGroup
                                 label="Function Name"
                                 name="functionName"
@@ -617,7 +624,7 @@ const ProblemManagement = () => {
                                         </div>
                                         <FormGroup
                                           label="Expected Output"
-                                          name={`testCases.${index}.expected`}
+                                          name={`testCases.${index}.output`}
                                           placeholder="Expected result..."
                                         />
                                         <FormGroup
@@ -647,7 +654,7 @@ const ProblemManagement = () => {
                                     onClick={() =>
                                       push({
                                         input: "",
-                                        expected: "",
+                                        output: "",
                                         explanation: "",
                                         hidden: false,
                                       })
@@ -674,7 +681,7 @@ const ProblemManagement = () => {
                                     </label>
                                     <Field
                                       as="textarea"
-                                      name={`solution.${lang}`}
+                                      name={`solutions.${lang}`}
                                       rows={6}
                                       className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
                                       placeholder={`Paste your ${lang} solution here...`}
@@ -780,7 +787,7 @@ const ProblemManagement = () => {
                               />
                               <FormGroup
                                 label="Tags"
-                                name="tags"
+                                name="topicTags"
                                 placeholder="e.g., Array, Hash Table"
                               />
 
@@ -799,11 +806,11 @@ const ProblemManagement = () => {
                                 </Field>
                               </div>
 
-                              <FormGroup
+                              {/* <FormGroup
                                 label="Problem Topic"
                                 name="problemTopic"
                                 placeholder="e.g., Algorithms"
-                              />
+                              /> */}
                               <FormGroup
                                 label="Function Name"
                                 name="functionName"
@@ -880,7 +887,7 @@ const ProblemManagement = () => {
                                         </div>
                                         <FormGroup
                                           label="Expected Output"
-                                          name={`testCases.${index}.expected`}
+                                          name={`testCases.${index}.output`}
                                           placeholder="Expected result..."
                                         />
                                         <FormGroup
@@ -910,7 +917,7 @@ const ProblemManagement = () => {
                                     onClick={() =>
                                       push({
                                         input: "",
-                                        expected: "",
+                                        output: "",
                                         explanation: "",
                                         hidden: false,
                                       })
@@ -1008,7 +1015,7 @@ const ProblemManagement = () => {
                                       </label>
                                       <Field
                                         as="textarea"
-                                        name={`solution.${lang}`}
+                                        name={`solutions.${lang}`}
                                         rows={6}
                                         className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
                                         placeholder={`Paste your ${lang} solution here...`}
