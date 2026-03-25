@@ -22,11 +22,16 @@ import { useAppContext } from "../../context/AppContext";
 
 const ProblemManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
+
   const [isAddMode, setIsAddMode] = useState(false);
-  const { jwtToken, allProblem,showAllProblems } = useAppContext();
+
+  const { jwtToken, allProblem, showAllProblems } = useAppContext();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
   const [editingProblem, setEditingProblem] = useState(null);
+
   const [activeTab, setActiveTab] = useState("basic");
+
   const [editActiveTab, setEditActiveTab] = useState("basic");
   const [IsDeleteOpen, setIsDeleteOpen] = useState(false);
   const [deleteTarget, setdeleteTarget] = useState(null);
@@ -141,6 +146,8 @@ const ProblemManagement = () => {
     },
   };
 
+  // console.log("Initial Values:", initialValues);
+
   // Validation Schema
   const validationSchema = yup.object({
     title: yup.string().required("Title is required"),
@@ -151,9 +158,15 @@ const ProblemManagement = () => {
   });
 
   const handleAddProblem = async (values, { resetForm }) => {
+    // console.log("here");
     try {
-      console.log("Form Values:", values);
-      toast.success("Problem added successfully! (Check console for data)");
+      // console.log("Form Values:", values);
+      // toast.success("Problem added successfully! (Check console for data)");
+      const result = await axios.post(`${BACKEND_URL}/problem/add`, values, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        }
+      });
       setIsAddMode(false);
       resetForm();
     } catch (e) {
@@ -733,18 +746,18 @@ const ProblemManagement = () => {
 
                       {/* Tabs */}
                       <div className="flex border-b border-gray-200 bg-white sticky top-0 z-10">
-                        {allProblem.length>0 && allProblem.map((tab) => (
+                        {tabs.map((tab) => (
                           <button
                             key={tab.id}
                             type="button"
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex-1 py-4 text-sm font-medium transition-colors relative ${
+                            className={`flex-1 py-4 cursor-pointer text-sm font-medium transition-colors relative ${
                               activeTab === tab.id
                                 ? "text-blue-600 bg-blue-50/50"
                                 : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                             }`}
                           >
-                            {tab.title}
+                            {tab.label}
                             {activeTab === tab.id && (
                               <motion.div
                                 layoutId="activeTab"
@@ -830,76 +843,6 @@ const ProblemManagement = () => {
                                 className="text-red-500 text-sm"
                               />
                             </div>
-
-                            <div className="space-y-2">
-                              <label className="block text-sm font-medium text-gray-700">
-                                Algorithm Steps
-                              </label>
-                              <FieldArray name="algorithmSteps">
-                                {({ push, remove }) => (
-                                  <div className="space-y-3">
-                                    {values.algorithmSteps.map(
-                                      (step, index) => (
-                                        <div key={index} className="flex gap-2">
-                                          <Field
-                                            name={`algorithmSteps.${index}`}
-                                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                            placeholder={`Step ${index + 1}`}
-                                          />
-                                          <button
-                                            type="button"
-                                            onClick={() => remove(index)}
-                                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                          >
-                                            <Trash2 size={18} />
-                                          </button>
-                                        </div>
-                                      ),
-                                    )}
-                                    <button
-                                      type="button"
-                                      onClick={() => push("")}
-                                      className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
-                                    >
-                                      <Plus size={16} /> Add Step
-                                    </button>
-                                  </div>
-                                )}
-                              </FieldArray>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
-                                <h3 className="font-semibold text-gray-900">
-                                  Time Complexity
-                                </h3>
-                                <FormGroup
-                                  label="Value"
-                                  name="timeComplexity.value"
-                                  placeholder="e.g., O(n)"
-                                />
-                                <FormGroup
-                                  label="Explanation"
-                                  name="timeComplexity.explanation"
-                                  placeholder="Brief explanation..."
-                                />
-                              </div>
-                              <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
-                                <h3 className="font-semibold text-gray-900">
-                                  Space Complexity
-                                </h3>
-                                <FormGroup
-                                  label="Value"
-                                  name="spaceComplexity.value"
-                                  placeholder="e.g., O(1)"
-                                />
-                                <FormGroup
-                                  label="Explanation"
-                                  name="spaceComplexity.explanation"
-                                  placeholder="Brief explanation..."
-                                />
-                              </div>
-                            </div>
                           </div>
                         )}
 
@@ -984,24 +927,96 @@ const ProblemManagement = () => {
 
                         {/* Solution Tab */}
                         {activeTab === "solution" && (
-                          <div className="space-y-6">
-                            <div className="grid grid-cols-1 gap-6">
-                              {["javascript", "java", "python", "cpp"].map(
-                                (lang) => (
-                                  <div key={lang} className="space-y-2">
-                                    <label className="block text-sm font-medium text-gray-700 capitalize">
-                                      {lang} Solution
-                                    </label>
-                                    <Field
-                                      as="textarea"
-                                      name={`solution.${lang}`}
-                                      rows={6}
-                                      className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
-                                      placeholder={`Paste your ${lang} solution here...`}
-                                    />
+                          <div className="flex gap-3 justify-center flex-col">
+                            <div className="space-y-2">
+                              <label className="block text-sm font-medium text-gray-700">
+                                Algorithm Steps
+                              </label>
+                              <FieldArray name="algorithmSteps">
+                                {({ push, remove }) => (
+                                  <div className="space-y-3">
+                                    {values.algorithmSteps.map(
+                                      (step, index) => (
+                                        <div key={index} className="flex gap-2">
+                                          <Field
+                                            name={`algorithmSteps.${index}`}
+                                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                            placeholder={`Step ${index + 1}`}
+                                          />
+                                          <button
+                                            type="button"
+                                            onClick={() => remove(index)}
+                                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                          >
+                                            <Trash2 size={18} />
+                                          </button>
+                                        </div>
+                                      ),
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={() => push("")}
+                                      className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                                    >
+                                      <Plus size={16} /> Add Step
+                                    </button>
                                   </div>
-                                ),
-                              )}
+                                )}
+                              </FieldArray>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
+                                <h3 className="font-semibold text-gray-900">
+                                  Time Complexity
+                                </h3>
+                                <FormGroup
+                                  label="Value"
+                                  name="timeComplexity.value"
+                                  placeholder="e.g., O(n)"
+                                />
+                                <FormGroup
+                                  label="Explanation"
+                                  name="timeComplexity.explanation"
+                                  placeholder="Brief explanation..."
+                                />
+                              </div>
+                              <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
+                                <h3 className="font-semibold text-gray-900">
+                                  Space Complexity
+                                </h3>
+                                <FormGroup
+                                  label="Value"
+                                  name="spaceComplexity.value"
+                                  placeholder="e.g., O(1)"
+                                />
+                                <FormGroup
+                                  label="Explanation"
+                                  name="spaceComplexity.explanation"
+                                  placeholder="Brief explanation..."
+                                />
+                              </div>
+                            </div>
+
+                            <div className="space-y-6">
+                              <div className="grid grid-cols-1 gap-6">
+                                {["javascript", "java", "python", "cpp"].map(
+                                  (lang) => (
+                                    <div key={lang} className="space-y-2">
+                                      <label className="block text-sm font-medium text-gray-700 capitalize">
+                                        {lang} Solution
+                                      </label>
+                                      <Field
+                                        as="textarea"
+                                        name={`solution.${lang}`}
+                                        rows={6}
+                                        className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
+                                        placeholder={`Paste your ${lang} solution here...`}
+                                      />
+                                    </div>
+                                  ),
+                                )}
+                              </div>
                             </div>
                           </div>
                         )}
@@ -1059,73 +1074,74 @@ const ProblemManagement = () => {
         </div>
 
         <div className="grid gap-4">
-          {allProblem?.length > 0 && allProblem?.map((problem) => (
-            <motion.div
-              key={problem.id}
-              layout
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between"
-            >
-              <div className="flex items-center gap-4">
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <Code className="w-6 h-6 text-gray-400" />
-                </div>
-                <div>
+          {allProblem?.length > 0 &&
+            allProblem?.map((problem) => (
+              <motion.div
+                key={problem.id}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-gray-50 rounded-lg">
+                    <Code className="w-6 h-6 text-gray-400" />
+                  </div>
                   <div>
-                    <div className="flex gap-2 items-center">
-                      <h3 className="font-bold text-gray-900 text-lg">
-                        {problem.title}
-                      </h3>
-                      <span
-                        className={`px-2 py-0.5 rounded text-xs font- medium ${difficultyColor(problem.difficulty)}`}
-                      >
-                        {problem.difficulty}
+                    <div>
+                      <div className="flex gap-2 items-center">
+                        <h3 className="font-bold text-gray-900 text-lg">
+                          {problem.title}
+                        </h3>
+                        <span
+                          className={`px-2 py-0.5 rounded text-xs font- medium ${difficultyColor(problem.difficulty)}`}
+                        >
+                          {problem.difficulty}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-sm text-gray-500 flex flex-row gap-3">
+                        {problem.topicTags.map((tag, index) => {
+                          return (
+                            <p
+                              key={index}
+                              className="px-2 py-0.5 rounded text-xs font- medium bg-blue-100 text-blue-500"
+                            >
+                              {tag}
+                            </p>
+                          );
+                        })}
+                      </span>
+                      <span className="text-sm text-gray-400">•</span>
+                      <span className="text-sm text-gray-500">
+                        Acceptance: {problem.acceptanceRate}%
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="text-sm text-gray-500 flex flex-row gap-3">
-                      {problem.topicTags.map((tag, index) => {
-                        return (
-                          <p
-                            key={index}
-                            className="px-2 py-0.5 rounded text-xs font- medium bg-blue-100 text-blue-500"
-                          >
-                            {tag}
-                          </p>
-                        );
-                      })}
-                    </span>
-                    <span className="text-sm text-gray-400">•</span>
-                    <span className="text-sm text-gray-500">
-                      Acceptance: {problem.acceptanceRate}%
-                    </span>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <div className="flex gap-2 border-l pl-4 border-gray-200">
+                    <button
+                      className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      onClick={() => {
+                        setEditingProblem(problem);
+                        setEditActiveTab("basic");
+                      }}
+                    >
+                      <Edit2 size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteOpen(problem)}
+                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    >
+                      <Trash2 size={18} />
+                    </button>
                   </div>
                 </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="flex gap-2 border-l pl-4 border-gray-200">
-                  <button
-                    className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                    onClick={() => {
-                      setEditingProblem(problem);
-                      setEditActiveTab("basic");
-                    }}
-                  >
-                    <Edit2 size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteOpen(problem)}
-                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
         </div>
       </div>
     </>
