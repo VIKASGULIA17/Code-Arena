@@ -127,7 +127,9 @@ const ProblemManagement = () => {
   // });
 
   // Initial values for the form
+
   const initialValues = {
+    sno : "",
     title: "",
     slug: "",
     topicTags: "",
@@ -149,6 +151,145 @@ const ProblemManagement = () => {
     },
   };
 
+//   const initialValues = {
+//   title: "Trapping Rain Water",
+//   slug: "trapping-rain-water",
+//   topicTags: "Array, Two Pointer, Dynamic Programming",
+//   difficulty: "Hard",
+//   problemTopic: "Arrays",
+//   inputType: "int[] height",
+//   returnType: "int",
+//   functionName: "trap",
+
+//   description:
+//     "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
+
+//   algorithmSteps: [
+//     "Initialize two pointers left = 0 and right = n-1",
+//     "Maintain leftMax and rightMax to track max height from both sides",
+//     "If height[left] < height[right], process left side",
+//     "If height[left] >= height[right], process right side",
+//     "Add trapped water as min(leftMax, rightMax) - current height",
+//     "Move pointers accordingly until left < right"
+//   ],
+
+//   timeComplexity: {
+//     value: "O(n)",
+//     explanation:
+//       "We traverse the array only once using two pointers."
+//   },
+
+//   spaceComplexity: {
+//     value: "O(1)",
+//     explanation:
+//       "No extra space is used except variables."
+//   },
+
+//   testCases: [
+//     {
+//       input: "height = [0,1,0,2,1,0,1,3,2,1,2,1]",
+//       output: "6",
+//       explanation: "Water trapped between bars sums to 6 units.",
+//       hidden: false
+//     },
+//     {
+//       input: "height = [4,2,0,3,2,5]",
+//       output: "9",
+//       explanation: "Total trapped water is 9.",
+//       hidden: false
+//     },
+//     {
+//       input: "height = [1,0,2]",
+//       output: "1",
+//       explanation: "",
+//       hidden: true
+//     }
+//   ],
+
+//   solutions: {
+//     javascript: `var trap = function(height) {
+//   let left = 0, right = height.length - 1;
+//   let leftMax = 0, rightMax = 0;
+//   let water = 0;
+
+//   while (left < right) {
+//     if (height[left] < height[right]) {
+//       if (height[left] >= leftMax) leftMax = height[left];
+//       else water += leftMax - height[left];
+//       left++;
+//     } else {
+//       if (height[right] >= rightMax) rightMax = height[right];
+//       else water += rightMax - height[right];
+//       right--;
+//     }
+//   }
+
+//   return water;
+// };`,
+
+//     java: `public int trap(int[] height) {
+//   int left = 0, right = height.length - 1;
+//   int leftMax = 0, rightMax = 0;
+//   int water = 0;
+
+//   while (left < right) {
+//     if (height[left] < height[right]) {
+//       if (height[left] >= leftMax) leftMax = height[left];
+//       else water += leftMax - height[left];
+//       left++;
+//     } else {
+//       if (height[right] >= rightMax) rightMax = height[right];
+//       else water += rightMax - height[right];
+//       right--;
+//     }
+//   }
+
+//   return water;
+// }`,
+
+//     python: `def trap(height):
+//     left, right = 0, len(height) - 1
+//     left_max, right_max = 0, 0
+//     water = 0
+
+//     while left < right:
+//         if height[left] < height[right]:
+//             if height[left] >= left_max:
+//                 left_max = height[left]
+//             else:
+//                 water += left_max - height[left]
+//             left += 1
+//         else:
+//             if height[right] >= right_max:
+//                 right_max = height[right]
+//             else:
+//                 water += right_max - height[right]
+//             right -= 1
+
+//     return water`,
+
+//     cpp: `int trap(vector<int>& height) {
+//   int left = 0, right = height.size() - 1;
+//   int leftMax = 0, rightMax = 0;
+//   int water = 0;
+
+//   while (left < right) {
+//     if (height[left] < height[right]) {
+//       if (height[left] >= leftMax) leftMax = height[left];
+//       else water += leftMax - height[left];
+//       left++;
+//     } else {
+//       if (height[right] >= rightMax) rightMax = height[right];
+//       else water += rightMax - height[right];
+//       right--;
+//     }
+//   }
+
+//   return water;
+// }`
+//   }
+// };
+
   // end 1
 
   // console.log("Initial Values:", initialValues);
@@ -165,16 +306,24 @@ const ProblemManagement = () => {
   const handleAddProblem = async (values, { resetForm }) => {
     // console.log("here");
     try {
-      console.log("Form Values:", values);
-      console.log("Jwt is : ",jwtToken);
+      values.sno = parseInt(values.sno);
+      // console.log("Form Values:", values);
+      // console.log("Jwt is : ",jwtToken);
       const result = await axios.post(`${BACKEND_URL}/problem/add`, values, {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         }
       });
-      console.log("API Response:", result.data);
-      setIsAddMode(false);
-      resetForm();
+      // console.log("API Response:", result.data);
+      if(result.data.status == 1){
+        setIsAddMode(false);
+        toast.success("New Problem Added");
+        resetForm();
+        showAllProblems();
+      }
+      else{
+        throw new Error();
+      }
     } catch (e) {
       toast.error("Failed to add problem");
     }
@@ -413,7 +562,7 @@ const ProblemManagement = () => {
           </div>
           <button
             onClick={() => setIsAddMode(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform cursor-pointer hover:-translate-y-0.5 active:translate-y-0"
           >
             <Plus size={20} />
             <span>Add Problem</span>
@@ -743,13 +892,23 @@ const ProblemManagement = () => {
                   {({ values }) => (
                     <Form className="flex flex-col flex-1 overflow-hidden">
                       {/* Persistent Title Field */}
-                      <div className="p-6 pb-0 bg-white">
-                        <FormGroup
-                          label="Problem Title"
-                          name="title"
-                          placeholder="e.g., Two Sum"
-                        />
-                      </div>
+                      <div className="p-4 sm:p-6 bg-white">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <FormGroup
+      label="S. No"
+      name="sno"
+      placeholder="Enter problem number"
+    />
+
+    <FormGroup
+      label="Problem Title"
+      name="title"
+      placeholder="Enter problem title"
+    />
+
+  </div>
+</div>
 
                       {/* Tabs */}
                       <div className="flex border-b border-gray-200 bg-white sticky top-0 z-10">
