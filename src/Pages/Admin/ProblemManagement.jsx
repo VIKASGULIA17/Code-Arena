@@ -37,8 +37,8 @@ const ProblemManagement = () => {
   const [deleteTarget, setdeleteTarget] = useState(null);
   const [deleteConfirmText, setdeleteConfirmText] = useState("");
 
-  console.log("problemManagement.jsx");
-  console.log(allProblem);
+  // console.log("problemManagement.jsx");
+  // console.log(allProblem);
 
   function handleDeleteOpen(problem) {
     setIsDeleteOpen(true);
@@ -142,6 +142,12 @@ const ProblemManagement = () => {
     timeComplexity: { value: "", explanation: "" },
     spaceComplexity: { value: "", explanation: "" },
     testCases: [{ input: "", output: "", explanation: "", hidden: false }],
+    templates: {
+      javascript: "",
+      java: "",
+      python: "",
+      cpp: "",
+    },
     solutions: {
       javascript: "",
       java: "",
@@ -298,18 +304,49 @@ const ProblemManagement = () => {
 
   // Validation Schema
   const validationSchema = yup.object({
+    sno: yup.number().typeError("S. No must be a number"),
     title: yup.string().required("Title is required"),
-    slug: yup.string().required("Slug is required"),
-    functionName: yup.string().required("Function name is required"),
-    description: yup.string().required("Description is required"),
-    // Add more validation as needed
+    // slug: yup.string().required("Slug is required"),
+    // topicTags: yup.string().required("Tags are required"),
+    // difficulty: yup.string().required("Difficulty is required"),
+    // inputType: yup.string().required("Input Type is required"),
+    // returnType: yup.string().required("Return Type is required"),
+    // functionName: yup.string().required("Function name is required"),
+    // description: yup.string().required("Description is required"),
+    // timeComplexity: yup.object({
+    //   value: yup.string().required("Time complexity value is required"),
+    //   explanation: yup.string().required("Explanation is required"),
+    // }),
+    // spaceComplexity: yup.object({
+    //   value: yup.string().required("Space complexity value is required"),
+    //   explanation: yup.string().required("Explanation is required"),
+    // }),
+    // testCases: yup.array().of(
+    //   yup.object({
+    //     input: yup.string().required("Input is required"),
+    //     output: yup.string().required("Output is required"),
+    //     explanation: yup.string(),
+    //   })
+    // ).min(1, "At least one test case is required"),
+    // templates: yup.object({
+    //   javascript: yup.string().required("Template is required"),
+    //   java: yup.string().required("Template is required"),
+    //   python: yup.string().required("Template is required"),
+    //   cpp: yup.string().required("Template is required"),
+    // }),
+    // solutions: yup.object({
+    //   javascript: yup.string().required("Solution is required"),
+    //   java: yup.string().required("Solution is required"),
+    //   python: yup.string().required("Solution is required"),
+    //   cpp: yup.string().required("Solution is required"),
+    // }),
   });
 
   const handleAddProblem = async (values, { resetForm }) => {
-    // console.log("here");
+    console.log("here");
     try {
       values.sno = parseInt(values.sno);
-      // console.log("Form Values:", values);
+      console.log("Form Values:", values);
       // console.log("Jwt is : ",jwtToken);
       const result = await axios.post(`${BACKEND_URL}/problem/add`, values, {
         headers: {
@@ -389,6 +426,7 @@ const ProblemManagement = () => {
     { id: "basic", label: "Basic Info" },
     { id: "details", label: "Details" },
     { id: "testcases", label: "Test Cases" },
+    { id: "template", label: "Template" },
     { id: "solution", label: "Solution" },
   ];
 
@@ -819,6 +857,37 @@ const ProblemManagement = () => {
                           </div>
                         )}
 
+                        {/* Template Tab */}
+                        {editActiveTab === "template" && (
+                          
+                          <div className="space-y-6">
+                          
+                            <div className="grid grid-cols-1 gap-6">
+                              {["javascript", "java", "python", "cpp"].map(
+                                (lang) => (
+                                  <div key={lang} className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 capitalize">
+                                      {lang} Template
+                                    </label>
+                                    <Field
+                                      as="textarea"
+                                      name={`templates.${lang}`}
+                                      rows={6}
+                                      className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
+                                      placeholder={`Paste your ${lang} template here...`}
+                                    />
+                                    <ErrorMessage
+                                      name={`templates.${lang}`}
+                                      component="div"
+                                      className="text-red-500 text-sm"
+                                    />
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                          </div>
+                        )}
+
                         {/* Solution Tab */}
                         {editActiveTab === "solution" && (
                           <div className="space-y-6">
@@ -835,6 +904,11 @@ const ProblemManagement = () => {
                                       rows={6}
                                       className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
                                       placeholder={`Paste your ${lang} solution here...`}
+                                    />
+                                    <ErrorMessage
+                                      name={`solutions.${lang}`}
+                                      component="div"
+                                      className="text-red-500 text-sm"
                                     />
                                   </div>
                                 ),
@@ -1090,6 +1164,35 @@ const ProblemManagement = () => {
                           </div>
                         )}
 
+                        {/* Template Tab */}
+                        {activeTab === "template" && (
+                          <div className="space-y-6">
+                            <div className="grid grid-cols-1 gap-6">
+                              {["javascript", "java", "python", "cpp"].map(
+                                (lang) => (
+                                  <div key={lang} className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-700 capitalize">
+                                      {lang} Template
+                                    </label>
+                                    <Field
+                                      as="textarea"
+                                      name={`template.${lang}`}
+                                      rows={6}
+                                      className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
+                                      placeholder={`Paste your ${lang} template here...`}
+                                    />
+                                    <ErrorMessage
+                                      name={`template.${lang}`}
+                                      component="div"
+                                      className="text-red-500 text-sm"
+                                    />
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                          </div>
+                        )}
+
                         {/* Solution Tab */}
                         {activeTab === "solution" && (
                           <div className="flex gap-3 justify-center flex-col">
@@ -1177,6 +1280,11 @@ const ProblemManagement = () => {
                                         rows={6}
                                         className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
                                         placeholder={`Paste your ${lang} solution here...`}
+                                      />
+                                      <ErrorMessage
+                                        name={`solutions.${lang}`}
+                                        component="div"
+                                        className="text-red-500 text-sm"
                                       />
                                     </div>
                                   ),
