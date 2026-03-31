@@ -14,12 +14,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useAppContext } from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 const UserModal = ({ user, onClose }) => {
   if (!user) return null;
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const { jwtToken, getAllUsers } = useAppContext();
   const [isLoading, setisLoading] = useState(false);
+  const navigate = useNavigate();
+
 
   const banUnbanToSpring = async () => {
     // console.log(BACKEND_URL);
@@ -84,11 +87,13 @@ const UserModal = ({ user, onClose }) => {
 
           <div className="p-8">
             <div className="flex items-center gap-6 mb-8">
+              <a onClick={()=>navigate(`/profile/${user?.username}`)}>
               <img
-                src={`https://ui-avatars.com/api/?name=${user.username}&background=random`}
+                src={user?.avatarLink || ""}
                 alt={user.name}
-                className="w-24 h-24 rounded-full ring-4 ring-gray-50"
+                className="w-24 h-24 cursor-pointer rounded-full ring-4 ring-gray-50"
               />
+              </a>
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">
                   {user.username}
@@ -171,6 +176,13 @@ const UserManagement = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [hoverProfileUsername,SetHoverProfileUsername] = useState("");
+  const navigate = useNavigate();
+
+  console.log("All Users : ");
+  console.log(users);
+
+  // console.log(isHoverProfileActive);
 
   // const users = [
   //     { id: 1, name: 'John Doe', email: 'john@example.com', role: 'User', status: 'Active', joinedDate: '2023-01-15', problemsSolved: 45 },
@@ -185,6 +197,8 @@ const UserManagement = () => {
       user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
+  console.log(users!=null?users[10]:"");
 
   return (
     <div className="space-y-6">
@@ -234,11 +248,12 @@ const UserManagement = () => {
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-linear-to-br from-gray-100 to-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">
-                      {user.username[0].toUpperCase()}
-                    </div>
+                    <a onClick={()=>navigate(`/profile/${user?.username}`)}>
+                    <img className="w-8 h-8 rounded-full cursor-pointer flex items-center justify-center font-bold" alt="user Profile Image" src={user?.avatarLink || ""} onMouseEnter={()=>SetHoverProfileUsername(user?.username)} onMouseLeave={()=>SetHoverProfileUsername("")}/>
+                      
+                      </a>
                     <div>
-                      <p className="font-medium text-gray-900">
+                      <p className={`font-medium  ${hoverProfileUsername==user?.username?"text-blue-600":"text-gray-900"}`}>
                         {user.username}
                       </p>
                       <p className="text-xs text-gray-500">{user.email}</p>
@@ -274,7 +289,7 @@ const UserManagement = () => {
                       className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                       title="View Details"
                     >
-                      <Eye size={18} />
+                      <Eye className="cursor-pointer" size={18} />
                     </button>
                   </div>
                 </td>

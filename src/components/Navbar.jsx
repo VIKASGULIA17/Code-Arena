@@ -31,8 +31,11 @@ export function EnhancedNavbar() {
     username, 
     setjwtToken, 
     userDetails, 
-    setisLoggedIn 
+    setisLoggedIn,
+    userProfile
   } = useAppContext()
+
+  console.log(userDetails);
 
   // 2. Fixed the Admin check based on your old code's logic
   const isAdmin = (userDetails?.roles || []).includes("ADMIN") || (userDetails?.roles || []).includes("ROLE_ADMIN")
@@ -129,7 +132,7 @@ export function EnhancedNavbar() {
                 className="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-blue-50 transition-colors"
               >
                 <img
-                  src={userDetails?.avatar || 'https://i.pravatar.cc/150'}
+                  src={userProfile?.avatarLink || 'https://i.pravatar.cc/100?img=5'}
                   alt="Avatar"
                   className="w-7 h-7 rounded-full border border-gray-200 object-cover"
                 />
