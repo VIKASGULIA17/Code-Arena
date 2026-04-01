@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import Countdown from "../components/others/CountDown";
 import { Button } from "../components/ui/button";
-import {EnhancedNavbar} from "../components/Navbar";
+import { EnhancedNavbar } from "../components/Navbar";
 import { BsTriangleFill } from "react-icons/bs";
 import { topSolvers } from "../data/ContestData";
 
@@ -20,91 +20,145 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import ContestList from "../components/Contest/ContestList";
+import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 
 const Contest = () => {
+  //ye abhi static h ,dynamic krna h isko
 
-  //ye abhi static h ,dynamic krna h isko 
-
-  // features left to apply 
+  // features left to apply
 
   // 1st - jo sabse recent contest hone wala h  ,display that info into the big div  -line 40
 
-  //2nd - when clicked on register ,register that user for contest and make it change 
+  //2nd - when clicked on register ,register that user for contest and make it change
 
-  //3rd - when contest is ongoing , show ongoing and for that contest fetch 3 question ,1 easy ,1 medium ,1 hard  - duration 1 hour 
+  //3rd - when contest is ongoing , show ongoing and for that contest fetch 3 question ,1 easy ,1 medium ,1 hard  - duration 1 hour
 
-  //4th - handle rank list after contest according to time 
+  //4th - handle rank list after contest according to time
 
   // 5th - maintain the timespan and points earned by the user  (even millisecond just to be secure )
 
   // 6th - blocking access of the user on the screen the contest end ( maybe even close the whole contest editor )
 
-  // 7th - maintaining the contest history of the user and his contest rating. 
+  // 7th - maintaining the contest history of the user and his contest rating.
 
-  
+  const [contestData, setcontestData] = useState([]);
+
+  const fetchContest = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/public/fetchAllContest`,
+      );
+      // setproblems(response.data);
+      // console.table(response.data);
+      if (response.data) {
+        console.log(response.data)
+        setcontestData(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const closestUpcomingContest = useMemo(() => {
+    if (!contestData || contestData.length === 0) return null;
+
+    const now = new Date();
+
+    const futureContests = contestData.filter(contest => {
+      const startTime = new Date(contest.startTime);
+      return startTime > now || contest.contestStatus === "UPCOMING" || contest.contestStatus === "ONGOING";
+    });
+    if (futureContests.length === 0) return null;
+
+    futureContests.sort((a, b) => {
+      return new Date(a.startTime) - new Date(b.startTime);
+    });
+    console.log(futureContests)
+    return futureContests[0];
+
+  }, [contestData])
+
+
+  useEffect(() => {
+    fetchContest();
+  }, []);
 
   return (
     <div className="w-full  bg-gray-100 overflow-x-hidden">
       <EnhancedNavbar />
       <div className="w-full h-full window:flex mt-26 px-4 window:mx-10 lg:px-10">
-        <div className="w-full window:w-[70%]  ">
-          {/* left div -  */}
-          {/*most recent-contest div  */}
-          <div className="flex  flex-col lg:flex-row w-full rounded-2xl shadow-xl bg-white overflow-hidden">
-            {/* card div  */}
-            <div className="recent-contest  lg:w-[25%] relative">
-              {/* imgage  */}
-              <img
-                src="https://images.unsplash.com/photo-1757101782354-d7988295617c"
-                className="h-60 lg:h-auto w-full object-cover "
-                alt=""
-              />
-              <p className="absolute bottom-7 left-13 bg-linear-to-r from-blue-400 via-purple-500 to-pink-600 text-white  px-3 py-1 rounded-2xl">
-                Featured Event
-              </p>
-            </div>
-            <div className="w-full px-10 my-10 ">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h1 className="text-2xl font-semibold">
-                    Global Coding contest 2024
-                  </h1>
-                  <p className="text-gray-700">sponsered by TechGiant</p>
-                </div>
-                <TrophyIcon
-                  className="p-3 bg-purple-100 text-purple-500 rounded-full font-bold"
-                  size={45}
-                />
-              </div>
-              <div className="flex items-center my-10 gap-4">
-                <AlarmClock className="text-blue-700" />
-                <div className="text-xl font-bold">
-                  <Countdown />
-                </div>
-                <p className="text-gray-700">until starts</p>
-              </div>
-              <div className="">
-                <p className="max-w-[400px]">
-                  Join over 15,000 developers in the biggest algorithm challenge
-                  of the year.
-                </p>
-              </div>
-              <div className="flex items-center gap-3 my-7">
-                <Button>
-                  <p className="text-gray-600 font-semibold border shadow-2xl px-4 py-2 rounded-lg">
-                    Details
+        {closestUpcomingContest ?
+            <div className="w-full window:w-[70%]  ">
+              {/* left div -  */}
+              {/*most recent-contest div  */}
+              <div className="flex  flex-col lg:flex-row w-full rounded-2xl shadow-xl bg-white overflow-hidden">
+                {/* card div  */}
+                <div className="recent-contest lg:w-[30%] xl:w-[25%] shrink-0 relative flex flex-col">
+                  {/* image  */}
+                  <img
+                    src="https://images.unsplash.com/photo-1757101782354-d7988295617c"
+                    className="h-60 lg:h-auto flex-1 w-full object-cover"
+                    alt="Contest Cover"
+                  />
+                  <p className="absolute bottom-7 left-6 lg:left-8 bg-linear-to-r from-blue-400 via-purple-500 to-pink-600 text-white px-4 py-1.5 rounded-full font-medium shadow-lg whitespace-nowrap z-10">
+                    Featured Event
                   </p>
-                </Button>
-                <Button className="bg-linear-to-r from-blue-600 via-purple-600 to-pink-500">
-                  <p className="text-white font-semibold">Register Now</p>
-                </Button>
+                </div>
+                <div className="w-full px-10 my-10 ">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h1 className="text-2xl font-semibold">
+                        {closestUpcomingContest.contestName}
+                      </h1>
+                      <p className="text-gray-700">sponsered by TechGiant</p>
+                    </div>
+                    <TrophyIcon
+                      className="p-3 bg-purple-100 text-purple-500 rounded-full font-bold"
+                      size={45}
+                    />
+                  </div>
+                  <div className="flex items-center my-10 gap-4">
+                    <AlarmClock className="text-blue-700" />
+                    <div className="text-xl font-bold">
+                      <Countdown targetTime={closestUpcomingContest.startTime} />
+                    </div>
+                    <p className="text-gray-700">until starts</p>
+                  </div>
+                  <div className="">
+                    <p className="max-w-[800px] text-gray-700">
+                      {closestUpcomingContest.contestDescription}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 my-7">
+                    <Link
+                      to="registration"
+                      state={{ contest: closestUpcomingContest }}
+                    >
+                      <Button>
+                        <p className="text-gray-600 font-semibold border shadow-2xl px-4 py-2 rounded-lg">
+                          Details
+                        </p>
+                      </Button>
+                    </Link>
+                    <Link
+                      to="registration"
+                      state={{ contest: closestUpcomingContest }}
+                    >
+                      <Button className="bg-linear-to-r from-blue-600 via-purple-600 to-pink-500">
+                        <p className="text-white font-semibold">Register Now</p>
+                      </Button>
+                    </Link>
+                  </div>
+                  {/* content  */}
+                </div>
               </div>
-              {/* content  */}
-            </div>
-          </div>
 
-          <ContestList />
-        </div>
+              <ContestList contestData={contestData}/>
+            </div> :
+            <div>No contest exist</div>
+        }
 
         <div className="w-full window:w-[28%] lg:px-10 h-auto  overflow-hidden">
           {/* right  */}

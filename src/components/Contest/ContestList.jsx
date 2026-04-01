@@ -7,11 +7,10 @@ import {
 } from "lucide-react";
 import SearchBar from "../others/SearchBar";
 import { Button } from "../ui/button";
-import { contestData } from "../../data/ContestData";
 import { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const ContestList = () => {
+const ContestList = ({ contestData = [] }) => {
   const [selected, setselected] = useState("grid");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -35,18 +34,19 @@ const ContestList = () => {
   // Filter Logic
   const filteredContest = useMemo(() => {
     return contestData.filter((contest) => {
-      const matchSearches = contest.name
-        .toLowerCase()
-        .includes(filters.search.toLowerCase());
+      const matchSearches = contest.contestName
+        ?.toLowerCase()
+        ?.includes(filters.search.toLowerCase());
 
+      const status = contest.contestStatus || "UPCOMING";
       const matchedStatus =
         filters.status === "All" ||
         !filters.status ||
-        contest.status.toLowerCase() === filters.status.toLowerCase();
+        status.toLowerCase() === filters.status.toLowerCase();
 
       return matchSearches && matchedStatus;
     });
-  }, [filters]);
+  }, [filters, contestData]);
 
   // Pagination Logic
   const totalPages = Math.ceil(filteredContest.length / itemsPerPage);
@@ -128,64 +128,77 @@ const ContestList = () => {
         ) : (
           <>
             {/* Contest list */}
-            {currentData.map((obj, idx) => (
-              <div key={idx} className="my-4">
+            {currentData.map((obj, idx) => {
+              const startDate = new Date(obj.startTime);
+              const month = startDate.toLocaleString('en-US', { month: 'short' });
+              const date = startDate.getDate();
+              const formattedTime = startDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+              const status = obj.contestStatus || "UPCOMING";
+              
+              const colorClass = status.toUpperCase() === "ONGOING" ? "from-green-500 to-emerald-600" :
+                                 status.toUpperCase() === "FINISHED" ? "from-gray-500 to-gray-600" :
+                                 "from-blue-500 to-indigo-600";
+              
+              const prize = "$5000"; 
+              
+              return (
+              <div key={obj.contestId || idx} className="my-4">
                 <div className="w-full flex flex-col lg:flex-row gap-10 items-center justify-between h-auto rounded-2xl shadow-lg bg-white py-7 px-8 hover:scale-[1.01] transition-transform">
                   <div className="flex">
                     <div className="bg-gray-100 w-18 h-18 text-center pt-2 rounded-2xl flex flex-col justify-center px-4">
                       <p className="font-medium text-gray-600 uppercase text-xs">
-                        {obj.month}
+                        {month}
                       </p>
-                      <p className="font-bold text-xl">{obj.date}</p>
+                      <p className="font-bold text-xl">{date}</p>
                     </div>
                     <div className="ml-4">
                       <div className="flex gap-5 py-1 items-center">
                         <h1 className="text-2xl font-medium text-gray-700">
-                          {obj.name}
+                          {obj.contestName}
                         </h1>
                         <span
-                          className={`px-4 py-1 rounded-full text-xs text-white font-bold bg-linear-to-b ${obj.color}`}
+                          className={`px-4 py-1 rounded-full text-xs text-white font-bold bg-linear-to-b ${colorClass}`}
                         >
-                          {obj.status}
+                          {status}
                         </span>
                       </div>
                       <div className="flex items-center gap-4 mt-2">
                         <div className="text-gray-500 text-sm">
-                          {obj.status === "Ongoing" ? "Ends in " : "Starts at "}
+                          {status.toUpperCase() === "ONGOING" ? "Ends in " : "Starts at "}
                           <span className="font-medium text-gray-700">
-                            {obj.startTime}
+                            {formattedTime}
                           </span>
                         </div>
                         <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
                         <h4 className="text-gray-500 text-sm">
-                          {obj.duration} Duration
+                          {obj.duration} Hours
                         </h4>
                       </div>
                     </div>
                   </div>
                   <div className="flex gap-4">
-                    <div className="text-right mr-4">
+                    <div className="text-right mr-4 hidden sm:block">
                       <p className="text-xs text-gray-400 uppercase">
                         Prize Pool
                       </p>
-                      <p className="font-bold text-orange-600">{obj.prize}</p>
+                      <p className="font-bold text-orange-600">{prize}</p>
                     </div>
 
-                    {obj.status === "Finished" ? (
-                      <Link to={`/contest/${obj.name} || Virtual Contest`}>
-                        <Button className="px-8 bg-brand-gradient font-bold">
+                    {status.toUpperCase() === "FINISHED" ? (
+                      <Link to={`/contest/${obj.contestId || obj.contestName}`}>
+                        <Button className="px-8 bg-brand-gradient font-bold cursor-pointer">
                           Virtual
                         </Button>
                       </Link>
-                    ) : obj.status === "Ongoing" ? (
-                      <Link to={`/contest/${obj.name}`}>
-                        <Button className="px-8 bg-brand-gradient font-bold">
+                    ) : status.toUpperCase() === "ONGOING" ? (
+                      <Link to={`/contest/${obj.contestId || obj.contestName}`}>
+                        <Button className="px-8 bg-brand-gradient font-bold cursor-pointer">
                           Enter
                         </Button>
                       </Link>
                     ) : (
-                      <Link to='registration'>
-                        <Button className="px-8 bg-brand-gradient font-bold">
+                      <Link to='registration' state={{ contest: obj }}>
+                        <Button className="px-8 bg-brand-gradient font-bold cursor-pointer">
                           Register
                         </Button>
                       </Link>
@@ -193,7 +206,7 @@ const ContestList = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            )})}
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
