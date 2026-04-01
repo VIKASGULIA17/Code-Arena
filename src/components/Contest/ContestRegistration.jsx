@@ -15,7 +15,7 @@ import {
   ArrowBigLeft,
 } from "lucide-react";
 
-import NotFound from '../../Pages/NotFound'
+import NotFound from "../../Pages/NotFound";
 import Countdown from "../others/CountDown";
 import { Button } from "../ui/button";
 import { motion } from "framer-motion";
@@ -27,7 +27,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ContestRegistration = ({}) => {
   // Animation variants
-  
+
   const { jwtToken } = useAppContext();
   const [showConfirm, setShowConfirm] = useState(false);
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -50,47 +50,68 @@ const ContestRegistration = ({}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const contest = location.state?.contest;
-  
+
   const [isRegistered, setIsRegistered] = useState(false);
 
   const contestId = contest?.contestId || null;
 
-
-  if(contest==null){
-    return <NotFound />
+  if (contest == null) {
+    return <NotFound />;
   }
-//   console.log(contestId);
-// console.log("jwtToken")
-//       console.log(jwtToken)
-//       console.log("Contest id")
-//       console.log(contestId)
+  //   console.log(contestId);
+  // console.log("jwtToken")
+  //       console.log(jwtToken)
+  //       console.log("Contest id")
+  //       console.log(contestId)
+
+  const isAlreadyRegistered = async () => {
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}/contest/isRegisterContest/${contestId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        },
+      );
+
+      if (response.data.status === 1) {
+        toast.success("User is already registered");
+        setIsRegistered(true);
+      }
+    } catch (error) {
+
+      setIsRegistered(false);
+    }
+  };
+
+  useEffect(() => {
+    isAlreadyRegistered()
+  }, [])
+  
+
   const registerForContest = async () => {
     try {
       const response = await axios.post(
         `${BACKEND_URL}/contest/register/${contestId}`,
         null,
         {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`
-        }
-      }
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        },
       );
-      
 
-     if (response.data.status === 1) {
-      toast.success("User registered successfully"); 
-      setIsRegistered(true);
-    }
+      if (response.data.status === 1) {
+        toast.success("User registered successfully");
+        setIsRegistered(true);
+      }
     } catch (error) {
-    
-    
       toast.error("Something went wrong");
-    
-  }
+    }
   };
 
-
-//   console.log(contest);
+  //   console.log(contest);
 
   return (
     <div className="min-h-screen bg-gray-50/50 dark:bg-zinc-950/50 p-4 lg:p-8 overflow-y-auto">
@@ -383,10 +404,14 @@ const ContestRegistration = ({}) => {
                 Confirm Registration
               </h2>
               <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-                Are you sure you want to register for <span className="font-semibold text-gray-800 dark:text-gray-200">{contest.contestName}</span>? You will not be able to undo this.
+                Are you sure you want to register for{" "}
+                <span className="font-semibold text-gray-800 dark:text-gray-200">
+                  {contest.contestName}
+                </span>
+                ? You will not be able to undo this.
               </p>
             </div>
-            
+
             <div className="flex gap-4 w-full pt-4">
               <Button
                 variant="outline"
