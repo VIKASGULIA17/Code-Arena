@@ -60,7 +60,7 @@ export const AppProvider = (props) => {
         }
       })
       if(result.data!=null){
-        console.log(result.data);
+        // console.log(result.data);
         setallProblems(result.data);
       }
       else{

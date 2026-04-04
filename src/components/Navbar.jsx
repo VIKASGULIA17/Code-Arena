@@ -91,7 +91,6 @@ export function EnhancedNavbar() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
-
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
