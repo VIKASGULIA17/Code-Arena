@@ -3440,7 +3440,7 @@ function main() {
 main();`
           }
         }
-      }
+      },
     }
   }
 };

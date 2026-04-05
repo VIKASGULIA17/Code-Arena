@@ -1,62 +1,86 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { ArrowRight, Code2, BookOpen, Zap, Search, Trophy, Clock } from 'lucide-react'
-import { EnhancedNavbar } from '../../components/Navbar'
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  Code2,
+  BookOpen,
+  Zap,
+  Search,
+  Trophy,
+  Clock,
+} from "lucide-react";
+import { EnhancedNavbar } from "../../components/Navbar";
 
 const HomePage = () => {
   const featuredTopics = [
     {
       id: 1,
       title: "Arrays & Strings",
-      description: "Master the fundamentals with array manipulation and string algorithms",
+      description:
+        "Master the fundamentals with array manipulation and string algorithms",
       difficulty: "Beginner",
       totalProblems: 45,
       category: "data-structures",
       topicId: "arrays",
       icon: "📊",
-      color: "from-green-500 to-emerald-500"
+      color: "from-green-500 to-emerald-500",
     },
     {
       id: 2,
       title: "Sorting Algorithms",
-      description: "Learn bubble sort, merge sort, quick sort and advanced techniques",
+      description:
+        "Learn bubble sort, merge sort, quick sort and advanced techniques",
       difficulty: "Intermediate",
       totalProblems: 32,
       category: "algorithms",
       topicId: "sorting",
       icon: "🔄",
-      color: "from-blue-500 to-cyan-500"
+      color: "from-blue-500 to-cyan-500",
     },
     {
       id: 3,
       title: "Trees & Graphs",
-      description: "Explore binary trees, BST, graph traversal and shortest paths",
+      description:
+        "Explore binary trees, BST, graph traversal and shortest paths",
       difficulty: "Advanced",
       totalProblems: 58,
       category: "data-structures",
       topicId: "trees",
       icon: "🌳",
-      color: "from-purple-500 to-pink-500"
+      color: "from-purple-500 to-pink-500",
     },
     {
       id: 4,
       title: "Dynamic Programming",
-      description: "Master optimization problems with memoization and tabulation",
+      description:
+        "Master optimization problems with memoization and tabulation",
       difficulty: "Advanced",
       totalProblems: 41,
       category: "algorithms",
       topicId: "dynamic-programming",
       icon: "⚡",
-      color: "from-orange-500 to-red-500"
-    }
-  ]
+      color: "from-orange-500 to-red-500",
+    },
+    {
+      id: 5,
+      title: "Advanced CP Techniques",
+      description:
+        "Master complex algorithms and tricks needed to solve Codeforces and ICPC level problems",
+      difficulty: "Extreme",
+      totalProblems: 41,
+      category: "algorithms",
+      topicId: "advanced-cp",
+      icon: "🚀",
+      color: "from-indigo-500 to-violet-500",
+    },
+  ];
 
   const stats = [
     { label: "Data Structures", value: "15+", icon: Code2 },
     { label: "Algorithms", value: "50+", icon: Zap },
     { label: "Code Templates", value: "200+", icon: BookOpen },
-    { label: "Languages", value: "4", icon: Trophy }
-  ]
+    { label: "Languages", value: "4", icon: Trophy },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,8 +95,9 @@ const HomePage = () => {
               &amp; Algorithms
             </h1>
             <p className="text-xl md:text-2xl text-gray-500 mb-8 max-w-3xl mx-auto">
-              Your comprehensive hub for learning DSA with interactive code templates,
-              detailed explanations, and real-world examples in multiple languages.
+              Your comprehensive hub for learning DSA with interactive code
+              templates, detailed explanations, and real-world examples in
+              multiple languages.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -94,14 +119,19 @@ const HomePage = () => {
           {/* Stats Section */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20">
             {stats.map((stat, index) => {
-              const Icon = stat.icon
+              const Icon = stat.icon;
               return (
-                <div key={index} className="text-center p-6 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all">
+                <div
+                  key={index}
+                  className="text-center p-6 rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all"
+                >
                   <Icon className="mx-auto mb-3 text-blue-600" size={32} />
-                  <div className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                  <div className="text-3xl font-bold text-gray-900 mb-1">
+                    {stat.value}
+                  </div>
                   <div className="text-gray-500 text-sm">{stat.label}</div>
                 </div>
-              )
+              );
             })}
           </div>
 
@@ -121,15 +151,22 @@ const HomePage = () => {
                   data-testid={`topic-card-${topic.topicId}`}
                 >
                   <div className="relative p-8 rounded-2xl bg-white border border-gray-200 hover:border-blue-300 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl overflow-hidden">
-                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${topic.color} opacity-10 rounded-full -translate-y-1/2 translate-x-1/2`}></div>
+                    <div
+                      className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${topic.color} opacity-10 rounded-full -translate-y-1/2 translate-x-1/2`}
+                    ></div>
 
                     <div className="relative z-10">
                       <div className="flex items-start justify-between mb-4">
                         <span className="text-4xl">{topic.icon}</span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${topic.difficulty === 'Beginner' ? 'bg-green-100 text-green-700' :
-                          topic.difficulty === 'Intermediate' ? 'bg-yellow-100 text-yellow-700' :
-                            'bg-red-100 text-red-700'
-                          }`}>
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            topic.difficulty === "Beginner"
+                              ? "bg-green-100 text-green-700"
+                              : topic.difficulty === "Intermediate"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-red-100 text-red-700"
+                          }`}
+                        >
                           {topic.difficulty}
                         </span>
                       </div>
@@ -145,7 +182,10 @@ const HomePage = () => {
                         <span className="text-sm text-gray-400">
                           {topic.totalProblems} Templates
                         </span>
-                        <ArrowRight className="text-gray-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" size={20} />
+                        <ArrowRight
+                          className="text-gray-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all"
+                          size={20}
+                        />
                       </div>
                     </div>
                   </div>
@@ -158,14 +198,19 @@ const HomePage = () => {
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-200">
             <div className="flex items-center mb-6">
               <Trophy className="text-yellow-500 mr-3" size={32} />
-              <h3 className="text-2xl font-bold text-gray-900">Problem of the Day</h3>
+              <h3 className="text-2xl font-bold text-gray-900">
+                Problem of the Day
+              </h3>
             </div>
             <div className="grid md:grid-cols-3 gap-6 items-center">
               <div className="md:col-span-2">
-                <h4 className="text-xl font-semibold text-blue-600 mb-2">Two Sum Problem</h4>
+                <h4 className="text-xl font-semibold text-blue-600 mb-2">
+                  Two Sum Problem
+                </h4>
                 <p className="text-gray-600 mb-4">
-                  Given an array of integers and a target sum, find two numbers that add up to the target.
-                  Practice this fundamental algorithm problem.
+                  Given an array of integers and a target sum, find two numbers
+                  that add up to the target. Practice this fundamental algorithm
+                  problem.
                 </p>
                 <div className="flex items-center text-sm text-gray-500">
                   <Clock size={16} className="mr-2" />
@@ -187,7 +232,7 @@ const HomePage = () => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
