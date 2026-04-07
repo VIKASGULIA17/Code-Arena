@@ -3,8 +3,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { CircleCheck } from "lucide-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { dsaProblems } from "../../data/dsaProblem";
-import Problems from "../../Pages/Problems";
+
 
 const ResultSection = ({ filters, filteredProblems }) => {
   const [currentPage, setCurrentPage] = useState(1); // this s for the problem list 
@@ -20,7 +19,7 @@ const ResultSection = ({ filters, filteredProblems }) => {
   const TotalPages = Math.ceil(filteredProblems.length / itemsPerPage); //total count
 
   const currElements = filteredProblems.slice(startElement, lastElement); // problem array 
-
+  console.log(filteredProblems)
   return (
     <div className="w-full mt-10 rounded-t-xl h-auto overflow-x-auto shadow-2xl">
       <div className="flex min-w-[500px] lg:w-full lg:gap-10 justify-between text-xl text-black/50 font-semibold py-4 px-10 bg-black/10">
@@ -36,14 +35,14 @@ const ResultSection = ({ filters, filteredProblems }) => {
       {currElements.length > 0 ? (
         currElements.map((obj, idx) => (
           <div
-            key={obj.id || idx}
+            key={obj.sno || idx}
             className="flex gap-10 justify-between min-w-[500px] font-semibold py-4 px-10"
           >
             <div className="flex gap-10 ">
               {obj.status === true ? (
                 <CircleCheck className="bg-green-500 min-w-7 min-h-7 rounded-full text-white" />
               ) : (
-                <CircleCheck className="bg-transparent rounded-full text-transparent" />
+                <CircleCheck className="bg-transparent border-green-400 border-1 rounded-full text-transparent" />
               )}
 
               <div className="">
@@ -52,7 +51,7 @@ const ResultSection = ({ filters, filteredProblems }) => {
                     to={`/problem/${obj.id}`}
                     className="hover:text-blue-600 transition-colors cursor-pointer"
                   >
-                    {obj.id}. {obj.title}
+                    {obj.sno}. {obj.title}
                   </Link>
                 </h2>
                 <div
@@ -61,7 +60,7 @@ const ResultSection = ({ filters, filteredProblems }) => {
                 grid grid-rows-2 items-center text-center
                 lg:flex gap-3 mt-1"
                 >
-                  {obj.tags.map((tag, tagIdx) => (
+                  {(obj.topicTags ?? []).map((tag, tagIdx) => (
                     <span
                       key={tagIdx}
                       className="bg-black/5 rounded-2xl text-gray-400 px-3 py-1 text-sm font-normal"
@@ -74,7 +73,7 @@ const ResultSection = ({ filters, filteredProblems }) => {
             </div>
 
             <div className="flex gap-10 justify-end">
-              <h2 className="text-gray-500">{obj.acceptance}</h2>
+              <h2 className="text-gray-500">{obj.acceptanceRate}</h2>
               <div>
                 <h2
                   className={`${

@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-import {EnhancedNavbar} from "../components/Navbar";
+import { EnhancedNavbar } from "../components/Navbar";
 import {
   MoveRight,
   ArrowLeft,
@@ -14,29 +14,55 @@ import SearchInterface from "../components/problem/SearchInterface";
 import SessionCard from "../components/others/CircularProgress";
 import ResultSection from "../components/problem/ResultSection";
 import { Link, useNavigate } from "react-router-dom";
-import { dsaProblems } from "../data/dsaProblem";
 import Countdown from "../components/others/CountDown";
 import Footer from "../components/Footer";
+import { toast } from "react-toastify";
+import axios from "axios";
+import Loading from "../components/others/Loading";
+import { useAppContext } from "../context/AppContext";
 
 const Problems = () => {
+  const [dsaProblems, setdsaProblems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [potd, setpotd] = useState(null);
+  const { jwtToken, allProblem, showAllProblems } = useAppContext();
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-  const problemOfTheDay = () => {
+  const problemOfTheDay = (problems) => {
+    if (!problems || problems.length === 0) return;
     const id = Math.round(Math.random() * 100);
-
-    const problem = id % dsaProblems.length;
-    setpotd(dsaProblems[problem]);
-    console.log(problem);
+    const index = id % problems.length;
+    setpotd(problems[index]);
   };
-  useEffect(() => {
-    problemOfTheDay();
-  }, [dsaProblems]);
 
-  //thing to apply
+  const fetchProblem = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://localhost:8080/problem/fetch`,{
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      },);
+      if (response.data) {
+        const problems = Array.isArray(response.data) ? response.data : [];
+        setdsaProblems(problems);
+        problemOfTheDay(problems);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch problems. Please try again.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProblem();
+  }, []);
+
+  // thing to apply
   // 1st- when submitted ,if passed all the test cases ,mark it true
   // 2nd  - pass random problem info to problem of the day ,will just pass the shuffle function on the useeffect for now
-
-
 
   const [filters, setfilters] = useState({
     //this si for the search and the filter to filter out questions
@@ -47,6 +73,7 @@ const Problems = () => {
   });
 
   const filteredProblems = useMemo(() => {
+    if (!dsaProblems || dsaProblems.length === 0) return [];
     // filtering problems in memory according to the questions
     // IMPORTANT --- topic wala filter add karna h , for now bus dsa h ,or problems bhi add krni h --
     return dsaProblems.filter((problem) => {
@@ -67,7 +94,7 @@ const Problems = () => {
 
       return matchSearches && matchedDifficulty && matchedTags;
     });
-  }, [filters]);
+  }, [filters, dsaProblems]);
 
   const navigate = useNavigate(); // path ke liye
 
@@ -81,6 +108,10 @@ const Problems = () => {
       alert("No problems found to shuffle from!");
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className=" bg-gray-100 overflow-hidden">
@@ -136,16 +167,16 @@ const Problems = () => {
               </div>
 
               <h3 className="px-2 text-3xl font-bold text-white ">
-                {potd ? potd.title : ""}
+                {potd ? potd.title : "Loading..."}
               </h3>
               <div className="flex gap-4 items-center">
-                <button className={`${potd? (potd.difficulty==="Easy"?'bg-green-300 ':(potd.difficulty==="Medium"?"bg-yellow-400":" bg-red-500")):'  '} bg-red-500 px-3 py-1 rounded-xl text-white`}>
-                  {potd ? potd.difficulty : ""}
+                <button className={`${potd ? (potd.difficulty === "Easy" ? 'bg-green-300 ' : (potd.difficulty === "Medium" ? "bg-yellow-400" : " bg-red-500")) : 'bg-gray-400'} px-3 py-1 rounded-xl text-white`}>
+                  {potd ? potd.difficulty : "—"}
                 </button>
                 <p className="text-emerald-100 text-lg font-medium">+10 Points</p>
               </div>
               <Link
-                to={`/problem/${potd?potd.id:''}`}
+                to={`/problem/${potd ? potd.id : ''}`}
                 className="hover:text-blue-600 transition-colors cursor-pointer"
               >
                 <button className="flex w-full cursor-pointer items-center justify-center text-center rounded-lg px-3 py-2 bg-white text-xl font-bold text-purple-500">
