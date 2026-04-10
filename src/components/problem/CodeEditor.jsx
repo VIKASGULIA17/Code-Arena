@@ -6,12 +6,12 @@ import TestCases from "./TestCases";
 import { userCode } from "../../data/UserCodeTemplate";
 import { problemSolutions } from "../../data/solution";
 
-const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar }) => {
+const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcases }) => {
 
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);   //all the language and versions
   const [Language, setLanguage] = useState(LanguageList[0]); 
 
-
+// console.log("Available code templates for this problem:", codeTemplates);
 
   const CodeEditorRef = useRef(); //refrence ot code editor
   const [Output, setOutput] = useState(null); // output (here because if i want to reset the code ,testcases get reset too)
@@ -97,7 +97,7 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar }) => {
           }}
         />
 
-        <TestCases 
+        {/* <TestCases 
             Language={Language} 
             value={Code} 
             problemId={problemId} 
@@ -105,7 +105,7 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar }) => {
             setOutput={setOutput}
             isContest={isContest}
             setcurrentTopBar={setcurrentTopBar}
-        />
+        /> */}
       </div>
     </div>
   );

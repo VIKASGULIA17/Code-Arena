@@ -54,11 +54,7 @@ export const AppProvider = (props) => {
   }
 
   async function showAllProblems(){
-      const result = await axios.get(`${BACKEND_URL}/problem/fetch`,{
-        headers : {
-          Authorization : `Bearer ${jwtToken}`
-        }
-      })
+      const result = await axios.get(`${BACKEND_URL}/public/fetchAllProblem`)
       if(result.data!=null){
         // console.log(result.data);
         setallProblems(result.data);

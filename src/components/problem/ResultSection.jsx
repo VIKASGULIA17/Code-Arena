@@ -19,7 +19,7 @@ const ResultSection = ({ filters, filteredProblems }) => {
   const TotalPages = Math.ceil(filteredProblems.length / itemsPerPage); //total count
 
   const currElements = filteredProblems.slice(startElement, lastElement); // problem array 
-  console.log(filteredProblems)
+  // console.log(filteredProblems)
   return (
     <div className="w-full mt-10 rounded-t-xl h-auto overflow-x-auto shadow-2xl">
       <div className="flex min-w-[500px] lg:w-full lg:gap-10 justify-between text-xl text-black/50 font-semibold py-4 px-10 bg-black/10">

@@ -35,7 +35,7 @@ export function EnhancedNavbar() {
     userProfile
   } = useAppContext()
 
-  console.log(userDetails);
+  // console.log(userDetails);
 
   // 2. Fixed the Admin check based on your old code's logic
   const isAdmin = (userDetails?.roles || []).includes("ADMIN") || (userDetails?.roles || []).includes("ROLE_ADMIN")

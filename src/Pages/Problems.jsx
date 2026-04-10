@@ -22,10 +22,10 @@ import Loading from "../components/others/Loading";
 import { useAppContext } from "../context/AppContext";
 
 const Problems = () => {
-  const [dsaProblems, setdsaProblems] = useState([]);
+  // const [dsaProblems, setdsaProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [potd, setpotd] = useState(null);
-  const { jwtToken, allProblem, showAllProblems } = useAppContext();
+  const { jwtToken, allProblem, showAllProblems} = useAppContext();
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const problemOfTheDay = (problems) => {
@@ -35,29 +35,14 @@ const Problems = () => {
     setpotd(problems[index]);
   };
 
-  const fetchProblem = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`http://localhost:8080/problem/fetch`,{
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      },);
-      if (response.data) {
-        const problems = Array.isArray(response.data) ? response.data : [];
-        setdsaProblems(problems);
-        problemOfTheDay(problems);
-      }
-    } catch (error) {
-      toast.error("Failed to fetch problems. Please try again.");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
+
+ 
 
   useEffect(() => {
-    fetchProblem();
+    showAllProblems();
+    setLoading(false);
+    
   }, []);
 
   // thing to apply
@@ -73,10 +58,9 @@ const Problems = () => {
   });
 
   const filteredProblems = useMemo(() => {
-    if (!dsaProblems || dsaProblems.length === 0) return [];
-    // filtering problems in memory according to the questions
+    if (!allProblem || allProblem.length === 0) return [];
     // IMPORTANT --- topic wala filter add karna h , for now bus dsa h ,or problems bhi add krni h --
-    return dsaProblems.filter((problem) => {
+    return allProblem.filter((problem) => {
       //checking searches
       const matchSearches = problem.title
         .toLowerCase()
@@ -94,7 +78,7 @@ const Problems = () => {
 
       return matchSearches && matchedDifficulty && matchedTags;
     });
-  }, [filters, dsaProblems]);
+  }, [filters, allProblem]);
 
   const navigate = useNavigate(); // path ke liye
 

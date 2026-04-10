@@ -71,10 +71,10 @@ const ProblemTopBar = ({ problemData, isJwtExist, userDetails, username, logout 
           <ArrowLeft size={14} className="text-gray-600" />
         </Link>
         <Link to="/" className="flex items-center gap-1.5 shrink-0">
-          <div className="w-6 h-6 bg-gradient-to-br from-blue-600 to-purple-600 rounded-md flex items-center justify-center">
+          <div className="w-6 h-6 bg-linear-to-br from-blue-600 to-purple-600 rounded-md flex items-center justify-center">
             <Code2 size={13} className="text-white" />
           </div>
-          <span className="font-bold text-sm bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hidden md:block">
+          <span className="font-bold text-sm bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hidden md:block">
             Code Arena
           </span>
         </Link>
@@ -191,24 +191,37 @@ const ProblemDetails = ({ isContest, problemId }) => {
     setcurrentTopBar("Description");
   }, [id]);
 
-  if (!problem) {
-    return <NotFound />
-  }
+  // if (!problem) {
+  //   return <NotFound />
+  // }
 
   const [problemDetailsInfo, setProblemDetailsInfo] = useState({})
+  const [problemBasicInfo, setProblemBasicInfo] = useState({})
   const [loading, setloading] = useState(true)
 
   const fetchProblemDetail = async () => {
-    try {
-      const response = await axios.get(`${BACKEND_URL}/public/fetchProblemDetail/${id}`);
-      setloading(false);
-      setProblemDetailsInfo(response.data.data)
-    } catch (error) {
-      setloading(false)
-      console.error("Failed to fetch submissions:", error);
-      setProblemDetailsInfo([]);
-    }
+  setloading(true); 
+
+  try {
+    const [detailResponse, basicResponse] = await Promise.all([
+      axios.get(`${BACKEND_URL}/public/fetchProblemDetail/${id}`),
+      axios.get(`${BACKEND_URL}/public/fetchOne/${id}`)
+    ]);
+
+    console.log("Detail Response:", detailResponse.data);
+    // console.log("Basic Response:", basicResponse.data);
+
+    setProblemDetailsInfo(detailResponse.data.data);
+    setProblemBasicInfo(basicResponse.data.problem);
+    
+  } catch (error) {
+    console.error("Failed to fetch problem details:", error);
+    setProblemDetailsInfo([]); 
+    setProblemBasicInfo([]);
+  } finally {
+    setloading(false); 
   }
+};
 
   useEffect(() => {
     fetchProblemDetail();
@@ -223,6 +236,8 @@ const ProblemDetails = ({ isContest, problemId }) => {
     window.location.href = '/'; // Redirect to home
   }
 
+  
+
   if(loading){
     return <Loading />
   }
@@ -230,11 +245,13 @@ const ProblemDetails = ({ isContest, problemId }) => {
   if(!problemDetailsInfo){
     return <NotFound />
   }
-
-  const description = problemDetailsInfo?.description;
-  const editorial = problemDetailsInfo?.editorial;
-  const codeImplementation = problemDetailsInfo?.solutions;
-  const codeTemplates = problemDetailsInfo?.templates;
+const description = problemDetailsInfo?.description;
+const editorial = problemDetailsInfo?.editorial;
+const algorithmSteps = problemDetailsInfo?.algorithmSteps; 
+const timeComplexity = problemDetailsInfo?.timeComplexity; 
+const spaceComplexity = problemDetailsInfo?.spaceComplexity; 
+const codeImplementation = problemDetailsInfo?.solutions;
+const codeTemplates = problemDetailsInfo?.templates;
 
   const TabButton = ({ label, icon: Icon }) => { 
     const isActive = currentTopBar === label;
@@ -258,7 +275,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
     <div className="flex flex-col h-screen overflow-hidden">
       {/* 2. PLACED TOP BAR HERE - It spans the entire width at the top */}
       <ProblemTopBar 
-        problemData={problem} 
+        problemData={problemBasicInfo} 
         isJwtExist={isJwtExist} 
         userDetails={userDetails} 
         username={username} 
@@ -285,9 +302,16 @@ const ProblemDetails = ({ isContest, problemId }) => {
 
           <div className="flex-1 overflow-y-auto p-4">
             {currentTopBar === "Description" ? (
-              <Description description={description} />
+              <Description description={description} basicInfo={problemBasicInfo} />
             ) : currentTopBar === "Solution" ? (
-              <Solution editorial={editorial} implementation={codeImplementation} />
+             <Solution 
+    editorial={editorial} 
+    algorithmSteps={algorithmSteps}
+    timeComplexity={timeComplexity}
+    spaceComplexity={spaceComplexity}
+    implementation={codeImplementation} 
+    setcurrentTopBar={setcurrentTopBar}
+  />
             ) : currentTopBar === "Discussion" ? (
               <Discussion id={id} />
             ) : (
