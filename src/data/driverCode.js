@@ -170,7 +170,10 @@ public class Main {
                 return `${type} ${key} = ${value};`;
             }).join('\n            ');
 
-            const expectedValRaw = t.expected;
+            let expectedValRaw = t.expected;
+            if (typeof t.expected === 'string') {
+                try { expectedValRaw = JSON.parse(t.expected); } catch(e) {}
+            }
             const expectedTypeRaw = getJavaType(expectedValRaw);
             const expectedValueStr = formatJavaVal(expectedValRaw, expectedTypeRaw);
 
@@ -374,9 +377,14 @@ int main() {
             return "vector<" + getCppType(val[0]) + ">";
         };
 
+        let parsedExpected = t.expected;
+        if (typeof t.expected === 'string') {
+            try { parsedExpected = JSON.parse(t.expected); } catch(e) {}
+        }
+
         const toCppVal = (val) => {
             if (Array.isArray(val)) return "{" + val.map(v => toCppVal(v)).join(',') + "}";
-            if (typeof val === 'string') return "\\\"" + val + "\\\"";
+            if (typeof val === 'string') return '"' + val + '"';
             return val;
         };
 
@@ -397,12 +405,12 @@ int main() {
             : `auto result = solution.${fnName}(${callArgs});`}
         
         // 3. Declare Expected with EXACT same type as Result
-        decltype(result) expected = ${toCppVal(t.expected)};
+        decltype(result) expected = ${toCppVal(parsedExpected)};
         
         // 4. Compare and Format JSON
         bool passed = isEqual(result, expected);
-        string actualStr = ${Array.isArray(t.expected) ? "vecToStr(result)" : "valToStr(result)"};
-        string expectedStr = ${Array.isArray(t.expected) ? "vecToStr(expected)" : "valToStr(expected)"};
+        string actualStr = ${Array.isArray(parsedExpected) ? "vecToStr(result)" : "valToStr(result)"};
+        string expectedStr = ${Array.isArray(parsedExpected) ? "vecToStr(expected)" : "valToStr(expected)"};
         
         stringstream ss;
         ss << "{\\"id\\": ${i + 1}, \\"status\\": \\"" << (passed ? "Passed" : "Failed") 
