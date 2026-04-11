@@ -282,33 +282,35 @@ const Submission = ({ id }) => {
   const { jwtToken } = useAppContext();
   // const value="two-sum-101";
   const fetchSubmissions = async () => {
+    const token = jwtToken || localStorage.getItem("jwtToken");
+    if (!token) {
+      console.warn("No auth token — skipping submission fetch.");
+      setSubmissions([]);
+      return;
+    }
     try {
       const response = await axios.get(`${BACKEND_URL}/submission/get/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
-      // THE BULLETPROOF FIX: Check if the data is actually an array
       if (Array.isArray(response.data)) {
         setSubmissions(response.data);
         handleReverse();
       } else {
-        console.warn(
-          "Backend did not return an array. Defaulting to empty array.",
-        );
+        console.warn("Backend did not return an array. Defaulting to empty.");
         setSubmissions([]);
       }
     } catch (error) {
       console.error("Failed to fetch submissions:", error);
-      // If the network fails or gives a 500 error, don't leave the state broken
       setSubmissions([]);
     }
   };
 
   useEffect(() => {
     fetchSubmissions();
-  }, [id]);
+  }, [id, jwtToken]); // re-fetch when token becomes available
 
   const statusOptions = [
     { value: "ALL", label: "All" },

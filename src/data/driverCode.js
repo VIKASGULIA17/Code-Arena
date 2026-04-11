@@ -8,6 +8,11 @@ export const driverCodeTemplate = {
         const testCases = ${JSON.stringify(cases)};
         const results = [];
         const isVoid = ${problemInfo?.returnType === "void"};
+        // Normalize expected: backend may store it as a JSON string like "[0, 1]"
+        const parseExpected = (exp) => {
+            if (typeof exp === 'string') { try { return JSON.parse(exp); } catch(e) { return exp; } }
+            return exp;
+        };
 
         testCases.forEach((t, index) => {
             const resultEntry = { id: index + 1 };
@@ -15,11 +20,12 @@ export const driverCodeTemplate = {
                 const args = Object.values(t.input).map(arg => JSON.parse(JSON.stringify(arg)));
                 const output = ${fnName}(...args);
                 const result = isVoid ? args[0] : output;
+                const expected = parseExpected(t.expected);
                 
                 resultEntry.actual = result;
-                resultEntry.expected = t.expected;
+                resultEntry.expected = expected;
                 
-                if (JSON.stringify(result) === JSON.stringify(t.expected)) {
+                if (JSON.stringify(result) === JSON.stringify(expected)) {
                     resultEntry.status = "Passed";
                 } else {
                     resultEntry.status = "Failed";
@@ -34,9 +40,10 @@ export const driverCodeTemplate = {
         `,
 
         python: (fnName, userCode, cases, problemInfo) => `
+from __future__ import annotations
 import json
 import copy
-from typing import List
+from typing import List, Optional
 
 ${userCode}
 
@@ -44,6 +51,14 @@ cases = json.loads('${JSON.stringify(cases)}')
 results = []
 sol = Solution()
 is_void = ${problemInfo?.returnType === "void" ? "True" : "False"}
+
+def _parse_expected(val):
+    if isinstance(val, str):
+        try:
+            return json.loads(val)
+        except Exception:
+            return val
+    return val
 
 for i, t in enumerate(cases):
     try:
@@ -54,9 +69,10 @@ for i, t in enumerate(cases):
         output = func(*args_copy)
         
         result = args_copy[0] if is_void else output
+        expected = _parse_expected(t.get("expected"))
         
-        status = "Passed" if result == t["expected"] else "Failed"
-        results.append({"id": i+1, "status": status, "actual": result, "expected": t["expected"]})
+        status = "Passed" if json.dumps(result, separators=(',', ':')) == json.dumps(expected, separators=(',', ':')) else "Failed"
+        results.append({"id": i+1, "status": status, "actual": result, "expected": expected})
     except Exception as e:
         results.append({"id": i+1, "status": "Error", "error": str(e)})
 
@@ -480,6 +496,7 @@ int main() {
         `,
 
         python: (fnName, userCode, cases) => `
+from __future__ import annotations
 import json
 from typing import List, Optional
 
@@ -862,6 +879,7 @@ int main() {
         `,
 
         python: (fnName, userCode, cases) => `
+from __future__ import annotations
 import json
 from typing import List, Optional
 
@@ -1208,6 +1226,7 @@ int main() {
         `,
 
         python: (fnName, userCode, cases) => `
+from __future__ import annotations
 import json
 from typing import List, Optional
 
@@ -1482,6 +1501,7 @@ int main() {
     `,
 
         python: (fnName, userCode, cases, problemInfo) => `
+from __future__ import annotations
 import json
 import copy
 
@@ -1835,6 +1855,7 @@ int main() {
     `,
 
         python: (fnName, userCode, cases, problemInfo) => `
+from __future__ import annotations
 import json
 import copy
 import math

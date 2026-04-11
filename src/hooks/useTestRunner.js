@@ -205,7 +205,7 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
       // 3. Save to Spring Boot Database (Now runs no matter what, even on timeout!)
       try {
         await axios.post(`${BACKEND_URL}/submission/create`, {
-          problemId: currentProblem.id, 
+          problemId: problemId,  // use the prop, not currentProblem.id (problemDTO has no id field)
           language: Language[0] === "cpp" ? "c++" : Language[0], 
           userCode: value,
           status: finalStatus, // Matches exactly what the Java entity expects
