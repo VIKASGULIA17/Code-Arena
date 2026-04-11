@@ -97,7 +97,7 @@ const Profile = () => {
   const solvedPercent = (solved.length / total) * 100;
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const { getUserProfileData, getUserData, userProfile, jwtToken } = useAppContext();
+  const { getUserProfileData, getUserData, userProfile, jwtToken, allProblem } = useAppContext();
   // console.log(userProfile)
 
   const LANG_COLORS = {
@@ -816,7 +816,7 @@ const Profile = () => {
                               JSON.stringify(sub.problemId)
                             : sub.problemId;
 
-                        const problemInfo = dsaProblems.find(
+                        const problemInfo = (allProblem || []).find(
                           (p) => String(p.id) === String(rawProblemId),
                         );
 
