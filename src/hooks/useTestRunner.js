@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { executeCode } from "../api/api";
-import { testCases } from "../data/testCases";
 import { driverCodeTemplate } from "../data/driverCode";
-import { dsaProblems } from "../data/dsaProblem";
 import axios from "axios";
 
-export const useTestRunner = (problemId, Language, value, setOutput, setcurrentTopBar) => {
+export const useTestRunner = (problemId, Language, value, setOutput, setcurrentTopBar, testcaseData, problemMeta) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -14,8 +12,82 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
   
   const [executionStats, setExecutionStats] = useState({ time: "0", memory: "0" });
 
-  const currentProblem = dsaProblems.find(p => String(p.id) === String(problemId));
-  const cases = testCases[problemId] || { visible: [], hidden: [] };
+  // Parse backend input string "nums = [2,7,11,15], target = 9" → { nums: [...], target: 9 }
+  const parseInputString = (inputStr) => {
+    if (typeof inputStr !== "string") return inputStr; // already an object
+    const result = {};
+    let depth = 0;
+    let current = "";
+    const parts = [];
+
+    for (let i = 0; i < inputStr.length; i++) {
+      const ch = inputStr[i];
+      if (ch === "[" || ch === "(" || ch === "{") depth++;
+      else if (ch === "]" || ch === ")" || ch === "}") depth--;
+
+      if (ch === "," && depth === 0) {
+        parts.push(current.trim());
+        current = "";
+      } else {
+        current += ch;
+      }
+    }
+    if (current.trim()) parts.push(current.trim());
+
+    for (const part of parts) {
+      const eqIdx = part.indexOf("=");
+      if (eqIdx !== -1) {
+        const key = part.slice(0, eqIdx).trim();
+        const valStr = part.slice(eqIdx + 1).trim();
+        try {
+          result[key] = JSON.parse(valStr);
+        } catch {
+          result[key] = valStr; // keep as string if unparseable
+        }
+      }
+    }
+    return result;
+  };
+
+  // Normalize backend testcases:
+  // - parse `input` string → object
+  // - map `output` → `expected`
+  // - map `hidden` → split logic (hidden:false = visible)
+  const normalizeTestCase = (tc) => ({
+    ...tc,
+    input: parseInputString(tc.input),
+    expected: tc.expected !== undefined ? tc.expected : tc.output,
+  });
+
+  const allCases = Array.isArray(testcaseData) ? testcaseData.map(normalizeTestCase) : [];
+
+  // Backend uses `hidden: true/false`; visible = !hidden
+  const hasHiddenFlag = allCases.length > 0 && allCases[0].hidden !== undefined;
+  const visibleCases = hasHiddenFlag
+    ? allCases.filter((tc) => !tc.hidden)
+    : allCases.slice(0, 3);
+  const hiddenCases = hasHiddenFlag
+    ? allCases.filter((tc) => tc.hidden)
+    : allCases.slice(3);
+
+  const cases = { visible: visibleCases, hidden: hiddenCases };
+
+  // Remap problemMeta fields to what driver code expects.
+  // Backend sends `functionName` (not `fnName`) and no `type` field.
+  // Infer `type` from `inputType` string ("int[] nums, int target" → "Array")
+  const inferType = (inputType = "") => {
+    if (/ListNode/i.test(inputType)) return "LinkedList";
+    if (/TreeNode/i.test(inputType)) return "Tree";
+    return "Array"; // default
+  };
+
+  const currentProblem = problemMeta
+    ? {
+        ...problemMeta,
+        fnName: problemMeta.fnName || problemMeta.functionName,
+        type: problemMeta.type || inferType(problemMeta.inputType),
+      }
+    : {};
 
   const timeoutPromise = (ms) => new Promise((_, reject) => {
     setTimeout(() => reject(new Error("TIMEOUT")), ms);

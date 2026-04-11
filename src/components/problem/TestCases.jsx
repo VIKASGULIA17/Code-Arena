@@ -4,7 +4,7 @@ import { CloudUpload, Play, CheckCircle, XCircle } from "lucide-react";
 import { useTestRunner } from '../../hooks/useTestRunner';
 
 
-const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,setcurrentTopBar }) => {
+const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,setcurrentTopBar,testcaseData, problemMeta }) => {
 
   const [isActive, setIsActive] = useState(0);
   const {
@@ -19,10 +19,10 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,se
     executionStats,
     visibleTestCases,
     hiddenTestCases
-  } = useTestRunner(problemId, Language, value, setOutput,setcurrentTopBar);
+  } = useTestRunner(problemId, Language, value, setOutput, setcurrentTopBar, testcaseData, problemMeta);
 
   // data variables
-
+  const testcases = testcaseData || [];
 
   const currentResult = Output && Output[isActive] ? Output[isActive] : null;
 
@@ -57,7 +57,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,se
         {/* VIEW 1: SUBMISSION RESULT ( when Submission Status exists) */}
         {submissionStatus ? (
           <div className="flex flex-col items-center justify-center h-full gap-4 animate-in fade-in zoom-in duration-300">
-            {submissionStatus === "Accepted" ? (
+            {submissionStatus === "ACCEPTED" ? (
               <>
                 <CheckCircle className="w-16 h-16 text-green-500" />
                 <h2 className="text-3xl font-bold text-green-600">Accepted</h2>
@@ -67,7 +67,7 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,se
               <>
                 <XCircle className="w-16 h-16 text-red-500" />
                 <h2 className="text-3xl font-bold text-red-600">
-                  {submissionStatus === "Accepted" && "Accepted"}
+                  {submissionStatus?.replace(/_/g, " ")}
                 </h2>
 
                 {firstFailedTestCase && hiddenTestCases && (
@@ -192,7 +192,10 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,se
                 Expected Output
               </h1>
               <div className="bg-gray-50 rounded-lg my-2 py-3 px-4 font-mono text-sm border">
-                {JSON.stringify(visibleTestCases[isActive].expected)}
+                {visibleTestCases[isActive]?.output != null || visibleTestCases[isActive]?.expected != null
+                  ? JSON.stringify(visibleTestCases[isActive].output ?? visibleTestCases[isActive].expected)
+                  : <span className="text-gray-400 italic">Not available</span>
+                }
               </div>
             </div>
 

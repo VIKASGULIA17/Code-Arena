@@ -6,12 +6,12 @@ import {
   Lightbulb,
   MessagesSquare,
   History,
-  LayoutList, 
-  Timer, 
-  LogOut, 
-  ChevronDown, 
-  User, 
-  Code2
+  LayoutList,
+  Timer,
+  LogOut,
+  ChevronDown,
+  User,
+  Code2,
 } from "lucide-react";
 import { problemInfo } from "../../data/dsaProblem";
 import { Button } from "../ui/button";
@@ -25,7 +25,13 @@ import axios from "axios";
 import Loading from "../../components/others/Loading";
 import { useAppContext } from "../../context/AppContext"; // Need this for auth data!
 
-const ProblemTopBar = ({ problemData, isJwtExist, userDetails, username, logout }) => {
+const ProblemTopBar = ({
+  problemData,
+  isJwtExist,
+  userDetails,
+  username,
+  logout,
+}) => {
   const [elapsed, setElapsed] = useState(0);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -37,7 +43,8 @@ const ProblemTopBar = ({ problemData, isJwtExist, userDetails, username, logout 
 
   useEffect(() => {
     const handleClick = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setUserMenuOpen(false);
+      if (menuRef.current && !menuRef.current.contains(e.target))
+        setUserMenuOpen(false);
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -84,7 +91,9 @@ const ProblemTopBar = ({ problemData, isJwtExist, userDetails, username, logout 
             {problemData?.title || "Problem"}
           </span>
           {problemData?.difficulty && (
-            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 ${diffColor}`}>
+            <span
+              className={`text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 ${diffColor}`}
+            >
               {problemData.difficulty}
             </span>
           )}
@@ -121,8 +130,13 @@ const ProblemTopBar = ({ problemData, isJwtExist, userDetails, username, logout 
                 alt="Avatar"
                 className="w-6 h-6 rounded-full border border-gray-200 object-cover"
               />
-              <span className="text-xs font-medium text-gray-700 hidden sm:block capitalize">{userDetails?.fullName || username}</span>
-              <ChevronDown size={12} className={`text-gray-400 transition-transform ${userMenuOpen ? "rotate-180" : ""}`} />
+              <span className="text-xs font-medium text-gray-700 hidden sm:block capitalize">
+                {userDetails?.fullName || username}
+              </span>
+              <ChevronDown
+                size={12}
+                className={`text-gray-400 transition-transform ${userMenuOpen ? "rotate-180" : ""}`}
+              />
             </button>
             {userMenuOpen && (
               <div className="absolute right-0 mt-1 w-44 bg-white border border-gray-200 rounded-xl shadow-xl z-50 py-1 overflow-hidden">
@@ -175,16 +189,22 @@ const ProblemTopBar = ({ problemData, isJwtExist, userDetails, username, logout 
   );
 };
 
-
 const ProblemDetails = ({ isContest, problemId }) => {
   const { id: paramId } = useParams();
   const id = isContest ? problemId : paramId;
 
   // 1. Get auth variables from context to pass into the TopBar
-  const { isJwtExist, userDetails, username, setisJwtExist, setisLoggedIn, setjwtToken } = useAppContext();
-  
-  const problem = problemInfo[id]; 
-  const [currentTopBar, setcurrentTopBar] = useState("Description"); 
+  const {
+    isJwtExist,
+    userDetails,
+    username,
+    setisJwtExist,
+    setisLoggedIn,
+    setjwtToken,
+  } = useAppContext();
+
+  const problem = problemInfo[id];
+  const [currentTopBar, setcurrentTopBar] = useState("Description");
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
@@ -195,33 +215,34 @@ const ProblemDetails = ({ isContest, problemId }) => {
   //   return <NotFound />
   // }
 
-  const [problemDetailsInfo, setProblemDetailsInfo] = useState({})
-  const [problemBasicInfo, setProblemBasicInfo] = useState({})
-  const [loading, setloading] = useState(true)
+  const [problemDetailsInfo, setProblemDetailsInfo] = useState({});
+  // const [problemBasicInfo, setProblemBasicInfo] = useState({})
+  const [testcasesdata, settestcasesdata] = useState({});
+  const [loading, setloading] = useState(true);
 
   const fetchProblemDetail = async () => {
-  setloading(true); 
+    setloading(true);
 
-  try {
-    const [detailResponse, basicResponse] = await Promise.all([
-      axios.get(`${BACKEND_URL}/public/fetchProblemDetail/${id}`),
-      axios.get(`${BACKEND_URL}/public/fetchOne/${id}`)
-    ]);
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}/public/getEntireProblem/${id}`,
+      );
 
-    console.log("Detail Response:", detailResponse.data);
-    // console.log("Basic Response:", basicResponse.data);
+      console.log("Detail Response:", response.data);
+      // console.log("Basic Response:", basicResponse.data);
 
-    setProblemDetailsInfo(detailResponse.data.data);
-    setProblemBasicInfo(basicResponse.data.problem);
-    
-  } catch (error) {
-    console.error("Failed to fetch problem details:", error);
-    setProblemDetailsInfo([]); 
-    setProblemBasicInfo([]);
-  } finally {
-    setloading(false); 
-  }
-};
+      setProblemDetailsInfo(response.data.problemDTO);
+      settestcasesdata(response.data.listOfTestcase);
+
+      // console.log(response.data.listOfTestcase);
+    } catch (error) {
+      console.error("Failed to fetch problem details:", error);
+      setProblemDetailsInfo([]);
+      settestcasesdata([]);
+    } finally {
+      setloading(false);
+    }
+  };
 
   useEffect(() => {
     fetchProblemDetail();
@@ -233,39 +254,38 @@ const ProblemDetails = ({ isContest, problemId }) => {
     setisJwtExist(false);
     setisLoggedIn(false);
     setjwtToken(null);
-    window.location.href = '/'; // Redirect to home
+    window.location.href = "/"; // Redirect to home
+  };
+
+  if (loading) {
+    return <Loading />;
   }
 
-  
-
-  if(loading){
-    return <Loading />
+  if (!problemDetailsInfo) {
+    return <NotFound />;
   }
+  const description = problemDetailsInfo?.description;
+  const editorial = problemDetailsInfo?.editorial;
+  const algorithmSteps = problemDetailsInfo?.algorithmSteps;
+  const timeComplexity = problemDetailsInfo?.timeComplexity;
+  const spaceComplexity = problemDetailsInfo?.spaceComplexity;
+  const codeImplementation = problemDetailsInfo?.solutions;
+  const codeTemplates = problemDetailsInfo?.templates;
 
-  if(!problemDetailsInfo){
-    return <NotFound />
-  }
-const description = problemDetailsInfo?.description;
-const editorial = problemDetailsInfo?.editorial;
-const algorithmSteps = problemDetailsInfo?.algorithmSteps; 
-const timeComplexity = problemDetailsInfo?.timeComplexity; 
-const spaceComplexity = problemDetailsInfo?.spaceComplexity; 
-const codeImplementation = problemDetailsInfo?.solutions;
-const codeTemplates = problemDetailsInfo?.templates;
-
-  const TabButton = ({ label, icon: Icon }) => { 
+  const TabButton = ({ label, icon: Icon }) => {
     const isActive = currentTopBar === label;
     return (
       <Button
         variant="ghost"
         onClick={() => setcurrentTopBar(label)}
-        className={`relative rounded-none h-10 px-4 font-semibold hover:bg-transparent transition-all gap-2 ${isActive ? "text-pink-500" : "text-gray-500"
-          }`}
+        className={`relative rounded-none h-10 px-4 font-semibold hover:bg-transparent transition-all gap-2 ${
+          isActive ? "text-pink-500" : "text-gray-500"
+        }`}
       >
         <Icon size={16} />
-        <h1 >{label}</h1>
+        <h1>{label}</h1>
         {isActive && (
-          <div className="absolute bottom-0 left-0 w-full h-0.5  bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600" />
+          <div className="absolute bottom-0 left-0 w-full h-0.5  bg-linear-to-r from-blue-600 via-purple-600 to-pink-600" />
         )}
       </Button>
     );
@@ -274,44 +294,46 @@ const codeTemplates = problemDetailsInfo?.templates;
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       {/* 2. PLACED TOP BAR HERE - It spans the entire width at the top */}
-      <ProblemTopBar 
-        problemData={problemBasicInfo} 
-        isJwtExist={isJwtExist} 
-        userDetails={userDetails} 
-        username={username} 
-        logout={handleLogout} 
+      <ProblemTopBar
+        problemData={problemDetailsInfo}
+        isJwtExist={isJwtExist}
+        userDetails={userDetails}
+        username={username}
+        logout={handleLogout}
       />
 
       {/* Main Content Area (Split into Left and Right Panes) */}
       <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
-        
         {/* Left Pane (Description, Solution, etc.) */}
         <div className="w-full lg:w-1/2 flex flex-col h-[50vh] lg:h-full border-b lg:border-b-0 lg:border-r border-gray-200">
           <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-2 min-h-10 shrink-0">
-            {isContest ?
+            {isContest ? (
               <TabButton label="Description" icon={Lightbulb} />
-              :
+            ) : (
               <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
                 <TabButton label="Description" icon={FileText} />
                 <TabButton label="Solution" icon={Lightbulb} />
                 <TabButton label="Discussion" icon={MessagesSquare} />
                 <TabButton label="Submissions" icon={History} />
               </div>
-            }
+            )}
           </div>
 
           <div className="flex-1 overflow-y-auto p-4">
             {currentTopBar === "Description" ? (
-              <Description description={description} basicInfo={problemBasicInfo} />
+              <Description
+                description={description}
+                basicInfo={problemDetailsInfo}
+              />
             ) : currentTopBar === "Solution" ? (
-             <Solution 
-    editorial={editorial} 
-    algorithmSteps={algorithmSteps}
-    timeComplexity={timeComplexity}
-    spaceComplexity={spaceComplexity}
-    implementation={codeImplementation} 
-    setcurrentTopBar={setcurrentTopBar}
-  />
+              <Solution
+                editorial={editorial}
+                algorithmSteps={algorithmSteps}
+                timeComplexity={timeComplexity}
+                spaceComplexity={spaceComplexity}
+                implementation={codeImplementation}
+                setcurrentTopBar={setcurrentTopBar}
+              />
             ) : currentTopBar === "Discussion" ? (
               <Discussion id={id} />
             ) : (
@@ -322,14 +344,15 @@ const codeTemplates = problemDetailsInfo?.templates;
 
         {/* Right Pane (Code Editor) */}
         <div className="w-full lg:w-1/2 flex flex-col h-[50vh] lg:h-full bg-white">
-          <CodeEditor 
-            codeTemplates={codeTemplates} 
-            problemId={id} 
-            setcurrentTopBar={setcurrentTopBar} 
-            isContest={isContest} 
+          <CodeEditor
+            codeTemplates={codeTemplates}
+            problemId={id}
+            problemMeta={problemDetailsInfo}
+            testcaseData={testcasesdata}
+            setcurrentTopBar={setcurrentTopBar}
+            isContest={isContest}
           />
         </div>
-
       </div>
     </div>
   );

@@ -81,7 +81,7 @@ const Description = ({ description, basicInfo }) => {
           )}
 
           {/* Tags Dropdown Button */}
-          {basicInfo?.topicTags && basicInfo.topicTags.length > 0 && (
+          {basicInfo?.topicTags && typeof basicInfo.topicTags === "string" && basicInfo.topicTags.length > 0 && (
             <div className="relative">
               <button
                 onClick={() => setIsTagsOpen(!isTagsOpen)}
@@ -97,21 +97,19 @@ const Description = ({ description, basicInfo }) => {
                 />
               </button>
 
-              {/* Tags Dropdown Panel */}
               {isTagsOpen && (
                 <div className="absolute top-full left-0 mt-2 p-3 bg-white border border-gray-100 shadow-xl rounded-xl z-10 w-64 flex flex-wrap gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
                   <p className="w-full text-xs font-semibold text-gray-400 mb-1">
                     Related Topics
                   </p>
-                  {basicInfo.topicTags.map((tag, index) => {
-                    // Handles both string arrays and object arrays (e.g. {name: "Array"})
-                    const tagName = typeof tag === "object" ? tag.name : tag;
+                  
+                  {basicInfo.topicTags.split(',').map((tag, index) => {
                     return (
                       <button
                         key={index}
                         className="px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-md hover:bg-blue-50 hover:text-blue-600 transition-colors"
                       >
-                        {tagName}
+                        {tag.trim()}
                       </button>
                     );
                   })}
