@@ -4,7 +4,7 @@ import { useAppContext } from '../../context/AppContext';
 
 const Analysis = () => {
 
-    const {totalActiveUsers} = useAppContext();
+    const { totalActiveUsers } = useAppContext();
 
     return (
         <div className="space-y-6">

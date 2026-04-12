@@ -1,46 +1,26 @@
 import { useRef, useEffect, useState } from "react";
 import { Search, Shuffle, ChevronDown } from "lucide-react";
-import SearchBar from "../others/SearchBar";
-
 
 const SearchInterface = ({ filters, setfilters, onShuffle }) => {
   const FILTER_OPTIONS = {
     Difficulty: ["All", "Easy", "Medium", "Hard"],
     Topic: ["All", "Algorithms", "Data Structures", "Database", "Shell"],
-    Tags: ["All", "Array", "String", "Tree","Graph","Hash Table", "DP", "Math", "Sorting"],
+    Tags: ["All", "Array", "String", "Tree", "Graph", "Hash Table", "DP", "Math", "Sorting"],
   };
+
   const popularTags = [
-    {
-      label: "Array",
-      textColor: "text-blue-700",
-      backgroundColor: "bg-blue-200",
-    },
-    {
-      label: "String",
-      textColor: "text-purple-700",
-      backgroundColor: "bg-purple-200",
-    },
-    {
-      label: "DP",
-      textColor: "text-pink-700",
-      backgroundColor: "bg-pink-200",
-    },
-    {
-      label: "Hash Table",
-      textColor: "text-indigo-700",
-      backgroundColor: "bg-indigo-200",
-    },
+    { label: "Array", color: "bg-indigo-50 text-indigo-600 border-indigo-100" },
+    { label: "String", color: "bg-purple-50 text-purple-600 border-purple-100" },
+    { label: "DP", color: "bg-pink-50 text-pink-600 border-pink-100" },
+    { label: "Hash Table", color: "bg-violet-50 text-violet-600 border-violet-100" },
   ];
+
   const [dropDownOpen, setdropDownOpen] = useState(null);
   const dropDownOpenRef = useRef(null);
 
   useEffect(() => {
-    // to handle outside click to close the downbar
     const handleClickOutside = (event) => {
-      if (
-        dropDownOpenRef.current &&
-        !dropDownOpenRef.current.contains(event.target)
-      ) {
+      if (dropDownOpenRef.current && !dropDownOpenRef.current.contains(event.target)) {
         setdropDownOpen(null);
       }
     };
@@ -48,78 +28,69 @@ const SearchInterface = ({ filters, setfilters, onShuffle }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // update query
   const updateQuery = (key, value) => {
-    setfilters((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    setfilters((prev) => ({ ...prev, [key]: value }));
   };
 
   return (
-    <div className="bg-white w-full shadow-2xl rounded-2xl my-5 
-    px-5
-    lg:px-10 py-8">
-      {/* 1. Search Bar */}
-      <SearchBar 
-      value={filters.search} 
-      onChange={(val) => updateQuery("search", val)} 
-    />
+    <div className="card-elevated p-5 lg:p-6 mb-6">
+      {/* Search Bar */}
+      <div className="relative mb-5">
+        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+        <input
+          type="text"
+          value={filters.search}
+          onChange={(e) => updateQuery("search", e.target.value)}
+          placeholder="Search problems by title..."
+          className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-300 transition-all"
+        />
+      </div>
 
-      {/* 2. Dropdowns Row */}
-      <div ref={dropDownOpenRef} className="flex justify-between items-center">
-        <div className="lg:flex grid grid-rows-2 grid-cols-2 py-7 gap-3">
+      {/* Dropdowns + Shuffle */}
+      <div ref={dropDownOpenRef} className="flex flex-wrap items-center justify-between gap-3 mb-5">
+        <div className="flex flex-wrap gap-2">
           {Object.keys(FILTER_OPTIONS).map((obj) => {
-            // obj is 'difficulty' or 'tags'
             const selectedValue = filters[obj];
             const hasActiveFilter =
-              selectedValue &&
-              selectedValue !== "All" &&
-              (Array.isArray(selectedValue)
-                ? selectedValue.length > 0
-                : selectedValue !== "");
+              selectedValue && selectedValue !== "All" &&
+              (Array.isArray(selectedValue) ? selectedValue.length > 0 : selectedValue !== "");
 
             return (
               <div key={obj} className="relative">
-                <div
-                  onClick={() =>
-                    setdropDownOpen(dropDownOpen === obj ? null : obj)
-                  }
-                  className={`flex gap-1 px-3 py-1 border rounded-lg items-center cursor-pointer transition-all ${
+                <button
+                  onClick={() => setdropDownOpen(dropDownOpen === obj ? null : obj)}
+                  className={`flex items-center gap-1.5 px-3.5 py-2 border rounded-xl text-sm font-medium transition-all ${
                     hasActiveFilter
-                      ? "border-blue-500 bg-blue-50 text-blue-600"
-                      : "border-gray-400 text-gray-700"
+                      ? "border-indigo-300 bg-indigo-50 text-indigo-600"
+                      : "border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300"
                   }`}
                 >
-                  <p className="text-md px-2 font-medium capitalize">
-                    {hasActiveFilter ? selectedValue : obj}
-                  </p>
-
+                  <span className="capitalize">{hasActiveFilter ? selectedValue : obj}</span>
                   <ChevronDown
-                    size={20}
-                    className={`text-gray-400 duration-300 ${
-                      dropDownOpen === obj ? "rotate-180" : "rotate-0"
+                    size={15}
+                    className={`text-gray-400 transition-transform duration-200 ${
+                      dropDownOpen === obj ? "rotate-180" : ""
                     }`}
                   />
-                </div>
+                </button>
 
                 {dropDownOpen === obj && (
-                  <div className="absolute top-12 left-0 z-50 rounded-xl w-40 bg-white text-sm shadow-2xl border border-gray-100 py-2">
+                  <div className="absolute top-11 left-0 z-50 w-44 bg-white border border-gray-200 rounded-xl shadow-xl py-1.5 animate-fade-in-up">
                     {FILTER_OPTIONS[obj].map((comp) => (
-                      <div
+                      <button
                         key={comp}
                         onClick={() => {
                           updateQuery(obj, comp);
                           setdropDownOpen(null);
                         }}
-                        className={`px-6 py-2 hover:bg-gray-100 cursor-pointer transition-colors ${
+                        className={`w-full text-left px-4 py-2 text-sm transition-colors ${
                           selectedValue === comp
-                            ? "text-blue-600 font-bold bg-blue-50"
-                            : "text-gray-500"
+                            ? "text-indigo-600 font-semibold bg-indigo-50"
+                            : "text-gray-500 hover:bg-gray-50"
                         }`}
                       >
                         {comp}
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}
@@ -127,38 +98,35 @@ const SearchInterface = ({ filters, setfilters, onShuffle }) => {
             );
           })}
         </div>
-        <Shuffle
+
+        <button
           onClick={onShuffle}
-          size={36}
-          className="border border-gray-500 p-2 rounded-lg text-gray-600 cursor-pointer"
-        />
+          className="p-2.5 rounded-xl border border-gray-200 text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all"
+          title="Random problem"
+        >
+          <Shuffle size={18} />
+        </button>
       </div>
 
-      {/* 3. Popular Tags */}
-      <div className="flex gap-2 items-center">
-        <h1 className="text-gray-500 font-semibold uppercase text-xs tracking-wider">
-          Popular :
-        </h1>
-        <div className="lg:flex gap-2 grid grid-cols-2">
-          {popularTags.map((obj) => {
-            const isSelected = filters.Tags === obj.label;
-            return (
-              <div
-                key={obj.label}
-                onClick={() =>
-                  updateQuery("Tags", isSelected ? "" : obj.label)
-                }
-                className={`${obj.backgroundColor} ${
-                  obj.textColor
-                } px-3 text-center py-1 rounded-full text-sm cursor-pointer transition-all border-2 ${
-                  isSelected ? "border-blue-600" : "border-transparent"
-                }`}
-              >
-                {obj.label}
-              </div>
-            );
-          })}
-        </div>
+      {/* Popular Tags */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mr-1">
+          Popular:
+        </span>
+        {popularTags.map((tag) => {
+          const isSelected = filters.Tags === tag.label;
+          return (
+            <button
+              key={tag.label}
+              onClick={() => updateQuery("Tags", isSelected ? "" : tag.label)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${tag.color} ${
+                isSelected ? "ring-2 ring-indigo-300 ring-offset-1" : "hover:ring-1 hover:ring-gray-200"
+              }`}
+            >
+              {tag.label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

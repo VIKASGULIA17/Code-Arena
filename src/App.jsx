@@ -24,6 +24,7 @@ import { useAppContext } from './context/AppContext'
 import HomePage from './components/DsaRevision/HomePage'
 import DSAHubPage from './components/DsaRevision/DsaHubPage'
 import TopicPage from './components/DsaRevision/TopicsPage'
+import RevisionLayout from './components/DsaRevision/RevisionLayout'
 import { MainLayout } from './components/layouts/MainLayout'
 
 
@@ -43,7 +44,9 @@ const App = () => {
         <Route path='login' element={<Login />} />
         <Route path='signup' element={<Signup />} />
         <Route path='algovisualizer' element={<AlgoVisualizer />} />
-        <Route path='revision' element={<HomePage />} />
+        <Route path='revision' element={<RevisionLayout />} />
+        <Route path='revision/:categoryId/:topicId' element={<RevisionLayout />} />
+        <Route path='revision/:categoryId/:topicId/:subtopicId' element={<RevisionLayout />} />
         <Route path='dsa-hub' element={<DSAHubPage />} />
         <Route path="/topic/:categoryId/:topicId" element={
                 <MainLayout>

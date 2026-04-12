@@ -2,31 +2,26 @@ import React, { useMemo, useState, useEffect } from "react";
 import { EnhancedNavbar } from "../components/Navbar";
 import {
   MoveRight,
-  ArrowLeft,
-  ArrowRight,
   ShoppingCart,
   CircleStar,
   Airplay,
   Aperture,
   Clock10,
+  Flame,
+  Building2,
 } from "lucide-react";
 import SearchInterface from "../components/problem/SearchInterface";
-import SessionCard from "../components/others/CircularProgress";
 import ResultSection from "../components/problem/ResultSection";
 import { Link, useNavigate } from "react-router-dom";
 import Countdown from "../components/others/CountDown";
 import Footer from "../components/Footer";
-import { toast } from "react-toastify";
-import axios from "axios";
 import Loading from "../components/others/Loading";
 import { useAppContext } from "../context/AppContext";
 
 const Problems = () => {
-  // const [dsaProblems, setdsaProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [potd, setpotd] = useState(null);
-  const { jwtToken, allProblem, showAllProblems} = useAppContext();
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const { jwtToken, allProblem, showAllProblems } = useAppContext();
 
   const problemOfTheDay = (problems) => {
     if (!problems || problems.length === 0) return;
@@ -35,22 +30,12 @@ const Problems = () => {
     setpotd(problems[index]);
   };
 
-  
-
- 
-
   useEffect(() => {
     showAllProblems();
     setLoading(false);
-    
   }, []);
 
-  // thing to apply
-  // 1st- when submitted ,if passed all the test cases ,mark it true
-  // 2nd  - pass random problem info to problem of the day ,will just pass the shuffle function on the useeffect for now
-
   const [filters, setfilters] = useState({
-    //this si for the search and the filter to filter out questions
     search: "",
     Difficulty: "All",
     Tags: "All",
@@ -59,31 +44,25 @@ const Problems = () => {
 
   const filteredProblems = useMemo(() => {
     if (!allProblem || allProblem.length === 0) return [];
-    // IMPORTANT --- topic wala filter add karna h , for now bus dsa h ,or problems bhi add krni h --
     return allProblem.filter((problem) => {
-      //checking searches
       const matchSearches = problem.title
         .toLowerCase()
         .includes(filters.search.toLowerCase());
-
       const matchedDifficulty =
         filters.Difficulty === "All" ||
         problem.difficulty === filters.Difficulty ||
         !filters.Difficulty;
-
       const matchedTags =
         filters.Tags === "All" ||
         !filters.Tags ||
         problem.tags.includes(filters.Tags);
-
       return matchSearches && matchedDifficulty && matchedTags;
     });
   }, [filters, allProblem]);
 
-  const navigate = useNavigate(); // path ke liye
+  const navigate = useNavigate();
 
   const handleShuffle = (filteredResults) => {
-    //random problem open krne ke liye
     if (filteredResults.length > 0) {
       const randomIndex = Math.floor(Math.random() * filteredResults.length);
       const randomProblem = filteredResults[randomIndex];
@@ -97,124 +76,124 @@ const Problems = () => {
     return <Loading />;
   }
 
+  const companies = [
+    { name: "Amazon", icon: ShoppingCart },
+    { name: "Microsoft", icon: Airplay },
+    { name: "Meta", icon: CircleStar },
+    { name: "Google", icon: Aperture },
+  ];
+
   return (
-    <div className=" bg-gray-100 overflow-hidden">
+    <div className="min-h-screen bg-gray-50">
       <EnhancedNavbar />
 
-      <div className="lg:px-20 pt-16 w-screen window:flex lg:gap-20">
-        <div className="w-full window:w-[70%] px-5 lg:px-0 my-6 ">
-          <div>
-            {/* left div  */}
-            <span
-              className="
-            font-bold  bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent text-5xl "
-            >
-              Problem Set
-            </span>
-            <h4 className="text-xl pt-3 text-gray-700  ">
-              Shape your coding skills with our currated list of
-              problems.Search,filter,
-              <br />
-              and solve.
-            </h4>
-          </div>
-          {/* <ProblemList /> */}
-          <SearchInterface
-            setfilters={setfilters}
-            filters={filters}
-            onShuffle={() => handleShuffle(filteredProblems)}
-          />
-
-          <ResultSection
-            filters={filters}
-            filteredProblems={filteredProblems}
-          />
-        </div>
-
-        <div
-          className="
-        px-6 lg:px-0 my-10
-        window:w-[20%] flex flex-col"
-        >
-          <div className=" shadow-2xl bg-linear-to-br rounded-2xl from-blue-500 via-purple-500 to-pink-600 ">
-            {/* right div  */}
-
-            {/* problem of the day  */}
-            <div className="px-5 py-8 flex flex-col gap-4">
-              <div className="flex justify-between">
-                <h1 className="text-xl font-bold text-white">
-                  Daily Challenge
-                </h1>
-                <button className="bg-white/50 text-white font-semibold px-3 py-1 rounded-2xl">
-                  April 12
-                </button>
-              </div>
-
-              <h3 className="px-2 text-3xl font-bold text-white ">
-                {potd ? potd.title : "Loading..."}
-              </h3>
-              <div className="flex gap-4 items-center">
-                <button className={`${potd ? (potd.difficulty === "Easy" ? 'bg-green-300 ' : (potd.difficulty === "Medium" ? "bg-yellow-400" : " bg-red-500")) : 'bg-gray-400'} px-3 py-1 rounded-xl text-white`}>
-                  {potd ? potd.difficulty : "—"}
-                </button>
-                <p className="text-emerald-100 text-lg font-medium">+10 Points</p>
-              </div>
-              <Link
-                to={`/problem/${potd ? potd.id : ''}`}
-                className="hover:text-blue-600 transition-colors cursor-pointer"
-              >
-                <button className="flex w-full cursor-pointer items-center justify-center text-center rounded-lg px-3 py-2 bg-white text-xl font-bold text-purple-500">
-                  <p>Solve now</p>
-                  <MoveRight />
-                </button>
-              </Link>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-10">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Main Content */}
+          <div className="flex-1 min-w-0">
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                Problem Set
+              </h1>
+              <p className="text-gray-500 text-lg">
+                Shape your coding skills with our curated list of problems. Search, filter, and solve.
+              </p>
             </div>
-          </div>
-          <div className="w-20 h-20 ">
-            <SessionCard />
-          </div>
 
-          <div className="w-auto text-sm py-6 rounded-2xl shadow-2xl mt-60">
-            <h1 className="text-2xl text-gray-600 px-10">Trending Companies</h1>
-            <div className="grid grid-cols-2 gap-7 pt-5 px-10">
-              <div className="border border-black/30 rounded-lg font-semibold flex gap-2 px-3 py-2 text-black/80">
-                <ShoppingCart className="text-sm" size={20} />
-                <p>Amazon</p>
-              </div>
-              <div className="border border-black/30 rounded-lg font-semibold flex gap-2 px-3 py-2 text-black/80">
-                <Airplay className="text-sm" size={20} />
-                <p>Microsoft</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-7 pt-5 px-10">
-              <div className="border border-black/30 rounded-lg font-semibold flex gap-2 px-3 py-2 text-black/80">
-                <CircleStar className="text-sm" size={20} />
-                <p>Meta</p>
-              </div>
-              <div className="border border-black/30 rounded-lg font-semibold flex gap-2 px-3 py-2 text-black/80">
-                <Aperture className="text-sm" size={20} />
-                <p>Google</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="w-full h-60 mt-10 overflow-hidden relative rounded-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1592659762303-90081d34b277?q=80&w=1073&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Contest Background"
-              className="w-full h-full object-cover"
+            <SearchInterface
+              setfilters={setfilters}
+              filters={filters}
+              onShuffle={() => handleShuffle(filteredProblems)}
             />
 
-            <div className="absolute inset-0 flex flex-col justify-center items-center text-white  bg-black/30">
-              <h1 className="text-center font-bold text-3xl ">
-                Weekly Contest 298
-              </h1>
+            <ResultSection
+              filters={filters}
+              filteredProblems={filteredProblems}
+            />
+          </div>
 
-              <div className="flex items-center justify-center gap-2 mt-2 px-4 py-1 rounded-full bg-white/20 text-lg font-semibold animate-pulse">
-                <Clock10 className="w-5 h-5" />
-                <p>
-                  Starts in {<Countdown targetTime="2026-06-18T22:30:00" />}
-                </p>
+          {/* Sidebar */}
+          <div className="w-full lg:w-[300px] shrink-0 space-y-6">
+            {/* Daily Challenge Card */}
+            <div className="card-elevated overflow-hidden">
+              <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Flame size={18} className="text-orange-300" />
+                    <h3 className="text-white font-bold text-sm">Daily Challenge</h3>
+                  </div>
+                  <span className="text-xs text-white/70 bg-white/15 px-2.5 py-1 rounded-full font-medium">
+                    April 12
+                  </span>
+                </div>
+
+                <h4 className="text-xl font-bold text-white">
+                  {potd ? potd.title : "Loading..."}
+                </h4>
+
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
+                      potd
+                        ? potd.difficulty === "Easy"
+                          ? "bg-emerald-400/20 text-emerald-200"
+                          : potd.difficulty === "Medium"
+                          ? "bg-amber-400/20 text-amber-200"
+                          : "bg-red-400/20 text-red-200"
+                        : "bg-white/10 text-white/60"
+                    }`}
+                  >
+                    {potd ? potd.difficulty : "—"}
+                  </span>
+                  <span className="text-emerald-200 text-sm font-medium">+10 Points</span>
+                </div>
+
+                <Link to={`/problem/${potd ? potd.id : ""}`}>
+                  <button className="w-full flex items-center justify-center gap-2 bg-white text-indigo-700 font-bold text-sm rounded-xl px-4 py-2.5 hover:bg-gray-50 transition-colors mt-2">
+                    Solve now
+                    <MoveRight size={16} />
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Trending Companies */}
+            <div className="card-elevated p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <Building2 size={16} className="text-gray-400" />
+                <h3 className="text-sm font-semibold text-gray-700">Trending Companies</h3>
+              </div>
+              <div className="grid grid-cols-2 gap-2.5">
+                {companies.map((company) => {
+                  const Icon = company.icon;
+                  return (
+                    <button
+                      key={company.name}
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all"
+                    >
+                      <Icon size={15} />
+                      <span>{company.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Contest Banner */}
+            <div className="card-elevated overflow-hidden">
+              <div className="relative h-40">
+                <img
+                  src="https://images.unsplash.com/photo-1592659762303-90081d34b277?q=80&w=1073&auto=format&fit=crop"
+                  alt="Contest Background"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 flex flex-col justify-center items-center text-white bg-gradient-to-t from-black/60 to-black/20">
+                  <h4 className="font-bold text-lg">Weekly Contest 298</h4>
+                  <div className="flex items-center gap-1.5 mt-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-sm font-medium">
+                    <Clock10 size={14} />
+                    <Countdown targetTime="2026-06-18T22:30:00" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

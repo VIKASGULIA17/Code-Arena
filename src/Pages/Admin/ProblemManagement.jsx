@@ -83,11 +83,11 @@ const ProblemManagement = () => {
         prev.map((p) =>
           p.id === editingProblem.id
             ? {
-                ...p,
-                title: values.title,
-                difficulty: values.difficulty,
-                category: values.problemTopic || p.category,
-              }
+              ...p,
+              title: values.title,
+              difficulty: values.difficulty,
+              category: values.problemTopic || p.category,
+            }
             : p,
         ),
       );
@@ -128,7 +128,7 @@ const ProblemManagement = () => {
   // Initial values for the form
 
   const initialValues = {
-    sno : "",
+    sno: "",
     title: "",
     slug: "",
     topicTags: "",
@@ -157,7 +157,7 @@ const ProblemManagement = () => {
   };
 
 
- 
+
 
   //   const initialValues = {
   //   title: "Trapping Rain Water",
@@ -442,7 +442,7 @@ const ProblemManagement = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-              // onClick={(e) => e.target === e.currentTarget && cancelDelete()}
+            // onClick={(e) => e.target === e.currentTarget && cancelDelete()}
             >
               <motion.div
                 initial={{ scale: 0.92, opacity: 0, y: 20 }}
@@ -495,13 +495,12 @@ const ProblemManagement = () => {
                         Problem
                       </p>
                       <span
-                        className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
-                          deleteTarget.difficulty.toLowerCase() === "easy"
+                        className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${deleteTarget.difficulty.toLowerCase() === "easy"
                             ? "bg-green-100 text-green-700"
                             : deleteTarget.difficulty === "medium"
                               ? "bg-yellow-100 text-yellow-700"
                               : "bg-red-100 text-red-700"
-                        }`}
+                          }`}
                       >
                         {deleteTarget.difficulty}
                       </span>
@@ -543,14 +542,13 @@ const ProblemManagement = () => {
                       onKeyDown={(e) => e.key === "Enter"}
                       placeholder="Type the problem name exactly..."
                       autoFocus
-                      className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${
-                        deleteConfirmText.length > 0
+                      className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${deleteConfirmText.length > 0
                           ? deleteConfirmText.toLowerCase().trim() ===
                             deleteTarget.title.toLowerCase()
                             ? "border-green-400 ring-2 cursor-pointer ring-green-100 bg-green-50"
                             : "border-red-300 cursor-not-allowed ring-2 ring-red-100"
                           : "border-gray-300 focus:ring-2 focus:ring-red-300 focus:border-red-400"
-                      }`}
+                        }`}
                     />
                     {deleteConfirmText.length > 0 &&
                       deleteConfirmText.trim() !== deleteTarget.title && (
@@ -650,11 +648,10 @@ const ProblemManagement = () => {
                             key={tab.id}
                             type="button"
                             onClick={() => setEditActiveTab(tab.id)}
-                            className={`flex-1 py-4 text-sm font-medium transition-colors relative ${
-                              editActiveTab === tab.id
+                            className={`flex-1 py-4 text-sm font-medium transition-colors relative ${editActiveTab === tab.id
                                 ? "text-blue-600 bg-blue-50/50"
                                 : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                            }`}
+                              }`}
                           >
                             {tab.label}
                             {editActiveTab === tab.id && (
@@ -859,9 +856,9 @@ const ProblemManagement = () => {
 
                         {/* templates Tab */}
                         {editActiveTab === "templates" && (
-                          
+
                           <div className="space-y-6">
-                          
+
                             <div className="grid grid-cols-1 gap-6">
                               {["javascript", "java", "python", "cpp"].map(
                                 (lang) => (
@@ -990,11 +987,10 @@ const ProblemManagement = () => {
                             key={tab.id}
                             type="button"
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex-1 py-4 cursor-pointer text-sm font-medium transition-colors relative ${
-                              activeTab === tab.id
+                            className={`flex-1 py-4 cursor-pointer text-sm font-medium transition-colors relative ${activeTab === tab.id
                                 ? "text-blue-600 bg-blue-50/50"
                                 : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                            }`}
+                              }`}
                           >
                             {tab.label}
                             {activeTab === tab.id && (

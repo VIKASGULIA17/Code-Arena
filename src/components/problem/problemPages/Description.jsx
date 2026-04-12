@@ -91,9 +91,8 @@ const Description = ({ description, basicInfo }) => {
                 Tags
                 <ChevronDown
                   size={14}
-                  className={`transition-transform duration-200 ${
-                    isTagsOpen ? "rotate-180" : ""
-                  }`}
+                  className={`transition-transform duration-200 ${isTagsOpen ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
@@ -102,7 +101,7 @@ const Description = ({ description, basicInfo }) => {
                   <p className="w-full text-xs font-semibold text-gray-400 mb-1">
                     Related Topics
                   </p>
-                  
+
                   {basicInfo.topicTags.split(',').map((tag, index) => {
                     return (
                       <button

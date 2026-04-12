@@ -1,41 +1,44 @@
 import React from 'react';
-import {EnhancedNavbar} from '../components/Navbar';
+import { EnhancedNavbar } from '../components/Navbar';
 import NotFoundRobot from '../assets/NotFoundRobot.png';
 import { Button } from '../components/ui/button';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import { ArrowLeft, Home } from 'lucide-react';
 
 const NotFound = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     return (
-        <div>
+        <div className="min-h-screen bg-gray-50 flex flex-col">
             <EnhancedNavbar />
-            <div className='my-40'>
-                <h1 className='text-9xl mt-18 font-medium text-center text-blue-200 '>404</h1>
-                <div className='flex justify-center'>
-                    <img src={NotFoundRobot} alt="Robot image" className='h-80 ' />
-                </div>
-                <div className='text-center justify-center flex flex-col gap-5 capitalize'>
-                    <h2 className='text-4xl font-medium'>404 - Page Not Found</h2>
-                    <p className='text-gray-500 tracking-wide px-3 '>
-                        Looks like the logic went into an infinite loop or the <br className='hidden md:block'/> 
-                        pointer is null, Error 404 : <span className='w-auto bg-slate-200'>Logic Not Found in this <br className='hidden md:block' /> scope. </span>
+            <div className="flex-1 flex items-center justify-center px-6">
+                <div className="text-center max-w-lg mx-auto py-20">
+                    <h1 className="text-8xl font-bold text-indigo-100 mb-4">404</h1>
+                    <div className="flex justify-center mb-8">
+                        <img src={NotFoundRobot} alt="Robot" className="h-64 object-contain" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-3">Page Not Found</h2>
+                    <p className="text-gray-500 mb-8 leading-relaxed">
+                        Looks like the logic went into an infinite loop or the pointer is null.
+                        <br />
+                        <code className="text-sm bg-gray-100 px-2 py-0.5 rounded text-gray-600">Error 404: Logic Not Found in this scope.</code>
                     </p>
-                    <div className='flex justify-center gap-4'>
-                        <Button 
-                            onClick={() => navigate(-1)} 
+                    <div className="flex justify-center gap-3">
+                        <Button
+                            onClick={() => navigate(-1)}
                             variant="outline"
-                            className='font-mono font-bold py-7 px-6 rounded-full'
+                            className="rounded-xl h-11 px-5 text-sm font-medium border-gray-200"
                         >
+                            <ArrowLeft size={16} className="mr-1.5" />
                             Go Back
                         </Button>
-
-                        <Button 
-                            onClick={() => navigate('/')} 
-                            className='bg-brand-gradient w-auto font-mono font-bold py-7 px-6 rounded-full'
+                        <Button
+                            onClick={() => navigate('/')}
+                            className="bg-indigo-600 hover:bg-indigo-700 rounded-xl h-11 px-5 text-sm font-medium shadow-sm shadow-indigo-200"
                         >
-                            Return to main branch
+                            <Home size={16} className="mr-1.5" />
+                            Return Home
                         </Button>
                     </div>
                 </div>

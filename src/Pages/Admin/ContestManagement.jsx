@@ -266,13 +266,12 @@ const ContestManagement = () => {
                     <Trophy className="w-6 h-6 text-purple-600" />
                   </div>
                   <span
-                    className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                      contest.contestStatus === "Upcoming"
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium ${contest.contestStatus === "Upcoming"
                         ? "bg-blue-100 text-blue-700"
                         : contest.contestStatus === "Completed"
                           ? "bg-gray-100 text-gray-600"
                           : "bg-green-100 text-green-700"
-                    }`}
+                      }`}
                   >
                     {contest.contestStatus}
                   </span>
@@ -385,9 +384,8 @@ const ContestManagement = () => {
                         contestName: e.target.value,
                       })
                     }
-                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${
-                      errors.contestName ? "border-red-500" : "border-gray-300"
-                    }`}
+                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${errors.contestName ? "border-red-500" : "border-gray-300"
+                      }`}
                     placeholder="Enter contest name"
                   />
                   {errors.contestName && (
@@ -411,11 +409,10 @@ const ContestManagement = () => {
                         contestDescription: e.target.value,
                       })
                     }
-                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all resize-none ${
-                      errors.contestDescription
+                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all resize-none ${errors.contestDescription
                         ? "border-red-500"
                         : "border-gray-300"
-                    }`}
+                      }`}
                     placeholder="Enter contest description"
                   />
                   {errors.contestDescription && (
@@ -440,9 +437,8 @@ const ContestManagement = () => {
                           startTime: e.target.value,
                         })
                       }
-                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${
-                        errors.startTime ? "border-red-500" : "border-gray-300"
-                      }`}
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${errors.startTime ? "border-red-500" : "border-gray-300"
+                        }`}
                     />
                     {errors.startTime && (
                       <p className="text-red-500 text-xs mt-1">
@@ -463,9 +459,8 @@ const ContestManagement = () => {
                           duration: e.target.value,
                         })
                       }
-                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${
-                        errors.duration ? "border-red-500" : "border-gray-300"
-                      }`}
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${errors.duration ? "border-red-500" : "border-gray-300"
+                        }`}
                       placeholder="e.g. 90"
                     />
                     {errors.duration && (
@@ -598,18 +593,17 @@ const ContestManagement = () => {
                       onKeyDown={(e) => e.key === "Enter"}
                       placeholder="Type the Contest name exactly..."
                       autoFocus
-                      className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${
-                        deleteConfirmText.length > 0
+                      className={`w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition-all ${deleteConfirmText.length > 0
                           ? deleteConfirmText.toLowerCase().trim() ===
                             targetContestDelete.contestName.toLowerCase()
                             ? "border-green-400 ring-2 ring-green-100 bg-green-50"
                             : "border-red-300 ring-2 ring-red-100"
                           : "border-gray-300 focus:ring-2 focus:ring-red-300 focus:border-red-400"
-                      }`}
+                        }`}
                     />
                     {deleteConfirmText.length > 0 &&
                       deleteConfirmText.toLowerCase().trim() !==
-                        targetContestDelete.contestName.toLowerCase() && (
+                      targetContestDelete.contestName.toLowerCase() && (
                         <p className="text-xs text-red-500">
                           Name doesn't match. Please type it exactly.
                         </p>
@@ -640,12 +634,11 @@ const ContestManagement = () => {
                       deleteConfirmText.toLowerCase().trim() !==
                       targetContestDelete.contestName.toLowerCase()
                     }
-                    className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all ${
-                      deleteConfirmText.toLowerCase().trim() ===
-                      targetContestDelete.contestName.toLowerCase()
+                    className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all ${deleteConfirmText.toLowerCase().trim() ===
+                        targetContestDelete.contestName.toLowerCase()
                         ? "bg-red-600 cursor-pointer hover:bg-red-700 text-white shadow-sm"
                         : "bg-red-200 text-red-400 cursor-not-allowed"
-                    }`}
+                      }`}
                   >
                     <Trash2 size={14} />
                     Delete Contest

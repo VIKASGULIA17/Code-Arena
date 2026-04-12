@@ -7,20 +7,20 @@ import {
   FaApple,
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import {EnhancedNavbar} from "../../components/Navbar";
+import { EnhancedNavbar } from "../../components/Navbar";
 import * as yup from "yup";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAppContext } from "../../context/AppContext";
-import Image from "../../assets/authentication.gif"
+import Image from "../../assets/authentication.gif";
 
 const Login = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
-  const [isHighlightOpen,setisHighlightOpen] = useState(false);
-  const [bannedUser,setbannedUser] = useState("");      //if user is banned
-  const { setjwtToken, setisJwtExist,setuserDetails,setisLoggedIn,getUserData } = useAppContext();
+  const [isHighlightOpen, setisHighlightOpen] = useState(false);
+  const [bannedUser, setbannedUser] = useState("");
+  const { setjwtToken, setisJwtExist, setuserDetails, setisLoggedIn, getUserData } = useAppContext();
 
   const validateData = yup.object({
     username: yup.string().required("**Username is required"),
@@ -35,21 +35,10 @@ const Login = () => {
     return result.data;
   };
 
-
-// RESPONSE BODY	
-// {
-//     "email": "brijmohan",
-//     "username": "brijmohan123@gmail.com",
-//     "roles": [
-//         "USER",
-//         "ADMIN"
-//     ]
-// }
-
   const handleSubmit = async (values, helper) => {
     try {
       const res = await checkToSpringBackend(values);
-      if (res.status===1) {
+      if (res.status === 1) {
         localStorage.setItem("jwtToken", res.jwtToken);
         setisJwtExist(true);
         setisLoggedIn(true);
@@ -57,12 +46,10 @@ const Login = () => {
         getUserData();
         toast.success(`User logged in..`);
         navigate("/");
-      } 
-      else if(res.status == -1){        //user is banned
+      } else if (res.status == -1) {
         setisHighlightOpen(true);
         setbannedUser(values.username);
-      }
-      else{
+      } else {
         throw new Error();
       }
     } catch (e) {
@@ -72,55 +59,56 @@ const Login = () => {
     }
   };
 
+  const socialButtons = [
+    { icon: FaGoogle, className: "border border-gray-200 hover:bg-gray-50 text-green-500" },
+    { icon: FaDiscord, className: "bg-[#5865F2] text-white hover:opacity-90" },
+    { icon: FaTwitch, className: "bg-[#9146FF] text-white hover:opacity-90" },
+    { icon: FaFacebook, className: "bg-[#1976D2] text-white hover:opacity-90" },
+    { icon: FaApple, className: "bg-gray-900 text-white hover:opacity-90" },
+  ];
+
   return (
     <div className="min-h-screen w-full bg-gray-50 flex flex-col">
       <EnhancedNavbar />
 
-      <div className="flex-1 flex items-center justify-center my-20 p-4 sm:p-6">
-        
-        <div className="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-gray-100">
-          
-          <div className="w-full lg:w-1/2 h-48 lg:h-auto relative bg-black">
+      <div className="flex-1 flex items-center justify-center pt-24 pb-10 px-4 sm:px-6">
+        <div className="bg-white w-full max-w-4xl rounded-2xl shadow-xl shadow-gray-200/60 overflow-hidden flex flex-col lg:flex-row border border-gray-100">
+          {/* Left: Image */}
+          <div className="w-full lg:w-1/2 h-48 lg:h-auto relative bg-gray-900">
             <img
               src={Image}
               alt="Login Visual"
-              className="w-full h-full object-cover opacity-90"
+              className="w-full h-full object-cover opacity-80"
             />
           </div>
 
-          <div className="w-full lg:w-1/2 p-6 sm:p-8 lg:p-12 flex flex-col justify-center bg-white">
-            
-            <div className="mb-8 text-center lg:text-left">
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">Login</h1>
-              
-              <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                <button className="p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition">
-                  <FaGoogle className="w-6 h-6 text-green-500" />
-                </button>
-                <button className="p-3 rounded-xl bg-[#7289DA] text-white hover:opacity-90 transition">
-                  <FaDiscord className="w-6 h-6" />
-                </button>
-                <button className="p-3 rounded-xl bg-[#B07BFF] text-white hover:opacity-90 transition">
-                  <FaTwitch className="w-6 h-6" />
-                </button>
-                <button className="p-3 rounded-xl bg-[#1976D2] text-white hover:opacity-90 transition">
-                  <FaFacebook className="w-6 h-6" />
-                </button>
-                <button className="p-3 rounded-xl bg-black text-white hover:opacity-90 transition">
-                  <FaApple className="w-6 h-6" />
-                </button>
-              </div>
+          {/* Right: Form */}
+          <div className="w-full lg:w-1/2 p-6 sm:p-8 lg:p-10 flex flex-col justify-center bg-white">
+            <div className="mb-6 text-center lg:text-left">
+              <h1 className="text-2xl font-bold text-gray-900 mb-1">Welcome back</h1>
+              <p className="text-sm text-gray-500">Sign in to continue your journey</p>
             </div>
 
+            {/* Social Buttons */}
+            <div className="flex flex-wrap justify-center lg:justify-start gap-2.5 mb-6">
+              {socialButtons.map(({ icon: Icon, className }, i) => (
+                <button key={i} className={`p-2.5 rounded-xl transition-all ${className}`}>
+                  <Icon className="w-5 h-5" />
+                </button>
+              ))}
+            </div>
+
+            {/* Divider */}
             <div className="relative mb-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
+                <div className="w-full border-t border-gray-200" />
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="bg-white px-2 text-gray-500">Or login with credentials</span>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-white px-3 text-gray-400 font-medium">Or continue with</span>
               </div>
             </div>
 
+            {/* Form */}
             <Formik
               initialValues={{ username: "", password: "" }}
               validationSchema={validateData}
@@ -128,21 +116,16 @@ const Login = () => {
             >
               {({ values, isSubmitting }) => {
                 const isFilled = values.username.length > 0 && values.password.length > 0;
-
                 return (
-                  <Form className="flex flex-col gap-4">
+                  <Form className="flex flex-col gap-3.5">
                     <div className="space-y-1">
                       <Field
                         name="username"
                         type="text"
                         placeholder="Username"
-                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 outline-none transition-all placeholder:text-gray-400 text-black"
+                        className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition-all placeholder:text-gray-400 text-sm text-gray-800"
                       />
-                      <ErrorMessage
-                        component="p"
-                        name="username"
-                        className="text-sm text-red-500 pl-1"
-                      />
+                      <ErrorMessage component="p" name="username" className="text-xs text-red-500 pl-1" />
                     </div>
 
                     <div className="space-y-1">
@@ -150,45 +133,44 @@ const Login = () => {
                         name="password"
                         type="password"
                         placeholder="••••••"
-                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-200 outline-none transition-all placeholder:text-gray-400 text-black"
+                        className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition-all placeholder:text-gray-400 text-sm text-gray-800"
                       />
-                      <ErrorMessage
-                        component="p"
-                        name="password"
-                        className="text-sm text-red-500 pl-1"
-                      />
+                      <ErrorMessage component="p" name="password" className="text-xs text-red-500 pl-1" />
                     </div>
 
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`w-full mt-2 font-bold py-3 rounded-xl transition-all duration-300 flex justify-center items-center gap-2
-            ${isSubmitting ? "cursor-not-allowed opacity-70" : ""}
-            ${isFilled
-                          ? "bg-amber-400 text-amber-950 shadow-md" 
-                          : "bg-amber-100 text-amber-700"          
+                      className={`w-full mt-1 font-semibold py-2.5 rounded-xl transition-all duration-200 text-sm flex justify-center items-center gap-2
+                        ${isSubmitting ? "cursor-not-allowed opacity-70" : ""}
+                        ${isFilled
+                          ? "bg-indigo-600 text-white shadow-sm shadow-indigo-200 hover:bg-indigo-700"
+                          : "bg-indigo-100 text-indigo-400"
                         }
-            hover:bg-amber-500 hover:text-white
-          `}
+                      `}
                     >
                       {isSubmitting ? (
                         <>
-                          <div className="w-5 h-5 border-2 border-amber-900 border-t-transparent rounded-full animate-spin"></div>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           Logging in...
                         </>
                       ) : (
                         "Log In"
                       )}
                     </button>
-                    {isHighlightOpen && <p className="text-red-600 text-[13px] font-semibold mx-auto">***{bannedUser} is banned***</p>}
+                    {isHighlightOpen && (
+                      <p className="text-red-600 text-xs font-semibold text-center">
+                        ***{bannedUser} is banned***
+                      </p>
+                    )}
                   </Form>
                 );
               }}
             </Formik>
-            {/* Footer */}
-            <div className="mt-8 text-center text-sm text-gray-600">
+
+            <div className="mt-6 text-center text-sm text-gray-500">
               Don't have an account?{" "}
-              <Link to="/signup" className="text-amber-500 font-bold hover:underline">
+              <Link to="/signup" className="text-indigo-600 font-semibold hover:underline">
                 Create One
               </Link>
             </div>

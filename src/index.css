@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -114,13 +114,16 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    font-family: "Rubik", sans-serif;
-    @apply border-border outline-ring/50;
+    font-family: "Inter", "Rubik", system-ui, sans-serif;
   }
   body {
     @apply bg-background text-foreground;
-    font-family: "Rubik", sans-serif;
-    @apply bg-background text-foreground;
+    font-family: "Inter", "Rubik", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  html {
+    scroll-behavior: smooth;
   }
 }
 
@@ -129,39 +132,69 @@
   --breakpoint-window:1440px;
 }
 
+/* ─── Animations ─── */
 .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-  
+  animation: float 6s ease-in-out infinite;
+}
+
 @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
 }
 
-
-*::-webkit-scrollbar {
-  display: none;
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* 2. For IE, Edge, and Firefox */
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+/* ─── Scrollbar — subtle thin style ─── */
 * {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #9ca3af;
 }
 
+/* ─── Utility Classes ─── */
 @layer utilities {
-  /* The Background Gradient Logic */
   .bg-brand-gradient {
-    @apply bg-linear-to-r from-blue-500 via-purple-600 to-pink-500 text-white;
+    @apply bg-linear-to-r from-indigo-600 via-purple-600 to-pink-500 text-white;
   }
-
-  /* The Text Gradient Logic */
   .text-brand-gradient {
-    @apply text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-purple-600 to-pink-600;
+    @apply text-transparent bg-clip-text bg-linear-to-r from-indigo-600 via-purple-600 to-pink-500;
   }
-
-  /* Standard Gray Background for Cards */
   .bg-card-gray {
     @apply bg-gray-100;
+  }
+
+  /* Premium card style */
+  .card-elevated {
+    @apply bg-white rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md transition-shadow duration-300;
+  }
+
+  /* Glass panel */
+  .glass-panel {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-lg;
+  }
+
+  /* Subtle hover lift */
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
   }
 }

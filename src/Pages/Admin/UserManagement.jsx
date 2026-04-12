@@ -87,12 +87,12 @@ const UserModal = ({ user, onClose }) => {
 
           <div className="p-8">
             <div className="flex items-center gap-6 mb-8">
-              <a onClick={()=>navigate(`/profile/${user?.username}`)}>
-              <img
-                src={user?.avatarLink || ""}
-                alt={user.name}
-                className="w-24 h-24 cursor-pointer rounded-full ring-4 ring-gray-50"
-              />
+              <a onClick={() => navigate(`/profile/${user?.username}`)}>
+                <img
+                  src={user?.avatarLink || ""}
+                  alt={user.name}
+                  className="w-24 h-24 cursor-pointer rounded-full ring-4 ring-gray-50"
+                />
               </a>
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">
@@ -104,11 +104,10 @@ const UserModal = ({ user, onClose }) => {
                 </div>
                 <div className="flex gap-2 mt-4">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      user.status === "Active"
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${user.status === "Active"
                         ? "bg-green-100 text-green-700"
                         : "bg-red-100 text-red-700"
-                    }`}
+                      }`}
                   >
                     {user.status}
                   </span>
@@ -162,7 +161,7 @@ const UserModal = ({ user, onClose }) => {
               onClick={banUnbanUser}
             >
               <Ban size={16} />
-              {isLoading?"wait..":!user.ban ? "Ban User" : "Unban User"}
+              {isLoading ? "wait.." : !user.ban ? "Ban User" : "Unban User"}
             </button>
           </div>
         </motion.div>
@@ -176,7 +175,7 @@ const UserManagement = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [hoverProfileUsername,SetHoverProfileUsername] = useState("");
+  const [hoverProfileUsername, SetHoverProfileUsername] = useState("");
   const navigate = useNavigate();
 
   console.log("All Users : ");
@@ -198,7 +197,7 @@ const UserManagement = () => {
       user.email.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  console.log(users!=null?users[10]:"");
+  console.log(users != null ? users[10] : "");
 
   return (
     <div className="space-y-6">
@@ -244,16 +243,16 @@ const UserManagement = () => {
             {filteredUsers?.map((user) => (
               <tr
                 key={user.joined}
-                className={` ${user.ban?"bg-red-50":"bg-gray-50/50"} transition-colors`}
+                className={` ${user.ban ? "bg-red-50" : "bg-gray-50/50"} transition-colors`}
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <a onClick={()=>navigate(`/profile/${user?.username}`)}>
-                    <img className="w-8 h-8 rounded-full cursor-pointer flex items-center justify-center font-bold" alt="user Profile Image" src={user?.avatarLink || ""} onMouseEnter={()=>SetHoverProfileUsername(user?.username)} onMouseLeave={()=>SetHoverProfileUsername("")}/>
-                      
-                      </a>
+                    <a onClick={() => navigate(`/profile/${user?.username}`)}>
+                      <img className="w-8 h-8 rounded-full cursor-pointer flex items-center justify-center font-bold" alt="user Profile Image" src={user?.avatarLink || ""} onMouseEnter={() => SetHoverProfileUsername(user?.username)} onMouseLeave={() => SetHoverProfileUsername("")} />
+
+                    </a>
                     <div>
-                      <p className={`font-medium  ${hoverProfileUsername==user?.username?"text-blue-600":"text-gray-900"}`}>
+                      <p className={`font-medium  ${hoverProfileUsername == user?.username ? "text-blue-600" : "text-gray-900"}`}>
                         {user.username}
                       </p>
                       <p className="text-xs text-gray-500">{user.email}</p>
@@ -276,7 +275,7 @@ const UserManagement = () => {
                     className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium`}
                   >
                     <div className={`w-1.5 h-1.5 rounded-full `}></div>
-                    {user.ban ? <span className="flex gap-1.5 items-center hover:text-red-500"><Ban size={12}/>Banned</span> : <span className="flex gap-1.5 items-center hover:text-green-500"><UserCheck size={12}/>Active</span>}
+                    {user.ban ? <span className="flex gap-1.5 items-center hover:text-red-500"><Ban size={12} />Banned</span> : <span className="flex gap-1.5 items-center hover:text-green-500"><UserCheck size={12} />Active</span>}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">

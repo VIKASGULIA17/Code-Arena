@@ -1,69 +1,69 @@
-import React, { useState, useMemo, useEffect } from "react";
-
-import { CircleCheck } from "lucide-react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { CircleCheck, ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-
 const ResultSection = ({ filters, filteredProblems }) => {
-  const [currentPage, setCurrentPage] = useState(1); // this s for the problem list 
-  const itemsPerPage = 9; // currenlt showing only 9 problems because of the page height
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
-  useEffect(() => { //added because if user search any new problem ,then it will go to first page 
+  useEffect(() => {
     setCurrentPage(1);
   }, [filters]);
 
-  const startElement = (currentPage - 1) * itemsPerPage; //1st index
-  const lastElement = startElement + itemsPerPage; //last index
+  const startElement = (currentPage - 1) * itemsPerPage;
+  const lastElement = startElement + itemsPerPage;
+  const TotalPages = Math.ceil(filteredProblems.length / itemsPerPage);
+  const currElements = filteredProblems.slice(startElement, lastElement);
 
-  const TotalPages = Math.ceil(filteredProblems.length / itemsPerPage); //total count
+  const difficultyStyle = {
+    Easy: "bg-emerald-50 text-emerald-700 border-emerald-100",
+    Medium: "bg-amber-50 text-amber-700 border-amber-100",
+    Hard: "bg-red-50 text-red-700 border-red-100",
+  };
 
-  const currElements = filteredProblems.slice(startElement, lastElement); // problem array 
-  // console.log(filteredProblems)
   return (
-    <div className="w-full mt-10 rounded-t-xl h-auto overflow-x-auto shadow-2xl">
-      <div className="flex min-w-[500px] lg:w-full lg:gap-10 justify-between text-xl text-black/50 font-semibold py-4 px-10 bg-black/10">
-        <div className="flex gap-10">
-          <h3 className="">Status</h3>
-          <h2>Title</h2>
+    <div className="card-elevated overflow-hidden">
+      {/* Table Header */}
+      <div className="flex items-center justify-between text-xs font-semibold text-gray-400 uppercase tracking-wider py-3.5 px-6 bg-gray-50 border-b border-gray-200">
+        <div className="flex items-center gap-8">
+          <span className="w-8">Status</span>
+          <span>Title</span>
         </div>
-        <div className="flex gap-10">
-          <h2>Acceptance</h2>
-          <h2>Difficulty</h2>
+        <div className="hidden sm:flex items-center gap-10">
+          <span>Acceptance</span>
+          <span className="w-20 text-center">Difficulty</span>
         </div>
       </div>
+
+      {/* Rows */}
       {currElements.length > 0 ? (
         currElements.map((obj, idx) => (
           <div
             key={obj.sno || idx}
-            className="flex gap-10 justify-between min-w-[500px] font-semibold py-4 px-10"
+            className={`flex items-center justify-between py-3.5 px-6 transition-colors hover:bg-gray-50/80 ${
+              idx !== currElements.length - 1 ? "border-b border-gray-100" : ""
+            }`}
           >
-            <div className="flex gap-10 ">
-              {obj.status === true ? (
-                <CircleCheck className="bg-green-500 min-w-7 min-h-7 rounded-full text-white" />
-              ) : (
-                <CircleCheck className="bg-transparent border-green-400 border-1 rounded-full text-transparent" />
-              )}
-
-              <div className="">
-                <h2>
-                  <Link
-                    to={`/problem/${obj.id}`}
-                    className="hover:text-blue-600 transition-colors cursor-pointer"
-                  >
-                    {obj.sno}. {obj.title}
-                  </Link>
-                </h2>
-                <div
-                  className=" 
-
-                grid grid-rows-2 items-center text-center
-                lg:flex gap-3 mt-1"
+            <div className="flex items-center gap-8 min-w-0">
+              <div className="w-8 flex-shrink-0">
+                {obj.status === true ? (
+                  <CircleCheck size={20} className="text-emerald-500 fill-emerald-500" />
+                ) : (
+                  <div className="w-5 h-5 rounded-full border-2 border-gray-200" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <Link
+                  to={`/problem/${obj.id}`}
+                  className="text-sm font-medium text-gray-800 hover:text-indigo-600 transition-colors line-clamp-1"
                 >
+                  {obj.sno}. {obj.title}
+                </Link>
+                <div className="flex flex-wrap gap-1.5 mt-1.5">
                   {(obj.topicTags ?? []).map((tag, tagIdx) => (
                     <span
                       key={tagIdx}
-                      className="bg-black/5 rounded-2xl text-gray-400 px-3 py-1 text-sm font-normal"
+                      className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded-md text-[11px] font-medium"
                     >
                       {tag}
                     </span>
@@ -72,97 +72,78 @@ const ResultSection = ({ filters, filteredProblems }) => {
               </div>
             </div>
 
-            <div className="flex gap-10 justify-end">
-              <h2 className="text-gray-500">{obj.acceptanceRate}</h2>
-              <div>
-                <h2
-                  className={`${
-                    obj.difficulty === "Easy"
-                      ? "bg-green-300 text-green-700"
-                      : obj.difficulty === "Medium"
-                      ? "bg-yellow-200 text-yellow-600"
-                      : "bg-red-200 text-red-700"
-                  } px-3 py-1 w-20 text-center rounded-2xl`}
-                >
-                  {obj.difficulty}
-                </h2>
-              </div>
+            <div className="hidden sm:flex items-center gap-10 flex-shrink-0">
+              <span className="text-sm text-gray-500 font-medium">{obj.acceptanceRate}</span>
+              <span
+                className={`text-xs font-semibold px-3 py-1 rounded-full border w-20 text-center ${
+                  difficultyStyle[obj.difficulty] || "bg-gray-50 text-gray-500"
+                }`}
+              >
+                {obj.difficulty}
+              </span>
             </div>
           </div>
         ))
       ) : (
-        <div className="flex text-start lg:text-center px-10 flex-col py-20 min-w-[500px] bg-white">
-          <p className="text-gray-500 text-xl font-medium">
-            No problems match your filters.
-          </p>
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <p className="text-gray-400 text-lg font-medium">No problems match your filters.</p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-4 text-start px-20 lg:text-center text-blue-600 hover:underline"
+            className="mt-3 text-sm text-indigo-600 hover:underline font-medium"
           >
             Clear all filters
           </button>
         </div>
       )}
-      {filteredProblems.length > 0 && (
-        <div className="py-4 min-w-[500px] px-4 bg-black/5 rounded-b-xl flex justify-between items-center">
-          
-          {/* 1. Dynamic Results Label */}
-          <h2 className="px-7 font-semibold text-gray-600 ">
-            Showing <span>{startElement + 1}</span> to{" "}
-            <span>{Math.min(lastElement, filteredProblems.length)}</span> of{" "}
-            <span>{filteredProblems.length}</span> results
-          </h2>
 
-          {/* 2. Pagination Buttons */}
-          <div className="flex gap-3">
-            {/* Previous Button */}
+      {/* Pagination */}
+      {filteredProblems.length > 0 && (
+        <div className="py-3.5 px-6 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-gray-500 font-medium">
+            Showing <span className="text-gray-700">{startElement + 1}</span> to{" "}
+            <span className="text-gray-700">{Math.min(lastElement, filteredProblems.length)}</span> of{" "}
+            <span className="text-gray-700">{filteredProblems.length}</span> results
+          </p>
+
+          <div className="flex items-center gap-1.5">
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className="border border-black/10 p-2 rounded-lg hover:bg-white disabled:opacity-50 transition-colors"
+              className="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white transition-colors"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={15} />
             </button>
 
-            {/* Page 1 */}
             <button
               onClick={() => setCurrentPage(1)}
-              className={`border border-black/10 px-3 rounded-lg transition-colors ${
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                 currentPage === 1
-                  ? "bg-blue-600 text-white"
-                  : "bg-white hover:bg-gray-50"
+                  ? "bg-indigo-600 text-white"
+                  : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
               }`}
             >
               1
             </button>
 
-            {/* Middle Logic: Only show if there are more than 1 page */}
             {TotalPages > 1 && (
               <>
-                {/* Ellipsis if current page is far from start */}
                 {currentPage > 3 && (
-                  <span className="px-2 self-center text-gray-400">...</span>
+                  <span className="px-1.5 text-gray-400 text-sm">…</span>
                 )}
-
-                {/* Dynamic Middle Button */}
                 {currentPage !== 1 && currentPage !== TotalPages && (
-                  <button className="border border-black/10 px-3 rounded-lg bg-blue-600 text-white">
+                  <button className="px-3 py-1.5 rounded-lg text-sm font-medium bg-indigo-600 text-white">
                     {currentPage}
                   </button>
                 )}
-
-                {/* Ellipsis if current page is far from end */}
                 {currentPage < TotalPages - 2 && (
-                  <span className="px-2 self-center text-gray-400">...</span>
+                  <span className="px-1.5 text-gray-400 text-sm">…</span>
                 )}
-
-                {/* Always Show Last Page */}
                 <button
                   onClick={() => setCurrentPage(TotalPages)}
-                  className={`border border-black/10 px-3 rounded-lg transition-colors ${
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                     currentPage === TotalPages
-                      ? "bg-blue-600 text-white"
-                      : "bg-white hover:bg-gray-50"
+                      ? "bg-indigo-600 text-white"
+                      : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
                   }`}
                 >
                   {TotalPages}
@@ -170,15 +151,12 @@ const ResultSection = ({ filters, filteredProblems }) => {
               </>
             )}
 
-            {/* Next Button */}
             <button
               disabled={currentPage === TotalPages}
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, TotalPages))
-              }
-              className="border border-black/10 p-2 rounded-lg hover:bg-white disabled:opacity-50 transition-colors"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, TotalPages))}
+              className="p-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:hover:bg-white transition-colors"
             >
-              <ArrowRight size={18} />
+              <ArrowRight size={15} />
             </button>
           </div>
         </div>

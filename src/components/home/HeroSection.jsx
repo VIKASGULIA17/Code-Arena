@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import axios from "axios";
 import {
   ArrowRight,
   Code2,
@@ -10,314 +9,254 @@ import {
   BarChart3,
   Sparkles,
   Award,
+  Clock,
+  ChevronRight,
 } from "lucide-react";
-import { useState } from "react";
-import { MdOutlineStart } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppContext } from "../../context/AppContext";
+import { Link } from "react-router-dom";
 
 export default function HeroSection() {
-  
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const navigate = useNavigate();
-  const {jwtToken} = useAppContext();
+  const stats = [
+    { label: "Submissions", value: "1.2M+", icon: Code2, color: "text-indigo-600 bg-indigo-50" },
+    { label: "Active Users", value: "50K+", icon: Users, color: "text-purple-600 bg-purple-50" },
+    { label: "Problems", value: "2,400+", icon: Zap, color: "text-pink-600 bg-pink-50" },
+  ];
 
-  async function handleTesting() {
-    try {
-      const res = await axios.get(`${BACKEND_URL}/user/isWorking`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
-      console.log(res.data);
-    } catch (e) {
-      navigate("/sessionExpired");
-    }
-  }
+  const features = [
+    {
+      icon: BarChart3,
+      title: "Problem Archive",
+      description: "Practice with 2000+ problems curated by difficulty, company, and tags with detailed analytics.",
+      color: "text-indigo-600 bg-indigo-50",
+    },
+    {
+      icon: Sparkles,
+      title: "Live Contests",
+      description: "Join weekly contests, compete in real time, and climb the global leaderboard.",
+      color: "text-purple-600 bg-purple-50",
+    },
+    {
+      icon: Zap,
+      title: "Algorithm Visualizer",
+      description: "Interactive visualizers for sorting, searching, dynamic programming, and more.",
+      color: "text-emerald-600 bg-emerald-50",
+    },
+  ];
 
   return (
-    <div className="min-h-screen pt-10 bg-linear-to-br from-slate-50 via-blue-50 to-pink-100">
-      {/* Hero Section */}
-      <section className="px-6 py-20 max-w-7xl mx-auto">
-        {/* just for checking session expiry i will remote it later  */}
-        <button
-          onClick={handleTesting}
-          className={`${jwtToken ? "block" : "hidden"} bg-black text-white rounded-md px-2 py-1 hover:bg-white hover:text-black cursor-pointer hover:border-black border-2`}
-        >
-          click me to test session expiration
-        </button>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 bg-white border   text-blue-500 px-3 py-2 rounded-full text-sm font-medium">
-              <span className="w-2 h-2 bg-blue-500 rounded-full" />
-              Weekly Contest #352 is Live
-            </div>
-            <div className="space-y-2">
-              <h1 className="text-5xl md:text-6xl font-semibold text-foreground leading-tight">
-                Master <br />
-                <span className="">Algorithms.</span>
-              </h1>
-              <h2 className="text-4xl md:text-7xl bg-linear-to-b from-blue-500 via-purple-500 to-pink-600 bg-clip-text text-transparent font-bold ">
-                Ace the Interview.
-              </h2>
-            </div>
-            <p className="text-lg text-foreground/70 max-w-md">
-              The best platform to practice coding, compete in global contests,
-              and visualize data structures with our modern tools.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/problem">
-                <Button
-                  size="lg"
-                  className="bg-foreground hover:bg-foreground/90 text-background rounded-lg"
-                >
-                  Start Solving
-                </Button>
-              </Link>
-              <Link to="/algovisualizer">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="hover:scale-105 rounded-lg bg-transparent"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Explore Visualizer
-                </Button>
-              </Link>
-            </div>
-            <div className="flex items-center gap-4 pt-4">
-              <div className="flex -space-x-2">
-                {[1, 29, 3, 4].map((i) => (
-                  <img
-                    src={`https://i.pravatar.cc?img=${i}`}
-                    key={i}
-                    alt=""
-                    className="w-12 h-12 rounded-full bg-linear-to-br from-purple-400 to-pink-400 border-2 border-white"
-                  />
-                ))}
+    <div className="min-h-screen bg-gray-50">
+      {/* ─── Hero ─── */}
+      <section className="relative pt-28 pb-20 px-6 overflow-hidden">
+        {/* Subtle background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/80 via-white to-purple-50/60 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-indigo-100/40 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column */}
+            <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 bg-white border border-indigo-100 text-indigo-600 px-4 py-2 rounded-full text-sm font-medium shadow-sm">
+                <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
+                Weekly Contest #352 is Live
+                <ChevronRight size={14} />
               </div>
-              <div className="text-sm text-foreground/70">
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <span key={i} className="text-yellow-400">
-                      ★
-                    </span>
+
+              <div className="space-y-3">
+                <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-[1.1] tracking-tight">
+                  Master
+                  <br />
+                  Algorithms.
+                </h1>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-brand-gradient leading-[1.15]">
+                  Ace the Interview.
+                </h2>
+              </div>
+
+              <p className="text-lg text-gray-500 max-w-md leading-relaxed">
+                The best platform to practice coding, compete in global contests,
+                and visualize data structures with modern tools.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link to="/problem">
+                  <Button
+                    size="lg"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-sm shadow-indigo-200 px-6 h-12 text-sm font-semibold"
+                  >
+                    Start Solving
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </Link>
+                <Link to="/algovisualizer">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="rounded-xl h-12 text-sm font-semibold border-gray-200 hover:bg-gray-50"
+                  >
+                    <Sparkles className="w-4 h-4 mr-1" />
+                    Explore Visualizer
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Social Proof */}
+              <div className="flex items-center gap-4 pt-2">
+                <div className="flex -space-x-2.5">
+                  {[1, 29, 3, 4].map((i) => (
+                    <img
+                      src={`https://i.pravatar.cc?img=${i}`}
+                      key={i}
+                      alt=""
+                      className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
+                    />
                   ))}
                 </div>
-                <div className="font-semibold">1M+ developers joined today</div>
+                <div className="text-sm">
+                  <div className="flex items-center gap-0.5 text-yellow-500 text-xs">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <span key={i}>★</span>
+                    ))}
+                  </div>
+                  <div className="font-semibold text-gray-600 text-xs mt-0.5">1M+ developers joined</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column — Image Card */}
+            <div className="hidden lg:block relative z-10">
+              <div className="card-elevated overflow-hidden aspect-[4/3] relative p-2 shadow-2xl">
+                <img
+                  src={"src/assets/BlackBackground.jpeg"}
+                  alt="Code Arena Preview"
+                  className="w-full h-full object-cover rounded-xl border border-gray-100 shadow-inner"
+                />
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Hero Image */}
-          <div className="lg:h-full lg:w-[40vw]  bg-black rounded-2xl overflow-hidden">
-            <div className="flex items-center justify-between bg-black  px-4 py-4
-            
-            ">
-              <div className="flex gap-2">
-                <div className="w-3 h-3 bg-red-400 rounded-full" />
-                <div className="w-3 h-3 bg-yellow-400 rounded-full" />
-                <div className="w-3 h-3 bg-green-400 rounded-full" />
-              </div>
-              <span className="text-xs text-white">solution.ts</span>
-            </div>
-            <div
-              className="bg-center bg-cover rounded-xl h-full flex flex-col gap-3 p-5
-              window:flex-row
-              lg:auto
-              "
-              style={{
-                backgroundImage: `url(${"src/assets/BlackBackground.jpeg"})`,
-              }}
-            >
-              <div className="w-full h-auto p-3 flex flex-col gap-3 items-center justify-center
-              
-              window:w-1/2 window:lg-auto">
-                <div className=" h-auto w-full">
-                  <p className="text-white text font-bold p-3 bg-blue">
-                    READY TO SPEED UP YOUR CODING?
-                  </p>
-                  <p className="text-white text-3xl font-bold px-3  p-3">
-                    Solve DSA and Competitive Programming Problems Faster
-                  </p>
+      {/* ─── Stats ─── */}
+      <section className="px-6 pb-16 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <div
+                key={index}
+                className="card-elevated p-6 flex items-center gap-5 hover-lift"
+              >
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${stat.color}`}>
+                  <Icon size={22} />
                 </div>
                 <div>
-                  <p className=" leading-loose  text-white font-light p-3">
-                    CodeTemplate Builder will guide you step-by-step to access
-                    pre-built, optimized templates designed for faster
-                    problem-solving. Spend less time writing boilerplate code
-                    and more time focusing on solving problems.
-                  </p>
-                  <div>
-                    <Link to="/problem">
-                      <div className="flex flex-row  w-auto justify-center p-4">
-                        <div className="bg-blue-700 h-full py-2 rounded-tl-lg rounded-bl-lg">
-                          <MdOutlineStart className="bg-red text-3xl pl-3 text-white" />
-                        </div>
-                        <button className="bg-blue-700 cursor-pointer text-white px-4 py-2 rounded-tr-lg rounded-br-lg">
-                          Get Started
-                        </button>
-                      </div>
-                    </Link>
-                  </div>
+                  <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                  <p className="text-sm text-gray-500 font-medium">{stat.label}</p>
                 </div>
               </div>
-              <div className="w-full h-[300px] overflow-hidden rounded-2xl 
-              lg:h-[300px]
-              window:w-1/2 window:h-auto 
-              
-              ">
-                <div
-                  className="bg-cover bg-no-repeat h-full duration-500 hover:scale-110 w-full rounded-2xl"
-                  style={{
-                    backgroundImage: `url(${"https://images.unsplash.com/photo-1618477388954-7852f32655ec?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"})`,
-                  }}
-                ></div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ─── Daily Challenge ─── */}
+      <section className="px-6 pb-16 max-w-7xl mx-auto">
+        <div className="card-elevated p-0 overflow-hidden hover-lift">
+          <div className="flex flex-col md:flex-row items-center gap-6 p-8">
+            <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
+              <Award className="w-7 h-7 text-white" />
+            </div>
+            <div className="flex-1 text-center md:text-left">
+              <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
+                  Daily Challenge
+                </h3>
+                <span className="px-2 py-0.5 text-[10px] font-bold bg-indigo-100 text-indigo-600 rounded-full">NEW</span>
+              </div>
+              <h4 className="text-xl font-bold text-gray-900 mb-2">
+                Reverse Linked List II
+              </h4>
+              <p className="text-gray-500 text-sm max-w-lg mb-3">
+                Given the head of a singly linked list and two integers left and right, reverse the nodes from position left to position right.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-2.5 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full border border-amber-100">
+                  Medium
+                </span>
+                <span className="px-2.5 py-1 bg-indigo-50 text-indigo-600 text-xs font-medium rounded-full border border-indigo-100">
+                  Linked List
+                </span>
+                <span className="px-2.5 py-1 bg-indigo-50 text-indigo-600 text-xs font-medium rounded-full border border-indigo-100">
+                  Recursion
+                </span>
               </div>
             </div>
+            <Link to="/problem/1" className="shrink-0">
+              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-sm shadow-indigo-200 h-11 px-5 text-sm font-semibold">
+                Solve Now <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="px-6 py-16 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl p-8 border border-slate-200">
-            <Code2 className="w-12 h-12 bg-blue-100 text-blue-600 p-2 rounded-lg mb-4" />
-            <p className="text-sm font-medium text-foreground/70 uppercase tracking-wide">
-              Total Submissions
-            </p>
-            <p className="text-4xl font-bold text-foreground mt-2">1.2M+</p>
-          </div>
-          <div className="bg-white rounded-xl  p-8 border border-slate-200">
-            <Users className="w-12 h-12 p-2 mb-4 bg-purple-100 text-purple-600 rounded-lg" />
-            <p className="text-sm font-medium text-foreground/70 uppercase tracking-wide">
-              Active Users
-            </p>
-            <p className="text-4xl font-bold text-foreground mt-2">50k+</p>
-          </div>
-          <div className="bg-white rounded-xl p-8 border border-slate-200">
-            <Zap className="w-12 h-12 p-2 bg-pink-100 text-pink-600 rounded-lg mb-4" />
-            <p className="text-sm font-medium text-foreground/70 uppercase tracking-wide">
-              Problems Available
-            </p>
-            <p className="text-4xl font-bold text-foreground mt-2">2,400+</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Daily Challenge Section */}
-      <section className="px-6 py-16 max-w-7xl mx-auto ">
-        <div className="bg-white rounded-2xl border shadow-xl hover:scale-101 duration-300 border-slate-200 overflow-hidden">
-          <div className="flex flex-col md:flex-row  items-center gap-4 p-8">
-            <div className="w-12 h-12 bg-linear-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center shrink-0">
-              <Award className="w-6 h-6 text-white" />
-            </div>
-            <div className="flex-1 text-center md:text-start">
-              <h3 className="text-lg font-bold text-foreground mb-2">
-                Daily Challenge
-              </h3>
-              <div className="space-y-3">
-                <h4 className="text-xl font-bold text-foreground">
-                  Reverse Linked List II
-                </h4>
-                <p className="text-foreground/70 text-md md:w-3/4">
-                  Given the head of a singly linked list and two integers left
-                  and right where left ≤ right, reverse the nodes of the list
-                  from position left to position right, and return the reversed
-                  list.
-                </p>
-                <div className="flex gap-2 pt-2">
-                  <span className="px-3 py-1 bg-yellow-50 text-yellow-700 text-xs font-semibold rounded-full border border-yellow-200">
-                    Medium
-                  </span>
-                  <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-200">
-                    Linked List
-                  </span>
-                  <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-200">
-                    Recursion
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="lg:w-1/8">
-              <Link to="/problem/1">
-                <Button className="bg-foreground  hover:bg-foreground/90 text-background rounded-lg">
-                  Solve Now <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
+      {/* ─── Features ─── */}
       <section className="px-6 py-20 max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
+        <div className="text-center mb-14">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
             Everything you need to grow
           </h2>
-          <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            From beginner concepts to advanced competitive programming, we have
-            the modern tools to help you succeed.
+          <p className="text-gray-500 max-w-xl mx-auto">
+            From beginner concepts to advanced competitive programming, modern tools to help you succeed.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white rounded-xl p-8 border border-slate-200 hover:shadow-lg transition-shadow">
-            <BarChart3 className="w-12 h-12 p-2 bg-pink-100 text-pink-600 rounded-lg mb-4" />
-            <h3 className="text-xl font-bold text-foreground mb-2">
-              Problem Archive
-            </h3>
-            <p className="text-foreground/70">
-              Practice with over 2000 problems curated by difficulty, company,
-              and tags. Track your progress with detailed analytics.
-            </p>
-          </div>
-          <div className="bg-white rounded-xl p-8 border border-slate-200 hover:shadow-lg transition-shadow">
-            <Sparkles className="w-12 h-12 p-2 bg-cyan-100 text-blue-600 rounded-lg mb-4" />
-            <h3 className="text-xl font-bold text-foreground mb-2">
-              Live Contests
-            </h3>
-            <p className="text-foreground/70">
-              Join weekly contests, compete with peers in real time, and climb
-              the global leaderboard to earn badges.
-            </p>
-          </div>
-          <div className="bg-white rounded-xl p-8 border border-slate-200 hover:shadow-lg transition-shadow">
-            <Zap className="w-12 h-12 p-2 bg-green-100 text-green-600 rounded-lg mb-4" />
-            <h3 className="text-xl font-bold text-foreground mb-2">
-              Algorithm Visualizer
-            </h3>
-            <p className="text-foreground/70">
-              Don't just read code—see it. Interactive visualizers for sorting,
-              searching, dynamic programming, and linked lists.
-            </p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <div key={index} className="card-elevated p-8 hover-lift group">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${feature.color} group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon size={22} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-500 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="px-6 py-20 max-w-7xl mx-auto">
-        <div className="bg-linear-to-r from-slate-900 to-slate-800 rounded-3xl p-12 text-center text-white">
-          <h2 className="text-5xl font-bold mb-6 leading-16">
-            Join{" "}
-            <span className="text-brand-gradient">
-              50,000+ developers <br />{" "}
-            </span>{" "}
-            sharpening their skills
-          </h2>
-          <p className="text-lg text-slate-300 max-w-2xl mx-auto mb-8">
-            Whether you're preparing for a technical interview or just want to
-            improve your problem-solving skills, CodeArena is the place for you.
-          </p>
-          <Link to="/problem">
-            <Button
-              size="lg"
-              className="bg-white hover:bg-slate-100 text-foreground rounded-full"
-            >
-              Get Started for Free
-            </Button>
-          </Link>
+      {/* ─── CTA ─── */}
+      <section className="px-6 pb-20 max-w-7xl mx-auto">
+        <div className="bg-gradient-to-br from-gray-900 via-gray-900 to-indigo-950 rounded-3xl p-12 md:p-16 text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+              Join{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
+                50,000+ developers
+              </span>
+              <br />
+              sharpening their skills
+            </h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+              Whether you're preparing for a technical interview or improving
+              problem-solving skills, Code Arena is the place for you.
+            </p>
+            <Link to="/problem">
+              <Button
+                size="lg"
+                className="bg-white hover:bg-gray-100 text-gray-900 rounded-full h-12 px-8 text-sm font-semibold shadow-lg"
+              >
+                Get Started for Free
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
     </div>
