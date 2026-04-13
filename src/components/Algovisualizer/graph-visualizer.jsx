@@ -1,584 +1,643 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import { Button } from "@/components/ui/button"
-import { Slider } from "@/components/ui/slider"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Play, Pause, RotateCcw, MousePointer2 } from "lucide-react"
+import {
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, Legend
+} from "recharts"
+import { Play, Pause, RotateCcw, MousePointer2, Info, TrendingUp } from "lucide-react"
 
-
-const algorithmInfo = {
+/* ─── algorithm metadata ────────────────────────────── */
+const ALGO_META = {
   dijkstra: {
     name: "Dijkstra's Algorithm",
-    complexity: "O((V + E) log V)",
-    description: "Finds shortest path from source to all vertices",
+    complexity: "O((V+E) log V)",
+    space: "O(V)",
+    description: "Greedy shortest-path algorithm using a priority queue. Guarantees optimal path for non-negative weights.",
+    color: "#6366f1",
   },
   bfs: {
     name: "Breadth-First Search",
     complexity: "O(V + E)",
-    description: "Explores neighbors before going deeper",
+    space: "O(V)",
+    description: "Explores all neighbours level-by-level. Finds shortest path in unweighted graphs.",
+    color: "#10b981",
   },
   dfs: {
     name: "Depth-First Search",
     complexity: "O(V + E)",
-    description: "Explores as far as possible before backtracking",
+    space: "O(V)",
+    description: "Explores as deep as possible before backtracking. Does not guarantee shortest path.",
+    color: "#f59e0b",
+  },
+  astar: {
+    name: "A* Search",
+    complexity: "O(E log V)",
+    space: "O(V)",
+    description: "Heuristic-guided search combining Dijkstra and greedy best-first. Optimal and complete.",
+    color: "#ec4899",
   },
 }
 
-export function GraphVisualizer() {
-  const [nodes, setNodes] = useState([])
-  const [edges, setEdges] = useState([])
-  const [algorithm, setAlgorithm] = useState("dijkstra")
-  const [speed, setSpeed] = useState(0)
-  const [isRunning, setIsRunning] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
-  const [startNode, setStartNode] = useState(null)
-  const [endNode, setEndNode] = useState(null)
-  const [selectMode, setSelectMode] = useState(null)
+
+
+/* ─── 16-node layout for a richer graph ────────────── */
+const GRAPH_POSITIONS = [
+  { x: 80,  y: 180 },  // 0
+  { x: 180, y: 80  },  // 1
+  { x: 300, y: 60  },  // 2
+  { x: 430, y: 80  },  // 3
+  { x: 540, y: 180 },  // 4
+  { x: 160, y: 200 },  // 5
+  { x: 280, y: 170 },  // 6
+  { x: 400, y: 200 },  // 7
+  { x: 520, y: 300 },  // 8
+  { x: 80,  y: 320 },  // 9
+  { x: 200, y: 340 },  // 10
+  { x: 330, y: 310 },  // 11
+  { x: 440, y: 340 },  // 12
+  { x: 560, y: 420 },  // 13
+  { x: 250, y: 430 },  // 14
+  { x: 100, y: 430 },  // 15
+]
+
+const GRAPH_EDGES = [
+  [0,1,4],[0,5,2],[0,9,6],
+  [1,2,3],[1,5,1],[1,6,5],
+  [2,3,2],[2,6,4],
+  [3,4,3],[3,7,2],
+  [4,7,1],[4,8,5],
+  [5,6,3],[5,10,4],
+  [6,7,2],[6,11,3],
+  [7,8,2],[7,11,4],[7,12,6],
+  [8,12,3],[8,13,4],
+  [9,10,2],[9,15,3],
+  [10,11,3],[10,14,4],[10,15,2],
+  [11,12,2],[11,14,3],
+  [12,13,5],
+  [13,8,2],
+  [14,15,4],
+]
+
+/* helper: euclidean heuristic for A* */
+const heuristic = (a, b) => {
+  const dx = GRAPH_POSITIONS[a].x - GRAPH_POSITIONS[b].x
+  const dy = GRAPH_POSITIONS[a].y - GRAPH_POSITIONS[b].y
+  return Math.sqrt(dx * dx + dy * dy) * 0.05
+}
+
+export function GraphVisualizer({ theme = "dark" }) {
+  const isDark = theme === "dark"
+  const c = {
+    bg:     isDark ? "#020617" : "#f8fafc", // Slate 950 / Slate 50
+    panel:  isDark ? "#0f172a" : "#ffffff", // Slate 900 / White
+    inner:  isDark ? "#020617" : "#f1f5f9", // Slate 950 / Slate 100
+    border: isDark ? "#1e293b" : "#e2e8f0", // Slate 800 / Slate 200
+    text:   isDark ? "#f1f5f9" : "#0f172a", // Slate 100 / Slate 900
+    muted:  isDark ? "#94a3b8" : "#64748b", // Slate 400 / Slate 500
+    node:   isDark ? "#1e293b" : "#cbd5e1", // Slate 800 / Slate 300
+    edge:   isDark ? "#1e293b" : "#cbd5e1", // Slate 800 / Slate 300
+    grid:   isDark ? "#1e293b" : "#e2e8f0", // Slate 800 / Slate 200
+  }
+
+  const [nodes, setNodes]               = useState([])
+  const [edges, setEdges]               = useState([])
+  const [pathEdges, setPathEdges]       = useState(new Set())
+  const [activeEdges, setActiveEdges]   = useState(new Set())
+  const [algorithm, setAlgorithm]       = useState("dijkstra")
+  const [speed, setSpeed]               = useState(50)
+  const [isRunning, setIsRunning]       = useState(false)
+  const [isPaused, setIsPaused]         = useState(false)
+  const [startNode, setStartNode]       = useState(0)
+  const [endNode, setEndNode]           = useState(13)
+  const [selectMode, setSelectMode]     = useState(null)
   const [visitedCount, setVisitedCount] = useState(0)
-  const stopRef = useRef(false)
+  const [pathLength, setPathLength]     = useState(null)
+  const [elapsed, setElapsed]           = useState(0)
+  const [visitedHistory, setVisitedHistory] = useState([]) // [{t, visited}]
+  const timerRef = useRef(null)
+  const stopRef  = useRef(false)
   const pauseRef = useRef(false)
-  const svgRef = useRef(null)
+  const visStepRef = useRef(0)
 
-  const generateGraph = useCallback(() => {
-    const newNodes = []
-    const newEdges = []
-    const nodeCount = 12
-
-    const positions = [
-      { x: 100, y: 150 },
-      { x: 200, y: 80 },
-      { x: 320, y: 60 },
-      { x: 440, y: 80 },
-      { x: 540, y: 150 },
-      { x: 200, y: 220 },
-      { x: 320, y: 180 },
-      { x: 440, y: 220 },
-      { x: 100, y: 300 },
-      { x: 270, y: 320 },
-      { x: 420, y: 320 },
-      { x: 540, y: 300 },
-    ]
-
-    for (let i = 0; i < nodeCount; i++) {
-      newNodes.push({
-        id: i,
-        x: positions[i].x,
-        y: positions[i].y,
-        state: "default",
-        distance: Number.POSITIVE_INFINITY,
-        parent: null,
-      })
-    }
-
-    // Create edges with weights
-    const edgePairs = [
-      [0, 1, 4],
-      [0, 5, 2],
-      [1, 2, 3],
-      [1, 6, 5],
-      [2, 3, 2],
-      [2, 6, 1],
-      [3, 4, 3],
-      [3, 7, 4],
-      [4, 7, 2],
-      [5, 6, 3],
-      [5, 8, 4],
-      [5, 9, 6],
-      [6, 7, 2],
-      [6, 9, 3],
-      [7, 10, 5],
-      [7, 11, 3],
-      [8, 9, 2],
-      [9, 10, 4],
-      [10, 11, 2],
-    ]
-
-    for (const [from, to, weight] of edgePairs) {
-      newEdges.push({ from, to, weight })
-    }
-
-    setNodes(newNodes)
-    setEdges(newEdges)
-    setStartNode(0)
-    setEndNode(11)
+  /* ── init graph ── */
+  const buildGraph = useCallback(() => {
+    const n = GRAPH_POSITIONS.map((pos, i) => ({
+      id: i, ...pos,
+      state: i === 0 ? "start" : i === 13 ? "end" : "default",
+      distance: Infinity, parent: null,
+    }))
+    setNodes(n)
+    setEdges(GRAPH_EDGES.map(([from, to, weight]) => ({ from, to, weight })))
+    setPathEdges(new Set())
+    setActiveEdges(new Set())
     setVisitedCount(0)
-
-    // Set initial start/end states
-    setTimeout(() => {
-      setNodes((prev) =>
-        prev.map((n, i) => ({
-          ...n,
-          state: i === 0 ? "start" : i === 11 ? "end" : "default",
-        })),
-      )
-    }, 0)
+    setPathLength(null)
+    setElapsed(0)
+    setVisitedHistory([])
+    visStepRef.current = 0
   }, [])
 
-  useEffect(() => {
-    generateGraph()
-  }, [generateGraph])
+  useEffect(() => { buildGraph() }, [buildGraph])
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+  /* ── helpers ── */
+  const delay = ms => new Promise(r => setTimeout(r, ms))
+  const waitPause = async () => { while (pauseRef.current && !stopRef.current) await delay(50) }
+  const stepDelay = () => Math.max(20, 300 - speed * 2.5)
 
-  const waitWhilePaused = async () => {
-    while (pauseRef.current && !stopRef.current) {
-      await delay(100)
+  /* track visited history for chart */
+  const trackVisit = (count) => {
+    visStepRef.current++
+    if (visStepRef.current % 2 === 0) {
+      setVisitedHistory(prev => [...prev, { step: visStepRef.current, visited: count }])
     }
   }
 
-  const getNeighbors = (nodeId) => {
-    const neighbors = []
-    for (const edge of edges) {
-      if (edge.from === nodeId) neighbors.push({ id: edge.to, weight: edge.weight })
-      if (edge.to === nodeId) neighbors.push({ id: edge.from, weight: edge.weight })
+  const getNeighbors = useCallback((id, currentEdges) => {
+    const result = []
+    for (const e of currentEdges) {
+      if (e.from === id) result.push({ id: e.to, weight: e.weight })
+      if (e.to   === id) result.push({ id: e.from, weight: e.weight })
     }
-    return neighbors
+    return result
+  }, [])
+
+  const markEdge = (a, b, set, setter) => {
+    setter(prev => {
+      const next = new Set(prev)
+      next.add(`${Math.min(a,b)}-${Math.max(a,b)}`)
+      return next
+    })
   }
 
-  const reconstructPath = async (endId) => {
+  const reconstructPath = async (parentsMap, endId, startId) => {
     const path = []
-    let current = endId
-
-    while (current !== null) {
-      path.unshift(current)
-      current = nodes.find((n) => n.id === current)?.parent ?? null
+    let cur = endId
+    while (cur !== null && cur !== undefined) {
+      path.unshift(cur)
+      cur = parentsMap[cur]
     }
-
-    for (const nodeId of path) {
-      if (stopRef.current) return
-      await waitWhilePaused()
-      setNodes((prev) =>
-        prev.map((n) =>
-          n.id === nodeId ? { ...n, state: n.id === startNode ? "start" : n.id === endNode ? "end" : "path" } : n,
-        ),
+    let dist = 0
+    for (let i = 0; i < path.length - 1; i++) {
+      const edge = GRAPH_EDGES.find(([a,b]) =>
+        (a === path[i] && b === path[i+1]) || (b === path[i] && a === path[i+1])
       )
-      await delay(Math.max(50, 200 - speed * 2))
+      if (edge) dist += edge[2]
+      if (stopRef.current) return
+      await waitPause()
+      markEdge(path[i], path[i+1], pathEdges, setPathEdges)
+      setNodes(prev => prev.map(n =>
+        n.id === path[i+1]
+          ? { ...n, state: n.id === endId ? "end" : n.id === startId ? "start" : "path" }
+          : n
+      ))
+      await delay(stepDelay() * 0.6)
+    }
+    setPathLength(dist)
+  }
+
+  /* ── algorithms ── */
+  const runDijkstra = async (currentEdges, sNode, eNode) => {
+    const dist = {}, par = {}, vis = new Set(), pq = []
+    for (const _ of GRAPH_POSITIONS) dist[_.x] = Infinity; // placeholder init
+    GRAPH_POSITIONS.forEach((_, i) => { dist[i] = Infinity; par[i] = null })
+    dist[sNode] = 0; pq.push({ id: sNode, d: 0 })
+
+    while (pq.length) {
+      if (stopRef.current) return
+      await waitPause()
+      pq.sort((a,b) => a.d - b.d)
+      const { id: cur } = pq.shift()
+      if (vis.has(cur)) continue
+      vis.add(cur); setVisitedCount(vis.size)
+
+      setNodes(prev => prev.map(n => ({
+        ...n,
+        state: n.id === cur ? "current"
+          : n.id === sNode ? "start"
+          : n.id === eNode ? "end"
+          : vis.has(n.id) ? "visited"
+          : n.state,
+        distance: dist[n.id],
+      })))
+
+      await delay(stepDelay())
+      if (cur === eNode) { await reconstructPath(par, eNode, sNode); return }
+
+      for (const { id: nb, weight } of getNeighbors(cur, currentEdges)) {
+        if (!vis.has(nb) && dist[cur] + weight < dist[nb]) {
+          dist[nb] = dist[cur] + weight
+          par[nb] = cur
+          pq.push({ id: nb, d: dist[nb] })
+          markEdge(cur, nb, activeEdges, setActiveEdges)
+        }
+      }
     }
   }
 
-  const dijkstra = async () => {
-    if (startNode === null) return
+  const runBFS = async (currentEdges, sNode, eNode) => {
+    const vis = new Set(), par = {}, queue = [sNode]
+    vis.add(sNode); par[sNode] = null
 
-    const distances = {}
-    const parents = {}
-    const visited = new Set()
-    const pq = []
-
-    for (const node of nodes) {
-      distances[node.id] = Number.POSITIVE_INFINITY
-      parents[node.id] = null
-    }
-    distances[startNode] = 0
-    pq.push({ id: startNode, distance: 0 })
-
-    while (pq.length > 0) {
+    while (queue.length) {
       if (stopRef.current) return
-      await waitWhilePaused()
+      await waitPause()
+      const cur = queue.shift()
+      vis.add(cur); setVisitedCount(vis.size); trackVisit(vis.size)
 
-      pq.sort((a, b) => a.distance - b.distance)
-      const next = pq.shift()
-      if (!next) break
-      const { id: currentId } = next
+      setNodes(prev => prev.map(n => ({
+        ...n,
+        state: n.id === cur ? "current"
+          : n.id === sNode ? "start"
+          : n.id === eNode ? "end"
+          : vis.has(n.id) ? "visited"
+          : n.state,
+      })))
 
-      if (visited.has(currentId)) continue
-      visited.add(currentId)
-      setVisitedCount(visited.size)
+      await delay(stepDelay())
+      if (cur === eNode) { await reconstructPath(par, eNode, sNode); return }
 
-      setNodes((prev) =>
-        prev.map((n) => ({
-          ...n,
-          state:
-            n.id === currentId
-              ? "current"
-              : n.id === startNode
-                ? "start"
-                : n.id === endNode
-                  ? "end"
-                  : visited.has(n.id)
-                    ? "visited"
-                    : n.state,
-          distance: distances[n.id],
-          parent: parents[n.id],
-        })),
-      )
-
-      await delay(Math.max(50, 200 - speed * 2))
-
-      if (currentId === endNode) {
-        await reconstructPath(endNode)
-        return
+      for (const { id: nb } of getNeighbors(cur, currentEdges)) {
+        if (!vis.has(nb)) {
+          vis.add(nb); par[nb] = cur; queue.push(nb)
+          markEdge(cur, nb, activeEdges, setActiveEdges)
+        }
       }
+    }
+  }
 
-      for (const { id: neighborId, weight } of getNeighbors(currentId)) {
-        if (!visited.has(neighborId)) {
-          const newDist = distances[currentId] + weight
-          if (newDist < distances[neighborId]) {
-            distances[neighborId] = newDist
-            parents[neighborId] = currentId
-            pq.push({ id: neighborId, distance: newDist })
+  const runDFS = async (currentEdges, sNode, eNode) => {
+    const vis = new Set(), par = {}, stack = [sNode]
+    par[sNode] = null
+
+    while (stack.length) {
+      if (stopRef.current) return
+      await waitPause()
+      const cur = stack.pop()
+      if (vis.has(cur)) continue
+      vis.add(cur); setVisitedCount(vis.size)
+
+      setNodes(prev => prev.map(n => ({
+        ...n,
+        state: n.id === cur ? "current"
+          : n.id === sNode ? "start"
+          : n.id === eNode ? "end"
+          : vis.has(n.id) ? "visited"
+          : n.state,
+      })))
+
+      await delay(stepDelay())
+      if (cur === eNode) { await reconstructPath(par, eNode, sNode); return }
+
+      for (const { id: nb } of getNeighbors(cur, currentEdges)) {
+        if (!vis.has(nb)) {
+          par[nb] = cur; stack.push(nb)
+          markEdge(cur, nb, activeEdges, setActiveEdges)
+        }
+      }
+    }
+  }
+
+  const runAstar = async (currentEdges, sNode, eNode) => {
+    const g = {}, par = {}, vis = new Set(), open = []
+    GRAPH_POSITIONS.forEach((_, i) => { g[i] = Infinity; par[i] = null })
+    g[sNode] = 0
+    open.push({ id: sNode, f: heuristic(sNode, eNode) })
+
+    while (open.length) {
+      if (stopRef.current) return
+      await waitPause()
+      open.sort((a,b) => a.f - b.f)
+      const { id: cur } = open.shift()
+      if (vis.has(cur)) continue
+      vis.add(cur); setVisitedCount(vis.size)
+
+      setNodes(prev => prev.map(n => ({
+        ...n,
+        state: n.id === cur ? "current"
+          : n.id === sNode ? "start"
+          : n.id === eNode ? "end"
+          : vis.has(n.id) ? "visited"
+          : n.state,
+      })))
+
+      await delay(stepDelay())
+      if (cur === eNode) { await reconstructPath(par, eNode, sNode); return }
+
+      for (const { id: nb, weight } of getNeighbors(cur, currentEdges)) {
+        if (!vis.has(nb)) {
+          const newG = g[cur] + weight
+          if (newG < g[nb]) {
+            g[nb] = newG; par[nb] = cur
+            open.push({ id: nb, f: newG + heuristic(nb, eNode) })
+            markEdge(cur, nb, activeEdges, setActiveEdges)
           }
         }
       }
     }
   }
 
-  const bfs = async () => {
-    if (startNode === null) return
-
-    const visited = new Set()
-    const parents = {}
-    const queue = [startNode]
-    visited.add(startNode)
-    parents[startNode] = null
-
-    while (queue.length > 0) {
-      if (stopRef.current) return
-      await waitWhilePaused()
-
-      const currentId = queue.shift()
-      if (currentId === undefined || currentId === null) break
-      setVisitedCount(visited.size)
-
-      setNodes((prev) =>
-        prev.map((n) => ({
-          ...n,
-          state:
-            n.id === currentId
-              ? "current"
-              : n.id === startNode
-                ? "start"
-                : n.id === endNode
-                  ? "end"
-                  : visited.has(n.id)
-                    ? "visited"
-                    : n.state,
-          parent: parents[n.id] ?? null,
-        })),
-      )
-
-      await delay(Math.max(50, 200 - speed * 2))
-
-      if (currentId === endNode) {
-        await reconstructPath(endNode)
-        return
-      }
-
-      for (const { id: neighborId } of getNeighbors(currentId)) {
-        if (!visited.has(neighborId)) {
-          visited.add(neighborId)
-          parents[neighborId] = currentId
-          queue.push(neighborId)
-        }
-      }
-    }
-  }
-
-  const dfs = async () => {
-    if (startNode === null) return
-
-    const visited = new Set()
-    const parents = {}
-    const stack = [startNode]
-    parents[startNode] = null
-
-    while (stack.length > 0) {
-      if (stopRef.current) return
-      await waitWhilePaused()
-
-      const currentId = stack.pop()
-      if (currentId === undefined || currentId === null) continue
-
-      if (visited.has(currentId)) continue
-      visited.add(currentId)
-      setVisitedCount(visited.size)
-
-      setNodes((prev) =>
-        prev.map((n) => ({
-          ...n,
-          state:
-            n.id === currentId
-              ? "current"
-              : n.id === startNode
-                ? "start"
-                : n.id === endNode
-                  ? "end"
-                  : visited.has(n.id)
-                    ? "visited"
-                    : n.state,
-          parent: parents[n.id] ?? null,
-        })),
-      )
-
-      await delay(Math.max(50, 200 - speed * 2))
-
-      if (currentId === endNode) {
-        await reconstructPath(endNode)
-        return
-      }
-
-      for (const { id: neighborId } of getNeighbors(currentId)) {
-        if (!visited.has(neighborId)) {
-          parents[neighborId] = currentId
-          stack.push(neighborId)
-        }
-      }
-    }
-  }
-
+  /* ── run ── */
   const runAlgorithm = async () => {
     setIsRunning(true)
-    stopRef.current = false
-    pauseRef.current = false
-    setVisitedCount(0)
+    stopRef.current = false; pauseRef.current = false
+    setVisitedCount(0); setPathLength(null); setPathEdges(new Set()); setActiveEdges(new Set())
+    setVisitedHistory([]); visStepRef.current = 0
 
-    // Reset node states
-    setNodes((prev) =>
-      prev.map((n) => ({
-        ...n,
-        state: n.id === startNode ? "start" : n.id === endNode ? "end" : "default",
-        distance: Number.POSITIVE_INFINITY,
-        parent: null,
-      })),
-    )
+    const startTime = Date.now()
+    timerRef.current = setInterval(() => setElapsed(Date.now() - startTime), 100)
 
-    await delay(100)
+    setNodes(prev => prev.map(n => ({
+      ...n, state: n.id === startNode ? "start" : n.id === endNode ? "end" : "default",
+      distance: Infinity, parent: null,
+    })))
+    await delay(80)
 
     switch (algorithm) {
-      case "dijkstra":
-        await dijkstra()
-        break
-      case "bfs":
-        await bfs()
-        break
-      case "dfs":
-        await dfs()
-        break
+      case "dijkstra": await runDijkstra(edges, startNode, endNode); break
+      case "bfs":      await runBFS(edges, startNode, endNode); break
+      case "dfs":      await runDFS(edges, startNode, endNode); break
+      case "astar":    await runAstar(edges, startNode, endNode); break
     }
 
-    setIsRunning(false)
-    setIsPaused(false)
+    clearInterval(timerRef.current)
+    setIsRunning(false); setIsPaused(false)
   }
 
-  const togglePause = () => {
-    pauseRef.current = !pauseRef.current
-    setIsPaused(!isPaused)
-  }
+  const togglePause = () => { pauseRef.current = !pauseRef.current; setIsPaused(p => !p) }
+  const reset       = () => { stopRef.current = true; clearInterval(timerRef.current); buildGraph() }
 
-  const stop = () => {
-    stopRef.current = true
-    pauseRef.current = false
-    setIsRunning(false)
-    setIsPaused(false)
-    generateGraph()
-  }
-
-  const handleNodeClick = (nodeId) => {
+  const handleNodeClick = nodeId => {
     if (isRunning) return
-
     if (selectMode === "start") {
       setStartNode(nodeId)
-      setNodes((prev) =>
-        prev.map((n) => ({
-          ...n,
-          state: n.id === nodeId ? "start" : n.id === endNode ? "end" : "default",
-        })),
-      )
+      setNodes(prev => prev.map(n => ({ ...n, state: n.id === nodeId ? "start" : n.id === endNode ? "end" : "default" })))
       setSelectMode(null)
     } else if (selectMode === "end") {
       setEndNode(nodeId)
-      setNodes((prev) =>
-        prev.map((n) => ({
-          ...n,
-          state: n.id === startNode ? "start" : n.id === nodeId ? "end" : "default",
-        })),
-      )
+      setNodes(prev => prev.map(n => ({ ...n, state: n.id === startNode ? "start" : n.id === nodeId ? "end" : "default" })))
       setSelectMode(null)
     }
   }
 
-  const getNodeColor = (state) => {
-    switch (state) {
-      case "start":
-        return "fill-chart-2"
-      case "end":
-        return "fill-chart-4"
-      case "visited":
-        return "fill-chart-1"
-      case "current":
-        return "fill-chart-3"
-      case "path":
-        return "fill-chart-2"
-      default:
-        return "fill-muted-foreground"
-    }
+  const meta = ALGO_META[algorithm]
+
+  /* ── node style based on theme ── */
+  const NODE_STYLE_T = {
+    default:  { fill: isDark ? "#334155" : "#94a3b8",  stroke: isDark ? "#475569" : "#cbd5e1", textFill: isDark ? "#94a3b8" : "#fff",    r: 22 },
+    start:    { fill: "#10b981", stroke: "#34d399", textFill: "#fff", r: 24, glow: "#10b981" },
+    end:      { fill: "#ef4444", stroke: "#f87171", textFill: "#fff", r: 24, glow: "#ef4444" },
+    visited:  { fill: isDark ? "#3730a3" : "#818cf8",  stroke: isDark ? "#6366f1" : "#6366f1", textFill: "#fff", r: 22 },
+    current:  { fill: "#7c3aed", stroke: "#c084fc", textFill: "#fff", r: 26, glow: "#c084fc" },
+    path:     { fill: "#f59e0b", stroke: "#fcd34d", textFill: "#fff", r: 24, glow: "#f59e0b" },
+    frontier: { fill: "#0ea5e9", stroke: "#38bdf8", textFill: "#fff", r: 22 },
   }
 
+  /* ── edge key helper ── */
+  const edgeKey = (a, b) => `${Math.min(a,b)}-${Math.max(a,b)}`
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col lg:flex-row gap-4">
-        <Card className="flex-1 bg-card border-border">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg text-card-foreground">Controls</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex flex-wrap gap-3">
-              <Select value={algorithm} onValueChange={(v) => setAlgorithm(v)} disabled={isRunning}>
-                <SelectTrigger className="w-48 bg-secondary text-secondary-foreground border-border">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(algorithmInfo).map(([key, info]) => (
-                    <SelectItem key={key} value={key}>
-                      {info.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+    <div className="flex flex-col gap-4 p-4 md:p-6 h-full" style={{ background: c.bg, color: c.text }}>
 
-              <Button onClick={isRunning ? togglePause : runAlgorithm} className="text-black border gap-2">
-                {isRunning ? (
-                  isPaused ? (
-                    <>
-                      <Play className="w-4 h-4" /> Resume
-                    </>
-                  ) : (
-                    <>
-                      <Pause className="w-4 h-4" /> Pause
-                    </>
-                  )
-                ) : (
-                  <>
-                    <Play className="w-4 h-4" /> Start
-                  </>
-                )}
-              </Button>
+      {/* ── Top controls bar ── */}
+      <div className="flex flex-wrap items-center gap-3">
 
-              <Button variant="outline" onClick={stop} className="gap-2 bg-transparent">
-                <RotateCcw className="w-4 h-4" /> Reset
-              </Button>
-            </div>
+        {/* Algorithm selector */}
+        <div className="flex gap-1 rounded-xl p-1 flex-wrap" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+          {Object.entries(ALGO_META).map(([key, m]) => (
+            <button
+              key={key}
+              onClick={() => !isRunning && setAlgorithm(key)}
+              disabled={isRunning}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${algorithm === key ? "text-white shadow-md" : ""}`}
+              style={algorithm === key ? { background: m.color } : { color: c.muted }}
+              onMouseOver={e => { if (algorithm !== key) e.currentTarget.style.color = c.text }}
+              onMouseOut={e => { if (algorithm !== key) e.currentTarget.style.color = c.muted }}
+            >
+              {m.name.split(" ")[0]}
+            </button>
+          ))}
+        </div>
 
-            <div className="flex flex-wrap gap-2">
-              <Button
-                variant={selectMode === "start" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectMode(selectMode === "start" ? null : "start")}
-                disabled={isRunning}
-                className="gap-2"
-              >
-                <MousePointer2 className="w-4 h-4" />
-                {selectMode === "start" ? "Click a node..." : "Set Start"}
-              </Button>
-              <Button
-                variant={selectMode === "end" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectMode(selectMode === "end" ? null : "end")}
-                disabled={isRunning}
-                className="gap-2"
-              >
-                <MousePointer2 className="w-4 h-4" />
-                {selectMode === "end" ? "Click a node..." : "Set End"}
-              </Button>
-            </div>
+        {/* Speed slider */}
+        <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+          <span className="text-[11px]" style={{ color: c.muted }}>Speed</span>
+          <input type="range" min={0} max={100} value={speed} onChange={e => setSpeed(+e.target.value)}
+            className="w-20" style={{ accentColor: meta.color }} />
+          <span className="text-[11px] font-bold w-8" style={{ color: c.text }}>{speed}%</span>
+        </div>
 
-            <div className="space-y-2">
-              <label className="text-sm text-muted-foreground">Speed: {speed}%</label>
-              <Slider value={[speed]} onValueChange={([v]) => setSpeed(v)} min={-50} max={100} step={1} />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="w-full lg:w-64 bg-card border-border">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg text-card-foreground">{algorithmInfo[algorithm].name}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <p className="text-sm text-muted-foreground">{algorithmInfo[algorithm].description}</p>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Complexity:</span>
-              <span className="font-mono text-primary">{algorithmInfo[algorithm].complexity}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Visited Nodes:</span>
-              <span className="font-mono text-chart-1">{visitedCount}</span>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Playback controls */}
+        <div className="flex gap-2 ml-auto">
+          <button
+            onClick={() => setSelectMode(m => m === "start" ? null : "start")}
+            disabled={isRunning}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${selectMode === "start" ? "text-white shadow-sm" : ""}`}
+            style={selectMode === "start" ? { background: "#10b981" } : { background: c.panel, border: `1px solid ${c.border}`, color: c.text }}
+          >
+            <MousePointer2 size={13} />
+            {selectMode === "start" ? "Pick start…" : "Set Start"}
+          </button>
+          <button
+            onClick={() => setSelectMode(m => m === "end" ? null : "end")}
+            disabled={isRunning}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${selectMode === "end" ? "text-white shadow-sm" : ""}`}
+            style={selectMode === "end" ? { background: "#ef4444" } : { background: c.panel, border: `1px solid ${c.border}`, color: c.text }}
+          >
+            <MousePointer2 size={13} />
+            {selectMode === "end" ? "Pick end…" : "Set End"}
+          </button>
+          <button
+            onClick={isRunning ? togglePause : runAlgorithm}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 shadow-lg"
+            style={{ background: `linear-gradient(135deg, ${meta.color}, ${meta.color}cc)` }}
+          >
+            {isRunning ? (isPaused ? <><Play size={14}/> Resume</> : <><Pause size={14}/> Pause</>) : <><Play size={14}/> Run</>}
+          </button>
+          <button
+            onClick={reset}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
+            style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}
+          >
+            <RotateCcw size={13} /> Reset
+          </button>
+        </div>
       </div>
 
-      <Card className="bg-card border-border">
-        <CardContent className="pt-6">
-          <svg ref={svgRef} viewBox="0 0 640 380" className="w-full h-64 md:h-80">
-            {/* Edges */}
-            {edges.map((edge, i) => {
-              const fromNode = nodes.find((n) => n.id === edge.from)
-              const toNode = nodes.find((n) => n.id === edge.to)
-              if (!fromNode || !toNode) return null
+      {/* ── Stats chips ── */}
+      <div className="flex flex-wrap gap-2">
+        {[
+          { label: "Algorithm",     value: meta.name,                  color: meta.color },
+          { label: "Complexity",    value: meta.complexity,            color: "#6366f1" },
+          { label: "Space",         value: meta.space,                 color: "#8b5cf6" },
+          { label: "Nodes visited", value: visitedCount,               color: "#0ea5e9" },
+          { label: "Path weight",   value: pathLength !== null ? pathLength : "—", color: "#f59e0b" },
+          { label: "Time",          value: `${(elapsed/1000).toFixed(1)}s`, color: "#10b981" },
+        ].map(({ label, value, color }) => (
+          <div key={label} className="flex items-center gap-2 border rounded-xl px-3 py-1.5"
+            style={{ background: c.panel, borderColor: c.border }}>
+            <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
+            <span className="text-[10px]" style={{ color: c.muted }}>{label}:</span>
+            <span className="text-[11px] font-bold font-mono" style={{ color: c.text }}>{value}</span>
+          </div>
+        ))}
+      </div>
 
-              const midX = (fromNode.x + toNode.x) / 2
-              const midY = (fromNode.y + toNode.y) / 2
+      {/* ── Main graph SVG ── */}
+      <div className="flex-1 rounded-2xl overflow-hidden relative min-h-[420px]"
+        style={{ background: c.inner, border: `1px solid ${c.border}` }}>
+        {/* Algorithm description overlay */}
+        <div className="absolute top-3 left-3 z-10 max-w-[260px] backdrop-blur rounded-xl px-3 py-2 border"
+          style={{ background: isDark ? "rgba(30, 41, 59, 0.9)" : "rgba(255, 255, 255, 0.9)", borderColor: c.border }}>
+          <div className="flex items-center gap-1.5 mb-1">
+            <Info size={11} style={{ color: meta.color }} />
+            <span className="text-[11px] font-semibold" style={{ color: meta.color }}>{meta.name}</span>
+          </div>
+          <p className="text-[10px] leading-relaxed" style={{ color: c.muted }}>{meta.description}</p>
+        </div>
 
-              return (
-                <g key={i}>
-                  <line
-                    x1={fromNode.x}
-                    y1={fromNode.y}
-                    x2={toNode.x}
-                    y2={toNode.y}
-                    className="stroke-border"
-                    strokeWidth={2}
+        <svg viewBox="0 0 640 500" className="w-full h-full" style={{ minHeight: 420 }}>
+          <defs>
+            {/* glow filters */}
+            {["start","end","current","path"].map(s => (
+              <filter key={s} id={`glow-${s}`} x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            ))}
+            <filter id="glow-edge" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2.5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          {/* background grid dots */}
+          {Array.from({ length: 13 }, (_, r) => Array.from({ length: 17 }, (_, c) => (
+            <circle key={`${r}-${c}`} cx={c * 40} cy={r * 40} r={1} fill={c.grid} opacity={0.3} />
+          )))}
+
+          {/* Edges */}
+          {edges.map((edge, i) => {
+            const fn = nodes.find(n => n.id === edge.from)
+            const tn = nodes.find(n => n.id === edge.to)
+            if (!fn || !tn) return null
+            const key = edgeKey(edge.from, edge.to)
+            const isPath   = pathEdges.has(key)
+            const isActive = activeEdges.has(key)
+            const mx = (fn.x + tn.x) / 2
+            const my = (fn.y + tn.y) / 2
+            return (
+              <g key={i}>
+                {/* glow copy for path */}
+                {isPath && (
+                  <line x1={fn.x} y1={fn.y} x2={tn.x} y2={tn.y}
+                    stroke="#f59e0b" strokeWidth={6} opacity={0.35}
+                    filter="url(#glow-edge)" strokeLinecap="round"
                   />
-                  {algorithm === "dijkstra" && (
-                    <text x={midX} y={midY - 8} className="fill-muted-foreground text-xs" textAnchor="middle">
-                      {edge.weight}
-                    </text>
-                  )}
-                </g>
-              )
-            })}
-
-            {/* Nodes */}
-            {nodes.map((node) => (
-              <g key={node.id} onClick={() => handleNodeClick(node.id)} className="cursor-pointer">
-                <circle
-                  cx={node.x}
-                  cy={node.y}
-                  r={20}
-                  className={`${getNodeColor(node.state)} transition-colors duration-200`}
+                )}
+                <line
+                  x1={fn.x} y1={fn.y} x2={tn.x} y2={tn.y}
+                  stroke={isPath ? "#f59e0b" : isActive ? "#6366f1" : (isDark ? "#334155" : "#cbd5e1")}
+                  strokeWidth={isPath ? 3 : isActive ? 2 : 1.5}
+                  strokeLinecap="round"
+                  style={{ transition: "stroke 0.3s, stroke-width 0.3s" }}
                 />
-                <text x={node.x} y={node.y + 5} className="fill-background text-sm font-medium" textAnchor="middle">
+                {/* weight label — only for dijkstra/astar */}
+                {(algorithm === "dijkstra" || algorithm === "astar") && (
+                  <text x={mx} y={my - 6} fill="#64748b" fontSize={9} textAnchor="middle" fontFamily="monospace">
+                    {edge.weight}
+                  </text>
+                )}
+              </g>
+            )
+          })}
+
+          {/* Nodes */}
+          {nodes.map(node => {
+            const s    = NODE_STYLE_T[node.state] || NODE_STYLE_T.default
+            const glow = ["start","end","current","path"].includes(node.state)
+            return (
+              <g
+                key={node.id}
+                onClick={() => handleNodeClick(node.id)}
+                style={{ cursor: selectMode ? "crosshair" : "pointer" }}
+              >
+                {/* outer glow ring */}
+                {glow && (
+                  <circle cx={node.x} cy={node.y} r={s.r + 6} fill="none"
+                    stroke={s.glow} strokeWidth={2} opacity={0.35}
+                    filter={`url(#glow-${node.state})`}
+                  />
+                )}
+                {/* main circle */}
+                <circle
+                  cx={node.x} cy={node.y} r={s.r}
+                  fill={s.fill} stroke={s.stroke} strokeWidth={2}
+                  style={{ transition: "all 0.25s ease", filter: glow ? `drop-shadow(0 0 6px ${s.glow})` : "none" }}
+                />
+                {/* node label */}
+                <text x={node.x} y={node.y + 1} fill={s.textFill}
+                  fontSize={11} fontWeight="700" textAnchor="middle" dominantBaseline="middle"
+                  fontFamily="monospace"
+                >
                   {node.id}
                 </text>
+                {/* start/end label */}
+                {node.id === startNode && (
+                  <text x={node.x} y={node.y - s.r - 6} fill="#34d399" fontSize={9} textAnchor="middle" fontWeight="600">S</text>
+                )}
+                {node.id === endNode && (
+                  <text x={node.x} y={node.y - s.r - 6} fill="#f87171" fontSize={9} textAnchor="middle" fontWeight="600">E</text>
+                )}
               </g>
-            ))}
-          </svg>
+            )
+          })}
+        </svg>
+      </div>
 
-          <div className="flex flex-wrap justify-center gap-4 mt-4 text-xs">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-muted-foreground" />
-              <span className="text-muted-foreground">Unvisited</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-chart-2" />
-              <span className="text-muted-foreground">Start</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-chart-4" />
-              <span className="text-muted-foreground">End</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-chart-3" />
-              <span className="text-muted-foreground">Current</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-chart-1" />
-              <span className="text-muted-foreground">Visited</span>
-            </div>
+      {/* ── Live visited-nodes chart (Recharts) ── */}
+      {visitedHistory.length > 2 && (
+        <div className="rounded-2xl p-4" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+          <div className="flex items-center gap-1.5 mb-2">
+            <TrendingUp size={12} style={{ color: meta.color }} />
+            <span className="text-[11px] font-semibold" style={{ color: c.text }}>Nodes Visited Over Time</span>
           </div>
-        </CardContent>
-      </Card>
+          <ResponsiveContainer width="100%" height={90}>
+            <AreaChart data={visitedHistory} margin={{ top: 4, right: 8, left: -20, bottom: 0 }}>
+              <defs>
+                <linearGradient id="visitGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={meta.color} stopOpacity={0.4} />
+                  <stop offset="95%" stopColor={meta.color} stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke={c.border} opacity={0.4} />
+              <XAxis dataKey="step" hide />
+              <YAxis tick={{ fill: c.muted, fontSize: 9 }} axisLine={false} tickLine={false} />
+              <Tooltip contentStyle={{ background: c.panel, border: `1px solid ${c.border}`, borderRadius: 8, fontSize: 11, color: c.text }} />
+              <Area type="monotone" dataKey="visited" stroke={meta.color} fill="url(#visitGrad)"
+                strokeWidth={2} dot={false} isAnimationActive={false} name="Nodes visited" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      {/* ── Legend ── */}
+      <div className="flex flex-wrap gap-3 justify-center">
+        {[
+          { label: "Unvisited",  color: isDark ? "#1e293b" : "#cbd5e1" },
+          { label: "Start",      color: "#10b981" },
+          { label: "End",        color: "#ef4444" },
+          { label: "Current",    color: "#7c3aed" },
+          { label: "Visited",    color: isDark ? "#3730a3" : "#818cf8" },
+          { label: "Shortest Path", color: "#f59e0b" },
+          { label: "Exploring", color: "#6366f1" },
+        ].map(({ label, color }) => (
+          <div key={label} className="flex items-center gap-1.5">
+            <span className="w-3 h-3 rounded-full flex-shrink-0 border border-white/10" style={{ background: color }} />
+            <span className="text-[11px]" style={{ color: c.muted }}>{label}</span>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

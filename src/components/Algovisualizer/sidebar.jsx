@@ -1,78 +1,158 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { BarChart3, GitBranch, TreeDeciduous, Repeat, X } from "lucide-react"
+import { BarChart3, GitBranch, TreeDeciduous, Repeat, X, Cpu } from "lucide-react"
 
 const categories = [
   {
     id: "sorting",
     label: "Sorting",
     icon: BarChart3,
-    description: "Bubble, Quick, Merge, Selection, Insertion",
+    description: "Bubble · Quick · Merge · Heap",
+    color: "#6366f1",
+    badge: "5 algos",
   },
-  { id: "graph", label: "Graph", icon: GitBranch, description: "Dijkstra, BFS, DFS" },
-  { id: "tree", label: "Tree", icon: TreeDeciduous, description: "BST, Traversals" },
-  { id: "recursion", label: "Recursion", icon: Repeat, description: "Fibonacci, Factorial, Tower of Hanoi" },
+  {
+    id: "graph",
+    label: "Graph",
+    icon: GitBranch,
+    description: "Dijkstra · BFS · DFS · A*",
+    color: "#10b981",
+    badge: "4 algos",
+  },
+  {
+    id: "tree",
+    label: "Trees",
+    icon: TreeDeciduous,
+    description: "BST · Inorder · Preorder · AVL",
+    color: "#f59e0b",
+    badge: "3 algos",
+  },
+  {
+    id: "recursion",
+    label: "Recursion",
+    icon: Repeat,
+    description: "Fibonacci · Factorial · Hanoi",
+    color: "#ec4899",
+    badge: "3 algos",
+  },
 ]
 
-export function Sidebar({ activeCategory, setActiveCategory, isOpen, onClose }) {
+export function Sidebar({ activeCategory, setActiveCategory, isOpen, onClose, theme = "dark" }) {
+  const isDark = theme === "dark"
+  const c = {
+    bg:     isDark ? "#0f172a" : "#ffffff", // Slate 900 / White
+    border: isDark ? "#1e293b" : "#e2e8f0", // Slate 800 / Slate 200
+    text:   isDark ? "#f1f5f9" : "#0f172a", // Slate 100 / Slate 900
+    muted:  isDark ? "#94a3b8" : "#64748b", // Slate 400 / Slate 500
+    hover:  isDark ? "#1e293b" : "#f1f5f9", // Slate 800 / Slate 100
+    active: isDark ? "#1e293b" : "#f1f5f9", // Slate 800 / Slate 100
+    tip:    isDark ? "#020617" : "#f8fafc", // Slate 950 / Slate 50
+    kbd:    isDark ? "#1e293b" : "#e2e8f0", // Slate 800 / Slate 200
+  }
   return (
     <>
       {/* Mobile overlay */}
-      {isOpen && <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden" onClick={onClose} />}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
 
       <aside
         className={cn(
-          "fixed lg:relative z-50 h-full w-72 bg-sidebar border-r border-sidebar-border flex flex-col transition-transform duration-200",
+          "fixed lg:relative z-50 h-full flex flex-col transition-transform duration-250",
+          "w-64 border-r",
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
+        style={{ background: c.bg, borderColor: c.border }}
       >
-        <div className="h-14 border-b border-sidebar-border flex items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <BarChart3 className="w-4 h-4 text-primary-foreground" />
+        {/* Header */}
+        <div className="h-14 flex items-center justify-between px-4 flex-shrink-0 border-b" style={{ borderColor: c.border }}>
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+              <Cpu className="w-4 h-4 text-white" />
             </div>
-            <span className="font-semibold text-sidebar-foreground">AlgoViz</span>
+            <div>
+              <span className="font-bold text-sm block leading-none" style={{ color: c.text }}>AlgoViz</span>
+              <span className="text-[10px]" style={{ color: c.muted }}>Interactive Visualizer</span>
+            </div>
           </div>
-          <Button variant="ghost" size="icon" className="lg:hidden text-sidebar-foreground" onClick={onClose}>
-            <X className="h-5 w-5" />
-          </Button>
+          <button
+            onClick={onClose}
+            className="lg:hidden p-1.5 rounded-lg transition-colors"
+              style={{ color: c.muted }}
+              onMouseOver={e => e.currentTarget.style.background = c.hover}
+              onMouseOut={e => e.currentTarget.style.background = 'transparent'}
+            >
+            <X className="h-4 w-4" />
+          </button>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2">
-          {categories.map((category) => {
-            const Icon = category.icon
-            const isActive = activeCategory === category.id
-
+        {/* Nav */}
+        <nav className="flex-1 p-3 space-y-1.5 overflow-y-auto">
+          <p className="text-[10px] font-bold uppercase tracking-widest px-2 pb-1" style={{ color: c.muted }}>Categories</p>
+          {categories.map((cat) => {
+            const Icon = cat.icon
+            const isActive = activeCategory === cat.id
             return (
               <button
-                key={category.id}
-                onClick={() => {
-                  setActiveCategory(category.id)
-                  onClose()
-                }}
+                key={cat.id}
+                onClick={() => { setActiveCategory(cat.id); onClose() }}
                 className={cn(
-                  "w-full flex items-start gap-3 p-3 rounded-lg transition-colors text-left",
-                  isActive
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent/50",
+                  "w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all duration-200 group",
+                  isActive ? "" : "",
                 )}
+                style={isActive ? { background: c.active } : {}}
+                onMouseOver={e => { if (!isActive) e.currentTarget.style.background = c.hover }}
+                onMouseOut={e => { if (!isActive) e.currentTarget.style.background = 'transparent' }}
               >
-                <Icon
-                  className={cn("w-5 h-5 mt-0.5 shrink-0", isActive ? "text-sidebar-primary" : "text-muted-foreground")}
-                />
-                <div>
-                  <div className="font-medium">{category.label}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">{category.description}</div>
+                {/* Icon box */}
+                <div
+                  className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-transform duration-200 group-hover:scale-105"
+                  style={{
+                    background: isActive ? cat.color : (isDark ? "#1e293b" : "#f1f5f9"),
+                    boxShadow: isActive ? `0 4px 12px ${cat.color}40` : "none",
+                  }}
+                >
+                  <Icon size={16} style={{ color: isActive ? "#fff" : cat.color }} />
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1">
+                    <span
+                      className="text-sm font-semibold truncate"
+                      style={{ color: isActive ? (isDark ? "#fff" : "#0f172a") : c.muted }}
+                    >
+                      {cat.label}
+                    </span>
+                    <span
+                      className="text-[9px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+                      style={{
+                        background: isActive ? `${cat.color}25` : (isDark ? "#1e293b" : "#f1f5f9"),
+                        color: isActive ? cat.color : c.muted,
+                      }}
+                    >
+                      {cat.badge}
+                    </span>
+                  </div>
+                   <p className="text-[10px] mt-0.5 truncate" style={{ color: c.muted }}>{cat.description}</p>
                 </div>
               </button>
             )
           })}
         </nav>
 
-        <div className="p-4 border-t border-sidebar-border">
-          <div className="text-xs text-muted-foreground">Click on bars/nodes to interact</div>
+        {/* Footer tip */}
+        <div className="p-4 flex-shrink-0 border-t" style={{ borderColor: c.border }}>
+          <div className="bg-tip rounded-xl p-3" style={{ background: c.tip }}>
+            <p className="text-[10px] leading-relaxed" style={{ color: c.muted }}>
+              💡 <span className="font-semibold" style={{ color: c.text }}>Tip:</span> Click on nodes or bars to interact.
+              Use <kbd className="px-1 py-0.5 rounded text-[9px]" style={{ background: c.kbd, color: c.text }}>Set Start</kbd> /
+              <kbd className="px-1 py-0.5 rounded text-[9px]" style={{ background: c.kbd, color: c.text }}> Set End</kbd> to pick source & target.
+            </p>
+          </div>
         </div>
       </aside>
     </>

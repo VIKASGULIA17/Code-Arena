@@ -225,7 +225,7 @@ export function RecursionVisualizer() {
                 max={getMaxInput()}
               />
 
-              <Button onClick={isRunning ? togglePause : runAlgorithm} className="text-black border gap-2">
+              <Button onClick={isRunning ? togglePause : runAlgorithm} className="border gap-2">
                 {isRunning ? (
                   isPaused ? (
                     <>
