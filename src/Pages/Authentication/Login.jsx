@@ -60,15 +60,15 @@ const Login = () => {
   };
 
   const socialButtons = [
-    { icon: FaGoogle, className: "border border-gray-200 hover:bg-gray-50 text-green-500" },
+    { icon: FaGoogle, className: "border border-slate-200 hover:bg-slate-50 text-green-500" },
     { icon: FaDiscord, className: "bg-[#5865F2] text-white hover:opacity-90" },
     { icon: FaTwitch, className: "bg-[#9146FF] text-white hover:opacity-90" },
     { icon: FaFacebook, className: "bg-[#1976D2] text-white hover:opacity-90" },
-    { icon: FaApple, className: "bg-gray-900 text-white hover:opacity-90" },
+    { icon: FaApple, className: "bg-slate-900 text-white hover:opacity-90" },
   ];
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 flex flex-col">
+    <div className="min-h-screen w-full bg-[#fafafa] flex flex-col">
       <EnhancedNavbar />
 
       <div className="flex-1 flex items-center justify-center pt-24 pb-10 px-4 sm:px-6">
@@ -84,15 +84,15 @@ const Login = () => {
 
           {/* Right: Form */}
           <div className="w-full lg:w-1/2 p-6 sm:p-8 lg:p-10 flex flex-col justify-center bg-white">
-            <div className="mb-6 text-center lg:text-left">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">Welcome back</h1>
-              <p className="text-sm text-gray-500">Sign in to continue your journey</p>
+            <div className="mb-7">
+              <h1 className="text-2xl font-bold text-slate-900 mb-1">Sign In</h1>
+              <p className="text-sm text-slate-500">Enter your credentials to continue</p>
             </div>
 
             {/* Social Buttons */}
-            <div className="flex flex-wrap justify-center lg:justify-start gap-2.5 mb-6">
+            <div className="flex flex-wrap justify-start gap-2.5 mb-6">
               {socialButtons.map(({ icon: Icon, className }, i) => (
-                <button key={i} className={`p-2.5 rounded-xl transition-all ${className}`}>
+                <button key={i} className={`p-2.5 rounded-xl transition-all duration-200 ${className}`}>
                   <Icon className="w-5 h-5" />
                 </button>
               ))}
@@ -101,10 +101,10 @@ const Login = () => {
             {/* Divider */}
             <div className="relative mb-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200" />
+                <div className="w-full border-t border-slate-200" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="bg-white px-3 text-gray-400 font-medium">Or continue with</span>
+                <span className="bg-white px-3 text-slate-400 font-medium">Or continue with</span>
               </div>
             </div>
 
@@ -117,23 +117,25 @@ const Login = () => {
               {({ values, isSubmitting }) => {
                 const isFilled = values.username.length > 0 && values.password.length > 0;
                 return (
-                  <Form className="flex flex-col gap-3.5">
+                  <Form className="flex flex-col gap-4">
                     <div className="space-y-1">
+                      <label className="text-xs font-medium text-slate-500 pl-1">Username</label>
                       <Field
                         name="username"
                         type="text"
-                        placeholder="Username"
-                        className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition-all placeholder:text-gray-400 text-sm text-gray-800"
+                        placeholder="Enter your username"
+                        className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition-all duration-200 placeholder:text-slate-400 text-sm text-slate-800"
                       />
                       <ErrorMessage component="p" name="username" className="text-xs text-red-500 pl-1" />
                     </div>
 
                     <div className="space-y-1">
+                      <label className="text-xs font-medium text-slate-500 pl-1">Password</label>
                       <Field
                         name="password"
                         type="password"
-                        placeholder="••••••"
-                        className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition-all placeholder:text-gray-400 text-sm text-gray-800"
+                        placeholder="••••••••"
+                        className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 outline-none transition-all duration-200 placeholder:text-slate-400 text-sm text-slate-800"
                       />
                       <ErrorMessage component="p" name="password" className="text-xs text-red-500 pl-1" />
                     </div>
@@ -144,7 +146,7 @@ const Login = () => {
                       className={`w-full mt-1 font-semibold py-2.5 rounded-xl transition-all duration-200 text-sm flex justify-center items-center gap-2
                         ${isSubmitting ? "cursor-not-allowed opacity-70" : ""}
                         ${isFilled
-                          ? "bg-indigo-600 text-white shadow-sm shadow-indigo-200 hover:bg-indigo-700"
+                          ? "bg-indigo-600 text-white shadow-sm shadow-indigo-200/50 hover:bg-indigo-700 hover:shadow-md"
                           : "bg-indigo-100 text-indigo-400"
                         }
                       `}
@@ -159,16 +161,18 @@ const Login = () => {
                       )}
                     </button>
                     {isHighlightOpen && (
-                      <p className="text-red-600 text-xs font-semibold text-center">
-                        ***{bannedUser} is banned***
-                      </p>
+                      <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-2.5 text-center">
+                        <p className="text-red-600 text-xs font-semibold">
+                          {bannedUser} is banned from this platform
+                        </p>
+                      </div>
                     )}
                   </Form>
                 );
               }}
             </Formik>
 
-            <div className="mt-6 text-center text-sm text-gray-500">
+            <div className="mt-7 text-center text-sm text-slate-500">
               Don't have an account?{" "}
               <Link to="/signup" className="text-indigo-600 font-semibold hover:underline">
                 Create One

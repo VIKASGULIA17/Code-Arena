@@ -93,14 +93,14 @@ export function EnhancedNavbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/85 backdrop-blur-2xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] border-b border-gray-200/60'
-          : 'bg-white/60 backdrop-blur-xl border-b border-transparent'
+          ? 'bg-white/90 backdrop-blur-2xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] border-b border-slate-200/60'
+          : 'bg-white/50 backdrop-blur-xl border-b border-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div className="section-wrapper h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+        <Link to="/" className="flex items-center gap-2.5 group shrink-0">
+          <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-200">
             <Code2 size={16} className="text-white" />
           </div>
           <span className="font-bold text-lg bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -119,8 +119,8 @@ export function EnhancedNavbar() {
                 to={item.link}
                 className={`relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-200 ${
                   active
-                    ? 'text-indigo-600 bg-indigo-50'
-                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+                    ? 'text-indigo-600 bg-indigo-50/80'
+                    : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
                 }`}
               >
                 <Icon size={15} strokeWidth={active ? 2.5 : 2} />
@@ -138,29 +138,29 @@ export function EnhancedNavbar() {
         </nav>
 
         {/* Desktop Right Side */}
-        <div className="hidden lg:flex items-center gap-2">
+        <div className="hidden lg:flex items-center gap-2.5">
           {/* Search hint */}
-          <button className="flex items-center gap-2 px-3 py-1.5 text-xs text-gray-400 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-gray-500 transition-colors">
+          <button className="flex items-center gap-2 px-3 py-1.5 text-xs text-slate-400 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 hover:text-slate-500 transition-all duration-200">
             <Search size={13} />
             <span>Search</span>
-            <kbd className="ml-1 px-1.5 py-0.5 text-[10px] font-mono bg-white border border-gray-200 rounded text-gray-400">⌘K</kbd>
+            <kbd className="ml-1 px-1.5 py-0.5 text-[10px] font-mono bg-white border border-slate-200 rounded text-slate-400 shadow-[0_1px_0_rgba(0,0,0,0.05)]">⌘K</kbd>
           </button>
 
           {isJwtExist ? (
             <div className="relative" ref={userMenuRef}>
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center gap-2 px-2 py-1.5 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px-2 py-1.5 rounded-xl text-slate-600 hover:bg-slate-50 transition-all duration-200"
               >
                 <img
                   src={userProfile?.avatarLink || 'https://i.pravatar.cc/100?img=5'}
                   alt="Avatar"
-                  className="w-7 h-7 rounded-full border-2 border-gray-200 object-cover"
+                  className="w-7 h-7 rounded-full border-2 border-slate-200 object-cover"
                 />
-                <span className="font-medium text-sm text-gray-700 capitalize max-w-[100px] truncate">{userDetails?.fullName || username}</span>
+                <span className="font-medium text-sm text-slate-700 capitalize max-w-[100px] truncate">{userDetails?.fullName || username}</span>
                 <ChevronDown
                   size={13}
-                  className={`text-gray-400 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`}
+                  className={`text-slate-400 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`}
                 />
               </button>
 
@@ -172,17 +172,17 @@ export function EnhancedNavbar() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.97 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 rounded-xl shadow-xl z-50 py-1 overflow-hidden"
+                    className="absolute right-0 mt-2 w-52 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-200/50 z-50 py-1 overflow-hidden"
                   >
-                    <div className="px-4 py-2.5 border-b border-gray-100">
-                      <p className="text-[10px] text-gray-400 uppercase tracking-wider font-medium">Signed in as</p>
-                      <p className="text-sm font-semibold text-gray-900 truncate mt-0.5">{username}</p>
+                    <div className="px-4 py-2.5 border-b border-slate-100">
+                      <p className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">Signed in as</p>
+                      <p className="text-sm font-semibold text-slate-900 truncate mt-0.5">{username}</p>
                     </div>
                     <div className="py-1">
                       <Link
                         to={`/profile/${username}`}
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
                       >
                         <User size={15} />
                         <span>Profile</span>
@@ -190,7 +190,7 @@ export function EnhancedNavbar() {
                       <Link
                         to="/statistics"
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
                       >
                         <BarChart3 size={15} />
                         <span>Statistics</span>
@@ -199,17 +199,17 @@ export function EnhancedNavbar() {
                         <Link
                           to="/admin"
                           onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                          className="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
                         >
                           <Settings size={15} />
                           <span>Admin Panel</span>
                         </Link>
                       )}
                     </div>
-                    <div className="border-t border-gray-100 pt-1">
+                    <div className="border-t border-slate-100 pt-1">
                       <button
                         onClick={handleLogout}
-                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors w-full text-left"
+                        className="flex items-center gap-2.5 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors duration-150 w-full text-left"
                       >
                         <LogOut size={15} />
                         <span>Sign Out</span>
@@ -223,13 +223,13 @@ export function EnhancedNavbar() {
             <div className="flex items-center gap-2">
               <Link
                 to="/login"
-                className="px-4 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-50 transition-colors duration-200"
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200"
+                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all duration-200 shadow-sm shadow-indigo-200/50"
               >
                 Sign Up
               </Link>
@@ -239,7 +239,7 @@ export function EnhancedNavbar() {
 
         {/* Mobile Menu Toggle */}
         <button
-          className="lg:hidden p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+          className="lg:hidden p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors duration-200"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -255,7 +255,7 @@ export function EnhancedNavbar() {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="lg:hidden bg-white border-t border-gray-100 shadow-lg overflow-hidden"
+            className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-slate-100 shadow-lg overflow-hidden"
           >
             <nav className="flex flex-col p-3 gap-0.5">
               {navItems.map((item, idx) => {
@@ -266,10 +266,10 @@ export function EnhancedNavbar() {
                     key={`mobile-${idx}`}
                     to={item.link}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all text-sm ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 text-sm ${
                       active
                         ? 'bg-indigo-50 text-indigo-600'
-                        : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                        : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
                     }`}
                   >
                     <Icon size={18} strokeWidth={active ? 2.5 : 2} />
@@ -278,15 +278,15 @@ export function EnhancedNavbar() {
                 )
               })}
 
-              <div className="pt-2 border-t border-gray-100 mt-2 space-y-1">
+              <div className="pt-2 border-t border-slate-100 mt-2 space-y-1">
                 {isJwtExist ? (
                   <>
-                    <div className="px-4 py-2 text-xs text-gray-400">
-                      Signed in as <span className="text-gray-700 font-medium">{username}</span>
+                    <div className="px-4 py-2 text-xs text-slate-400">
+                      Signed in as <span className="text-slate-700 font-medium">{username}</span>
                     </div>
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-all w-full text-left font-medium text-sm"
+                      className="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl transition-all duration-200 w-full text-left font-medium text-sm"
                     >
                       <LogOut size={18} />
                       <span>Sign Out</span>
@@ -297,14 +297,14 @@ export function EnhancedNavbar() {
                     <Link
                       to="/login"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="px-4 py-3 text-center text-sm font-medium text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+                      className="px-4 py-3 text-center text-sm font-medium text-slate-700 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors duration-200"
                     >
                       Login
                     </Link>
                     <Link
                       to="/signup"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="px-4 py-3 text-center text-sm font-medium text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors"
+                      className="px-4 py-3 text-center text-sm font-medium text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors duration-200"
                     >
                       Sign Up
                     </Link>

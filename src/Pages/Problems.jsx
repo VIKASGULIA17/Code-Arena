@@ -84,18 +84,18 @@ const Problems = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#fafafa]">
       <EnhancedNavbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-10">
+      <div className="section-wrapper pt-24 pb-10">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Content */}
           <div className="flex-1 min-w-0">
             <div className="mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              <h1 className="text-4xl font-bold text-slate-900 mb-2">
                 Problem Set
               </h1>
-              <p className="text-gray-500 text-lg">
+              <p className="text-slate-500 text-lg">
                 Shape your coding skills with our curated list of problems. Search, filter, and solve.
               </p>
             </div>
@@ -122,8 +122,8 @@ const Problems = () => {
                     <Flame size={18} className="text-orange-300" />
                     <h3 className="text-white font-bold text-sm">Daily Challenge</h3>
                   </div>
-                  <span className="text-xs text-white/70 bg-white/15 px-2.5 py-1 rounded-full font-medium">
-                    April 12
+                  <span className="text-xs text-white/70 bg-white/15 px-2.5 py-1 rounded-full font-medium backdrop-blur-sm">
+                    Today
                   </span>
                 </div>
 
@@ -149,7 +149,7 @@ const Problems = () => {
                 </div>
 
                 <Link to={`/problem/${potd ? potd.id : ""}`}>
-                  <button className="w-full flex items-center justify-center gap-2 bg-white text-indigo-700 font-bold text-sm rounded-xl px-4 py-2.5 hover:bg-gray-50 transition-colors mt-2">
+                  <button className="w-full flex items-center justify-center gap-2 bg-white text-indigo-700 font-bold text-sm rounded-xl px-4 py-2.5 hover:bg-slate-50 transition-all duration-200 mt-2 shadow-sm">
                     Solve now
                     <MoveRight size={16} />
                   </button>
@@ -160,8 +160,8 @@ const Problems = () => {
             {/* Trending Companies */}
             <div className="card-elevated p-5">
               <div className="flex items-center gap-2 mb-4">
-                <Building2 size={16} className="text-gray-400" />
-                <h3 className="text-sm font-semibold text-gray-700">Trending Companies</h3>
+                <Building2 size={16} className="text-slate-400" />
+                <h3 className="text-sm font-semibold text-slate-700">Trending Companies</h3>
               </div>
               <div className="grid grid-cols-2 gap-2.5">
                 {companies.map((company) => {
@@ -169,7 +169,7 @@ const Problems = () => {
                   return (
                     <button
                       key={company.name}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all"
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all duration-200"
                     >
                       <Icon size={15} />
                       <span>{company.name}</span>

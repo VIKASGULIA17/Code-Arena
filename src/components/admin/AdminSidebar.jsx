@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FileCode2, Trophy, BarChart2, Users, LogOut } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, FileCode2, Trophy, BarChart2, Users, LogOut, ChevronLeft, ChevronRight, Code2, X } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 
-const AdminSidebar = () => {
+const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const { setisJwtExist, setjwtToken, setIsAdmin } = useAppContext();
 
     const menuItems = [
@@ -28,40 +29,113 @@ const AdminSidebar = () => {
         window.location.href = '/';
     };
 
-    return (
-        <div className="h-screen w-64 bg-white border-r text-white fixed left-0 top-0 flex flex-col border-gray-800">
-            <div className="p-6 border-b border-gray-800">
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-pink-500 via-purple-500 bg-clip-text text-transparent">
-                    Admin Panel
-                </h1>
+    const sidebarContent = (
+        <>
+            {/* Header */}
+            <div className={`shrink-0 border-b border-slate-100 flex items-center ${collapsed ? 'justify-center p-4' : 'justify-between p-5'}`}>
+                {collapsed ? (
+                    <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
+                        <Code2 size={16} className="text-white" />
+                    </div>
+                ) : (
+                    <>
+                        <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center shadow-sm">
+                                <Code2 size={16} className="text-white" />
+                            </div>
+                            <div>
+                                <h1 className="text-sm font-bold text-slate-800">Admin Panel</h1>
+                                <p className="text-[10px] text-slate-400 font-medium">Code Arena</p>
+                            </div>
+                        </div>
+                        {/* Mobile close button */}
+                        <button
+                            className="lg:hidden p-1 rounded-md text-slate-400 hover:bg-slate-100 transition-colors"
+                            onClick={() => setMobileOpen(false)}
+                        >
+                            <X size={18} />
+                        </button>
+                    </>
+                )}
             </div>
 
-            <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+            {/* Navigation */}
+            <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+                {!collapsed && (
+                    <p className="px-3 py-2 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Navigation</p>
+                )}
                 {menuItems.map((item) => (
                     <Link
                         key={item.path}
                         to={item.path}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${isActive(item.path)
-                                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                                : 'text-black hover:bg-gray-800 hover:text-white'
-                            }`}
+                        onClick={() => setMobileOpen?.(false)}
+                        title={collapsed ? item.label : undefined}
+                        className={`flex items-center gap-3 rounded-lg transition-all duration-200 ${
+                            collapsed ? 'justify-center p-3' : 'px-3 py-2.5'
+                        } ${isActive(item.path)
+                            ? 'bg-indigo-50 text-indigo-600 border-l-[3px] border-indigo-600 font-semibold'
+                            : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700 border-l-[3px] border-transparent'
+                        }`}
                     >
-                        <item.icon size={20} />
-                        <span className="font-medium">{item.label}</span>
+                        <item.icon size={18} strokeWidth={isActive(item.path) ? 2.5 : 2} />
+                        {!collapsed && <span className="text-sm font-medium">{item.label}</span>}
                     </Link>
                 ))}
             </nav>
 
-            <div className="p-4 border-t border-gray-800">
+            {/* Bottom Section */}
+            <div className={`shrink-0 border-t border-slate-100 ${collapsed ? 'p-3' : 'p-3 space-y-1'}`}>
+                {/* Collapse toggle (desktop only) */}
+                <button
+                    onClick={() => setCollapsed(!collapsed)}
+                    className={`hidden lg:flex items-center gap-2 w-full rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-all duration-200 ${
+                        collapsed ? 'justify-center p-3' : 'px-3 py-2.5'
+                    }`}
+                    title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                >
+                    {collapsed ? <ChevronRight size={18} /> : (
+                        <>
+                            <ChevronLeft size={18} />
+                            <span className="text-sm font-medium">Collapse</span>
+                        </>
+                    )}
+                </button>
+
+                {/* Logout */}
                 <button
                     onClick={handleLogout}
-                    className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                    className={`flex items-center gap-2 w-full rounded-lg text-red-400 hover:bg-red-50 hover:text-red-500 transition-all duration-200 ${
+                        collapsed ? 'justify-center p-3' : 'px-3 py-2.5'
+                    }`}
+                    title={collapsed ? 'Logout' : undefined}
                 >
-                    <LogOut size={20} />
-                    <span className="font-medium">Logout</span>
+                    <LogOut size={18} />
+                    {!collapsed && <span className="text-sm font-medium">Logout</span>}
                 </button>
             </div>
-        </div>
+        </>
+    );
+
+    return (
+        <>
+            {/* Desktop sidebar */}
+            <aside
+                className={`hidden lg:flex flex-col fixed left-0 top-0 h-screen bg-white border-r border-slate-200/60 z-40 transition-all duration-300 ${
+                    collapsed ? 'w-[72px]' : 'w-64'
+                }`}
+            >
+                {sidebarContent}
+            </aside>
+
+            {/* Mobile sidebar */}
+            <aside
+                className={`lg:hidden fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-200/60 z-50 flex flex-col transition-transform duration-300 ${
+                    mobileOpen ? 'translate-x-0' : '-translate-x-full'
+                }`}
+            >
+                {sidebarContent}
+            </aside>
+        </>
     );
 };
 

@@ -12,6 +12,8 @@ import {
   ChevronDown,
   User,
   Code2,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { problemInfo } from "../../data/dsaProblem";
 import { Button } from "../ui/button";
@@ -23,7 +25,7 @@ import NotFound from "../../Pages/NotFound";
 import Submission from "./problemPages/Submission";
 import axios from "axios";
 import Loading from "../../components/others/Loading";
-import { useAppContext } from "../../context/AppContext"; // Need this for auth data!
+import { useAppContext } from "../../context/AppContext";
 
 const ProblemTopBar = ({
   problemData,
@@ -31,6 +33,8 @@ const ProblemTopBar = ({
   userDetails,
   username,
   logout,
+  isDarkMode,
+  setIsDarkMode,
 }) => {
   const [elapsed, setElapsed] = useState(0);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -59,41 +63,39 @@ const ProblemTopBar = ({
       : `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
   };
 
-  const diffColor =
+  const diffBadge =
     problemData?.difficulty === "Easy"
-      ? "text-green-600 bg-green-100"
+      ? "badge-success"
       : problemData?.difficulty === "Medium"
-        ? "text-yellow-600 bg-yellow-100"
-        : "text-red-600 bg-red-100";
+        ? "badge-warning"
+        : "badge-danger";
 
   return (
-    <header className="h-13 border-b border-gray-200 bg-white flex items-center justify-between px-4 shrink-0 z-30 py-2 gap-4">
+    <header className="h-13 border-b border-slate-200 bg-white/95 backdrop-blur-sm flex items-center justify-between px-4 shrink-0 z-30 py-2 gap-4">
       {/* LEFT: back + logo + title */}
       <div className="flex items-center gap-3 min-w-0">
         <Link
           to="/problem"
-          className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors shrink-0"
+          className="flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors duration-200 shrink-0"
           title="Problem List"
         >
-          <ArrowLeft size={14} className="text-gray-600" />
+          <ArrowLeft size={14} className="text-slate-600" />
         </Link>
         <Link to="/" className="flex items-center gap-1.5 shrink-0">
-          <div className="w-6 h-6 bg-linear-to-br from-blue-600 to-purple-600 rounded-md flex items-center justify-center">
+          <div className="w-6 h-6 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-md flex items-center justify-center">
             <Code2 size={13} className="text-white" />
           </div>
-          <span className="font-bold text-sm bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hidden md:block">
+          <span className="font-bold text-sm bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hidden md:block">
             Code Arena
           </span>
         </Link>
-        <span className="text-gray-300 hidden sm:block">|</span>
+        <span className="text-slate-300 hidden sm:block">|</span>
         <div className="hidden sm:flex items-center gap-2 min-w-0">
-          <span className="text-sm font-semibold text-gray-800 truncate max-w-[180px] lg:max-w-xs">
+          <span className="text-sm font-semibold text-slate-800 truncate max-w-[180px] lg:max-w-xs">
             {problemData?.title || "Problem"}
           </span>
           {problemData?.difficulty && (
-            <span
-              className={`text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 ${diffColor}`}
-            >
+            <span className={`${diffBadge} text-[11px]`}>
               {problemData.difficulty}
             </span>
           )}
@@ -104,18 +106,27 @@ const ProblemTopBar = ({
       <div className="hidden lg:flex items-center">
         <Link
           to="/problem"
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200"
         >
           <LayoutList size={14} />
           Problem List
         </Link>
       </div>
 
-      {/* RIGHT: timer + auth */}
-      <div className="flex items-center gap-3 shrink-0">
+      {/* RIGHT: theme toggle + timer + auth */}
+      <div className="flex items-center gap-2.5 shrink-0">
+        {/* Theme toggle */}
+        <button
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all duration-200"
+          title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        >
+          {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+        </button>
+
         {/* Timer */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-100 rounded-lg text-xs font-mono text-gray-600">
-          <Timer size={13} className="text-blue-500" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-code text-slate-600">
+          <Timer size={13} className="text-indigo-500" />
           {fmt(elapsed)}
         </div>
 
@@ -123,27 +134,27 @@ const ProblemTopBar = ({
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="flex items-center gap-1.5 hover:bg-gray-100 rounded-lg px-2 py-1 transition-colors"
+              className="flex items-center gap-1.5 hover:bg-slate-100 rounded-lg px-2 py-1 transition-colors duration-200"
             >
               <img
                 src={userDetails?.avatar || "https://i.pravatar.cc/150"}
                 alt="Avatar"
-                className="w-6 h-6 rounded-full border border-gray-200 object-cover"
+                className="w-6 h-6 rounded-full border border-slate-200 object-cover"
               />
-              <span className="text-xs font-medium text-gray-700 hidden sm:block capitalize">
+              <span className="text-xs font-medium text-slate-700 hidden sm:block capitalize">
                 {userDetails?.fullName || username}
               </span>
               <ChevronDown
                 size={12}
-                className={`text-gray-400 transition-transform ${userMenuOpen ? "rotate-180" : ""}`}
+                className={`text-slate-400 transition-transform duration-200 ${userMenuOpen ? "rotate-180" : ""}`}
               />
             </button>
             {userMenuOpen && (
-              <div className="absolute right-0 mt-1 w-44 bg-white border border-gray-200 rounded-xl shadow-xl z-50 py-1 overflow-hidden">
+              <div className="absolute right-0 mt-1 w-44 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-200/50 z-50 py-1 overflow-hidden animate-scale-in">
                 <Link
                   to={`/profile/${username}`}
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
                 >
                   <User size={14} />
                   Profile
@@ -151,15 +162,15 @@ const ProblemTopBar = ({
                 <Link
                   to="/problem"
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
                 >
                   <LayoutList size={14} />
                   Problem List
                 </Link>
-                <div className="border-t border-gray-100 mt-1 pt-1">
+                <div className="border-t border-slate-100 mt-1 pt-1">
                   <button
                     onClick={logout}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors w-full text-left"
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors duration-150 w-full text-left"
                   >
                     <LogOut size={14} />
                     Sign Out
@@ -172,13 +183,13 @@ const ProblemTopBar = ({
           <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="px-3 py-1.5 text-xs font-medium text-gray-600 border border-gray-300 rounded-lg hover:border-blue-500 hover:text-blue-600 transition-colors"
+              className="px-3 py-1.5 text-xs font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
             >
               Login
             </Link>
             <Link
               to="/signup"
-              className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-3 py-1.5 text-xs font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-sm shadow-indigo-200/50"
             >
               Sign Up
             </Link>
@@ -192,8 +203,8 @@ const ProblemTopBar = ({
 const ProblemDetails = ({ isContest, problemId }) => {
   const { id: paramId } = useParams();
   const id = isContest ? problemId : paramId;
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // 1. Get auth variables from context to pass into the TopBar
   const {
     isJwtExist,
     userDetails,
@@ -211,30 +222,18 @@ const ProblemDetails = ({ isContest, problemId }) => {
     setcurrentTopBar("Description");
   }, [id]);
 
-  // if (!problem) {
-  //   return <NotFound />
-  // }
-
   const [problemDetailsInfo, setProblemDetailsInfo] = useState({});
-  // const [problemBasicInfo, setProblemBasicInfo] = useState({})
   const [testcasesdata, settestcasesdata] = useState({});
   const [loading, setloading] = useState(true);
 
   const fetchProblemDetail = async () => {
     setloading(true);
-
     try {
       const response = await axios.get(
         `${BACKEND_URL}/public/getEntireProblem/${id}`,
       );
-
-      console.log("Detail Response:", response.data);
-      // console.log("Basic Response:", basicResponse.data);
-
       setProblemDetailsInfo(response.data.problemDTO);
       settestcasesdata(response.data.listOfTestcase);
-
-      // console.log(response.data.listOfTestcase);
     } catch (error) {
       console.error("Failed to fetch problem details:", error);
       setProblemDetailsInfo([]);
@@ -248,13 +247,12 @@ const ProblemDetails = ({ isContest, problemId }) => {
     fetchProblemDetail();
   }, [id]);
 
-  // Logout function to pass into the TopBar
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
     setisJwtExist(false);
     setisLoggedIn(false);
     setjwtToken(null);
-    window.location.href = "/"; // Redirect to home
+    window.location.href = "/";
   };
 
   if (loading) {
@@ -264,6 +262,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
   if (!problemDetailsInfo) {
     return <NotFound />;
   }
+
   const description = problemDetailsInfo?.description;
   const editorial = problemDetailsInfo?.editorial;
   const algorithmSteps = problemDetailsInfo?.algorithmSteps;
@@ -272,54 +271,61 @@ const ProblemDetails = ({ isContest, problemId }) => {
   const codeImplementation = problemDetailsInfo?.solutions;
   const codeTemplates = problemDetailsInfo?.templates;
 
+  const tabs = [
+    { label: "Description", icon: FileText },
+    { label: "Solution", icon: Lightbulb },
+    { label: "Discussion", icon: MessagesSquare },
+    { label: "Submissions", icon: History },
+  ];
+
   const TabButton = ({ label, icon: Icon }) => {
     const isActive = currentTopBar === label;
     return (
       <Button
         variant="ghost"
         onClick={() => setcurrentTopBar(label)}
-        className={`relative rounded-none h-10 px-4 font-semibold hover:bg-transparent transition-all gap-2 ${
-          isActive ? "text-pink-500" : "text-gray-500"
+        className={`relative rounded-none h-10 px-4 font-medium hover:bg-transparent transition-all duration-200 gap-2 text-sm ${
+          isActive ? "text-indigo-600" : "text-slate-500 hover:text-slate-700"
         }`}
       >
-        <Icon size={16} />
-        <h1>{label}</h1>
+        <Icon size={15} />
+        <span>{label}</span>
         {isActive && (
-          <div className="absolute bottom-0 left-0 w-full h-0.5  bg-linear-to-r from-blue-600 via-purple-600 to-pink-600" />
+          <div className="absolute bottom-0 left-0 w-full h-[2px] bg-indigo-600 rounded-full" />
         )}
       </Button>
     );
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
-      {/* 2. PLACED TOP BAR HERE - It spans the entire width at the top */}
+    <div className="flex flex-col h-screen overflow-hidden bg-[#fafafa]">
       <ProblemTopBar
         problemData={problemDetailsInfo}
         isJwtExist={isJwtExist}
         userDetails={userDetails}
         username={username}
         logout={handleLogout}
+        isDarkMode={isDarkMode}
+        setIsDarkMode={setIsDarkMode}
       />
 
-      {/* Main Content Area (Split into Left and Right Panes) */}
+      {/* Main Content Area */}
       <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
-        {/* Left Pane (Description, Solution, etc.) */}
-        <div className="w-full lg:w-1/2 flex flex-col h-[50vh] lg:h-full border-b lg:border-b-0 lg:border-r border-gray-200">
-          <div className="flex items-center justify-between border-b border-gray-200 bg-gray-50 px-2 min-h-10 shrink-0">
+        {/* Left Pane (Description) */}
+        <div className="w-full lg:w-1/2 flex flex-col h-[50vh] lg:h-full border-b lg:border-b-0 lg:border-r border-slate-200">
+          <div className="flex items-center justify-between border-b border-slate-200 bg-white px-2 min-h-10 shrink-0">
             {isContest ? (
               <TabButton label="Description" icon={Lightbulb} />
             ) : (
-              <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
-                <TabButton label="Description" icon={FileText} />
-                <TabButton label="Solution" icon={Lightbulb} />
-                <TabButton label="Discussion" icon={MessagesSquare} />
-                <TabButton label="Submissions" icon={History} />
+              <div className="flex items-center gap-0.5 overflow-x-auto no-scrollbar">
+                {tabs.map((tab) => (
+                  <TabButton key={tab.label} label={tab.label} icon={tab.icon} />
+                ))}
               </div>
             )}
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto p-5 bg-white">
             {currentTopBar === "Description" ? (
               <Description
                 description={description}
@@ -343,7 +349,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
         </div>
 
         {/* Right Pane (Code Editor) */}
-        <div className="w-full lg:w-1/2 flex flex-col h-[50vh] lg:h-full bg-white">
+        <div className={`w-full lg:w-1/2 flex flex-col h-[50vh] lg:h-full ${isDarkMode ? 'bg-[#1e1e1e]' : 'bg-white'}`}>
           <CodeEditor
             codeTemplates={codeTemplates}
             problemId={id}
