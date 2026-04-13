@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Menu } from 'lucide-react'
 import { EnhancedNavbar } from '../Navbar'
@@ -12,6 +12,7 @@ const RevisionLayout = () => {
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024)
 
   const {
     toggleComplete,
@@ -20,6 +21,19 @@ const RevisionLayout = () => {
     getOverallProgress,
     resetProgress
   } = useRevisionProgress()
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      const desktop = window.innerWidth >= 1024
+      setIsDesktop(desktop)
+      // Auto-close mobile menu on resize to desktop
+      if (desktop) setMobileOpen(false)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Derive active subtopic from URL
   const activeSubtopic = subtopicId
@@ -47,9 +61,9 @@ const RevisionLayout = () => {
       <div className="lg:hidden fixed bottom-6 left-6 z-30">
         <button
           onClick={() => setMobileOpen(true)}
-          className="w-14 h-14 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
           aria-label="Open modules"
           data-testid="mobile-menu-btn"
+          className="w-14 h-14 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-2xl shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
         >
           <Menu size={24} />
         </button>
@@ -71,10 +85,10 @@ const RevisionLayout = () => {
         onCloseMobile={() => setMobileOpen(false)}
       />
 
-      {/* Content area - offset by sidebar width */}
+      {/* Content area - offset by sidebar width on desktop only */}
       <div
-        className="pt-20 transition-all duration-300"
-        style={{ marginLeft: sidebarCollapsed ? 64 : 272 }}
+        className="pt-20 lg:pt-0 transition-all duration-300"
+        style={{ marginLeft: isDesktop ? (sidebarCollapsed ? 64 : 272) : 0 }}
       >
         <div className="hidden lg:block" /> {/* Spacer only needed for layout reference */}
         <ModuleContentArea

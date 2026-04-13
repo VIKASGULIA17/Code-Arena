@@ -110,17 +110,17 @@ const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, on
       </div>
 
       {/* Module Header Card */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-8">
-        <div className="flex items-start gap-5 mb-6">
-          <div className="text-5xl">{icon}</div>
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-bold text-gray-900">{topic.title}</h1>
-              <span className={`text-xs px-2.5 py-1 rounded-full font-semibold border ${difficultyColors[topic.difficulty] || ''}`}>
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
+        <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5 mb-6">
+          <div className="text-4xl sm:text-5xl flex-shrink-0">{icon}</div>
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mb-2">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 break-words">{topic.title}</h1>
+              <span className={`text-xs px-2.5 py-1 rounded-full font-semibold border flex-shrink-0 ${difficultyColors[topic.difficulty] || ''}`}>
                 {topic.difficulty}
               </span>
             </div>
-            <p className="text-gray-500 text-lg">{topic.description}</p>
+            <p className="text-gray-500 text-base sm:text-lg">{topic.description}</p>
           </div>
         </div>
 
@@ -228,13 +228,13 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
       </div>
 
       {/* Mark Complete Button */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 order-1 break-words">
           {subtopic.type === 'theory' ? `${topic.title} — Theory` : topic.codeTemplates?.[subtopic.id]?.title}
         </h1>
         <button
           onClick={() => toggleComplete(itemKey)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex-shrink-0 order-2 sm:order-3
             ${completed
               ? 'bg-green-100 text-green-700 border border-green-200 hover:bg-green-50'
               : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200'
@@ -243,7 +243,8 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
           data-testid="mark-complete-btn"
         >
           {completed ? <CheckCircle2 size={18} /> : <Circle size={18} />}
-          {completed ? 'Completed' : 'Mark Complete'}
+          <span className="hidden sm:inline">{completed ? 'Completed' : 'Mark Complete'}</span>
+          <span className="sm:hidden">{completed ? 'Done' : 'Mark'}</span>
         </button>
       </div>
 
@@ -274,33 +275,33 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
       </div>
 
       {/* Prev/Next Navigation */}
-      <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-6 border-t border-gray-200">
         {prevSub ? (
           <button
             onClick={() => onSelectSubtopic(catId, topicId, prevSub.type, prevSub.id)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 hover:border-gray-300 transition-all order-2 sm:order-1"
           >
-            <ArrowLeft size={16} />
-            <div className="text-left">
+            <ArrowLeft size={16} className="flex-shrink-0" />
+            <div className="text-left min-w-0">
               <span className="block text-[10px] text-gray-400 uppercase">Previous</span>
               <span className="block truncate max-w-[160px]">{prevSub.label}</span>
             </div>
           </button>
-        ) : <div />}
+        ) : <div className="order-2 sm:order-1" />}
 
         {nextSub ? (
           <button
             onClick={() => onSelectSubtopic(catId, topicId, nextSub.type, nextSub.id)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium hover:from-blue-600 hover:to-purple-600 transition-all shadow-sm"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium hover:from-blue-600 hover:to-purple-600 transition-all shadow-sm order-1 sm:order-2"
           >
-            <div className="text-right">
+            <div className="text-right min-w-0">
               <span className="block text-[10px] text-blue-100 uppercase">Next</span>
               <span className="block truncate max-w-[160px]">{nextSub.label}</span>
             </div>
-            <ArrowRight size={16} />
+            <ArrowRight size={16} className="flex-shrink-0" />
           </button>
         ) : (
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-green-100 text-green-700 text-sm font-medium border border-green-200">
+          <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-green-100 text-green-700 text-sm font-medium border border-green-200 order-1 sm:order-2">
             <CheckCircle2 size={16} />
             Module Complete!
           </div>
@@ -325,7 +326,7 @@ const ModuleContentArea = ({
 
   return (
     <div className="flex-1 min-w-0 overflow-y-auto">
-      <div className="max-w-5xl mx-auto p-6 md:p-8 lg:p-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 md:p-8 lg:p-10 py-6 md:py-8 lg:py-10">
         <AnimatePresence mode="wait">
           {!activeCategoryId || !activeTopicId ? (
             <WelcomeScreen key="welcome" getOverallProgress={getOverallProgress} />

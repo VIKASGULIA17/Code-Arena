@@ -26,6 +26,7 @@ import Submission from "./problemPages/Submission";
 import axios from "axios";
 import Loading from "../../components/others/Loading";
 import { useAppContext } from "../../context/AppContext";
+import ResizablePanels from "../utils/ResizablePanel";
 
 const ProblemTopBar = ({
   problemData,
@@ -310,9 +311,9 @@ const ProblemDetails = ({ isContest, problemId }) => {
       />
 
       {/* Main Content Area */}
-      <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
+      <ResizablePanels direction="horizontal" initialSize={50}>
         {/* Left Pane (Description) */}
-        <div className="w-full lg:w-1/2 flex flex-col h-[50vh] lg:h-full border-b lg:border-b-0 lg:border-r border-slate-200">
+        <div className="flex flex-col h-full w-full border-r border-slate-200 bg-white">
           <div className="flex items-center justify-between border-b border-slate-200 bg-white px-2 min-h-10 shrink-0">
             {isContest ? (
               <TabButton label="Description" icon={Lightbulb} />
@@ -349,7 +350,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
         </div>
 
         {/* Right Pane (Code Editor) */}
-        <div className={`w-full lg:w-1/2 flex flex-col h-[50vh] lg:h-full ${isDarkMode ? 'bg-[#1e1e1e]' : 'bg-white'}`}>
+        <div className={`flex flex-col h-full w-full ${isDarkMode ? 'bg-[#1e1e1e]' : 'bg-white'}`}>
           <CodeEditor
             codeTemplates={codeTemplates}
             problemId={id}
@@ -359,7 +360,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
             isContest={isContest}
           />
         </div>
-      </div>
+      </ResizablePanels>
     </div>
   );
 };

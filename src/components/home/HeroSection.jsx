@@ -115,7 +115,10 @@ function CodeTypewriter() {
   const [currentChar, setCurrentChar] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [blink, setBlink] = useState(true);
+  const [autoPlay, setAutoPlay] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const timerRef = useRef(null);
+  const autoplayRef = useRef(null);
 
   const lang = LANGUAGES[langIdx];
 
@@ -127,21 +130,30 @@ function CodeTypewriter() {
 
   /* typing engine */
   useEffect(() => {
-    setVisibleLines([]);
-    setCurrentLine(0);
-    setCurrentChar(0);
-    setShowResult(false);
+    setIsTransitioning(true);
+    const timer = setTimeout(() => {
+      setVisibleLines([]);
+      setCurrentLine(0);
+      setCurrentChar(0);
+      setShowResult(false);
+      setIsTransitioning(false);
+    }, 100);
+    return () => clearTimeout(timer);
   }, [langIdx]);
 
   useEffect(() => {
     clearTimeout(timerRef.current);
 
     if (showResult) {
-      timerRef.current = setTimeout(() => {
-        setLangIdx((i) => (i + 1) % LANGUAGES.length);
-      }, DONE_PAUSE);
+      if (autoPlay) {
+        autoplayRef.current = setTimeout(() => {
+          setLangIdx((i) => (i + 1) % LANGUAGES.length);
+        }, DONE_PAUSE);
+      }
       return;
     }
+
+    if (isTransitioning) return;
 
     const lines = lang.lines;
     if (currentLine >= lines.length) {
@@ -164,10 +176,22 @@ function CodeTypewriter() {
     }
 
     return () => clearTimeout(timerRef.current);
-  }, [currentLine, currentChar, showResult, langIdx]);
+  }, [currentLine, currentChar, showResult, langIdx, autoPlay, isTransitioning]);
+
+  const handleManualLangChange = (index) => {
+    setLangIdx(index);
+    setAutoPlay(false);
+  };
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(autoplayRef.current);
+    };
+  }, []);
 
   /* render a line's tokens up to `chars` characters visible */
   const renderTokens = (tokens, chars) => {
+    if (!tokens || !Array.isArray(tokens)) return null;
     let used = 0;
     return tokens.map((tok, ti) => {
       if (used >= chars) return null;
@@ -185,41 +209,41 @@ function CodeTypewriter() {
     <div className="rounded-2xl overflow-hidden border border-slate-700/60 shadow-2xl shadow-black/40 bg-slate-900 select-none">
       {/* ── title bar ── */}
       <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-800 border-b border-slate-700/50">
-        <div className="flex gap-1.5 flex-shrink-0">
+        <div className="flex gap-1.5 shrink-0">
           <span className="w-3 h-3 rounded-full bg-red-400/80" />
           <span className="w-3 h-3 rounded-full bg-amber-400/80" />
           <span className="w-3 h-3 rounded-full bg-emerald-400/80" />
         </div>
 
-        {/* language tabs */}
-        <div className="flex gap-1 ml-3 overflow-x-auto">
+        {/* language tabs - naturally circular */}
+        <div className="flex gap-1 ml-3 flex-wrap">
           {LANGUAGES.map((l, i) => (
             <button
               key={l.id}
-              onClick={() => setLangIdx(i)}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-medium transition-all duration-200 whitespace-nowrap
-                ${i === langIdx
-                  ? "bg-slate-700 text-white shadow-inner"
+              onClick={() => handleManualLangChange(i)}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-medium transition-all duration-200 whitespace-nowrap ${
+                i === langIdx
+                  ? "bg-slate-700 text-white shadow-inner ring-1 ring-slate-600"
                   : "text-slate-500 hover:text-slate-300 hover:bg-slate-700/50"
-                }`}
+              }`}
             >
-              <span className={`w-1.5 h-1.5 rounded-full ${l.badge} flex-shrink-0`} />
+              <span className={`w-1.5 h-1.5 rounded-full ${l.badge} shrink-0`} />
               {l.label}
             </button>
           ))}
         </div>
 
-        <span className="ml-auto text-[11px] text-slate-500 font-mono flex-shrink-0">
-          {lang.filename}
+        <span className="ml-auto text-[11px] text-slate-500 font-mono shrink-0">
+          {lang?.filename}
         </span>
       </div>
 
       {/* ── code area ── */}
-      <div className="p-5 font-mono text-[13px] leading-[1.75] min-h-[260px]">
+      <div className={`p-5 font-mono text-[13px] leading-[1.75] min-h-[260px] transition-opacity duration-100 ${isTransitioning ? 'opacity-50' : 'opacity-100'}`}>
         {/* fully typed lines */}
-        {visibleLines.map((li) => (
+        {lang?.lines && visibleLines.map((li) => (
           <div key={li} className="flex">
-            <span className="select-none text-slate-600 w-6 mr-4 text-right flex-shrink-0 text-[11px] mt-[2px]">
+            <span className="select-none text-slate-600 w-6 mr-4 text-right flex-shrink-0 text-[11px] mt-0.5">
               {li + 1}
             </span>
             <span>{renderTokens(lang.lines[li], Infinity)}</span>
@@ -227,15 +251,15 @@ function CodeTypewriter() {
         ))}
 
         {/* currently typing line */}
-        {!showResult && currentLine < lang.lines.length && (
+        {lang?.lines && !showResult && currentLine < lang.lines.length && !isTransitioning && (
           <div className="flex">
-            <span className="select-none text-slate-600 w-6 mr-4 text-right flex-shrink-0 text-[11px] mt-[2px]">
+            <span className="select-none text-slate-600 w-6 mr-4 text-right flex-shrink-0 text-[11px] mt-0.5">
               {currentLine + 1}
             </span>
             <span>
               {renderTokens(lang.lines[currentLine], currentChar)}
               <span
-                className="inline-block w-[2px] h-[14px] align-middle ml-[1px] rounded-sm"
+                className="inline-block w-0.5 h-3.5 align-middle ml-px rounded-sm"
                 style={{
                   background: blink ? lang.color : "transparent",
                   transition: "background 0.1s",

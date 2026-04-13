@@ -5,6 +5,7 @@ import { LANGUAGE_VERSIONS } from "../../data/constants";
 import TestCases from "./TestCases";
 import { userCode } from "../../data/UserCodeTemplate";
 import { problemSolutions } from "../../data/solution";
+import ResizablePanels from "../utils/ResizablePanel";
 
 const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcaseData,problemMeta }) => {
 
@@ -60,7 +61,7 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col h-full w-full gap-0">
       <LanguageSelector
         LanguageList={LanguageList}
         Language={Language}
@@ -72,32 +73,37 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
         Output={Output}
         setOutput={setOutput}
       />
-      <div className="h-[92.2vh] overflow-scroll select-text ">
-        <Editor
-          height="50vh"
-          language={Language[0]}
-          
-          defaultValue={template} 
-          
-          theme="vs-light"
-          onMount={onMount}
-          
-          onChange={(value) => {
-            setCode(value);
-          }}
-          
-          options={{
-            fontSize: 16,
-            lineHeight: 24,
-            padding: { top: 10, bottom: 10 },
-            minimap: { enabled: false },
-            letterSpacing: 1,
-            selectOnLineNumbers: true,
-            scrollbar: false,
-          }}
-        />
+      <ResizablePanels direction="vertical" initialSize={60}>
+        {/* Editor Panel */}
+        <div className="flex flex-col h-full w-full overflow-hidden">
+          <Editor
+            height="100%"
+            language={Language[0]}
+            
+            defaultValue={template} 
+            
+            theme="vs-light"
+            onMount={onMount}
+            
+            onChange={(value) => {
+              setCode(value);
+            }}
+            
+            options={{
+              fontSize: 16,
+              lineHeight: 24,
+              padding: { top: 10, bottom: 10 },
+              minimap: { enabled: false },
+              letterSpacing: 1,
+              selectOnLineNumbers: true,
+              scrollbar: { alwaysConsumeMouseWheel: false },
+            }}
+          />
+        </div>
 
-        <TestCases 
+        {/* TestCases Panel */}
+        <div className="flex flex-col h-full w-full overflow-hidden">
+          <TestCases 
             Language={Language} 
             value={Code} 
             problemId={problemId} 
@@ -107,8 +113,9 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
             setcurrentTopBar={setcurrentTopBar}
             testcaseData={testcaseData}
             problemMeta={problemMeta}
-        />
-      </div>
+          />
+        </div>
+      </ResizablePanels>
     </div>
   );
 };
