@@ -74,7 +74,7 @@ const RevisionLayout = () => {
       {/* Content area - offset by sidebar width */}
       <div
         className="pt-20 transition-all duration-300"
-        style={{ marginLeft: sidebarCollapsed ? 72 : 300 }}
+        style={{ marginLeft: sidebarCollapsed ? 64 : 272 }}
       >
         <div className="hidden lg:block" /> {/* Spacer only needed for layout reference */}
         <ModuleContentArea
