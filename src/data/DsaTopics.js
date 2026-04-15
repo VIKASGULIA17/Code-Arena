@@ -3688,6 +3688,247 @@ if (dsu.findUltimateParent(0) === dsu.findUltimateParent(2)) {
 if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
     console.log("0 and 5 are NOT connected");
 }`
+                    },
+                    "disjoint-set-union-by-size": {
+                        title: "Disjoint Set Union-Find Implementation by Size",
+                        cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+class DSU {
+public:
+    vector<int> parent, size;
+
+    DSU(int n) {
+        parent.resize(n);
+        size.resize(n, 1);
+
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int findUltimateParent(int node) {
+        if (parent[node] == node) {
+            return node;
+        }
+        return parent[node] = findUltimateParent(parent[node]);
+    }
+
+    void unite(int u, int v) {
+        int ulp_u = findUltimateParent(u);
+        int ulp_v = findUltimateParent(v);
+
+        if (ulp_u == ulp_v) {
+            return;
+        }
+
+        if (size[ulp_u] <= size[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        } 
+        else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+};
+
+int main() {
+    int n = 6;
+
+    vector<pair<int, int>> edges = {
+        {0, 1},
+        {1, 2},
+        {3, 4},
+        {4, 5}
+    };
+
+    DSU dsu(n);
+
+    for (auto e : edges) {
+        int u = e.first;
+        int v = e.second;
+        dsu.unite(u, v);
+    }
+
+    cout << "Node -> Parent\n";
+    for (int i = 0; i < n; i++) {
+        cout << i << " -> " << dsu.findUltimateParent(i) << "\n";
+    }
+
+    if (dsu.findUltimateParent(0) == dsu.findUltimateParent(2)) {
+        cout << "0 and 2 are connected\n";
+    }
+
+    if (dsu.findUltimateParent(0) != dsu.findUltimateParent(5)) {
+        cout << "0 and 5 are NOT connected\n";
+    }
+
+    return 0;
+}`,
+                        python: `class DSU:
+    def __init__(self, n):
+        self.parent = [i for i in range(n)]
+        self.size = [1] * n
+
+    def findUltimateParent(self, node):
+        if self.parent[node] == node:
+            return node
+        self.parent[node] = self.findUltimateParent(self.parent[node])
+        return self.parent[node]
+
+    def unite(self, u, v):
+        pu = self.findUltimateParent(u)
+        pv = self.findUltimateParent(v)
+
+        if pu == pv:
+            return
+
+        if self.size[pu] <= self.size[pv]:
+            self.parent[pu] = pv
+            self.size[pv] += self.size[pu]
+        else:
+            self.parent[pv] = pu
+            self.size[pu] += self.size[pv]
+
+
+n = 6
+edges = [(0, 1), (1, 2), (3, 4), (4, 5)]
+
+dsu = DSU(n)
+
+for u, v in edges:
+    dsu.unite(u, v)
+
+print("Node -> Parent")
+for i in range(n):
+    print(i, "->", dsu.findUltimateParent(i))
+
+if dsu.findUltimateParent(0) == dsu.findUltimateParent(2):
+    print("0 and 2 are connected")
+
+if dsu.findUltimateParent(0) != dsu.findUltimateParent(5):
+    print("0 and 5 are NOT connected")`,
+                        java: `import java.util.*;
+
+class DSU {
+    int[] parent, size;
+
+    DSU(int n) {
+        parent = new int[n];
+        size = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUltimateParent(int node) {
+        if (parent[node] == node) {
+            return node;
+        }
+        return parent[node] = findUltimateParent(parent[node]);
+    }
+
+    void unite(int u, int v) {
+        int pu = findUltimateParent(u);
+        int pv = findUltimateParent(v);
+
+        if (pu == pv) return;
+
+        if (size[pu] <= size[pv]) {
+            parent[pu] = pv;
+            size[pv] += size[pu];
+        } else {
+            parent[pv] = pu;
+            size[pu] += size[pv];
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int n = 6;
+
+        int[][] edges = {
+            {0, 1},
+            {1, 2},
+            {3, 4},
+            {4, 5}
+        };
+
+        DSU dsu = new DSU(n);
+
+        for (int[] e : edges) {
+            dsu.unite(e[0], e[1]);
+        }
+
+        System.out.println("Node -> Parent");
+        for (int i = 0; i < n; i++) {
+            System.out.println(i + " -> " + dsu.findUltimateParent(i));
+        }
+
+        if (dsu.findUltimateParent(0) == dsu.findUltimateParent(2)) {
+            System.out.println("0 and 2 are connected");
+        }
+
+        if (dsu.findUltimateParent(0) != dsu.findUltimateParent(5)) {
+            System.out.println("0 and 5 are NOT connected");
+        }
+    }
+}`,
+                        javascript: `class DSU {
+    constructor(n) {
+        this.parent = Array.from({ length: n }, (_, i) => i);
+        this.size = Array(n).fill(1);
+    }
+
+    findUltimateParent(node) {
+        if (this.parent[node] === node) {
+            return node;
+        }
+        this.parent[node] = this.findUltimateParent(this.parent[node]);
+        return this.parent[node];
+    }
+
+    unite(u, v) {
+        let pu = this.findUltimateParent(u);
+        let pv = this.findUltimateParent(v);
+
+        if (pu === pv) return;
+
+        if (this.size[pu] <= this.size[pv]) {
+            this.parent[pu] = pv;
+            this.size[pv] += this.size[pu];
+        } else {
+            this.parent[pv] = pu;
+            this.size[pu] += this.size[pv];
+        }
+    }
+}
+
+let n = 6;
+let edges = [[0,1], [1,2], [3,4], [4,5]];
+
+let dsu = new DSU(n);
+
+for (let [u, v] of edges) {
+    dsu.unite(u, v);
+}
+
+console.log("Node -> Parent");
+for (let i = 0; i < n; i++) {
+    console.log(i + " -> " + dsu.findUltimateParent(i));
+}
+
+if (dsu.findUltimateParent(0) === dsu.findUltimateParent(2)) {
+    console.log("0 and 2 are connected");
+}
+
+if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
+    console.log("0 and 5 are NOT connected");
+}`
                     }
                 }
             },
