@@ -3932,6 +3932,449 @@ if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
                     }
                 }
             },
+            "difference array": {
+                title: "Difference Array",
+                difficulty: "Advanced",
+                description: "Master graph traversal, shortest paths, and advanced graph algorithms",
+                codeTemplates: {
+                    "difference-array-without-steps": {
+                        title: "Difference Array Technique - With no Jumps",
+                        cpp: `#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+
+
+    int n;
+    cin >> n;
+
+    vector < int > arr(n, 0);
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+
+    int q;
+    cin >> q;
+
+    vector < vector < int >> queries(q, vector < int > (3, -1));
+
+    // {start,end,val}   // step value : 1 means no jump
+
+    for (int i = 0; i < q; i++) {
+        cin >> queries[i][0] >> queries[i][1] >> queries[i][2];
+    }
+
+    vector < int > diffArr(n, 0);
+
+    // [start,end]
+
+    for (int i = 0; i < q; i++) {
+        int start = queries[i][0];
+        int end = queries[i][1];
+        int val = queries[i][2];
+        diffArr[start] += val;
+        if (end < n - 1) diffArr[end + 1] -= val;
+    }
+
+    for (int i = 1; i < n; i++) {
+        diffArr[i] += diffArr[i - 1];
+    }
+
+    for (int i = 0; i < n; i++) {
+        arr[i] += diffArr[i];
+    }
+
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << ' ';
+    }
+    cout << endl;
+
+    return 0;
+
+}`,
+                        python: `n = int(input())
+
+arr = list(map(int, input().split()))
+
+q = int(input())
+
+queries = []
+for i in range(q):
+    start, end, val = map(int, input().split())
+    queries.append((start, end, val))
+
+diff = [0] * n
+
+for start, end, val in queries:
+    diff[start] += val
+    if end < n - 1:
+        diff[end + 1] -= val
+
+for i in range(1, n):
+    diff[i] += diff[i - 1]
+
+for i in range(n):
+    arr[i] += diff[i]
+
+print(*arr)`,
+                        java: `import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        int q = sc.nextInt();
+
+        int[][] queries = new int[q][3];
+
+        for (int i = 0; i < q; i++) {
+            queries[i][0] = sc.nextInt();
+            queries[i][1] = sc.nextInt();
+            queries[i][2] = sc.nextInt();
+        }
+
+        int[] diff = new int[n];
+
+        for (int i = 0; i < q; i++) {
+            int start = queries[i][0];
+            int end = queries[i][1];
+            int val = queries[i][2];
+
+            diff[start] += val;
+            if (end < n - 1) {
+                diff[end + 1] -= val;
+            }
+        }
+
+        for (int i = 1; i < n; i++) {
+            diff[i] += diff[i - 1];
+        }
+
+        for (int i = 0; i < n; i++) {
+            arr[i] += diff[i];
+        }
+
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+}`,
+                        javascript: `let n = parseInt(prompt());
+let arr = prompt().split(" ").map(Number);
+
+let q = parseInt(prompt());
+
+let queries = [];
+
+for (let i = 0; i < q; i++) {
+    let [start, end, val] = prompt().split(" ").map(Number);
+    queries.push([start, end, val]);
+}
+
+let diff = new Array(n).fill(0);
+
+for (let i = 0; i < q; i++) {
+    let [start, end, val] = queries[i];
+
+    diff[start] += val;
+    if (end < n - 1) {
+        diff[end + 1] -= val;
+    }
+}
+
+for (let i = 1; i < n; i++) {
+    diff[i] += diff[i - 1];
+}
+
+for (let i = 0; i < n; i++) {
+    arr[i] += diff[i];
+}
+
+console.log(arr.join(" "));`
+                    },
+                    "difference-array-with-steps":{
+                        title: "Difference Array Technique - With Jumps",
+                        cpp: `#include <bits/stdc++.h>
+
+using namespace std;
+
+void forEachJump(vector < vector < int >> & sequence, vector < int > & arr, int n, int jump) {
+
+    vector < int > diffArr(n, 0);
+
+    // [start,end]
+
+    int q = sequence.size();
+
+    for (int i = 0; i < q; i++) {
+
+        int start = sequence[i][0];
+        int end = sequence[i][1];
+        int val = sequence[i][2];
+
+        cout << start << " " << end << " " << val << endl;
+
+        diffArr[start] += val;
+        if (end + jump < n) diffArr[end + jump] -= val;
+
+    }
+
+    for (int i = jump; i < n; i++) {
+        diffArr[i] += diffArr[i - jump];
+    }
+
+
+    for (int i = 0; i < n; i++) {
+        arr[i] += diffArr[i];
+    }
+}
+
+int main() {
+
+
+    int n;
+    cin >> n;
+
+    vector < int > arr(n, 0);
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+
+    int q;
+    cin >> q;
+
+    vector < vector < int >> queries(q, vector < int > (4, -1));
+
+    // {start,end,val,step}   // step value : jump
+
+    for (int i = 0; i < q; i++) {
+        cin >> queries[i][0] >> queries[i][1] >> queries[i][2] >> queries[i][3];
+    }
+
+    unordered_map < int, vector < vector < int >>> mymap;
+
+    for (int i = 0; i < q; i++) {
+
+        int start = queries[i][0];
+        int end = queries[i][1];
+        int val = queries[i][2];
+        int jump = queries[i][3];
+
+        mymap[jump].push_back({
+            start,
+            end,
+            val
+        });
+    }
+
+    for (auto it: mymap) {
+        forEachJump(it.second, arr, n, it.first);
+    }
+
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << ' ';
+    }
+    cout << endl;
+
+    return 0;
+
+}`,
+                        java:`import java.util.*;
+
+public class Main {
+
+    static void forEachJump(List<int[]> sequence, int[] arr, int n, int jump) {
+        int[] diff = new int[n];
+
+        int q = sequence.size();
+
+        for (int i = 0; i < q; i++) {
+            int start = sequence.get(i)[0];
+            int end = sequence.get(i)[1];
+            int val = sequence.get(i)[2];
+
+            System.out.println(start + " " + end + " " + val);
+
+            diff[start] += val;
+            if (end + jump < n) {
+                diff[end + jump] -= val;
+            }
+        }
+
+        for (int i = jump; i < n; i++) {
+            diff[i] += diff[i - jump];
+        }
+
+        for (int i = 0; i < n; i++) {
+            arr[i] += diff[i];
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        int q = sc.nextInt();
+
+        int[][] queries = new int[q][4];
+
+        for (int i = 0; i < q; i++) {
+            queries[i][0] = sc.nextInt();
+            queries[i][1] = sc.nextInt();
+            queries[i][2] = sc.nextInt();
+            queries[i][3] = sc.nextInt();
+        }
+
+        HashMap<Integer, List<int[]>> map = new HashMap<>();
+
+        for (int i = 0; i < q; i++) {
+            int start = queries[i][0];
+            int end = queries[i][1];
+            int val = queries[i][2];
+            int jump = queries[i][3];
+
+            map.putIfAbsent(jump, new ArrayList<>());
+            map.get(jump).add(new int[]{start, end, val});
+        }
+
+        for (int jump : map.keySet()) {
+            forEachJump(map.get(jump), arr, n, jump);
+        }
+
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+}`,
+                        python:`def forEachJump(sequence, arr, n, jump):
+    diff = [0] * n
+
+    q = len(sequence)
+
+    for i in range(q):
+        start, end, val = sequence[i]
+
+        print(start, end, val)
+
+        diff[start] += val
+        if end + jump < n:
+            diff[end + jump] -= val
+
+    for i in range(jump, n):
+        diff[i] += diff[i - jump]
+
+    for i in range(n):
+        arr[i] += diff[i]
+
+
+n = int(input())
+arr = list(map(int, input().split()))
+
+q = int(input())
+
+queries = []
+for i in range(q):
+    queries.append(list(map(int, input().split())))
+
+mymap = {}
+
+for i in range(q):
+    start, end, val, jump = queries[i]
+
+    if jump not in mymap:
+        mymap[jump] = []
+
+    mymap[jump].append([start, end, val])
+
+for jump in mymap:
+    forEachJump(mymap[jump], arr, n, jump)
+
+print(*arr)`,
+                        javascript:`function forEachJump(sequence, arr, n, jump) {
+    let diff = new Array(n).fill(0);
+
+    let q = sequence.length;
+
+    for (let i = 0; i < q; i++) {
+        let [start, end, val] = sequence[i];
+
+        console.log(start, end, val);
+
+        diff[start] += val;
+        if (end + jump < n) {
+            diff[end + jump] -= val;
+        }
+    }
+
+    for (let i = jump; i < n; i++) {
+        diff[i] += diff[i - jump];
+    }
+
+    for (let i = 0; i < n; i++) {
+        arr[i] += diff[i];
+    }
+}
+
+// Input (Node.js style)
+const fs = require("fs");
+const input = fs.readFileSync(0, "utf-8").trim().split(/\s+/).map(Number);
+
+let idx = 0;
+
+let n = input[idx++];
+let arr = [];
+
+for (let i = 0; i < n; i++) {
+    arr.push(input[idx++]);
+}
+
+let q = input[idx++];
+
+let queries = [];
+
+for (let i = 0; i < q; i++) {
+    let start = input[idx++];
+    let end = input[idx++];
+    let val = input[idx++];
+    let jump = input[idx++];
+    queries.push([start, end, val, jump]);
+}
+
+let map = {};
+
+for (let i = 0; i < q; i++) {
+    let [start, end, val, jump] = queries[i];
+
+    if (!map[jump]) map[jump] = [];
+    map[jump].push([start, end, val]);
+}
+
+for (let jump in map) {
+    forEachJump(map[jump], arr, n, parseInt(jump));
+}
+
+console.log(arr.join(" "));`
+                    }
+                }
+            }
         }
     }
 };
