@@ -1,33 +1,33 @@
 export const dsaCategories = {
-  "data-structures": {
-    title: "Data Structures",
-    description: "Learn fundamental and advanced data structures",
-    topics: {
-      arrays: {
-        title: "Arrays & Strings",
-        difficulty: "Beginner",
-        description: "Master array operations, string manipulation, and related algorithms",
-        theory: {
-          definition: "An array is a collection of elements stored at contiguous memory locations. It's the simplest data structure where each data element can be accessed directly by only using its index number.",
-          realWorldAnalogy: "Think of an array like a row of lockers in a gym. Each locker has a number (index), and you can directly go to any locker if you know its number.",
-          coreOperations: [
-            "Access - O(1)",
-            "Search - O(n)", 
-            "Insertion - O(n)",
-            "Deletion - O(n)"
-          ],
-          timeComplexity: {
-            access: { best: "O(1)", average: "O(1)", worst: "O(1)" },
-            search: { best: "O(1)", average: "O(n)", worst: "O(n)" },
-            insertion: { best: "O(1)", average: "O(n)", worst: "O(n)" },
-            deletion: { best: "O(1)", average: "O(n)", worst: "O(n)" }
-          },
-          spaceComplexity: "O(n)"
-        },
-        codeTemplates: {
-          "array-basics": {
-            title: "Array Basics - Declaration & Operations",
-            cpp: `#include <iostream>
+    "data-structures": {
+        title: "Data Structures",
+        description: "Learn fundamental and advanced data structures",
+        topics: {
+            arrays: {
+                title: "Arrays & Strings",
+                difficulty: "Beginner",
+                description: "Master array operations, string manipulation, and related algorithms",
+                theory: {
+                    definition: "An array is a collection of elements stored at contiguous memory locations. It's the simplest data structure where each data element can be accessed directly by only using its index number.",
+                    realWorldAnalogy: "Think of an array like a row of lockers in a gym. Each locker has a number (index), and you can directly go to any locker if you know its number.",
+                    coreOperations: [
+                        "Access - O(1)",
+                        "Search - O(n)",
+                        "Insertion - O(n)",
+                        "Deletion - O(n)"
+                    ],
+                    timeComplexity: {
+                        access: { best: "O(1)", average: "O(1)", worst: "O(1)" },
+                        search: { best: "O(1)", average: "O(n)", worst: "O(n)" },
+                        insertion: { best: "O(1)", average: "O(n)", worst: "O(n)" },
+                        deletion: { best: "O(1)", average: "O(n)", worst: "O(n)" }
+                    },
+                    spaceComplexity: "O(n)"
+                },
+                codeTemplates: {
+                    "array-basics": {
+                        title: "Array Basics - Declaration & Operations",
+                        cpp: `#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -55,7 +55,7 @@ int main() {
     
     return 0;
 }`,
-            java: `import java.util.*;
+                        java: `import java.util.*;
 
 public class ArrayBasics {
     public static void main(String[] args) {
@@ -81,7 +81,7 @@ public class ArrayBasics {
         System.out.println("ArrayList size: " + arr2.size());
     }
 }`,
-            python: `# Array basics in Python using lists
+                        python: `# Array basics in Python using lists
 def array_basics():
     # List declaration
     arr1 = [1, 2, 3, 4, 5]
@@ -108,7 +108,7 @@ def array_basics():
 
 # Call the function
 array_basics()`,
-            javascript: `// Array basics in JavaScript
+                        javascript: `// Array basics in JavaScript
 function arrayBasics() {
     // Array declaration
     let arr1 = [1, 2, 3, 4, 5];
@@ -139,10 +139,10 @@ function arrayBasics() {
 
 // Call the function
 arrayBasics();`
-          },
-          "two-sum": {
-            title: "Two Sum Problem",
-            cpp: `#include <iostream>
+                    },
+                    "two-sum": {
+                        title: "Two Sum Problem",
+                        cpp: `#include <iostream>
 #include <vector>
 #include <unordered_map>
 using namespace std;
@@ -180,7 +180,7 @@ int main() {
     
     return 0;
 }`,
-            java: `import java.util.*;
+                        java: `import java.util.*;
 
 class Solution {
     public int[] twoSum(int[] nums, int target) {
@@ -212,7 +212,7 @@ class Solution {
         }
     }
 }`,
-            python: `def two_sum(nums, target):
+                        python: `def two_sum(nums, target):
     """
     Find two indices in the array that sum to target.
     
@@ -250,7 +250,7 @@ def main():
 
 if __name__ == "__main__":
     main()`,
-            javascript: `/**
+                        javascript: `/**
  * Find two indices in the array that sum to target
  * @param {number[]} nums - Array of numbers
  * @param {number} target - Target sum
@@ -289,34 +289,34 @@ function main() {
 
 // Call the function
 main();`
-          }
-        }
-      },
-      "stacks": {
-        title: "Stacks",
-        difficulty: "Beginner", 
-        description: "Master Last-In-First-Out (LIFO) data structure with applications",
-        theory: {
-          definition: "A stack is a linear data structure that follows the Last-In-First-Out (LIFO) principle. Elements are added and removed from the same end, called the top of the stack.",
-          realWorldAnalogy: "Think of a stack of plates in a cafeteria. You can only add or remove plates from the top. The last plate you put on the stack will be the first one you take off.",
-          coreOperations: [
-            "Push - O(1)",
-            "Pop - O(1)",
-            "Peek/Top - O(1)",
-            "isEmpty - O(1)"
-          ],
-          timeComplexity: {
-            push: { best: "O(1)", average: "O(1)", worst: "O(1)" },
-            pop: { best: "O(1)", average: "O(1)", worst: "O(1)" },
-            peek: { best: "O(1)", average: "O(1)", worst: "O(1)" },
-            search: { best: "O(1)", average: "O(n)", worst: "O(n)" }
-          },
-          spaceComplexity: "O(n)"
-        },
-        codeTemplates: {
-          "stack-implementation": {
-            title: "Stack Implementation using Array",
-            cpp: `#include <iostream>
+                    }
+                }
+            },
+            "stacks": {
+                title: "Stacks",
+                difficulty: "Beginner",
+                description: "Master Last-In-First-Out (LIFO) data structure with applications",
+                theory: {
+                    definition: "A stack is a linear data structure that follows the Last-In-First-Out (LIFO) principle. Elements are added and removed from the same end, called the top of the stack.",
+                    realWorldAnalogy: "Think of a stack of plates in a cafeteria. You can only add or remove plates from the top. The last plate you put on the stack will be the first one you take off.",
+                    coreOperations: [
+                        "Push - O(1)",
+                        "Pop - O(1)",
+                        "Peek/Top - O(1)",
+                        "isEmpty - O(1)"
+                    ],
+                    timeComplexity: {
+                        push: { best: "O(1)", average: "O(1)", worst: "O(1)" },
+                        pop: { best: "O(1)", average: "O(1)", worst: "O(1)" },
+                        peek: { best: "O(1)", average: "O(1)", worst: "O(1)" },
+                        search: { best: "O(1)", average: "O(n)", worst: "O(n)" }
+                    },
+                    spaceComplexity: "O(n)"
+                },
+                codeTemplates: {
+                    "stack-implementation": {
+                        title: "Stack Implementation using Array",
+                        cpp: `#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -401,7 +401,7 @@ int main() {
     
     return 0;
 }`,
-            java: `import java.util.*;
+                        java: `import java.util.*;
 
 public class Stack {
     private ArrayList<Integer> arr;
@@ -483,7 +483,7 @@ public class Stack {
         stack.display();
     }
 }`,
-            python: `class Stack:
+                        python: `class Stack:
     def __init__(self):
         self.arr = []
     
@@ -547,7 +547,7 @@ def main():
 
 if __name__ == "__main__":
     main()`,
-            javascript: `class Stack {
+                        javascript: `class Stack {
     constructor() {
         this.arr = [];
     }
@@ -624,34 +624,34 @@ function main() {
 
 // Call the function
 main();`
-          }
-        }
-      },
-      "trees": {
-        title: "Trees & Binary Trees",
-        difficulty: "Intermediate",
-        description: "Learn hierarchical data structures including binary trees and BST",
-        theory: {
-          definition: "A tree is a hierarchical data structure consisting of nodes connected by edges. Each tree has a root node and subtrees of children with a parent node, connected by edges.",
-          realWorldAnalogy: "Think of a family tree or an organizational chart. There's a top-level (root), and each person can have children below them, forming a hierarchical structure.",
-          coreOperations: [
-            "Insertion - O(log n) average, O(n) worst",
-            "Search - O(log n) average, O(n) worst", 
-            "Deletion - O(log n) average, O(n) worst",
-            "Traversal - O(n)"
-          ],
-          timeComplexity: {
-            search: { best: "O(log n)", average: "O(log n)", worst: "O(n)" },
-            insertion: { best: "O(log n)", average: "O(log n)", worst: "O(n)" },
-            deletion: { best: "O(log n)", average: "O(log n)", worst: "O(n)" },
-            traversal: { best: "O(n)", average: "O(n)", worst: "O(n)" }
-          },
-          spaceComplexity: "O(n)"
-        },
-        codeTemplates: {
-          "binary-tree": {
-            title: "Binary Tree Implementation",
-            cpp: `#include <iostream>
+                    }
+                }
+            },
+            "trees": {
+                title: "Trees & Binary Trees",
+                difficulty: "Intermediate",
+                description: "Learn hierarchical data structures including binary trees and BST",
+                theory: {
+                    definition: "A tree is a hierarchical data structure consisting of nodes connected by edges. Each tree has a root node and subtrees of children with a parent node, connected by edges.",
+                    realWorldAnalogy: "Think of a family tree or an organizational chart. There's a top-level (root), and each person can have children below them, forming a hierarchical structure.",
+                    coreOperations: [
+                        "Insertion - O(log n) average, O(n) worst",
+                        "Search - O(log n) average, O(n) worst",
+                        "Deletion - O(log n) average, O(n) worst",
+                        "Traversal - O(n)"
+                    ],
+                    timeComplexity: {
+                        search: { best: "O(log n)", average: "O(log n)", worst: "O(n)" },
+                        insertion: { best: "O(log n)", average: "O(log n)", worst: "O(n)" },
+                        deletion: { best: "O(log n)", average: "O(log n)", worst: "O(n)" },
+                        traversal: { best: "O(n)", average: "O(n)", worst: "O(n)" }
+                    },
+                    spaceComplexity: "O(n)"
+                },
+                codeTemplates: {
+                    "binary-tree": {
+                        title: "Binary Tree Implementation",
+                        cpp: `#include <iostream>
 #include <queue>
 using namespace std;
 
@@ -787,7 +787,7 @@ int main() {
     
     return 0;
 }`,
-            java: `import java.util.*;
+                        java: `import java.util.*;
 
 class TreeNode {
     int data;
@@ -914,7 +914,7 @@ public class BinaryTree {
         tree.levelOrderTraversal();
     }
 }`,
-            python: `from collections import deque
+                        python: `from collections import deque
 
 class TreeNode:
     def __init__(self, data):
@@ -1029,7 +1029,7 @@ def main():
 
 if __name__ == "__main__":
     main()`,
-            javascript: `class TreeNode {
+                        javascript: `class TreeNode {
     constructor(data) {
         this.data = data;
         this.left = null;
@@ -1153,34 +1153,34 @@ function main() {
 
 // Call the function
 main();`
-          }
-        }
-      },
-      "linked-lists": {
-        title: "Linked Lists",
-        difficulty: "Beginner",
-        description: "Understand singly, doubly, and circular linked lists with operations",
-        theory: {
-          definition: "A linked list is a linear data structure where elements are stored in nodes, and each node contains data and a reference (or link) to the next node in the sequence.",
-          realWorldAnalogy: "Think of a linked list like a treasure hunt. Each clue (node) contains information and tells you where to find the next clue. You must follow the chain sequentially.",
-          coreOperations: [
-            "Insertion at head - O(1)",
-            "Insertion at tail - O(1) with tail pointer",
-            "Deletion - O(1) if node reference given",
-            "Search - O(n)"
-          ],
-          timeComplexity: {
-            access: { best: "O(n)", average: "O(n)", worst: "O(n)" },
-            search: { best: "O(1)", average: "O(n)", worst: "O(n)" },
-            insertion: { best: "O(1)", average: "O(1)", worst: "O(1)" },
-            deletion: { best: "O(1)", average: "O(1)", worst: "O(1)" }
-          },
-          spaceComplexity: "O(n)"
-        },
-        codeTemplates: {
-          "singly-linked-list": {
-            title: "Singly Linked List Implementation",
-            cpp: `#include <iostream>
+                    }
+                }
+            },
+            "linked-lists": {
+                title: "Linked Lists",
+                difficulty: "Beginner",
+                description: "Understand singly, doubly, and circular linked lists with operations",
+                theory: {
+                    definition: "A linked list is a linear data structure where elements are stored in nodes, and each node contains data and a reference (or link) to the next node in the sequence.",
+                    realWorldAnalogy: "Think of a linked list like a treasure hunt. Each clue (node) contains information and tells you where to find the next clue. You must follow the chain sequentially.",
+                    coreOperations: [
+                        "Insertion at head - O(1)",
+                        "Insertion at tail - O(1) with tail pointer",
+                        "Deletion - O(1) if node reference given",
+                        "Search - O(n)"
+                    ],
+                    timeComplexity: {
+                        access: { best: "O(n)", average: "O(n)", worst: "O(n)" },
+                        search: { best: "O(1)", average: "O(n)", worst: "O(n)" },
+                        insertion: { best: "O(1)", average: "O(1)", worst: "O(1)" },
+                        deletion: { best: "O(1)", average: "O(1)", worst: "O(1)" }
+                    },
+                    spaceComplexity: "O(n)"
+                },
+                codeTemplates: {
+                    "singly-linked-list": {
+                        title: "Singly Linked List Implementation",
+                        cpp: `#include <iostream>
 using namespace std;
 
 class Node {
@@ -1296,7 +1296,7 @@ int main() {
     
     return 0;
 }`,
-            java: `class Node {
+                        java: `class Node {
     int data;
     Node next;
     
@@ -1398,7 +1398,7 @@ public class LinkedList {
         list.display();
     }
 }`,
-            python: `class Node:
+                        python: `class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
@@ -1490,7 +1490,7 @@ def main():
 
 if __name__ == "__main__":
     main()`,
-            javascript: `class Node {
+                        javascript: `class Node {
     constructor(data) {
         this.data = data;
         this.next = null;
@@ -1593,41 +1593,41 @@ function main() {
 
 // Call the function
 main();`
-          }
+                    }
+                }
+            }
         }
-      }
-    }
-  },
-  "algorithms": {
-    title: "Algorithms",
-    description: "Master essential algorithms for problem solving",
-    topics: {
-      sorting: {
-        title: "Sorting Algorithms",
-        difficulty: "Intermediate",
-        description: "Learn various sorting techniques from basic to advanced",
-        theory: {
-          definition: "Sorting algorithms are used to rearrange a given array or list elements according to a comparison operator on the elements.",
-          realWorldAnalogy: "Like organizing books on a shelf alphabetically, or arranging playing cards by value - we need systematic methods to put things in order.",
-          coreOperations: [
-            "Comparison-based sorting",
-            "Non-comparison sorting",
-            "Stable vs Unstable sorting",
-            "In-place vs Out-place sorting"
-          ],
-          timeComplexity: {
-            bubble: { best: "O(n)", average: "O(n²)", worst: "O(n²)" },
-            selection: { best: "O(n²)", average: "O(n²)", worst: "O(n²)" },
-            insertion: { best: "O(n)", average: "O(n²)", worst: "O(n²)" },
-            merge: { best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)" },
-            quick: { best: "O(n log n)", average: "O(n log n)", worst: "O(n²)" }
-          },
-          spaceComplexity: "Varies by algorithm"
-        },
-        codeTemplates: {
-          "bubble-sort": {
-            title: "Bubble Sort Algorithm",
-            cpp: `#include <iostream>
+    },
+    "algorithms": {
+        title: "Algorithms",
+        description: "Master essential algorithms for problem solving",
+        topics: {
+            sorting: {
+                title: "Sorting Algorithms",
+                difficulty: "Intermediate",
+                description: "Learn various sorting techniques from basic to advanced",
+                theory: {
+                    definition: "Sorting algorithms are used to rearrange a given array or list elements according to a comparison operator on the elements.",
+                    realWorldAnalogy: "Like organizing books on a shelf alphabetically, or arranging playing cards by value - we need systematic methods to put things in order.",
+                    coreOperations: [
+                        "Comparison-based sorting",
+                        "Non-comparison sorting",
+                        "Stable vs Unstable sorting",
+                        "In-place vs Out-place sorting"
+                    ],
+                    timeComplexity: {
+                        bubble: { best: "O(n)", average: "O(n²)", worst: "O(n²)" },
+                        selection: { best: "O(n²)", average: "O(n²)", worst: "O(n²)" },
+                        insertion: { best: "O(n)", average: "O(n²)", worst: "O(n²)" },
+                        merge: { best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)" },
+                        quick: { best: "O(n log n)", average: "O(n log n)", worst: "O(n²)" }
+                    },
+                    spaceComplexity: "Varies by algorithm"
+                },
+                codeTemplates: {
+                    "bubble-sort": {
+                        title: "Bubble Sort Algorithm",
+                        cpp: `#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -1676,7 +1676,7 @@ int main() {
     
     return 0;
 }`,
-            java: `import java.util.Arrays;
+                        java: `import java.util.Arrays;
 
 public class BubbleSort {
     
@@ -1721,7 +1721,7 @@ public class BubbleSort {
         printArray(arr);
     }
 }`,
-            python: `def bubble_sort(arr):
+                        python: `def bubble_sort(arr):
     """
     Bubble Sort Algorithm
     
@@ -1768,7 +1768,7 @@ def main():
 
 if __name__ == "__main__":
     main()`,
-            javascript: `/**
+                        javascript: `/**
  * Bubble Sort Algorithm
  * Time Complexity: O(n²) average and worst case, O(n) best case
  * Space Complexity: O(1)
@@ -1812,33 +1812,33 @@ function main() {
 
 // Call the function
 main();`
-          }
-        }
-      },
-      "merge-sort": {
-        title: "Merge Sort",
-        difficulty: "Intermediate",
-        description: "Learn divide-and-conquer sorting algorithm with guaranteed O(n log n)",
-        theory: {
-          definition: "Merge Sort is a divide-and-conquer algorithm that divides the input array into two halves, calls itself for the two halves, and then merges the two sorted halves.",
-          realWorldAnalogy: "Like organizing a large deck of cards by splitting it into smaller piles, sorting each pile, then merging them back together in order.",
-          coreOperations: [
-            "Divide array into halves",
-            "Recursively sort each half", 
-            "Merge sorted halves",
-            "Stable sorting algorithm"
-          ],
-          timeComplexity: {
-            best: { best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)" },
-            average: { best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)" },
-            worst: { best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)" }
-          },
-          spaceComplexity: "O(n)"
-        },
-        codeTemplates: {
-          "merge-sort-algorithm": {
-            title: "Merge Sort Implementation",
-            cpp: `#include <iostream>
+                    }
+                }
+            },
+            "merge-sort": {
+                title: "Merge Sort",
+                difficulty: "Intermediate",
+                description: "Learn divide-and-conquer sorting algorithm with guaranteed O(n log n)",
+                theory: {
+                    definition: "Merge Sort is a divide-and-conquer algorithm that divides the input array into two halves, calls itself for the two halves, and then merges the two sorted halves.",
+                    realWorldAnalogy: "Like organizing a large deck of cards by splitting it into smaller piles, sorting each pile, then merging them back together in order.",
+                    coreOperations: [
+                        "Divide array into halves",
+                        "Recursively sort each half",
+                        "Merge sorted halves",
+                        "Stable sorting algorithm"
+                    ],
+                    timeComplexity: {
+                        best: { best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)" },
+                        average: { best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)" },
+                        worst: { best: "O(n log n)", average: "O(n log n)", worst: "O(n log n)" }
+                    },
+                    spaceComplexity: "O(n)"
+                },
+                codeTemplates: {
+                    "merge-sort-algorithm": {
+                        title: "Merge Sort Implementation",
+                        cpp: `#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -1912,7 +1912,7 @@ int main() {
     
     return 0;
 }`,
-            java: `public class MergeSort {
+                        java: `public class MergeSort {
     
     public static void mergeSort(int[] arr, int left, int right) {
         if (left >= right) return;
@@ -1991,7 +1991,7 @@ int main() {
         printArray(arr);
     }
 }`,
-            python: `def merge_sort(arr):
+                        python: `def merge_sort(arr):
     """
     Merge Sort Algorithm - Divide and Conquer
     
@@ -2119,7 +2119,7 @@ def main():
 
 if __name__ == "__main__":
     main()`,
-            javascript: `/**
+                        javascript: `/**
  * Merge Sort Algorithm - Divide and Conquer
  * Time Complexity: O(n log n) in all cases
  * Space Complexity: O(n)
@@ -2240,33 +2240,33 @@ function main() {
 
 // Call the function
 main();`
-          }
-        }
-      },
-      "dynamic-programming": {
-        title: "Dynamic Programming",
-        difficulty: "Advanced",
-        description: "Master optimization problems with memoization and tabulation techniques",
-        theory: {
-          definition: "Dynamic Programming is an algorithmic paradigm that solves complex problems by breaking them down into simpler subproblems and storing the results to avoid redundant calculations.",
-          realWorldAnalogy: "Like keeping a notebook of solutions to math problems you've solved before, so when you encounter the same problem again, you can just look up the answer instead of solving it from scratch.",
-          coreOperations: [
-            "Identify overlapping subproblems",
-            "Optimal substructure property",
-            "Memoization (top-down)",
-            "Tabulation (bottom-up)"
-          ],
-          timeComplexity: {
-            memoization: { best: "O(n)", average: "O(n)", worst: "O(n)" },
-            tabulation: { best: "O(n)", average: "O(n)", worst: "O(n)" },
-            naive: { best: "O(2^n)", average: "O(2^n)", worst: "O(2^n)" }
-          },
-          spaceComplexity: "O(n)"
-        },
-        codeTemplates: {
-          "fibonacci-dp": {
-            title: "Fibonacci - Dynamic Programming",
-            cpp: `#include <iostream>
+                    }
+                }
+            },
+            "dynamic-programming": {
+                title: "Dynamic Programming",
+                difficulty: "Advanced",
+                description: "Master optimization problems with memoization and tabulation techniques",
+                theory: {
+                    definition: "Dynamic Programming is an algorithmic paradigm that solves complex problems by breaking them down into simpler subproblems and storing the results to avoid redundant calculations.",
+                    realWorldAnalogy: "Like keeping a notebook of solutions to math problems you've solved before, so when you encounter the same problem again, you can just look up the answer instead of solving it from scratch.",
+                    coreOperations: [
+                        "Identify overlapping subproblems",
+                        "Optimal substructure property",
+                        "Memoization (top-down)",
+                        "Tabulation (bottom-up)"
+                    ],
+                    timeComplexity: {
+                        memoization: { best: "O(n)", average: "O(n)", worst: "O(n)" },
+                        tabulation: { best: "O(n)", average: "O(n)", worst: "O(n)" },
+                        naive: { best: "O(2^n)", average: "O(2^n)", worst: "O(2^n)" }
+                    },
+                    spaceComplexity: "O(n)"
+                },
+                codeTemplates: {
+                    "fibonacci-dp": {
+                        title: "Fibonacci - Dynamic Programming",
+                        cpp: `#include <iostream>
 #include <vector>
 #include <unordered_map>
 using namespace std;
@@ -2346,7 +2346,7 @@ int main() {
     
     return 0;
 }`,
-            java: `import java.util.*;
+                        java: `import java.util.*;
 
 public class FibonacciDP {
     
@@ -2422,7 +2422,7 @@ public class FibonacciDP {
         System.out.println("Optimized: " + fibonacciOptimized(n));
     }
 }`,
-            python: `def fibonacci_naive(n):
+                        python: `def fibonacci_naive(n):
     """
     Naive recursive approach - O(2^n) time
     This will be very slow for large n
@@ -2545,7 +2545,7 @@ def main():
 
 if __name__ == "__main__":
     main()`,
-            javascript: `/**
+                        javascript: `/**
  * Fibonacci using Dynamic Programming
  * Demonstrating different approaches and their time complexities
  */
@@ -2692,39 +2692,39 @@ function main() {
 
 // Call the function
 main();`
-          }
+                    }
+                }
+            }
         }
-      }
-    }
-  },
-  "advanced-topics": {
-    title: "Advanced Topics",
-    description: "Explore advanced data structures and algorithms",
-    topics: {
-      "graphs": {
-        title: "Graph Algorithms",
-        difficulty: "Advanced",
-        description: "Master graph traversal, shortest paths, and advanced graph algorithms",
-        theory: {
-          definition: "A graph is a collection of nodes (vertices) connected by edges. Graphs are used to represent relationships between objects and solve complex problems like finding shortest paths, network analysis, and social networks.",
-          realWorldAnalogy: "Think of a social network like Facebook - people are nodes and friendships are edges connecting them. Or consider a road map where cities are nodes and roads are edges.",
-          coreOperations: [
-            "Graph Traversal (BFS, DFS) - O(V + E)",
-            "Shortest Path (Dijkstra) - O(V log V + E)",
-            "Minimum Spanning Tree - O(E log V)",
-            "Topological Sort - O(V + E)"
-          ],
-          timeComplexity: {
-            bfs: { best: "O(V + E)", average: "O(V + E)", worst: "O(V + E)" },
-            dfs: { best: "O(V + E)", average: "O(V + E)", worst: "O(V + E)" },
-            dijkstra: { best: "O(V log V + E)", average: "O(V log V + E)", worst: "O(V log V + E)" }
-          },
-          spaceComplexity: "O(V + E)"
-        },
-        codeTemplates: {
-          "graph-bfs-dfs": {
-            title: "Graph BFS and DFS Implementation", 
-            cpp: `#include <iostream>
+    },
+    "advanced-topics": {
+        title: "Advanced Topics",
+        description: "Explore advanced data structures and algorithms",
+        topics: {
+            "graphs": {
+                title: "Graph Algorithms",
+                difficulty: "Advanced",
+                description: "Master graph traversal, shortest paths, and advanced graph algorithms",
+                theory: {
+                    definition: "A graph is a collection of nodes (vertices) connected by edges. Graphs are used to represent relationships between objects and solve complex problems like finding shortest paths, network analysis, and social networks.",
+                    realWorldAnalogy: "Think of a social network like Facebook - people are nodes and friendships are edges connecting them. Or consider a road map where cities are nodes and roads are edges.",
+                    coreOperations: [
+                        "Graph Traversal (BFS, DFS) - O(V + E)",
+                        "Shortest Path (Dijkstra) - O(V log V + E)",
+                        "Minimum Spanning Tree - O(E log V)",
+                        "Topological Sort - O(V + E)"
+                    ],
+                    timeComplexity: {
+                        bfs: { best: "O(V + E)", average: "O(V + E)", worst: "O(V + E)" },
+                        dfs: { best: "O(V + E)", average: "O(V + E)", worst: "O(V + E)" },
+                        dijkstra: { best: "O(V log V + E)", average: "O(V log V + E)", worst: "O(V log V + E)" }
+                    },
+                    spaceComplexity: "O(V + E)"
+                },
+                codeTemplates: {
+                    "graph-bfs-dfs": {
+                        title: "Graph BFS and DFS Implementation",
+                        cpp: `#include <iostream>
 #include <vector>
 #include <queue>
 #include <stack>
@@ -2889,7 +2889,7 @@ int main() {
     
     return 0;
 }`,
-            java: `import java.util.*;
+                        java: `import java.util.*;
 
 public class Graph {
     private int vertices;
@@ -3045,7 +3045,7 @@ public class Graph {
         System.out.println("Path from 1 to 2: " + (g.hasPath(1, 2) ? "Yes" : "No"));
     }
 }`,
-            python: `from collections import deque, defaultdict
+                        python: `from collections import deque, defaultdict
 
 class Graph:
     def __init__(self, vertices):
@@ -3225,7 +3225,7 @@ def main():
 
 if __name__ == "__main__":
     main()`,
-            javascript: `class Graph {
+                        javascript: `class Graph {
     constructor(vertices) {
         this.vertices = vertices;
         this.adjList = new Map();
@@ -3441,9 +3441,940 @@ function main() {
 
 // Call the function
 main();`
-          }
+                    },
+                    "disjoint-set-union-by-rank": {
+                        title: "Disjoint Set Union-Find Implementation By Rank",
+                        cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+class DSU {
+public:
+    vector<int> parent, rank;
+
+    DSU(int n) {
+        parent.resize(n);
+        rank.resize(n, 0);
+
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
         }
-      },
     }
-  }
+
+    int findUltimateParent(int node) {
+        if (parent[node] == node) {
+            return node;
+        }
+        return parent[node] = findUltimateParent(parent[node]);
+    }
+
+    void unite(int u, int v) {
+        int ulp_u = findUltimateParent(u);
+        int ulp_v = findUltimateParent(v);
+
+        if (ulp_u == ulp_v) {
+            return;
+        }
+
+        if (rank[ulp_u] < rank[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+        }
+        else if (rank[ulp_u] > rank[ulp_v]) {
+            parent[ulp_v] = ulp_u;
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            rank[ulp_u]++;
+        }
+    }
+};
+
+int main() {
+    int n = 6;
+
+    vector<pair<int, int>> edges = {
+        {0, 1},
+        {1, 2},
+        {3, 4},
+        {4, 5}
+    };
+
+    DSU dsu(n);
+
+    for (auto e : edges) {
+        int u = e.first;
+        int v = e.second;
+
+        dsu.unite(u, v);
+    }
+
+    cout << "Node -> Parent\n";
+    for (int i = 0; i < n; i++) {
+        cout << i << " -> " << dsu.findUltimateParent(i) << "\n";
+    }
+
+    if (dsu.findUltimateParent(0) == dsu.findUltimateParent(2)) {
+        cout << "0 and 2 are connected\n";
+    }
+
+    if (dsu.findUltimateParent(0) != dsu.findUltimateParent(5)) {
+        cout << "0 and 5 are NOT connected\n";
+    }
+
+    return 0;
+}`,
+                        python: `class DSU:
+    def __init__(self, n):
+        self.parent = [i for i in range(n)]
+        self.rank = [0] * n
+
+    def findUltimateParent(self, node):
+        if self.parent[node] == node:
+            return node
+        self.parent[node] = self.findUltimateParent(self.parent[node])
+        return self.parent[node]
+
+    def unite(self, u, v):
+        pu = self.findUltimateParent(u)
+        pv = self.findUltimateParent(v)
+
+        if pu == pv:
+            return
+
+        if self.rank[pu] < self.rank[pv]:
+            self.parent[pu] = pv
+        elif self.rank[pu] > self.rank[pv]:
+            self.parent[pv] = pu
+        else:
+            self.parent[pv] = pu
+            self.rank[pu] += 1
+
+
+n = 6
+edges = [(0, 1), (1, 2), (3, 4), (4, 5)]
+
+dsu = DSU(n)
+
+for u, v in edges:
+    dsu.unite(u, v)
+
+print("Node -> Parent")
+for i in range(n):
+    print(i, "->", dsu.findUltimateParent(i))
+
+if dsu.findUltimateParent(0) == dsu.findUltimateParent(2):
+    print("0 and 2 are connected")
+
+if dsu.findUltimateParent(0) != dsu.findUltimateParent(5):
+    print("0 and 5 are NOT connected")`,
+                        java: `import java.util.*;
+
+class DSU {
+    int[] parent, rank;
+
+    DSU(int n) {
+        parent = new int[n];
+        rank = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+    }
+
+    int findUltimateParent(int node) {
+        if (parent[node] == node) {
+            return node;
+        }
+        return parent[node] = findUltimateParent(parent[node]);
+    }
+
+    void unite(int u, int v) {
+        int pu = findUltimateParent(u);
+        int pv = findUltimateParent(v);
+
+        if (pu == pv) return;
+
+        if (rank[pu] < rank[pv]) {
+            parent[pu] = pv;
+        } else if (rank[pu] > rank[pv]) {
+            parent[pv] = pu;
+        } else {
+            parent[pv] = pu;
+            rank[pu]++;
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int n = 6;
+
+        int[][] edges = {
+            {0, 1},
+            {1, 2},
+            {3, 4},
+            {4, 5}
+        };
+
+        DSU dsu = new DSU(n);
+
+        for (int[] e : edges) {
+            dsu.unite(e[0], e[1]);
+        }
+
+        System.out.println("Node -> Parent");
+        for (int i = 0; i < n; i++) {
+            System.out.println(i + " -> " + dsu.findUltimateParent(i));
+        }
+
+        if (dsu.findUltimateParent(0) == dsu.findUltimateParent(2)) {
+            System.out.println("0 and 2 are connected");
+        }
+
+        if (dsu.findUltimateParent(0) != dsu.findUltimateParent(5)) {
+            System.out.println("0 and 5 are NOT connected");
+        }
+    }
+}`,
+                        javascript: `class DSU {
+    constructor(n) {
+        this.parent = Array.from({ length: n }, (_, i) => i);
+        this.rank = Array(n).fill(0);
+    }
+
+    findUltimateParent(node) {
+        if (this.parent[node] === node) {
+            return node;
+        }
+        this.parent[node] = this.findUltimateParent(this.parent[node]);
+        return this.parent[node];
+    }
+
+    unite(u, v) {
+        let pu = this.findUltimateParent(u);
+        let pv = this.findUltimateParent(v);
+
+        if (pu === pv) return;
+
+        if (this.rank[pu] < this.rank[pv]) {
+            this.parent[pu] = pv;
+        } else if (this.rank[pu] > this.rank[pv]) {
+            this.parent[pv] = pu;
+        } else {
+            this.parent[pv] = pu;
+            this.rank[pu]++;
+        }
+    }
+}
+
+let n = 6;
+let edges = [[0,1], [1,2], [3,4], [4,5]];
+
+let dsu = new DSU(n);
+
+for (let [u, v] of edges) {
+    dsu.unite(u, v);
+}
+
+console.log("Node -> Parent");
+for (let i = 0; i < n; i++) {
+    console.log(i + " -> " + dsu.findUltimateParent(i));
+}
+
+if (dsu.findUltimateParent(0) === dsu.findUltimateParent(2)) {
+    console.log("0 and 2 are connected");
+}
+
+if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
+    console.log("0 and 5 are NOT connected");
+}`
+                    },
+                    "disjoint-set-union-by-size": {
+                        title: "Disjoint Set Union-Find Implementation by Size",
+                        cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+class DSU {
+public:
+    vector<int> parent, size;
+
+    DSU(int n) {
+        parent.resize(n);
+        size.resize(n, 1);
+
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int findUltimateParent(int node) {
+        if (parent[node] == node) {
+            return node;
+        }
+        return parent[node] = findUltimateParent(parent[node]);
+    }
+
+    void unite(int u, int v) {
+        int ulp_u = findUltimateParent(u);
+        int ulp_v = findUltimateParent(v);
+
+        if (ulp_u == ulp_v) {
+            return;
+        }
+
+        if (size[ulp_u] <= size[ulp_v]) {
+            parent[ulp_u] = ulp_v;
+            size[ulp_v] += size[ulp_u];
+        } 
+        else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v];
+        }
+    }
+};
+
+int main() {
+    int n = 6;
+
+    vector<pair<int, int>> edges = {
+        {0, 1},
+        {1, 2},
+        {3, 4},
+        {4, 5}
+    };
+
+    DSU dsu(n);
+
+    for (auto e : edges) {
+        int u = e.first;
+        int v = e.second;
+        dsu.unite(u, v);
+    }
+
+    cout << "Node -> Parent\n";
+    for (int i = 0; i < n; i++) {
+        cout << i << " -> " << dsu.findUltimateParent(i) << "\n";
+    }
+
+    if (dsu.findUltimateParent(0) == dsu.findUltimateParent(2)) {
+        cout << "0 and 2 are connected\n";
+    }
+
+    if (dsu.findUltimateParent(0) != dsu.findUltimateParent(5)) {
+        cout << "0 and 5 are NOT connected\n";
+    }
+
+    return 0;
+}`,
+                        python: `class DSU:
+    def __init__(self, n):
+        self.parent = [i for i in range(n)]
+        self.size = [1] * n
+
+    def findUltimateParent(self, node):
+        if self.parent[node] == node:
+            return node
+        self.parent[node] = self.findUltimateParent(self.parent[node])
+        return self.parent[node]
+
+    def unite(self, u, v):
+        pu = self.findUltimateParent(u)
+        pv = self.findUltimateParent(v)
+
+        if pu == pv:
+            return
+
+        if self.size[pu] <= self.size[pv]:
+            self.parent[pu] = pv
+            self.size[pv] += self.size[pu]
+        else:
+            self.parent[pv] = pu
+            self.size[pu] += self.size[pv]
+
+
+n = 6
+edges = [(0, 1), (1, 2), (3, 4), (4, 5)]
+
+dsu = DSU(n)
+
+for u, v in edges:
+    dsu.unite(u, v)
+
+print("Node -> Parent")
+for i in range(n):
+    print(i, "->", dsu.findUltimateParent(i))
+
+if dsu.findUltimateParent(0) == dsu.findUltimateParent(2):
+    print("0 and 2 are connected")
+
+if dsu.findUltimateParent(0) != dsu.findUltimateParent(5):
+    print("0 and 5 are NOT connected")`,
+                        java: `import java.util.*;
+
+class DSU {
+    int[] parent, size;
+
+    DSU(int n) {
+        parent = new int[n];
+        size = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUltimateParent(int node) {
+        if (parent[node] == node) {
+            return node;
+        }
+        return parent[node] = findUltimateParent(parent[node]);
+    }
+
+    void unite(int u, int v) {
+        int pu = findUltimateParent(u);
+        int pv = findUltimateParent(v);
+
+        if (pu == pv) return;
+
+        if (size[pu] <= size[pv]) {
+            parent[pu] = pv;
+            size[pv] += size[pu];
+        } else {
+            parent[pv] = pu;
+            size[pu] += size[pv];
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int n = 6;
+
+        int[][] edges = {
+            {0, 1},
+            {1, 2},
+            {3, 4},
+            {4, 5}
+        };
+
+        DSU dsu = new DSU(n);
+
+        for (int[] e : edges) {
+            dsu.unite(e[0], e[1]);
+        }
+
+        System.out.println("Node -> Parent");
+        for (int i = 0; i < n; i++) {
+            System.out.println(i + " -> " + dsu.findUltimateParent(i));
+        }
+
+        if (dsu.findUltimateParent(0) == dsu.findUltimateParent(2)) {
+            System.out.println("0 and 2 are connected");
+        }
+
+        if (dsu.findUltimateParent(0) != dsu.findUltimateParent(5)) {
+            System.out.println("0 and 5 are NOT connected");
+        }
+    }
+}`,
+                        javascript: `class DSU {
+    constructor(n) {
+        this.parent = Array.from({ length: n }, (_, i) => i);
+        this.size = Array(n).fill(1);
+    }
+
+    findUltimateParent(node) {
+        if (this.parent[node] === node) {
+            return node;
+        }
+        this.parent[node] = this.findUltimateParent(this.parent[node]);
+        return this.parent[node];
+    }
+
+    unite(u, v) {
+        let pu = this.findUltimateParent(u);
+        let pv = this.findUltimateParent(v);
+
+        if (pu === pv) return;
+
+        if (this.size[pu] <= this.size[pv]) {
+            this.parent[pu] = pv;
+            this.size[pv] += this.size[pu];
+        } else {
+            this.parent[pv] = pu;
+            this.size[pu] += this.size[pv];
+        }
+    }
+}
+
+let n = 6;
+let edges = [[0,1], [1,2], [3,4], [4,5]];
+
+let dsu = new DSU(n);
+
+for (let [u, v] of edges) {
+    dsu.unite(u, v);
+}
+
+console.log("Node -> Parent");
+for (let i = 0; i < n; i++) {
+    console.log(i + " -> " + dsu.findUltimateParent(i));
+}
+
+if (dsu.findUltimateParent(0) === dsu.findUltimateParent(2)) {
+    console.log("0 and 2 are connected");
+}
+
+if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
+    console.log("0 and 5 are NOT connected");
+}`
+                    }
+                }
+            },
+            "difference array": {
+                title: "Difference Array",
+                difficulty: "Advanced",
+                description: "Master graph traversal, shortest paths, and advanced graph algorithms",
+                codeTemplates: {
+                    "difference-array-without-steps": {
+                        title: "Difference Array Technique - With no Jumps",
+                        cpp: `#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+
+
+    int n;
+    cin >> n;
+
+    vector < int > arr(n, 0);
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+
+    int q;
+    cin >> q;
+
+    vector < vector < int >> queries(q, vector < int > (3, -1));
+
+    // {start,end,val}   // step value : 1 means no jump
+
+    for (int i = 0; i < q; i++) {
+        cin >> queries[i][0] >> queries[i][1] >> queries[i][2];
+    }
+
+    vector < int > diffArr(n, 0);
+
+    // [start,end]
+
+    for (int i = 0; i < q; i++) {
+        int start = queries[i][0];
+        int end = queries[i][1];
+        int val = queries[i][2];
+        diffArr[start] += val;
+        if (end < n - 1) diffArr[end + 1] -= val;
+    }
+
+    for (int i = 1; i < n; i++) {
+        diffArr[i] += diffArr[i - 1];
+    }
+
+    for (int i = 0; i < n; i++) {
+        arr[i] += diffArr[i];
+    }
+
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << ' ';
+    }
+    cout << endl;
+
+    return 0;
+
+}`,
+                        python: `n = int(input())
+
+arr = list(map(int, input().split()))
+
+q = int(input())
+
+queries = []
+for i in range(q):
+    start, end, val = map(int, input().split())
+    queries.append((start, end, val))
+
+diff = [0] * n
+
+for start, end, val in queries:
+    diff[start] += val
+    if end < n - 1:
+        diff[end + 1] -= val
+
+for i in range(1, n):
+    diff[i] += diff[i - 1]
+
+for i in range(n):
+    arr[i] += diff[i]
+
+print(*arr)`,
+                        java: `import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        int q = sc.nextInt();
+
+        int[][] queries = new int[q][3];
+
+        for (int i = 0; i < q; i++) {
+            queries[i][0] = sc.nextInt();
+            queries[i][1] = sc.nextInt();
+            queries[i][2] = sc.nextInt();
+        }
+
+        int[] diff = new int[n];
+
+        for (int i = 0; i < q; i++) {
+            int start = queries[i][0];
+            int end = queries[i][1];
+            int val = queries[i][2];
+
+            diff[start] += val;
+            if (end < n - 1) {
+                diff[end + 1] -= val;
+            }
+        }
+
+        for (int i = 1; i < n; i++) {
+            diff[i] += diff[i - 1];
+        }
+
+        for (int i = 0; i < n; i++) {
+            arr[i] += diff[i];
+        }
+
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+}`,
+                        javascript: `let n = parseInt(prompt());
+let arr = prompt().split(" ").map(Number);
+
+let q = parseInt(prompt());
+
+let queries = [];
+
+for (let i = 0; i < q; i++) {
+    let [start, end, val] = prompt().split(" ").map(Number);
+    queries.push([start, end, val]);
+}
+
+let diff = new Array(n).fill(0);
+
+for (let i = 0; i < q; i++) {
+    let [start, end, val] = queries[i];
+
+    diff[start] += val;
+    if (end < n - 1) {
+        diff[end + 1] -= val;
+    }
+}
+
+for (let i = 1; i < n; i++) {
+    diff[i] += diff[i - 1];
+}
+
+for (let i = 0; i < n; i++) {
+    arr[i] += diff[i];
+}
+
+console.log(arr.join(" "));`
+                    },
+                    "difference-array-with-steps":{
+                        title: "Difference Array Technique - With Jumps",
+                        cpp: `#include <bits/stdc++.h>
+
+using namespace std;
+
+void forEachJump(vector < vector < int >> & sequence, vector < int > & arr, int n, int jump) {
+
+    vector < int > diffArr(n, 0);
+
+    // [start,end]
+
+    int q = sequence.size();
+
+    for (int i = 0; i < q; i++) {
+
+        int start = sequence[i][0];
+        int end = sequence[i][1];
+        int val = sequence[i][2];
+
+        cout << start << " " << end << " " << val << endl;
+
+        diffArr[start] += val;
+        if (end + jump < n) diffArr[end + jump] -= val;
+
+    }
+
+    for (int i = jump; i < n; i++) {
+        diffArr[i] += diffArr[i - jump];
+    }
+
+
+    for (int i = 0; i < n; i++) {
+        arr[i] += diffArr[i];
+    }
+}
+
+int main() {
+
+
+    int n;
+    cin >> n;
+
+    vector < int > arr(n, 0);
+
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+
+    int q;
+    cin >> q;
+
+    vector < vector < int >> queries(q, vector < int > (4, -1));
+
+    // {start,end,val,step}   // step value : jump
+
+    for (int i = 0; i < q; i++) {
+        cin >> queries[i][0] >> queries[i][1] >> queries[i][2] >> queries[i][3];
+    }
+
+    unordered_map < int, vector < vector < int >>> mymap;
+
+    for (int i = 0; i < q; i++) {
+
+        int start = queries[i][0];
+        int end = queries[i][1];
+        int val = queries[i][2];
+        int jump = queries[i][3];
+
+        mymap[jump].push_back({
+            start,
+            end,
+            val
+        });
+    }
+
+    for (auto it: mymap) {
+        forEachJump(it.second, arr, n, it.first);
+    }
+
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << ' ';
+    }
+    cout << endl;
+
+    return 0;
+
+}`,
+                        java:`import java.util.*;
+
+public class Main {
+
+    static void forEachJump(List<int[]> sequence, int[] arr, int n, int jump) {
+        int[] diff = new int[n];
+
+        int q = sequence.size();
+
+        for (int i = 0; i < q; i++) {
+            int start = sequence.get(i)[0];
+            int end = sequence.get(i)[1];
+            int val = sequence.get(i)[2];
+
+            System.out.println(start + " " + end + " " + val);
+
+            diff[start] += val;
+            if (end + jump < n) {
+                diff[end + jump] -= val;
+            }
+        }
+
+        for (int i = jump; i < n; i++) {
+            diff[i] += diff[i - jump];
+        }
+
+        for (int i = 0; i < n; i++) {
+            arr[i] += diff[i];
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        int q = sc.nextInt();
+
+        int[][] queries = new int[q][4];
+
+        for (int i = 0; i < q; i++) {
+            queries[i][0] = sc.nextInt();
+            queries[i][1] = sc.nextInt();
+            queries[i][2] = sc.nextInt();
+            queries[i][3] = sc.nextInt();
+        }
+
+        HashMap<Integer, List<int[]>> map = new HashMap<>();
+
+        for (int i = 0; i < q; i++) {
+            int start = queries[i][0];
+            int end = queries[i][1];
+            int val = queries[i][2];
+            int jump = queries[i][3];
+
+            map.putIfAbsent(jump, new ArrayList<>());
+            map.get(jump).add(new int[]{start, end, val});
+        }
+
+        for (int jump : map.keySet()) {
+            forEachJump(map.get(jump), arr, n, jump);
+        }
+
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+}`,
+                        python:`def forEachJump(sequence, arr, n, jump):
+    diff = [0] * n
+
+    q = len(sequence)
+
+    for i in range(q):
+        start, end, val = sequence[i]
+
+        print(start, end, val)
+
+        diff[start] += val
+        if end + jump < n:
+            diff[end + jump] -= val
+
+    for i in range(jump, n):
+        diff[i] += diff[i - jump]
+
+    for i in range(n):
+        arr[i] += diff[i]
+
+
+n = int(input())
+arr = list(map(int, input().split()))
+
+q = int(input())
+
+queries = []
+for i in range(q):
+    queries.append(list(map(int, input().split())))
+
+mymap = {}
+
+for i in range(q):
+    start, end, val, jump = queries[i]
+
+    if jump not in mymap:
+        mymap[jump] = []
+
+    mymap[jump].append([start, end, val])
+
+for jump in mymap:
+    forEachJump(mymap[jump], arr, n, jump)
+
+print(*arr)`,
+                        javascript:`function forEachJump(sequence, arr, n, jump) {
+    let diff = new Array(n).fill(0);
+
+    let q = sequence.length;
+
+    for (let i = 0; i < q; i++) {
+        let [start, end, val] = sequence[i];
+
+        console.log(start, end, val);
+
+        diff[start] += val;
+        if (end + jump < n) {
+            diff[end + jump] -= val;
+        }
+    }
+
+    for (let i = jump; i < n; i++) {
+        diff[i] += diff[i - jump];
+    }
+
+    for (let i = 0; i < n; i++) {
+        arr[i] += diff[i];
+    }
+}
+
+// Input (Node.js style)
+const fs = require("fs");
+const input = fs.readFileSync(0, "utf-8").trim().split(/\s+/).map(Number);
+
+let idx = 0;
+
+let n = input[idx++];
+let arr = [];
+
+for (let i = 0; i < n; i++) {
+    arr.push(input[idx++]);
+}
+
+let q = input[idx++];
+
+let queries = [];
+
+for (let i = 0; i < q; i++) {
+    let start = input[idx++];
+    let end = input[idx++];
+    let val = input[idx++];
+    let jump = input[idx++];
+    queries.push([start, end, val, jump]);
+}
+
+let map = {};
+
+for (let i = 0; i < q; i++) {
+    let [start, end, val, jump] = queries[i];
+
+    if (!map[jump]) map[jump] = [];
+    map[jump].push([start, end, val]);
+}
+
+for (let jump in map) {
+    forEachJump(map[jump], arr, n, parseInt(jump));
+}
+
+console.log(arr.join(" "));`
+                    }
+                }
+            }
+        }
+    }
 };
