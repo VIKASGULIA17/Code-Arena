@@ -238,16 +238,16 @@ const ContestManagement = () => {
       <div className="space-y-6 relative">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-50">
               Contest Management
             </h1>
-            <p className="text-gray-500 mt-2">
+            <p className="text-gray-500 dark:text-slate-400 mt-2">
               Schedule and manage coding contests.
             </p>
           </div>
           <button
             onClick={handleCreateClick}
-            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors shadow-sm shadow-purple-200/50 dark:shadow-purple-900/30"
           >
             <Plus size={20} />
             <span>Create Contest</span>
@@ -258,12 +258,12 @@ const ContestManagement = () => {
           {allContest?.map((contest) => (
             <div
               key={contest.contestName}
-              className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-visible relative group"
+              className="bg-white dark:bg-slate-800/80 rounded-xl border border-gray-100 dark:border-slate-700/50 shadow-sm hover:shadow-md dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.4)] transition-shadow overflow-visible relative group"
             >
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
-                  <div className="p-3 bg-purple-50 rounded-xl group-hover:bg-purple-100 transition-colors">
-                    <Trophy className="w-6 h-6 text-purple-600" />
+                  <div className="p-3 bg-purple-50 dark:bg-purple-500/15 rounded-xl group-hover:bg-purple-100 dark:group-hover:bg-purple-500/20 transition-colors">
+                    <Trophy className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                   </div>
                   <span
                     className={`px-2.5 py-1 rounded-full text-xs font-medium ${contest.contestStatus === "Upcoming"
@@ -277,21 +277,21 @@ const ContestManagement = () => {
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-slate-100 mb-2">
                   {contest.contestName}
                 </h3>
 
-                <div className="space-y-2 text-sm text-gray-500">
+                <div className="space-y-2 text-sm text-gray-500 dark:text-slate-400">
                   <div className="flex items-center gap-2">
-                    <Calendar size={16} className="text-gray-400" />
+                    <Calendar size={16} className="text-gray-400 dark:text-slate-500" />
                     <span>{new Date(contest.startTime).toLocaleString()}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock size={16} className="text-gray-400" />
+                    <Clock size={16} className="text-gray-400 dark:text-slate-500" />
                     <span>{contest.duration} hours</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Users size={16} className="text-gray-400" />
+                    <Users size={16} className="text-gray-400 dark:text-slate-500" />
                     <span>
                       {contest.registeredUsers.length > 0
                         ? contest.registeredUsers.length
@@ -302,17 +302,17 @@ const ContestManagement = () => {
                 </div>
               </div>
 
-              <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center relative">
+              <div className="px-6 py-4 bg-gray-50 dark:bg-slate-900/40 border-t border-gray-100 dark:border-slate-700/50 flex justify-between items-center relative">
                 <button
                   onClick={() => handleEditClick(contest)}
-                  className="text-sm font-medium text-purple-600 hover:text-purple-700"
+                  className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300"
                 >
                   Edit Details
                 </button>
                 <div className="relative">
                   <button
                     onClick={(e) => toggleMenu(contest.contestName, e)}
-                    className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-200 transition-colors"
+                    className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
                   >
                     <MoreHorizontal size={20} />
                   </button>
@@ -320,18 +320,18 @@ const ContestManagement = () => {
                   {activeMenuContestName === contest.contestName && (
                     <div
                       ref={menuRef}
-                      className="absolute right-0 bottom-full mb-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 z-10 overflow-hidden animate-in fade-in zoom-in duration-200"
+                      className="absolute right-0 bottom-full mb-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl dark:shadow-black/40 border border-gray-100 dark:border-slate-700 z-10 overflow-hidden animate-in fade-in zoom-in duration-200"
                     >
                       <button
                         onClick={() => handleEditClick(contest)}
-                        className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 flex items-center gap-2 transition-colors"
+                        className="w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-500/10 hover:text-purple-700 dark:hover:text-purple-400 flex items-center gap-2 transition-colors"
                       >
                         <Edit2 size={16} />
                         Modify
                       </button>
                       <button
                         onClick={() => handleDeleteClick(contest)}
-                        className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors border-t border-gray-50"
+                        className="w-full text-left px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 flex items-center gap-2 transition-colors border-t border-gray-50 dark:border-slate-700"
                       >
                         <Trash2 size={16} />
                         Delete
@@ -346,9 +346,9 @@ const ContestManagement = () => {
 
         {isModalOpen && (
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl transform transition-all scale-100">
-              <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                <h2 className="text-xl font-bold text-gray-900">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl w-full max-w-lg shadow-2xl dark:shadow-black/40 transform transition-all scale-100">
+              <div className="p-6 border-b border-gray-100 dark:border-slate-700 flex justify-between items-center">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-slate-50">
                   {modalMode === "create"
                     ? "Create New Contest"
                     : "Modify Contest"}
@@ -363,7 +363,7 @@ const ContestManagement = () => {
                       duration: "",
                     });
                   }}
-                  className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                  className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
                 >
                   <X size={20} />
                 </button>
@@ -372,7 +372,7 @@ const ContestManagement = () => {
               <form className="p-6 space-y-4">
                 {/* CONTEST NAME */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
                     Contest Name
                   </label>
                   <input
@@ -384,7 +384,7 @@ const ContestManagement = () => {
                         contestName: e.target.value,
                       })
                     }
-                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${errors.contestName ? "border-red-500" : "border-gray-300"
+                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 ${errors.contestName ? "border-red-500" : "border-gray-300 dark:border-slate-600"
                       }`}
                     placeholder="Enter contest name"
                   />
@@ -409,9 +409,9 @@ const ContestManagement = () => {
                         contestDescription: e.target.value,
                       })
                     }
-                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all resize-none ${errors.contestDescription
+                    className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all resize-none bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 ${errors.contestDescription
                         ? "border-red-500"
-                        : "border-gray-300"
+                        : "border-gray-300 dark:border-slate-600"
                       }`}
                     placeholder="Enter contest description"
                   />
@@ -437,7 +437,7 @@ const ContestManagement = () => {
                           startTime: e.target.value,
                         })
                       }
-                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${errors.startTime ? "border-red-500" : "border-gray-300"
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 ${errors.startTime ? "border-red-500" : "border-gray-300 dark:border-slate-600"
                         }`}
                     />
                     {errors.startTime && (
@@ -459,7 +459,7 @@ const ContestManagement = () => {
                           duration: e.target.value,
                         })
                       }
-                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all ${errors.duration ? "border-red-500" : "border-gray-300"
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 outline-none transition-all bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 ${errors.duration ? "border-red-500" : "border-gray-300 dark:border-slate-600"
                         }`}
                       placeholder="e.g. 90"
                     />
@@ -485,7 +485,7 @@ const ContestManagement = () => {
                         duration: "",
                       });
                     }}
-                    className="px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
+                    className="px-4 py-2 text-gray-700 dark:text-slate-300 font-medium hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
                   >
                     Cancel
                   </button>
@@ -519,18 +519,18 @@ const ContestManagement = () => {
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.92, opacity: 0, y: 20 }}
                 transition={{ type: "spring", stiffness: 320, damping: 25 }}
-                className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+                className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl dark:shadow-black/40 w-full max-w-md overflow-hidden"
               >
                 {/* Header */}
-                <div className="bg-red-50 border-b border-red-100 px-6 py-5 flex items-start gap-4">
-                  <div className="p-2.5 bg-red-100 rounded-xl shrink-0">
+                <div className="bg-red-50 dark:bg-red-500/10 border-b border-red-100 dark:border-red-500/20 px-6 py-5 flex items-start gap-4">
+                  <div className="p-2.5 bg-red-100 dark:bg-red-500/20 rounded-xl shrink-0">
                     <AlertTriangle size={22} className="text-red-600" />
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-lg font-bold text-gray-900">
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-slate-50">
                       Delete Contest
                     </h2>
-                    <p className="text-sm text-gray-500 mt-0.5">
+                    <p className="text-sm text-gray-500 dark:text-slate-400 mt-0.5">
                       This action is permanent and cannot be undone.
                     </p>
                   </div>
@@ -545,7 +545,7 @@ const ContestManagement = () => {
                       setDeleteConfirmText("");
                       setdeleteTarget(false);
                     }}
-                    className="p-1.5 rounded-lg cursor-pointer text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors shrink-0"
+                    className="p-1.5 rounded-lg cursor-pointer text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors shrink-0"
                   >
                     <X size={18} />
                   </button>
@@ -553,9 +553,9 @@ const ContestManagement = () => {
 
                 {/* Body */}
                 <div className="px-6 py-6 space-y-5">
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed">
                     You are about to permanently delete{" "}
-                    <span className="font-semibold text-gray-900">
+                    <span className="font-semibold text-gray-900 dark:text-slate-100">
                       "{targetContestDelete.contestName}"
                     </span>
                     . All ranking, solutions, and submissions will be lost
@@ -563,12 +563,12 @@ const ContestManagement = () => {
                   </p>
 
                   {/* Problem preview card */}
-                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-1.5">
+                  <div className="bg-gray-50 dark:bg-slate-700/40 border border-gray-200 dark:border-slate-600 rounded-xl p-4 space-y-1.5">
                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
                       Contest
                     </p>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-gray-800 truncate">
+                      <span className="text-sm font-semibold text-gray-800 dark:text-slate-200 truncate">
                         {targetContestDelete.contestName}
                       </span>
                     </div>
@@ -580,10 +580,10 @@ const ContestManagement = () => {
 
                   {/* Name confirmation input */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">
+                    <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
                       Type the contest name to confirm:
                     </label>
-                    <div className="text-xs text-gray-500 font-mono bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 select-all">
+                    <div className="text-xs text-gray-500 dark:text-slate-400 font-mono bg-gray-100 dark:bg-slate-700 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-600 select-all">
                       {targetContestDelete.contestName}
                     </div>
                     <input
@@ -624,7 +624,7 @@ const ContestManagement = () => {
                       setDeleteConfirmText("");
                       setdeleteTarget(false);
                     }}
-                    className="px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors  cursor-pointer"
+                    className="px-5 py-2.5 text-sm font-medium text-gray-600 dark:text-slate-300 border border-gray-300 dark:border-slate-600 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>

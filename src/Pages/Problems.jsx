@@ -84,7 +84,7 @@ const Problems = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen bg-[#fafafa] dark:bg-[#0b1120]">
       <EnhancedNavbar />
 
       <div className="section-wrapper pt-24 pb-10">
@@ -92,10 +92,10 @@ const Problems = () => {
           {/* Main Content */}
           <div className="flex-1 min-w-0">
             <div className="mb-8">
-              <h1 className="text-4xl font-bold text-slate-900 mb-2">
+              <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">
                 Problem Set
               </h1>
-              <p className="text-slate-500 text-lg">
+              <p className="text-slate-500 dark:text-slate-400 text-lg">
                 Shape your coding skills with our curated list of problems. Search, filter, and solve.
               </p>
             </div>
@@ -161,7 +161,7 @@ const Problems = () => {
             <div className="card-elevated p-5">
               <div className="flex items-center gap-2 mb-4">
                 <Building2 size={16} className="text-slate-400" />
-                <h3 className="text-sm font-semibold text-slate-700">Trending Companies</h3>
+                <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Trending Companies</h3>
               </div>
               <div className="grid grid-cols-2 gap-2.5">
                 {companies.map((company) => {
@@ -169,7 +169,7 @@ const Problems = () => {
                   return (
                     <button
                       key={company.name}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all duration-200"
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-200 dark:hover:border-indigo-500/20 transition-all duration-200"
                     >
                       <Icon size={15} />
                       <span>{company.name}</span>

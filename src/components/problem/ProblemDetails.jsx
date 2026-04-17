@@ -26,6 +26,7 @@ import Submission from "./problemPages/Submission";
 import axios from "axios";
 import Loading from "../../components/others/Loading";
 import { useAppContext } from "../../context/AppContext";
+import { useTheme } from "../../context/ThemeContext";
 import ResizablePanels from "../utils/ResizablePanel";
 
 const ProblemTopBar = ({
@@ -34,12 +35,12 @@ const ProblemTopBar = ({
   userDetails,
   username,
   logout,
-  isDarkMode,
-  setIsDarkMode,
 }) => {
   const [elapsed, setElapsed] = useState(0);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const { resolvedTheme, cycleTheme } = useTheme();
+  const isDarkMode = resolvedTheme === "dark";
 
   useEffect(() => {
     const t = setInterval(() => setElapsed((s) => s + 1), 1000);
@@ -72,15 +73,15 @@ const ProblemTopBar = ({
         : "badge-danger";
 
   return (
-    <header className="h-13 border-b border-slate-200 bg-white/95 backdrop-blur-sm flex items-center justify-between px-4 shrink-0 z-30 py-2 gap-4">
+    <header className="h-13 border-b border-slate-200 dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm flex items-center justify-between px-4 shrink-0 z-30 py-2 gap-4">
       {/* LEFT: back + logo + title */}
       <div className="flex items-center gap-3 min-w-0">
         <Link
           to="/problem"
-          className="flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors duration-200 shrink-0"
+          className="flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors duration-200 shrink-0"
           title="Problem List"
         >
-          <ArrowLeft size={14} className="text-slate-600" />
+          <ArrowLeft size={14} className="text-slate-600 dark:text-slate-400" />
         </Link>
         <Link to="/" className="flex items-center gap-1.5 shrink-0">
           <div className="w-6 h-6 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-md flex items-center justify-center">
@@ -90,9 +91,9 @@ const ProblemTopBar = ({
             Code Arena
           </span>
         </Link>
-        <span className="text-slate-300 hidden sm:block">|</span>
+        <span className="text-slate-300 dark:text-slate-600 hidden sm:block">|</span>
         <div className="hidden sm:flex items-center gap-2 min-w-0">
-          <span className="text-sm font-semibold text-slate-800 truncate max-w-[180px] lg:max-w-xs">
+          <span className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate max-w-[180px] lg:max-w-xs">
             {problemData?.title || "Problem"}
           </span>
           {problemData?.difficulty && (
@@ -107,7 +108,7 @@ const ProblemTopBar = ({
       <div className="hidden lg:flex items-center">
         <Link
           to="/problem"
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-lg transition-all duration-200"
         >
           <LayoutList size={14} />
           Problem List
@@ -116,18 +117,18 @@ const ProblemTopBar = ({
 
       {/* RIGHT: theme toggle + timer + auth */}
       <div className="flex items-center gap-2.5 shrink-0">
-        {/* Theme toggle */}
+        {/* Theme toggle — uses global ThemeContext */}
         <button
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all duration-200"
+          onClick={cycleTheme}
+          className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-slate-300 transition-all duration-200"
           title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
           {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
         </button>
 
         {/* Timer */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-code text-slate-600">
-          <Timer size={13} className="text-indigo-500" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-code text-slate-600 dark:text-slate-400">
+          <Timer size={13} className="text-indigo-500 dark:text-indigo-400" />
           {fmt(elapsed)}
         </div>
 
@@ -135,14 +136,14 @@ const ProblemTopBar = ({
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="flex items-center gap-1.5 hover:bg-slate-100 rounded-lg px-2 py-1 transition-colors duration-200"
+              className="flex items-center gap-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg px-2 py-1 transition-colors duration-200"
             >
               <img
                 src={userDetails?.avatar || "https://i.pravatar.cc/150"}
                 alt="Avatar"
-                className="w-6 h-6 rounded-full border border-slate-200 object-cover"
+                className="w-6 h-6 rounded-full border border-slate-200 dark:border-slate-700 object-cover"
               />
-              <span className="text-xs font-medium text-slate-700 hidden sm:block capitalize">
+              <span className="text-xs font-medium text-slate-700 dark:text-slate-300 hidden sm:block capitalize">
                 {userDetails?.fullName || username}
               </span>
               <ChevronDown
@@ -151,11 +152,11 @@ const ProblemTopBar = ({
               />
             </button>
             {userMenuOpen && (
-              <div className="absolute right-0 mt-1 w-44 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-200/50 z-50 py-1 overflow-hidden animate-scale-in">
+              <div className="absolute right-0 mt-1 w-44 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl dark:shadow-black/40 z-50 py-1 overflow-hidden animate-scale-in">
                 <Link
                   to={`/profile/${username}`}
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150"
                 >
                   <User size={14} />
                   Profile
@@ -163,15 +164,15 @@ const ProblemTopBar = ({
                 <Link
                   to="/problem"
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-150"
                 >
                   <LayoutList size={14} />
                   Problem List
                 </Link>
-                <div className="border-t border-slate-100 mt-1 pt-1">
+                <div className="border-t border-slate-100 dark:border-slate-700 mt-1 pt-1">
                   <button
                     onClick={logout}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors duration-150 w-full text-left"
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors duration-150 w-full text-left"
                   >
                     <LogOut size={14} />
                     Sign Out
@@ -184,13 +185,13 @@ const ProblemTopBar = ({
           <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="px-3 py-1.5 text-xs font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
+              className="px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200"
             >
               Login
             </Link>
             <Link
               to="/signup"
-              className="px-3 py-1.5 text-xs font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-sm shadow-indigo-200/50"
+              className="px-3 py-1.5 text-xs font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-sm shadow-indigo-200/50 dark:shadow-indigo-900/30"
             >
               Sign Up
             </Link>
@@ -204,7 +205,7 @@ const ProblemTopBar = ({
 const ProblemDetails = ({ isContest, problemId }) => {
   const { id: paramId } = useParams();
   const id = isContest ? problemId : paramId;
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { resolvedTheme } = useTheme();
 
   const {
     isJwtExist,
@@ -286,35 +287,33 @@ const ProblemDetails = ({ isContest, problemId }) => {
         variant="ghost"
         onClick={() => setcurrentTopBar(label)}
         className={`relative rounded-none h-10 px-4 font-medium hover:bg-transparent transition-all duration-200 gap-2 text-sm ${
-          isActive ? "text-indigo-600" : "text-slate-500 hover:text-slate-700"
+          isActive ? "text-indigo-600 dark:text-indigo-400" : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
         }`}
       >
         <Icon size={15} />
         <span>{label}</span>
         {isActive && (
-          <div className="absolute bottom-0 left-0 w-full h-[2px] bg-indigo-600 rounded-full" />
+          <div className="absolute bottom-0 left-0 w-full h-[2px] bg-indigo-600 dark:bg-indigo-400 rounded-full" />
         )}
       </Button>
     );
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#fafafa]">
+    <div className="flex flex-col h-screen overflow-hidden bg-[#fafafa] dark:bg-[#0b1120]">
       <ProblemTopBar
         problemData={problemDetailsInfo}
         isJwtExist={isJwtExist}
         userDetails={userDetails}
         username={username}
         logout={handleLogout}
-        isDarkMode={isDarkMode}
-        setIsDarkMode={setIsDarkMode}
       />
 
       {/* Main Content Area */}
       <ResizablePanels direction="horizontal" initialSize={50}>
         {/* Left Pane (Description) */}
-        <div className="flex flex-col h-full w-full border-r border-slate-200 bg-white">
-          <div className="flex items-center justify-between border-b border-slate-200 bg-white px-2 min-h-10 shrink-0">
+        <div className="flex flex-col h-full w-full border-r border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-2 min-h-10 shrink-0">
             {isContest ? (
               <TabButton label="Description" icon={Lightbulb} />
             ) : (
@@ -326,7 +325,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
             )}
           </div>
 
-          <div className="flex-1 overflow-y-auto p-5 bg-white">
+          <div className="flex-1 overflow-y-auto p-5 bg-white dark:bg-slate-900">
             {currentTopBar === "Description" ? (
               <Description
                 description={description}
@@ -350,7 +349,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
         </div>
 
         {/* Right Pane (Code Editor) */}
-        <div className={`flex flex-col h-full w-full ${isDarkMode ? 'bg-[#1e1e1e]' : 'bg-white'}`}>
+        <div className={`flex flex-col h-full w-full ${resolvedTheme === 'dark' ? 'bg-[#1e1e1e]' : 'bg-white'}`}>
           <CodeEditor
             codeTemplates={codeTemplates}
             problemId={id}

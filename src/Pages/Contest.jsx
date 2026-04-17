@@ -56,7 +56,7 @@ const Contest = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen bg-[#fafafa] dark:bg-[#0b1120]">
       <EnhancedNavbar />
 
       <div className="section-wrapper pt-24 pb-10">
@@ -84,25 +84,25 @@ const Contest = () => {
                     <div className="flex-1 p-6 lg:p-8 space-y-5">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h2 className="text-2xl font-bold text-slate-900">
+                          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
                             {closestUpcomingContest.contestName}
                           </h2>
-                          <p className="text-sm text-slate-500 mt-0.5">Sponsored by TechGiant</p>
+                          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Sponsored by TechGiant</p>
                         </div>
-                        <div className="w-11 h-11 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0">
-                          <TrophyIcon size={20} className="text-indigo-600" />
+                        <div className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 flex items-center justify-center shrink-0">
+                          <TrophyIcon size={20} className="text-indigo-600 dark:text-indigo-400" />
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 w-fit">
-                        <AlarmClock size={18} className="text-indigo-600" />
-                        <span className="text-lg font-bold text-slate-900">
+                      <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 w-fit">
+                        <AlarmClock size={18} className="text-indigo-600 dark:text-indigo-400" />
+                        <span className="text-lg font-bold text-slate-900 dark:text-slate-50">
                           <Countdown targetTime={closestUpcomingContest.startTime} />
                         </span>
-                        <span className="text-sm text-slate-500">until start</span>
+                        <span className="text-sm text-slate-500 dark:text-slate-400">until start</span>
                       </div>
 
-                      <p className="text-sm text-slate-500 leading-relaxed max-w-lg">
+                      <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-lg">
                         {closestUpcomingContest.contestDescription}
                       </p>
 
@@ -127,8 +127,8 @@ const Contest = () => {
             ) : (
               <div className="card-elevated p-12 text-center">
                 <TrophyIcon size={48} className="mx-auto text-slate-300 mb-4" />
-                <h3 className="text-lg font-semibold text-slate-700">No Upcoming Contests</h3>
-                <p className="text-sm text-slate-500 mt-1">Check back later for new contests.</p>
+              <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200">No Upcoming Contests</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Check back later for new contests.</p>
               </div>
             )}
           </div>
@@ -138,13 +138,13 @@ const Contest = () => {
             {/* Rating Card */}
             <div className="card-elevated p-5 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center">
-                  <TrendingUp size={18} className="text-indigo-600" />
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 flex items-center justify-center">
+                  <TrendingUp size={18} className="text-indigo-600 dark:text-indigo-400" />
                 </div>
                 <div>
-                  <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Your Rating</p>
+                  <p className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Your Rating</p>
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold text-slate-900">1,540</span>
+                    <span className="text-2xl font-bold text-slate-900 dark:text-slate-50">1,540</span>
                     <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-0.5 border border-emerald-100">
                       <BsTriangleFill size={8} />
                       12
@@ -154,13 +154,13 @@ const Contest = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
-                  <p className="text-[11px] text-slate-500 font-medium">Global Rank</p>
-                  <p className="text-lg font-bold text-slate-900">#14,023</p>
+                <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 text-center border border-slate-100 dark:border-slate-700">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Global Rank</p>
+                  <p className="text-lg font-bold text-slate-900 dark:text-slate-50">#14,023</p>
                 </div>
-                <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
-                  <p className="text-[11px] text-slate-500 font-medium">Contests</p>
-                  <p className="text-lg font-bold text-slate-900">24</p>
+                <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 text-center border border-slate-100 dark:border-slate-700">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Contests</p>
+                  <p className="text-lg font-bold text-slate-900 dark:text-slate-50">24</p>
                 </div>
               </div>
 
@@ -172,26 +172,26 @@ const Contest = () => {
 
             {/* Top Solvers */}
             <div className="card-elevated overflow-hidden">
-              <div className="flex items-center justify-between p-4 border-b border-slate-100">
-                <h3 className="text-sm font-bold text-slate-800">Top Solvers</h3>
-                <span className="text-[11px] text-slate-400 font-medium">Last Contest</span>
+              <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700/50">
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Top Solvers</h3>
+                <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">Last Contest</span>
               </div>
               <div>
                 {topSolvers.map((obj, idx) => (
                   <div
                     key={idx}
-                    className={`flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors duration-150 ${
-                      idx !== topSolvers.length - 1 ? "border-b border-slate-50" : ""
+                    className={`flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors duration-150 ${
+                      idx !== topSolvers.length - 1 ? "border-b border-slate-50 dark:border-slate-700/30" : ""
                     }`}
                   >
-                    <span className="w-6 text-sm font-bold text-slate-400 text-center">{obj.rank}</span>
+                    <span className="w-6 text-sm font-bold text-slate-400 dark:text-slate-500 text-center">{obj.rank}</span>
                     <img
                       src={obj.avatar}
                       alt=""
                       className="w-8 h-8 rounded-full bg-slate-100"
                     />
-                    <span className="flex-1 text-sm font-medium text-slate-700 truncate">{obj.name}</span>
-                    <div className="flex items-center gap-1 text-xs text-slate-400 font-medium">
+                    <span className="flex-1 text-sm font-medium text-slate-700 dark:text-slate-200 truncate">{obj.name}</span>
+                    <div className="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500 font-medium">
                       <Zap size={13} className="fill-emerald-500 text-emerald-500" />
                       {obj.duration}
                     </div>

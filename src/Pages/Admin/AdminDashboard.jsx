@@ -3,10 +3,10 @@ import { Users, FileCode2, Trophy, ArrowUpRight, ArrowDownRight, Activity, Trend
 
 const AdminDashboard = () => {
     const stats = [
-        { title: 'Total Users', value: '1,234', change: '+12%', icon: Users, trend: 'up', color: 'text-indigo-600 bg-indigo-50' },
-        { title: 'Active Problems', value: '456', change: '+5%', icon: FileCode2, trend: 'up', color: 'text-purple-600 bg-purple-50' },
-        { title: 'Total Contests', value: '89', change: '+2%', icon: Trophy, trend: 'up', color: 'text-amber-600 bg-amber-50' },
-        { title: 'Submissions', value: '12.5k', change: '-4%', icon: Activity, trend: 'down', color: 'text-emerald-600 bg-emerald-50' },
+        { title: 'Total Users', value: '1,234', change: '+12%', icon: Users, trend: 'up', color: 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/15' },
+        { title: 'Active Problems', value: '456', change: '+5%', icon: FileCode2, trend: 'up', color: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/15' },
+        { title: 'Total Contests', value: '89', change: '+2%', icon: Trophy, trend: 'up', color: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/15' },
+        { title: 'Submissions', value: '12.5k', change: '-4%', icon: Activity, trend: 'down', color: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/15' },
     ];
 
     const recentActivity = [
@@ -47,24 +47,24 @@ const AdminDashboard = () => {
                 {/* Recent Activity */}
                 <div className="admin-card">
                     <div className="flex items-center justify-between mb-5">
-                        <h2 className="text-base font-bold text-slate-800">Recent Activity</h2>
-                        <button className="text-xs text-indigo-600 font-medium hover:underline">View All</button>
+                        <h2 className="text-base font-bold text-slate-800 dark:text-slate-100">Recent Activity</h2>
+                        <button className="text-xs text-indigo-600 dark:text-indigo-400 font-medium hover:underline">View All</button>
                     </div>
                     <div className="space-y-0">
                         {recentActivity.map((activity, index) => (
-                            <div key={index} className={`flex items-center justify-between py-3.5 ${index !== recentActivity.length - 1 ? 'border-b border-slate-50' : ''}`}>
+                            <div key={index} className={`flex items-center justify-between py-3.5 ${index !== recentActivity.length - 1 ? 'border-b border-slate-50 dark:border-slate-700/30' : ''}`}>
                                 <div className="flex items-center gap-3">
                                     <img
                                         src={activity.avatar}
                                         alt={activity.user}
-                                        className="w-9 h-9 rounded-full object-cover border border-slate-100"
+                                        className="w-9 h-9 rounded-full object-cover border border-slate-100 dark:border-slate-700"
                                     />
                                     <div>
-                                        <p className="text-sm font-medium text-slate-800">{activity.user}</p>
-                                        <p className="text-xs text-slate-400 mt-0.5">{activity.action}</p>
+                                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{activity.user}</p>
+                                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{activity.action}</p>
                                     </div>
                                 </div>
-                                <span className="text-xs text-slate-400 shrink-0 ml-3">{activity.time}</span>
+                                <span className="text-xs text-slate-400 dark:text-slate-500 shrink-0 ml-3">{activity.time}</span>
                             </div>
                         ))}
                     </div>
@@ -73,7 +73,7 @@ const AdminDashboard = () => {
                 {/* System Status */}
                 <div className="admin-card">
                     <div className="flex items-center justify-between mb-5">
-                        <h2 className="text-base font-bold text-slate-800">System Status</h2>
+                        <h2 className="text-base font-bold text-slate-800 dark:text-slate-100">System Status</h2>
                         <span className="badge-success text-[11px]">
                             <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
                             All Systems Operational
@@ -92,11 +92,11 @@ const AdminDashboard = () => {
 };
 
 const StatCard = ({ title, value, change, icon: Icon, trend, color }) => (
-    <div className="admin-card hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all duration-300 group">
+    <div className="admin-card hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.4)] transition-all duration-300 group">
         <div className="flex justify-between items-start">
             <div>
-                <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">{title}</p>
-                <h3 className="text-2xl font-bold text-slate-900 mt-2">{value}</h3>
+                <p className="text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">{title}</p>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mt-2">{value}</h3>
             </div>
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color} group-hover:scale-110 transition-transform duration-300`}>
                 <Icon className="w-5 h-5" />
@@ -111,7 +111,7 @@ const StatCard = ({ title, value, change, icon: Icon, trend, color }) => (
             <span className={`text-sm font-semibold ${trend === 'up' ? 'text-emerald-500' : 'text-red-500'}`}>
                 {change}
             </span>
-            <span className="text-xs text-slate-400 ml-2">vs last month</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 ml-2">vs last month</span>
         </div>
     </div>
 );
@@ -119,10 +119,10 @@ const StatCard = ({ title, value, change, icon: Icon, trend, color }) => (
 const StatusBar = ({ label, value, percentage, color }) => (
     <div>
         <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-slate-600">{label}</span>
-            <span className={`text-sm font-semibold ${percentage > 90 ? 'text-emerald-600' : percentage > 60 ? 'text-amber-600' : 'text-indigo-600'}`}>{value}</span>
+            <span className="text-sm text-slate-600 dark:text-slate-300">{label}</span>
+            <span className={`text-sm font-semibold ${percentage > 90 ? 'text-emerald-600 dark:text-emerald-400' : percentage > 60 ? 'text-amber-600 dark:text-amber-400' : 'text-indigo-600 dark:text-indigo-400'}`}>{value}</span>
         </div>
-        <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+        <div className="w-full bg-slate-100 dark:bg-slate-700/50 rounded-full h-2 overflow-hidden">
             <div
                 className={`${color} h-full rounded-full transition-all duration-700 ease-out`}
                 style={{ width: `${percentage}%` }}

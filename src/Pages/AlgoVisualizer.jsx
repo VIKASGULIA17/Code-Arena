@@ -9,17 +9,20 @@ import { GraphVisualizer } from "@/components/Algovisualizer/graph-visualizer"
 import { ArrowLeft, Menu, Code2, Cpu, Sun, Moon } from "lucide-react"
 import { useNavigate, Link } from "react-router-dom"
 import { useAppContext } from "@/context/AppContext"
+import { useTheme } from "@/context/ThemeContext"
 
 export default function AlgoVisualizerPage() {
   const [activeCategory, setActiveCategory] = useState("graph")
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [theme, setTheme] = useState("light")
   const navigate = useNavigate()
   const { isJwtExist, userDetails, username } = useAppContext()
+  const { resolvedTheme, cycleTheme } = useTheme()
 
-  const isDark = theme === "dark"
+  // Derive theme string for child components that still use the "light"/"dark" prop
+  const theme = resolvedTheme
+  const isDark = resolvedTheme === "dark"
 
-  const bgClass   = isDark ? "bg-[#020617] text-[#f1f5f9] dark" : "bg-[#f8fafc] text-[#0f172a]"
+  const bgClass   = isDark ? "bg-[#020617] text-[#f1f5f9]" : "bg-[#f8fafc] text-[#0f172a]"
   const headerBg  = isDark ? "bg-[#0f172a]/90 border-[#1e293b]" : "bg-[#ffffff]/90 border-[#e2e8f0]"
   const btnClass  = isDark ? "bg-[#1e293b] hover:bg-[#334155] text-[#94a3b8]" : "bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#64748b]"
 
@@ -52,9 +55,9 @@ export default function AlgoVisualizerPage() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          {/* Theme toggle */}
+          {/* Theme toggle — now uses global ThemeContext */}
           <button
-            onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}
+            onClick={cycleTheme}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${btnClass}`}
             title="Toggle theme"
           >

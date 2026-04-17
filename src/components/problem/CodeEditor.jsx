@@ -6,22 +6,35 @@ import TestCases from "./TestCases";
 import { userCode } from "../../data/UserCodeTemplate";
 import { problemSolutions } from "../../data/solution";
 import ResizablePanels from "../utils/ResizablePanel";
+import { useTheme } from "../../context/ThemeContext";
 
 const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcaseData,problemMeta }) => {
 
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);   //all the language and versions
   const [Language, setLanguage] = useState(LanguageList[0]); 
-
-// console.log("Available code templates for this problem:", codeTemplates);
+  const { resolvedTheme } = useTheme();
 
   const CodeEditorRef = useRef(); //refrence ot code editor
   const [Output, setOutput] = useState(null); // output (here because if i want to reset the code ,testcases get reset too)
 
   const currentLang=Language[0];
   
-  const onMount = (editor) => { //to focus on editor on refresh
+  const onMount = (editor, monaco) => { //to focus on editor on refresh
+    monaco.editor.defineTheme('oceanDark', {
+      base: 'vs-dark',
+      inherit: true,
+      rules: [],
+      colors: {
+        'editor.background': '#0f172a',
+        'editor.lineHighlightBackground': '#1e293b',
+      }
+    });
     CodeEditorRef.current = editor;
     editor.focus();
+    // After definition is ready, explicitly set the theme if we were already in dark mode
+    if (resolvedTheme === "dark") {
+      monaco.editor.setTheme('oceanDark');
+    }
   };
 
 
@@ -29,20 +42,6 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
 
 
   const [Code, setCode] = useState(template); //current code of the user 
-
-  // useEffect(() => {
-    
-  //   const newLang=Language[0]
-  //   // const new_template = userCode[problemId][newLang]['boilerplate'];
-  //   // setCode(new_template)
-  //   setOutput(null)
-
-  //   if(CodeEditorRef.current){
-  //     // CodeEditorRef.current.setValue(new_template);
-  //   }
-  
-  // }, [problemId,Language])
-  
 
   useEffect(() => {
     if (CodeEditorRef.current) {
@@ -60,6 +59,8 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
     }
   };
 
+  const editorTheme = resolvedTheme === "dark" ? "oceanDark" : "vs-light";
+
   return (
     <div className="flex flex-col h-full w-full gap-0">
       <LanguageSelector
@@ -69,7 +70,6 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
         setLanguage={setLanguage}
         setCode={setCode}
         onReset={handleReset}
-        // problemId={problemId}
         Output={Output}
         setOutput={setOutput}
       />
@@ -82,13 +82,12 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
             
             defaultValue={template} 
             
-            theme="vs-light"
+            theme={editorTheme}
             onMount={onMount}
             
             onChange={(value) => {
               setCode(value);
             }}
-            
             options={{
               fontSize: 16,
               lineHeight: 24,

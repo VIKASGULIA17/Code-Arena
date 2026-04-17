@@ -361,13 +361,13 @@ export default function HeroSection() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen bg-[#fafafa] dark:bg-[#0b1120]">
       {/* ─── Hero ─── */}
       <section className="relative pt-32 pb-24 px-6 overflow-hidden">
         {/* Background blobs */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/60 via-white to-purple-50/40 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-gradient-to-bl from-indigo-100/30 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-purple-100/20 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/60 via-white to-purple-50/40 dark:from-indigo-950/30 dark:via-[#0b1120] dark:to-purple-950/20 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-gradient-to-bl from-indigo-100/30 dark:from-indigo-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-purple-100/20 dark:from-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative section-wrapper">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -379,7 +379,7 @@ export default function HeroSection() {
               <div className="flex items-center gap-3">
                 <a
                   href="/contest"
-                  className="inline-flex items-center gap-2 bg-white border border-indigo-100 text-indigo-600 px-4 py-1.5 rounded-full text-sm font-semibold shadow-sm hover:shadow-md hover:border-indigo-300 transition-all duration-200 group"
+                  className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-indigo-100 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 px-4 py-1.5 rounded-full text-sm font-semibold shadow-sm hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-500/40 transition-all duration-200 group"
                 >
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75" />
@@ -388,12 +388,12 @@ export default function HeroSection() {
                   Weekly Contest #352 is Live
                   <ChevronRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                 </a>
-                <span className="text-xs text-slate-400 font-medium">Ends in <span className="text-slate-600 font-semibold">2h 14m</span></span>
+                <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">Ends in <span className="text-slate-600 dark:text-slate-300 font-semibold">2h 14m</span></span>
               </div>
 
               {/* Headline */}
               <div className="space-y-2">
-                <h1 className="text-5xl md:text-[3.75rem] font-extrabold text-slate-900 leading-[1.06] tracking-tight">
+                <h1 className="text-5xl md:text-[3.75rem] font-extrabold text-slate-900 dark:text-white leading-[1.06] tracking-tight">
                   Master
                   <span
                     className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 transition-opacity duration-300"
@@ -402,13 +402,13 @@ export default function HeroSection() {
                     {ROTATING_WORDS[wordIdx]}.
                   </span>
                 </h1>
-                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-400 leading-tight">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-400 dark:text-slate-500 leading-tight">
                   Ace the Interview.
                 </h2>
               </div>
 
               {/* Sub-text */}
-              <p className="text-base text-slate-500 max-w-md leading-relaxed">
+              <p className="text-base text-slate-500 dark:text-slate-400 max-w-md leading-relaxed">
                 The sharpest platform to practice DSA, compete in global contests,
                 and land your dream tech job — all in one place.
               </p>
@@ -418,7 +418,7 @@ export default function HeroSection() {
                 {pills.map(({ icon: Icon, label }) => (
                   <span
                     key={label}
-                    className="inline-flex items-center gap-1.5 bg-white border border-slate-200 text-slate-600 text-[12px] font-medium px-3 py-1 rounded-full shadow-sm"
+                    className="inline-flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-[12px] font-medium px-3 py-1 rounded-full shadow-sm"
                   >
                     <Icon size={12} className="text-indigo-500" />
                     {label}
@@ -435,7 +435,7 @@ export default function HeroSection() {
                   </button>
                 </Link>
                 <Link to="/algovisualizer">
-                  <button className="group inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 font-semibold px-6 h-12 rounded-xl border border-slate-200 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-200 text-sm">
+                  <button className="group inline-flex items-center gap-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold px-6 h-12 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 shadow-sm hover:shadow-md transition-all duration-200 text-sm">
                     <Sparkles size={15} className="text-purple-500 group-hover:rotate-12 transition-transform" />
                     Explore Visualizer
                   </button>
@@ -443,14 +443,14 @@ export default function HeroSection() {
               </div>
 
               {/* Social Proof */}
-              <div className="flex items-center gap-4 pt-1 border-t border-slate-100">
+              <div className="flex items-center gap-4 pt-1 border-t border-slate-100 dark:border-slate-800">
                 <div className="flex -space-x-2">
                   {[1, 29, 3, 4, 5].map((i) => (
                     <img
                       key={i}
                       src={`https://i.pravatar.cc?img=${i}`}
                       alt=""
-                      className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
+                      className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 shadow-sm"
                     />
                   ))}
                 </div>
@@ -463,7 +463,7 @@ export default function HeroSection() {
                     ))}
                     <span className="ml-1 text-xs font-semibold text-slate-700">4.9</span>
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Trusted by <span className="font-semibold text-slate-600">1M+ developers</span> worldwide</p>
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">Trusted by <span className="font-semibold text-slate-600 dark:text-slate-300">1M+ developers</span> worldwide</p>
                 </div>
               </div>
 
@@ -488,8 +488,8 @@ export default function HeroSection() {
                   <Icon size={22} />
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-slate-900">{stat.value}</p>
-                  <p className="text-sm text-slate-500 font-medium">{stat.label}</p>
+                  <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">{stat.value}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{stat.label}</p>
                 </div>
               </div>
             );
@@ -511,8 +511,8 @@ export default function HeroSection() {
                 </h3>
                 <span className="px-2 py-0.5 text-[10px] font-bold bg-indigo-100 text-indigo-600 rounded-full">NEW</span>
               </div>
-              <h4 className="text-xl font-bold text-slate-900 mb-2">Reverse Linked List II</h4>
-              <p className="text-slate-500 text-sm max-w-lg mb-3">
+              <h4 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-2">Reverse Linked List II</h4>
+              <p className="text-slate-500 dark:text-slate-400 text-sm max-w-lg mb-3">
                 Given the head of a singly linked list and two integers left and right, reverse the nodes from position left to position right.
               </p>
               <div className="flex flex-wrap gap-2">
@@ -533,10 +533,10 @@ export default function HeroSection() {
       {/* ─── Features ─── */}
       <section className="px-6 py-24 section-wrapper">
         <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-50 mb-3">
             Everything you need to grow
           </h2>
-          <p className="text-slate-500 max-w-xl mx-auto">
+          <p className="text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
             From beginner concepts to advanced competitive programming, modern tools to help you succeed.
           </p>
         </div>
@@ -548,8 +548,8 @@ export default function HeroSection() {
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${feature.color} group-hover:scale-110 transition-transform duration-300`}>
                   <Icon size={22} />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">{feature.title}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-50 mb-2">{feature.title}</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">{feature.description}</p>
               </div>
             );
           })}

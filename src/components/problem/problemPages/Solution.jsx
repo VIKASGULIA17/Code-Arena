@@ -4,7 +4,9 @@ import { Copy, FileQuestion, Code2, ArrowLeft } from "lucide-react";
 import { Kbd } from "@/components/ui/kbd";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import { Editor } from "@monaco-editor/react";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { materialLight, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useTheme } from "../../../context/ThemeContext";
 import { ToastContainer, toast } from "react-toastify";
 
 const Solution = ({ 
@@ -15,7 +17,9 @@ const Solution = ({
   implementation, 
   setcurrentTopBar 
 }) => {
-  
+  const { resolvedTheme } = useTheme();
+  const syntaxTheme = resolvedTheme === "dark" ? vscDarkPlus : materialLight;
+
   const hasMarkdownEditorial = typeof editorial === "string" && editorial.trim() !== "";
   
   const hasStructuredEditorial = 
@@ -187,21 +191,23 @@ const Solution = ({
               </div>
             </div>
             
-            <div className="rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-               <Editor
-                  height="50vh"
-                  value={currentCode}
-                  language={editorLanguage}
-                  theme="light"
-                  options={{
-                    readOnly: true,
-                    minimap: { enabled: false },
-                    fontSize: 14,
-                    padding: { top: 20 },
-                    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-                    scrollbar: { vertical: "visible", horizontal: "visible" },
-                  }}
-                />
+            <div className={`rounded-xl border ${resolvedTheme === 'dark' ? 'border-slate-800 bg-[#0f172a] shadow-inner' : 'border-gray-200 bg-[#FAFAFA]'} overflow-hidden shadow-sm`}>
+               <SyntaxHighlighter
+                 language={editorLanguage}
+                 style={syntaxTheme}
+                 customStyle={{
+                   margin: 0,
+                   padding: '1.5rem',
+                   fontSize: '14px',
+                   lineHeight: '1.6',
+                   fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                   background: 'transparent',
+                 }}
+                 wrapLines={true}
+                 wrapLongLines={true}
+               >
+                 {currentCode}
+               </SyntaxHighlighter>
             </div>
           </div>
         )}
