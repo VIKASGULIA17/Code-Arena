@@ -33,6 +33,7 @@ const Contest = () => {
       );
       if (response.data) {
         setcontestData(response.data);
+        console.log(response.data)
       }
     } catch (error) {
       console.log(error);
@@ -44,7 +45,8 @@ const Contest = () => {
     const now = new Date();
     const futureContests = contestData.filter((contest) => {
       const startTime = new Date(contest.startTime);
-      return startTime > now || contest.contestStatus === "UPCOMING" || contest.contestStatus === "ONGOING";
+      const status = contest.contestStatus?.toUpperCase();
+      return startTime > now || status === "UPCOMING" || status === "ONGOING";
     });
     if (futureContests.length === 0) return null;
     futureContests.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
@@ -64,73 +66,71 @@ const Contest = () => {
           {/* Main Content */}
           <div className="flex-1 min-w-0">
             {closestUpcomingContest ? (
-              <>
-                {/* Featured Contest Card */}
-                <div className="card-elevated overflow-hidden mb-8">
-                  <div className="flex flex-col lg:flex-row">
-                    {/* Image */}
-                    <div className="lg:w-[280px] shrink-0 relative bg-slate-100">
-                      <img
-                        src="https://images.unsplash.com/photo-1757101782354-d7988295617c"
-                        className="h-52 lg:h-full w-full object-cover"
-                        alt="Contest Cover"
-                      />
-                      <span className="absolute bottom-4 left-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-lg shadow-indigo-500/20">
-                        Featured Event
-                      </span>
+              <div className="card-elevated overflow-hidden mb-8">
+                <div className="flex flex-col lg:flex-row">
+                  {/* Image */}
+                  <div className="lg:w-[280px] shrink-0 relative bg-slate-100">
+                    <img
+                      src="https://images.unsplash.com/photo-1757101782354-d7988295617c"
+                      className="h-52 lg:h-full w-full object-cover"
+                      alt="Contest Cover"
+                    />
+                    <span className="absolute bottom-4 left-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-lg shadow-indigo-500/20">
+                      Featured Event
+                    </span>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 p-6 lg:p-8 space-y-5">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
+                          {closestUpcomingContest.contestName}
+                        </h2>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Sponsored by TechGiant</p>
+                      </div>
+                      <div className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 flex items-center justify-center shrink-0">
+                        <TrophyIcon size={20} className="text-indigo-600 dark:text-indigo-400" />
+                      </div>
                     </div>
 
-                    {/* Content */}
-                    <div className="flex-1 p-6 lg:p-8 space-y-5">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
-                            {closestUpcomingContest.contestName}
-                          </h2>
-                          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Sponsored by TechGiant</p>
-                        </div>
-                        <div className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 flex items-center justify-center shrink-0">
-                          <TrophyIcon size={20} className="text-indigo-600 dark:text-indigo-400" />
-                        </div>
-                      </div>
+                    <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 w-fit">
+                      <AlarmClock size={18} className="text-indigo-600 dark:text-indigo-400" />
+                      <span className="text-lg font-bold text-slate-900 dark:text-slate-50">
+                        <Countdown targetTime={closestUpcomingContest.startTime} />
+                      </span>
+                      <span className="text-sm text-slate-500 dark:text-slate-400">until start</span>
+                    </div>
 
-                      <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 w-fit">
-                        <AlarmClock size={18} className="text-indigo-600 dark:text-indigo-400" />
-                        <span className="text-lg font-bold text-slate-900 dark:text-slate-50">
-                          <Countdown targetTime={closestUpcomingContest.startTime} />
-                        </span>
-                        <span className="text-sm text-slate-500 dark:text-slate-400">until start</span>
-                      </div>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-lg">
+                      {closestUpcomingContest.contestDescription}
+                    </p>
 
-                      <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-lg">
-                        {closestUpcomingContest.contestDescription}
-                      </p>
-
-                      <div className="flex items-center gap-3 pt-2">
-                        <Link to="registration" state={{ contest: closestUpcomingContest }}>
-                          <Button variant="outline" className="rounded-xl text-sm font-medium h-10 border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200">
-                            Details
-                          </Button>
-                        </Link>
-                        <Link to="registration" state={{ contest: closestUpcomingContest }}>
-                          <Button className="bg-indigo-600 hover:bg-indigo-700 rounded-xl text-sm font-medium h-10 shadow-sm shadow-indigo-200/50 transition-all duration-200">
-                            Register Now
-                          </Button>
-                        </Link>
-                      </div>
+                    <div className="flex items-center gap-3 pt-2">
+                      <Link to="registration" state={{ contest: closestUpcomingContest }}>
+                        <Button variant="outline" className="rounded-xl text-sm font-medium h-10 border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200">
+                          Details
+                        </Button>
+                      </Link>
+                      <Link to="registration" state={{ contest: closestUpcomingContest }}>
+                        <Button className="bg-indigo-600 hover:bg-indigo-700 rounded-xl text-sm font-medium h-10 shadow-sm shadow-indigo-200/50 transition-all duration-200">
+                          Register Now
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 </div>
-
-                <ContestList contestData={contestData} />
-              </>
+              </div>
             ) : (
-              <div className="card-elevated p-12 text-center">
+              <div className="card-elevated p-12 text-center mb-8">
                 <TrophyIcon size={48} className="mx-auto text-slate-300 mb-4" />
-              <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200">No Upcoming Contests</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200">No Upcoming Contests</h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Check back later for new contests.</p>
               </div>
             )}
+
+            {/* This list will now always render, showing all past/ongoing/future contests returned from the backend */}
+            <ContestList contestData={contestData} />
           </div>
 
           {/* Sidebar */}

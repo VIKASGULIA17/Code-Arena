@@ -364,7 +364,7 @@ export function TreeCanvas({ snapshot, theme = "dark" }) {
                     fill={style.fill}
                     stroke={style.stroke}
                     strokeWidth={2}
-                    filter={style.filter || undefined}
+                    style={{ filter: style.glow ? `drop-shadow(0 0 6px ${style.glow})` : 'none' }}
                     animate={{
                       r: style.r,
                       fill: style.fill,

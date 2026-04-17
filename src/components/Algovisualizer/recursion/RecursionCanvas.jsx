@@ -449,17 +449,17 @@ export function RecursionCanvas({
                 NODE_STYLES[node.state] ||
                 NODE_STYLES[STATE.PENDING];
               const isActive = node.id === activeNodeId;
-              const glowFilter =
+              const dropShadow =
                 node.state === STATE.ACTIVE ||
                 node.state === STATE.COMPUTING
-                  ? "url(#node-glow-blue)"
+                  ? 'drop-shadow(0 0 6px #3b82f6)'
                   : node.state === STATE.BASE_CASE
-                    ? "url(#node-glow-green)"
+                    ? 'drop-shadow(0 0 6px #10b981)'
                     : node.state === STATE.RETURNING
-                      ? "url(#node-glow-yellow)"
+                      ? 'drop-shadow(0 0 6px #eab308)'
                       : node.state === STATE.MEMOIZED
-                        ? "url(#node-glow-purple)"
-                        : undefined;
+                        ? 'drop-shadow(0 0 6px #a855f7)'
+                        : 'none';
 
               return (
                 <motion.g
@@ -511,7 +511,7 @@ export function RecursionCanvas({
                     strokeDasharray={
                       style.dash || undefined
                     }
-                    filter={glowFilter}
+                    style={{ filter: dropShadow }}
                     animate={{
                       r: style.r,
                       fill: style.fill,

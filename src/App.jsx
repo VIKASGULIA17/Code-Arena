@@ -12,6 +12,7 @@ import Signup from './Pages/Authentication/Signup'
 import AlgoVisualizer from './Pages/AlgoVisualizer'
 import OngoingContestPage from './components/Contest/OngoingContestPage'
 import ContestRegistration from './components/Contest/ContestRegistration'
+import ContestRankings from './Pages/ContestPages/ContestRankings'
 import SessionExpired from './components/others/SessionExpired'
 import AdminLayout from './components/admin/AdminLayout'
 import AdminDashboard from './Pages/Admin/AdminDashboard'
@@ -39,6 +40,7 @@ const App = () => {
         <Route path='contest' element={<Contest />} />
         <Route path='contest/registration' element={<ContestRegistration />} />
         <Route path='contest/:contestName' element={<OngoingContestPage />} />
+        <Route path='contestRankings/:slug' element={<ContestRankings />} />
         <Route path='/profile/:username' element={<Profile />} />
         <Route path="/submission/:slug" element={<SharedSubmission />} />
         <Route path='login' element={<Login />} />

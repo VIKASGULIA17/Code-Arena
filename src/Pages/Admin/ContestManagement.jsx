@@ -18,7 +18,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { AnimatePresence, motion } from "framer-motion";
 
 const ContestManagement = () => {
-  const { allContest, showAllContest } = useAppContext();
+  const { allContest, showAllContest, allProblem } = useAppContext();
   const [deleteTarget, setdeleteTarget] = useState("");
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [targetContestDelete, settargetContestDelete] = useState({
@@ -36,6 +36,7 @@ const ContestManagement = () => {
     contestDescription: "",
     startTime: "",
     duration: "",
+    problemIds: [],
   });
 
   const initialValues = {
@@ -43,6 +44,7 @@ const ContestManagement = () => {
     contestDescription: "",
     startTime: "",
     duration: "",
+    problemIds: [],
   };
 
   console.log(allContest);
@@ -81,6 +83,7 @@ const ContestManagement = () => {
       contestDescription: contest.contestDescription,
       startTime: contest.startTime,
       duration: contest.duration,
+      problemIds: contest.problemIds || [],
     });
     setIsModalOpen(true);
     setActiveMenuContestName(null);
@@ -469,6 +472,53 @@ const ContestManagement = () => {
                       </p>
                     )}
                   </div>
+                </div>
+
+                {/* PROBLEM SELECTION */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+                    Select Problems
+                  </label>
+                  <div className="h-40 overflow-y-auto border border-gray-300 dark:border-slate-600 rounded-lg p-2 space-y-1 bg-gray-50 dark:bg-slate-900">
+                    {allProblem && allProblem.length > 0 ? (
+                      allProblem.map((prob) => {
+                        const isSelected = currentContest.problemIds?.includes(prob.id);
+                        return (
+                          <div 
+                            key={prob.id}
+                            onClick={() => {
+                              setCurrentContest(prev => {
+                                const ids = prev.problemIds || [];
+                                return {
+                                  ...prev,
+                                  problemIds: isSelected 
+                                    ? ids.filter(id => id !== prob.id)
+                                    : [...ids, prob.id]
+                                };
+                              });
+                            }}
+                            className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${isSelected ? 'bg-indigo-100 dark:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-800' : 'hover:bg-gray-100 dark:hover:bg-slate-800 border border-transparent'}`}
+                          >
+                            <input 
+                              type="checkbox" 
+                              checked={isSelected}
+                              readOnly
+                              className="w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+                            />
+                            <div className="flex-1 flex justify-between items-center">
+                              <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{prob.title}</span>
+                              <span className={`text-xs px-2 py-0.5 rounded-full ${prob.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' : prob.difficulty === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}`}>
+                                {prob.difficulty}
+                              </span>
+                            </div>
+                          </div>
+                        )
+                      })
+                    ) : (
+                       <p className="text-xs text-gray-500 text-center py-4">No problems found. Add problems first.</p>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Select the problems you want to feature in this contest.</p>
                 </div>
 
                 {/* BUTTONS */}
