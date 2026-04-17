@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import Editor from "@monaco-editor/react";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { materialLight, vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useTheme } from "../../../context/ThemeContext";
 import {
   CheckCircle2,
   XCircle,
@@ -92,10 +94,10 @@ const StatPill = ({
   value,
   iconClass = "text-gray-400",
 }) => (
-  <div className="flex flex-col items-center gap-1 px-6 py-4 bg-white rounded-2xl border border-gray-200 shadow-sm min-w-[100px]">
+  <div className="flex flex-col items-center gap-1 px-6 py-4 bg-white dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-800 shadow-sm min-w-[100px]">
     <Icon size={20} className={iconClass} />
-    <span className="text-xl font-extrabold text-gray-800">{value ?? "—"}</span>
-    <span className="text-xs text-gray-400 uppercase tracking-wide">
+    <span className="text-xl font-extrabold text-gray-800 dark:text-slate-100">{value ?? "—"}</span>
+    <span className="text-xs text-gray-400 dark:text-slate-500 uppercase tracking-wide">
       {label}
     </span>
   </div>
@@ -144,6 +146,8 @@ const SharedSubmission = () => {
   const [submission, setSubmission] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const syntaxTheme = resolvedTheme === "dark" ? vscDarkPlus : materialLight;
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -217,14 +221,14 @@ const SharedSubmission = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120]">
       <EnhancedNavbar />
 
       <div className="max-w-5xl mx-auto px-4 pt-24 pb-16 flex flex-col gap-6">
         <div>
           <Link
             to="/problem"
-            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200 transition-colors"
           >
             <ArrowLeft size={15} />
             Back to Problems
@@ -330,28 +334,26 @@ const SharedSubmission = () => {
         <TestingPage submittedCode={submission.userCode} autoExecute={true} />
       }
 
-        <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-md">
-          <div className="flex items-center justify-between px-5 py-3 bg-white border-b border-gray-700">
+        <div className={`rounded-2xl border ${resolvedTheme === 'dark' ? 'border-slate-800 bg-[#0f172a] shadow-lg' : 'border-gray-200 bg-[#FAFAFA] shadow-md'} overflow-hidden`}>
+          <div className={`flex items-center justify-between px-5 py-3 border-b ${resolvedTheme === 'dark' ? 'border-slate-800 bg-[#0b1120]' : 'border-gray-200 bg-white'}`}>
             <div className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full bg-red-500" />
               <span className="h-3 w-3 rounded-full bg-yellow-400" />
               <span className="h-3 w-3 rounded-full bg-green-500" />
-              <span className="ml-3 text-xs text-gray-600 font-mono">
+              <span className={`ml-3 text-xs font-mono opacity-80 ${resolvedTheme === 'dark' ? 'text-slate-300' : 'text-gray-600'}`}>
                 {langLabel} · read-only
               </span>
             </div>
 
-            
-
             <div className="flex items-center gap-2">
               <button
                 onClick={handleCopyLink}
-                className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-black transition-colors cursor-pointer px-3 py-1.5 rounded-lg hover:bg-white/10"
+                className={`flex items-center gap-1.5 text-xs transition-colors cursor-pointer px-3 py-1.5 rounded-lg ${resolvedTheme === 'dark' ? 'text-slate-300 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-black hover:bg-slate-100'}`}
               >
                 {linkCopied ? (
                   <>
-                    <Check size={12} className="text-green-600" />
-                    <span className="text-green-600">Link copied!</span>
+                    <Check size={12} className="text-green-500" />
+                    <span className="text-green-500">Link copied!</span>
                   </>
                 ) : (
                   <>
@@ -363,12 +365,12 @@ const SharedSubmission = () => {
 
               <button
                 onClick={handleCopyCode}
-                className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-black transition-colors cursor-pointer px-3 py-1.5 rounded-lg hover:bg-white/10"
+                className={`flex items-center gap-1.5 text-xs transition-colors cursor-pointer px-3 py-1.5 rounded-lg ${resolvedTheme === 'dark' ? 'text-slate-300 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-black hover:bg-slate-100'}`}
               >
                 {copied ? (
                   <>
-                    <Check size={12} className="text-green-400" />
-                    <span className="text-green-400">Copied!</span>
+                    <Check size={12} className="text-green-500" />
+                    <span className="text-green-500">Copied!</span>
                   </>
                 ) : (
                   <>
@@ -380,25 +382,24 @@ const SharedSubmission = () => {
             </div>
           </div>
 
-          
-
-          <div className="h-[58vh]">
-            <Editor
-              height="100%"
+          <div className="overflow-x-auto h-[58vh]">
+            <SyntaxHighlighter
               language={monacoLang}
-              value={submission.userCode}
-              theme="vs-white"
-              options={{
-                readOnly: true,
-                domReadOnly: true,
-                minimap: { enabled: false },
-                fontSize: 15,
-                lineHeight: 24,
-                padding: { top: 16, bottom: 16 },
-                scrollBeyondLastLine: false,
-                letterSpacing: 0.5,
+              style={syntaxTheme}
+              customStyle={{
+                margin: 0,
+                padding: '1.5rem',
+                fontSize: '15px',
+                lineHeight: '1.6',
+                fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                background: 'transparent',
+                minHeight: '100%'
               }}
-            />
+              wrapLines={true}
+              wrapLongLines={false}
+            >
+              {submission.userCode}
+            </SyntaxHighlighter>
           </div>
         </div>
 
