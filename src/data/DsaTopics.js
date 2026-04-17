@@ -4102,7 +4102,7 @@ for (let i = 0; i < n; i++) {
 
 console.log(arr.join(" "));`
                     },
-                    "difference-array-with-steps":{
+                    "difference-array-with-steps": {
                         title: "Difference Array Technique - With Jumps",
                         cpp: `#include <bits/stdc++.h>
 
@@ -4191,7 +4191,7 @@ int main() {
     return 0;
 
 }`,
-                        java:`import java.util.*;
+                        java: `import java.util.*;
 
 public class Main {
 
@@ -4264,7 +4264,7 @@ public class Main {
         }
     }
 }`,
-                        python:`def forEachJump(sequence, arr, n, jump):
+                        python: `def forEachJump(sequence, arr, n, jump):
     diff = [0] * n
 
     q = len(sequence)
@@ -4308,7 +4308,7 @@ for jump in mymap:
     forEachJump(mymap[jump], arr, n, jump)
 
 print(*arr)`,
-                        javascript:`function forEachJump(sequence, arr, n, jump) {
+                        javascript: `function forEachJump(sequence, arr, n, jump) {
     let diff = new Array(n).fill(0);
 
     let q = sequence.length;
@@ -4372,6 +4372,263 @@ for (let jump in map) {
 }
 
 console.log(arr.join(" "));`
+                    }
+                }
+            },
+            "square decomposition technique": {
+                title: "Square Decomposition Technique",
+                difficulty: "Advanced",
+                description: "Master graph traversal, shortest paths, and advanced graph algorithms",
+                codeTemplates: {
+                    "minimum-element-in-range": {
+                        title: "Minimum Element in Range using Square Decomposition",
+                        cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+
+    int n;
+    cin >> n;
+
+    vector<int> arr(n);
+
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+
+    int q;
+    cin >> q;
+
+    vector<vector<int>> queries(q, vector<int>(2));
+
+    for(int i = 0; i < q; i++){
+        cin >> queries[i][0] >> queries[i][1];
+    }
+
+    int len = sqrt(n);
+    if(len == 0) len = 1;
+
+    int numBlock = (n + len - 1) / len;
+
+    vector<int> blocks(numBlock, INT_MAX);
+
+    for(int i = 0; i < n; i++){
+        int b = i / len;
+        blocks[b] = min(blocks[b], arr[i]);
+    }
+
+    vector<int> result(q);
+
+    for(int i = 0; i < q; i++){
+
+        int l = queries[i][0];
+        int r = queries[i][1];
+
+        int ans = INT_MAX;
+
+        // left partial
+        while(l <= r && l % len != 0){
+            ans = min(ans, arr[l]);
+            l++;
+        }
+
+        // full blocks
+        while(l + len - 1 <= r){
+            ans = min(ans, blocks[l / len]);
+            l += len;
+        }
+
+        // right partial
+        while(l <= r){
+            ans = min(ans, arr[l]);
+            l++;
+        }
+
+        result[i] = ans;
+    }
+
+    for(int i = 0; i < q; i++){
+        cout << result[i] << endl;
+    }
+
+    return 0;
+}`,
+                        python: `import math
+
+n = int(input())
+arr = list(map(int, input().split()))
+
+q = int(input())
+queries = [tuple(map(int, input().split())) for _ in range(q)]
+
+length = int(math.sqrt(n))
+if length == 0:
+    length = 1
+
+num_blocks = (n + length - 1) // length
+blocks = [float('inf')] * num_blocks
+
+# build blocks
+for i in range(n):
+    blocks[i // length] = min(blocks[i // length], arr[i])
+
+result = []
+
+for l, r in queries:
+    ans = float('inf')
+
+    # left partial
+    while l <= r and l % length != 0:
+        ans = min(ans, arr[l])
+        l += 1
+
+    # full blocks
+    while l + length - 1 <= r:
+        ans = min(ans, blocks[l // length])
+        l += length
+
+    # right partial
+    while l <= r:
+        ans = min(ans, arr[l])
+        l += 1
+
+    result.append(ans)
+
+for x in result:
+    print(x)`,
+                        java: `import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+
+        for(int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        int q = sc.nextInt();
+        int[][] queries = new int[q][2];
+
+        for(int i = 0; i < q; i++) {
+            queries[i][0] = sc.nextInt();
+            queries[i][1] = sc.nextInt();
+        }
+
+        int len = (int)Math.sqrt(n);
+        if(len == 0) len = 1;
+
+        int numBlocks = (n + len - 1) / len;
+        int[] blocks = new int[numBlocks];
+
+        Arrays.fill(blocks, Integer.MAX_VALUE);
+
+        // build blocks
+        for(int i = 0; i < n; i++) {
+            blocks[i / len] = Math.min(blocks[i / len], arr[i]);
+        }
+
+        int[] result = new int[q];
+
+        for(int i = 0; i < q; i++) {
+
+            int l = queries[i][0];
+            int r = queries[i][1];
+
+            int ans = Integer.MAX_VALUE;
+
+            // left partial
+            while(l <= r && l % len != 0) {
+                ans = Math.min(ans, arr[l]);
+                l++;
+            }
+
+            // full blocks
+            while(l + len - 1 <= r) {
+                ans = Math.min(ans, blocks[l / len]);
+                l += len;
+            }
+
+            // right partial
+            while(l <= r) {
+                ans = Math.min(ans, arr[l]);
+                l++;
+            }
+
+            result[i] = ans;
+        }
+
+        for(int i = 0; i < q; i++) {
+            System.out.println(result[i]);
+        }
+
+        sc.close();
+    }
+}`,
+                        javascript: `const fs = require("fs");
+
+let input = fs.readFileSync(0, "utf8").trim().split(/\s+/);
+let idx = 0;
+
+let n = Number(input[idx++]);
+let arr = new Array(n);
+
+for (let i = 0; i < n; i++) {
+    arr[i] = Number(input[idx++]);
+}
+
+let q = Number(input[idx++]);
+let queries = [];
+
+for (let i = 0; i < q; i++) {
+    let l = Number(input[idx++]);
+    let r = Number(input[idx++]);
+    queries.push([l, r]);
+}
+
+let len = Math.floor(Math.sqrt(n));
+if (len === 0) len = 1;
+
+let numBlocks = Math.ceil(n / len);
+let blocks = new Array(numBlocks).fill(Infinity);
+
+// build blocks
+for (let i = 0; i < n; i++) {
+    let b = Math.floor(i / len);
+    blocks[b] = Math.min(blocks[b], arr[i]);
+}
+
+let result = [];
+
+for (let [l, r] of queries) {
+    let ans = Infinity;
+
+    // left partial
+    while (l <= r && l % len !== 0) {
+        ans = Math.min(ans, arr[l]);
+        l++;
+    }
+
+    // full blocks
+    while (l + len - 1 <= r) {
+        ans = Math.min(ans, blocks[Math.floor(l / len)]);
+        l += len;
+    }
+
+    // right partial
+    while (l <= r) {
+        ans = Math.min(ans, arr[l]);
+        l++;
+    }
+
+    result.push(ans);
+}
+
+console.log(result.join("\n"));`
                     }
                 }
             }
