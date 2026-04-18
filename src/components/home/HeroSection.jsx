@@ -328,9 +328,9 @@ export default function HeroSection() {
   }, []);
 
   const stats = [
-    { label: "Submissions",  value: "1.2M+",  icon: Code2,  color: "text-indigo-600 bg-indigo-50"  },
-    { label: "Active Users", value: "50K+",   icon: Users,  color: "text-purple-600 bg-purple-50"  },
-    { label: "Problems",     value: "2,400+", icon: Zap,    color: "text-pink-600   bg-pink-50"    },
+    { label: "Submissions",  value: "1.2M+",  icon: Code2,  color: "text-indigo-600 bg-indigo-50 dark:text-indigo-400 dark:bg-indigo-500/10"  },
+    { label: "Active Users", value: "50K+",   icon: Users,  color: "text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-500/10"  },
+    { label: "Problems",     value: "2,400+", icon: Zap,    color: "text-pink-600   bg-pink-50 dark:text-pink-400 dark:bg-pink-500/10"    },
   ];
 
   const features = [
@@ -338,19 +338,19 @@ export default function HeroSection() {
       icon: BarChart3,
       title: "Problem Archive",
       description: "Practice with 2000+ problems curated by difficulty, company, and tags with detailed analytics.",
-      color: "text-indigo-600 bg-indigo-50",
+      color: "text-indigo-600 bg-indigo-50 dark:text-indigo-400 dark:bg-indigo-500/10",
     },
     {
       icon: Sparkles,
       title: "Live Contests",
       description: "Join weekly contests, compete in real time, and climb the global leaderboard.",
-      color: "text-purple-600 bg-purple-50",
+      color: "text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-500/10",
     },
     {
       icon: Zap,
       title: "Algorithm Visualizer",
       description: "Interactive visualizers for sorting, searching, dynamic programming, and more.",
-      color: "text-emerald-600 bg-emerald-50",
+      color: "text-emerald-600 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-500/10",
     },
   ];
 
@@ -366,8 +366,8 @@ export default function HeroSection() {
       <section className="relative pt-32 pb-24 px-6 overflow-hidden">
         {/* Background blobs */}
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/60 via-white to-purple-50/40 dark:from-indigo-950/30 dark:via-[#0b1120] dark:to-purple-950/20 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-gradient-to-bl from-indigo-100/30 dark:from-indigo-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-purple-100/20 dark:from-purple-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-gradient-to-bl from-indigo-100/30 dark:from-indigo-800/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-purple-100/20 dark:from-purple-800/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative section-wrapper">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -393,7 +393,7 @@ export default function HeroSection() {
 
               {/* Headline */}
               <div className="space-y-2">
-                <h1 className="text-5xl md:text-[3.75rem] font-extrabold text-slate-900 dark:text-white leading-[1.06] tracking-tight">
+                <h1 className="text-5xl md:text-[3.75rem] font-extrabold text-slate-900 dark:text-slate-50 leading-[1.06] tracking-tight">
                   Master
                   <span
                     className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 transition-opacity duration-300"
@@ -420,7 +420,7 @@ export default function HeroSection() {
                     key={label}
                     className="inline-flex items-center gap-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-[12px] font-medium px-3 py-1 rounded-full shadow-sm"
                   >
-                    <Icon size={12} className="text-indigo-500" />
+                    <Icon size={12} className="text-indigo-500 dark:text-indigo-400" />
                     {label}
                   </span>
                 ))}
@@ -429,7 +429,7 @@ export default function HeroSection() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link to="/problem">
-                  <button className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold px-7 h-12 rounded-xl shadow-lg shadow-indigo-300/40 hover:shadow-indigo-300/60 transition-all duration-200 text-sm">
+                  <button className="group relative inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold px-7 h-12 rounded-xl shadow-lg shadow-indigo-300/40 dark:shadow-indigo-900/40 hover:shadow-indigo-300/60 dark:hover:shadow-indigo-900/60 transition-all duration-200 text-sm">
                     Start Solving
                     <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
                   </button>
@@ -461,7 +461,7 @@ export default function HeroSection() {
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                       </svg>
                     ))}
-                    <span className="ml-1 text-xs font-semibold text-slate-700">4.9</span>
+                    <span className="ml-1 text-xs font-semibold text-slate-700 dark:text-slate-300">4.9</span>
                   </div>
                   <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">Trusted by <span className="font-semibold text-slate-600 dark:text-slate-300">1M+ developers</span> worldwide</p>
                 </div>
@@ -506,10 +506,10 @@ export default function HeroSection() {
             </div>
             <div className="flex-1 text-center md:text-left">
               <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
-                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">
+                <h3 className="text-sm font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
                   Daily Challenge
                 </h3>
-                <span className="px-2 py-0.5 text-[10px] font-bold bg-indigo-100 text-indigo-600 rounded-full">NEW</span>
+                <span className="px-2 py-0.5 text-[10px] font-bold bg-indigo-100 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 rounded-full">NEW</span>
               </div>
               <h4 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-2">Reverse Linked List II</h4>
               <p className="text-slate-500 dark:text-slate-400 text-sm max-w-lg mb-3">
