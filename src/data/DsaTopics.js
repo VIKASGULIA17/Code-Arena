@@ -4445,6 +4445,7 @@ int main() {
         }
 
         result[i] = ans;
+        
     }
 
     for(int i = 0; i < q; i++){
