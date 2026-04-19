@@ -4168,6 +4168,235 @@ function multiSourceBFS(adj, colors, n) {
 }
 
 // Example usage (you can adapt input as needed)`
+                    },
+                    "0-1-BFS":{
+                        title:"0/1 BFS",
+                        cpp:`#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> zeroOneBFS(vector<vector<int>>& adj, vector<int>& colors, int n){
+    
+    deque<int> q;
+    vector<int> dist(n, INT_MAX);
+    
+    for(int i = 0; i < n; i++){
+        if(colors[i] == 0){
+            q.push_back(i);
+            dist[i] = 0;
+        }
+    }
+    
+    while(!q.empty()){
+        int u = q.front();
+        q.pop_front();
+        
+        for(vector<int> t : adj[u]){
+            int w = t[0];
+            int v = t[1];
+            
+            if(dist[v] > dist[u] + w){
+                dist[v] = dist[u] + w;
+                
+                if(w == 0)
+                    q.push_front(v);
+                else
+                    q.push_back(v);
+            }
+        }
+    }
+    
+    return dist;
+}
+
+int main() {
+    
+    int n, m;
+    cin >> n >> m;   // n = nodes, m = edges
+    
+    vector<vector<int>> adj(n);
+    
+    // input edges: u v w (0 or 1)
+    for(int i = 0; i < m; i++){
+        int u, v, w;
+        cin >> u >> v >> w;
+        
+        adj[u].push_back({w, v});
+        adj[v].push_back({w, u});  // undirected graph
+    }
+    
+    vector<int> colors(n);
+    
+    for(int i = 0; i < n; i++){
+        cin >> colors[i];   // 0 or 1
+    }
+    
+    vector<int> dist = zeroOneBFS(adj, colors, n);
+    
+    for(int i = 0; i < n; i++){
+        cout << dist[i] << " ";
+    }
+    
+    return 0;
+}`,
+                        python:`from collections import deque
+import sys
+
+def zeroOneBFS(adj, colors, n):
+    INF = float('inf')
+    dist = [INF] * n
+    dq = deque()
+
+    for i in range(n):
+        if colors[i] == 0:
+            dq.append(i)
+            dist[i] = 0
+
+    while dq:
+        u = dq.popleft()
+
+        for w, v in adj[u]:
+            if dist[v] > dist[u] + w:
+                dist[v] = dist[u] + w
+
+                if w == 0:
+                    dq.appendleft(v)
+                else:
+                    dq.append(v)
+
+    return dist
+
+
+n, m = map(int, input().split())
+
+adj = [[] for _ in range(n)]
+
+for _ in range(m):
+    u, v, w = map(int, input().split())
+    adj[u].append((w, v))
+    adj[v].append((w, u))
+
+colors = list(map(int, input().split()))
+
+res = zeroOneBFS(adj, colors, n)
+print(*res)`,
+                        java:`import java.util.*;
+
+public class Main {
+
+    static int[] zeroOneBFS(List<List<int[]>> adj, int[] colors, int n) {
+
+        Deque<Integer> dq = new ArrayDeque<>();
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+        for (int i = 0; i < n; i++) {
+            if (colors[i] == 0) {
+                dq.addLast(i);
+                dist[i] = 0;
+            }
+        }
+
+        while (!dq.isEmpty()) {
+            int u = dq.removeFirst();
+
+            for (int[] t : adj.get(u)) {
+                int w = t[0];
+                int v = t[1];
+
+                if (dist[v] > dist[u] + w) {
+                    dist[v] = dist[u] + w;
+
+                    if (w == 0)
+                        dq.addFirst(v);
+                    else
+                        dq.addLast(v);
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+        List<List<int[]>> adj = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) adj.add(new ArrayList<>());
+
+        for (int i = 0; i < m; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            int w = sc.nextInt();
+
+            adj.get(u).add(new int[]{w, v});
+            adj.get(v).add(new int[]{w, u});
+        }
+
+        int[] colors = new int[n];
+        for (int i = 0; i < n; i++) {
+            colors[i] = sc.nextInt();
+        }
+
+        int[] res = zeroOneBFS(adj, colors, n);
+
+        for (int x : res) System.out.print(x + " ");
+    }
+}`,
+                        javascript:`function zeroOneBFS(adj, colors, n) {
+    let INF = Infinity;
+    let dist = new Array(n).fill(INF);
+    let dq = [];
+
+    for (let i = 0; i < n; i++) {
+        if (colors[i] === 0) {
+            dq.push(i);
+            dist[i] = 0;
+        }
+    }
+
+    let head = 0;
+
+    while (head < dq.length) {
+        let u = dq[head++];
+
+        for (let [w, v] of adj[u]) {
+            if (dist[v] > dist[u] + w) {
+                dist[v] = dist[u] + w;
+
+                if (w === 0)
+                    dq.splice(--head, 0, v); // push front
+                else
+                    dq.push(v);
+            }
+        }
+    }
+
+    return dist;
+}
+
+// input handling example
+const fs = require("fs");
+const input = fs.readFileSync(0, "utf-8").trim().split("\n");
+
+let [n, m] = input[0].split(" ").map(Number);
+
+let adj = Array.from({ length: n }, () => []);
+
+let idx = 1;
+
+for (let i = 0; i < m; i++) {
+    let [u, v, w] = input[idx++].split(" ").map(Number);
+    adj[u].push([w, v]);
+    adj[v].push([w, u]);
+}
+
+let colors = input[idx++].split(" ").map(Number);
+
+console.log(zeroOneBFS(adj, colors, n).join(" "));`
                     }
                 }
             },
