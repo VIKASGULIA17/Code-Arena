@@ -3929,6 +3929,245 @@ if (dsu.findUltimateParent(0) === dsu.findUltimateParent(2)) {
 if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
     console.log("0 and 5 are NOT connected");
 }`
+                    },
+                    "multi-source-BFS-having-equal-weight": {
+                        title: "Multi-Source BFS (having equal weight)",
+                        cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> makeAdj(vector<vector<int>>& edges, int n){
+    
+    vector<vector<int>> adj(n + 1);
+    
+    for(int i = 0; i < edges.size(); i++){
+        int u = edges[i][0];
+        int v = edges[i][1];
+        
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    
+    return adj;
+}
+    
+vector<int> multiSourceBFS(vector<vector<int>>& adj, vector<int>& colors, int n){
+    
+    vector<int> minDist(n + 1, INT_MAX);
+    queue<vector<int>> q;
+    
+    for(int i = 0; i <= n; i++){
+        if(colors[i] == 0){
+            q.push({0, i});
+            minDist[i] = 0;
+        }
+    }
+    
+    while(!q.empty()){
+        vector<int> cur = q.front();
+        q.pop();
+
+        int currW = cur[0];
+        int u = cur[1];
+        
+        for(int v : adj[u]){
+            if(minDist[v] == INT_MAX){
+                minDist[v] = currW + 1;
+                q.push({minDist[v], v});
+            }
+        }
+    }
+    
+    return minDist;
+}
+
+int main() {
+    
+    int n;
+    cin >> n;   // nodes = 0..n
+    
+    vector<vector<int>> edges(n, vector<int>(2));
+    
+    for(int i = 0; i < n; i++){
+        cin >> edges[i][0] >> edges[i][1];
+    }
+    
+    vector<int> colors(n + 1);
+    
+    for(int i = 0; i <= n; i++){
+        cin >> colors[i];
+    }
+    
+    vector<vector<int>> adj = makeAdj(edges, n);
+    
+    vector<int> minDist = multiSourceBFS(adj, colors, n);
+
+    // print answer
+    for(int i = 0; i <= n; i++){
+        cout << minDist[i] << " ";
+    }
+}`,
+                        python: `from collections import deque
+import sys
+
+def make_adj(edges, n):
+    adj = [[] for _ in range(n + 1)]
+    
+    for u, v in edges:
+        adj[u].append(v)
+        adj[v].append(u)
+    
+    return adj
+
+
+def multi_source_bfs(adj, colors, n):
+    INF = float('inf')
+    dist = [INF] * (n + 1)
+    q = deque()
+
+    for i in range(n + 1):
+        if colors[i] == 0:
+            q.append((0, i))
+            dist[i] = 0
+
+    while q:
+        curr_w, u = q.popleft()
+
+        for v in adj[u]:
+            if dist[v] == INF:
+                dist[v] = curr_w + 1
+                q.append((dist[v], v))
+
+    return dist
+
+
+n = int(input())
+
+edges = [tuple(map(int, input().split())) for _ in range(n)]
+colors = list(map(int, input().split()))
+
+adj = make_adj(edges, n)
+res = multi_source_bfs(adj, colors, n)
+
+print(*res)`,
+                        java: `import java.util.*;
+
+public class Main {
+
+    static List<List<Integer>> makeAdj(int[][] edges, int n) {
+        List<List<Integer>> adj = new ArrayList<>();
+        
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        return adj;
+    }
+
+    static int[] multiSourceBFS(List<List<Integer>> adj, int[] colors, int n) {
+
+        int[] dist = new int[n + 1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+        Queue<int[]> q = new LinkedList<>();
+
+        for (int i = 0; i <= n; i++) {
+            if (colors[i] == 0) {
+                q.add(new int[]{0, i});
+                dist[i] = 0;
+            }
+        }
+
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            int currW = cur[0];
+            int u = cur[1];
+
+            for (int v : adj.get(u)) {
+                if (dist[v] == Integer.MAX_VALUE) {
+                    dist[v] = currW + 1;
+                    q.add(new int[]{dist[v], v});
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        int[][] edges = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            edges[i][0] = sc.nextInt();
+            edges[i][1] = sc.nextInt();
+        }
+
+        int[] colors = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            colors[i] = sc.nextInt();
+        }
+
+        List<List<Integer>> adj = makeAdj(edges, n);
+        int[] res = multiSourceBFS(adj, colors, n);
+
+        for (int i = 0; i <= n; i++) {
+            System.out.print(res[i] + " ");
+        }
+    }
+}`,
+                        javascript: `function makeAdj(edges, n) {
+    let adj = Array.from({ length: n + 1 }, () => []);
+
+    for (let i = 0; i < edges.length; i++) {
+        let u = edges[i][0];
+        let v = edges[i][1];
+
+        adj[u].push(v);
+        adj[v].push(u);
+    }
+
+    return adj;
+}
+
+function multiSourceBFS(adj, colors, n) {
+    let INF = Infinity;
+    let dist = new Array(n + 1).fill(INF);
+    let q = [];
+
+    for (let i = 0; i <= n; i++) {
+        if (colors[i] === 0) {
+            q.push([0, i]);
+            dist[i] = 0;
+        }
+    }
+
+    let head = 0;
+
+    while (head < q.length) {
+        let [currW, u] = q[head++];
+
+        for (let v of adj[u]) {
+            if (dist[v] === INF) {
+                dist[v] = currW + 1;
+                q.push([dist[v], v]);
+            }
+        }
+    }
+
+    return dist;
+}
+
+// Example usage (you can adapt input as needed)`
                     }
                 }
             },
