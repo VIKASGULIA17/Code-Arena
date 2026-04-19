@@ -364,10 +364,11 @@ export default function HeroSection() {
     <div className="min-h-screen bg-[#fafafa] dark:bg-[#0b1120]">
       {/* ─── Hero ─── */}
       <section className="relative pt-32 pb-24 px-6 overflow-hidden">
-        {/* Background blobs */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/60 via-white to-purple-50/40 dark:from-indigo-950/30 dark:via-[#0b1120] dark:to-purple-950/20 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-gradient-to-bl from-indigo-100/30 dark:from-indigo-800/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-purple-100/20 dark:from-purple-800/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        {/* Animated Background blobs & gradient */}
+        <div className="absolute inset-0 animate-gradient bg-gradient-to-br from-indigo-50/80 via-white to-purple-50/80 dark:from-indigo-950/40 dark:via-[#0b1120] dark:to-purple-950/30 pointer-events-none" />
+        <div className="absolute -top-20 -right-20 w-[700px] h-[700px] bg-gradient-to-bl from-indigo-200/40 dark:from-indigo-600/20 to-transparent rounded-full blur-3xl pointer-events-none animate-blob" />
+        <div className="absolute -bottom-32 -left-20 w-[600px] h-[600px] bg-gradient-to-tr from-purple-200/40 dark:from-purple-600/20 to-transparent rounded-full blur-3xl pointer-events-none animate-blob animation-delay-2000" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-pink-200/20 dark:from-pink-600/10 to-transparent rounded-full blur-3xl pointer-events-none animate-blob animation-delay-4000" />
 
         <div className="relative section-wrapper">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -558,9 +559,9 @@ export default function HeroSection() {
 
       {/* ─── CTA ─── */}
       <section className="px-6 pb-24 section-wrapper">
-        <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 rounded-3xl p-12 md:p-16 text-center relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="animate-gradient bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-12 md:p-16 text-center relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-600/20 rounded-full blur-3xl pointer-events-none animate-blob" />
+          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-blob animation-delay-2000" />
           <div className="relative">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
               Join{" "}
