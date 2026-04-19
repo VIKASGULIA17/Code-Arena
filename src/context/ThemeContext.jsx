@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { flushSync } from 'react-dom';
 
 const ThemeContext = createContext();
 
@@ -24,6 +25,8 @@ function getStoredTheme() {
   }
 }
 
+let transitionTimeout = null;
+
 export const ThemeProvider = ({ children }) => {
   const [theme, setThemeState] = useState(getStoredTheme);
   const [resolvedTheme, setResolvedTheme] = useState(() => {
@@ -31,14 +34,38 @@ export const ThemeProvider = ({ children }) => {
     return stored === 'system' ? getSystemTheme() : stored;
   });
 
-  const applyTheme = useCallback((resolved) => {
+  const applyTheme = useCallback((resolved, isInitial = false) => {
     const root = document.documentElement;
-    if (resolved === 'dark') {
-      root.classList.add('dark');
+    
+    const doThemeChange = () => {
+      if (resolved === 'dark') {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+      setResolvedTheme(resolved);
+    };
+
+    if (!isInitial && document.startViewTransition) {
+      document.startViewTransition(() => {
+        flushSync(() => {
+          doThemeChange();
+        });
+      });
     } else {
-      root.classList.remove('dark');
+      if (!isInitial) {
+        root.classList.add('theme-transitioning');
+        if (transitionTimeout) clearTimeout(transitionTimeout);
+      }
+      
+      doThemeChange();
+
+      if (!isInitial) {
+        transitionTimeout = setTimeout(() => {
+          root.classList.remove('theme-transitioning');
+        }, 300);
+      }
     }
-    setResolvedTheme(resolved);
   }, []);
 
   const setTheme = useCallback((newTheme) => {
@@ -48,7 +75,7 @@ export const ThemeProvider = ({ children }) => {
       localStorage.setItem(STORAGE_KEY, newTheme);
     } catch {}
     const resolved = newTheme === 'system' ? getSystemTheme() : newTheme;
-    applyTheme(resolved);
+    applyTheme(resolved, false);
   }, [applyTheme]);
 
   // Listen for system preference changes when in "system" mode
@@ -56,7 +83,7 @@ export const ThemeProvider = ({ children }) => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handler = (e) => {
       if (theme === 'system') {
-        applyTheme(e.matches ? 'dark' : 'light');
+        applyTheme(e.matches ? 'dark' : 'light', false);
       }
     };
     mediaQuery.addEventListener('change', handler);
@@ -66,7 +93,7 @@ export const ThemeProvider = ({ children }) => {
   // Apply on mount
   useEffect(() => {
     const resolved = theme === 'system' ? getSystemTheme() : theme;
-    applyTheme(resolved);
+    applyTheme(resolved, true);
   }, []);
 
   // Cycle function: light → dark → system → light

@@ -17,10 +17,10 @@ const topicIcons = {
 }
 
 const difficultyMeta = {
-  'Beginner':     { cls: 'bg-emerald-100 text-emerald-700', dot: 'bg-emerald-500' },
-  'Intermediate': { cls: 'bg-amber-100   text-amber-700',   dot: 'bg-amber-500'   },
-  'Advanced':     { cls: 'bg-rose-100    text-rose-700',    dot: 'bg-rose-500'     },
-  'Extreme':      { cls: 'bg-purple-100  text-purple-700',  dot: 'bg-purple-500'   },
+  'Beginner':     { cls: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400', dot: 'bg-emerald-500' },
+  'Intermediate': { cls: 'bg-amber-100   text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',   dot: 'bg-amber-500'   },
+  'Advanced':     { cls: 'bg-rose-100    text-rose-700 dark:bg-rose-500/10 dark:text-rose-400',    dot: 'bg-rose-500'     },
+  'Extreme':      { cls: 'bg-purple-100  text-purple-700 dark:bg-purple-500/10 dark:text-purple-400',  dot: 'bg-purple-500'   },
 }
 
 /* ─── tiny circular progress SVG ─────────────────── */
@@ -91,30 +91,30 @@ const ModuleSidebar = ({
 
   /* ──────────────────────── sidebar body ──── */
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-white dark:bg-slate-900 transition-colors">
 
       {/* ── Header ── */}
-      <div className="px-3 pt-3 pb-2 border-b border-gray-100 flex-shrink-0">
+      <div className="px-3 pt-3 pb-2 border-b border-gray-100 dark:border-slate-800 flex-shrink-0">
         <div className="flex items-center justify-between mb-2">
           {!collapsed && (
             <div className="flex items-center gap-1.5">
               <div className="w-6 h-6 rounded-md bg-indigo-600 flex items-center justify-center flex-shrink-0">
                 <BookOpen size={13} className="text-white" />
               </div>
-              <span className="font-bold text-sm text-gray-900 leading-none">DSA Modules</span>
+              <span className="font-bold text-sm text-gray-900 dark:text-slate-100 leading-none">DSA Modules</span>
             </div>
           )}
           <div className="flex items-center gap-1 ml-auto">
             <button
               onClick={onToggleCollapse}
-              className="hidden lg:flex p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+              className="hidden lg:flex p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300 transition-colors"
               aria-label="Toggle sidebar"
             >
               {collapsed ? <Menu size={16} /> : <ChevronLeft size={16} />}
             </button>
             <button
               onClick={onCloseMobile}
-              className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100 text-gray-400"
+              className="lg:hidden p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-400 dark:text-slate-500"
               aria-label="Close sidebar"
             >
               <X size={16} />
@@ -124,17 +124,17 @@ const ModuleSidebar = ({
 
         {/* Overall progress strip */}
         {!collapsed && (
-          <div className="bg-gray-50 rounded-xl p-2.5 space-y-1.5">
+          <div className="bg-gray-50 dark:bg-slate-800/50 rounded-xl p-2.5 space-y-1.5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <Trophy size={12} className="text-indigo-500" />
-                <span className="text-[11px] font-semibold text-gray-600">Overall Progress</span>
+                <Trophy size={12} className="text-indigo-500 dark:text-indigo-400" />
+                <span className="text-[11px] font-semibold text-gray-600 dark:text-slate-300">Overall Progress</span>
               </div>
               <div className="flex items-center gap-1.5">
                 {overall.done > 0 && (
                   <button
                     onClick={onResetProgress}
-                    className="text-[10px] text-gray-300 hover:text-red-400 transition-colors flex items-center gap-0.5"
+                    className="text-[10px] text-gray-300 dark:text-slate-500 hover:text-red-400 dark:hover:text-red-400 transition-colors flex items-center gap-0.5"
                     title="Reset progress"
                   >
                     <RotateCcw size={9} />
@@ -144,7 +144,7 @@ const ModuleSidebar = ({
                 <span className="text-xs font-bold text-indigo-600">{overall.percent}%</span>
               </div>
             </div>
-            <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-gray-200 dark:bg-slate-700/50 rounded-full overflow-hidden">
               <motion.div
                 className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500"
                 initial={{ width: 0 }}
@@ -153,7 +153,7 @@ const ModuleSidebar = ({
               />
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[10px] text-gray-400">{overall.done}/{overall.total} items done</span>
+              <span className="text-[10px] text-gray-400 dark:text-slate-400">{overall.done}/{overall.total} items done</span>
               {overall.percent === 100 && (
                 <span className="text-[10px] font-medium text-emerald-600 flex items-center gap-0.5">
                   <Zap size={9} /> Complete!
@@ -178,17 +178,17 @@ const ModuleSidebar = ({
 
       {/* ── Search bar ── */}
       {!collapsed && (
-        <div className="px-3 py-2 border-b border-gray-100 flex-shrink-0">
+        <div className="px-3 py-2 border-b border-gray-100 dark:border-slate-800 flex-shrink-0">
           <div className="relative">
-            <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
             <input
               value={query}
               onChange={e => setQuery(e.target.value)}
               placeholder="Search topics…"
-              className="w-full pl-7 pr-3 py-1.5 text-xs rounded-lg bg-gray-50 border border-gray-200 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 outline-none placeholder:text-gray-400 transition-all"
+              className="w-full pl-7 pr-3 py-1.5 text-xs rounded-lg bg-gray-50 dark:bg-slate-800/80 border border-gray-200 dark:border-slate-700 focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-1 focus:ring-indigo-100 dark:focus:ring-indigo-500/20 outline-none placeholder:text-gray-400 dark:placeholder:text-slate-500 text-gray-900 dark:text-slate-100 transition-all"
             />
             {query && (
-              <button onClick={() => setQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+              <button onClick={() => setQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-slate-300">
                 <X size={10} />
               </button>
             )}
@@ -211,13 +211,13 @@ const ModuleSidebar = ({
                 <div className="px-3 pt-2 pb-0.5 flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     {activeCategoryId === catId && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400 flex-shrink-0" />
                     )}
-                    <span className={`text-[10px] font-bold uppercase tracking-wider ${activeCategoryId === catId ? 'text-indigo-500' : 'text-gray-400'}`}>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider ${activeCategoryId === catId ? 'text-indigo-500 dark:text-indigo-400' : 'text-gray-400 dark:text-slate-500'}`}>
                       {category.title}
                     </span>
                   </div>
-                  <span className="text-[10px] text-gray-300 tabular-nums">
+                  <span className="text-[10px] text-gray-300 dark:text-slate-600 tabular-nums">
                     {catDone}/{catTotal}
                   </span>
                 </div>
@@ -250,8 +250,8 @@ const ModuleSidebar = ({
                       className={`
                         w-full flex items-center gap-2 px-2 py-2 text-left transition-all duration-150 group
                         ${isActive
-                          ? 'bg-indigo-50 border-l-2 border-indigo-500'
-                          : 'border-l-2 border-transparent hover:bg-gray-50'}
+                          ? 'bg-indigo-50 dark:bg-indigo-500/10 border-l-2 border-indigo-500 dark:border-indigo-400'
+                          : 'border-l-2 border-transparent hover:bg-gray-50 dark:hover:bg-slate-800/50'}
                       `}
                     >
                       {/* emoji icon */}
@@ -263,23 +263,23 @@ const ModuleSidebar = ({
                         <>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5 mb-0.5">
-                              <span className={`text-xs font-semibold truncate leading-tight ${isActive ? 'text-indigo-700' : 'text-gray-800'}`}>
+                              <span className={`text-xs font-semibold truncate leading-tight ${isActive ? 'text-indigo-700 dark:text-indigo-300' : 'text-gray-800 dark:text-slate-200'}`}>
                                 {topic.title}
                               </span>
-                              {done100 && <CheckCircle2 size={11} className="text-emerald-500 flex-shrink-0" />}
+                              {done100 && <CheckCircle2 size={11} className="text-emerald-500 dark:text-emerald-400 flex-shrink-0" />}
                             </div>
                             <div className="flex items-center gap-1.5">
-                              <span className={`inline-flex items-center gap-0.5 text-[9px] px-1 py-0 rounded-full font-medium ${isActive ? 'bg-indigo-100 text-indigo-700' : diff.cls}`}>
-                                {isActive && <span className="w-1 h-1 rounded-full bg-indigo-500" />}
+                              <span className={`inline-flex items-center gap-0.5 text-[9px] px-1 py-0 rounded-full font-medium ${isActive ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300' : diff.cls}`}>
+                                {isActive && <span className="w-1 h-1 rounded-full bg-indigo-500 dark:bg-indigo-400" />}
                                 {topic.difficulty}
                               </span>
-                              <span className="text-[9px] text-gray-400 tabular-nums">{prog.done}/{prog.total}</span>
+                              <span className="text-[9px] text-gray-400 dark:text-slate-500 tabular-nums">{prog.done}/{prog.total}</span>
                             </div>
                           </div>
 
                           {/* chevron */}
                           <div className="flex-shrink-0">
-                            <motion.div animate={{ rotate: isExp ? 90 : 0 }} transition={{ duration: 0.18 }} className="text-gray-400">
+                            <motion.div animate={{ rotate: isExp ? 90 : 0 }} transition={{ duration: 0.18 }} className="text-gray-400 dark:text-slate-500">
                               <ChevronRight size={13} />
                             </motion.div>
                           </div>
@@ -304,7 +304,7 @@ const ModuleSidebar = ({
                           transition={{ duration: 0.2, ease: 'easeInOut' }}
                           className="overflow-hidden"
                         >
-                          <div className="ml-7 mr-2 mb-1 space-y-0.5 border-l border-gray-200 pl-2">
+                          <div className="ml-7 mr-2 mb-1 space-y-0.5 border-l border-gray-200 dark:border-slate-700 pl-2">
                             {subtopics.map(sub => {
                               const SubIcon = sub.icon
                               const isSubActive = activeSubtopic?.type === sub.type
@@ -317,10 +317,10 @@ const ModuleSidebar = ({
                                   data-testid={`subtopic-${sub.id}`}
                                   className={`
                                     w-full flex items-center gap-1.5 px-2 py-1.5 rounded-md text-left transition-all duration-100
-                                    ${isSubActive
-                                      ? 'bg-indigo-100 text-indigo-700 font-medium'
-                                      : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}
-                                  `}
+                                      ${isSubActive
+                                        ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                                        : 'text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800/50 hover:text-gray-700 dark:hover:text-slate-200'}
+                                    `}
                                 >
                                   <SubIcon size={11} className="flex-shrink-0 opacity-70" />
                                   <span className="truncate text-[11px] leading-tight">{sub.label}</span>
@@ -353,9 +353,9 @@ const ModuleSidebar = ({
 
       {/* ── Footer hint ── */}
       {!collapsed && (
-        <div className="px-3 py-2 border-t border-gray-100 flex-shrink-0">
-          <p className="text-[9px] text-gray-300 text-center">
-            <kbd className="bg-gray-100 text-gray-500 px-1 py-0.5 rounded text-[8px] font-mono">click</kbd> topic to expand  ·  track progress with rings
+        <div className="px-3 py-2 border-t border-gray-100 dark:border-slate-800 flex-shrink-0">
+          <p className="text-[9px] text-gray-300 dark:text-slate-600 text-center">
+            <kbd className="bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400 px-1 py-0.5 rounded text-[8px] font-mono">click</kbd> topic to expand  ·  track progress with rings
           </p>
         </div>
       )}
@@ -366,7 +366,7 @@ const ModuleSidebar = ({
     <>
       {/* Desktop fixed sidebar */}
       <motion.aside
-        className="hidden lg:flex flex-col bg-white border-r border-gray-200 fixed top-16 left-0 bottom-0 z-20 overflow-hidden shadow-sm"
+        className="hidden lg:flex flex-col bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 fixed top-16 left-0 bottom-0 z-20 overflow-hidden shadow-sm"
         animate={{ width: collapsed ? 64 : 272 }}
         transition={{ duration: 0.28, ease: 'easeInOut' }}
       >
@@ -385,7 +385,7 @@ const ModuleSidebar = ({
             <motion.aside
               initial={{ x: -300 }} animate={{ x: 0 }} exit={{ x: -300 }}
               transition={{ type: 'spring', damping: 26, stiffness: 260 }}
-              className="lg:hidden fixed left-0 top-0 bottom-0 w-[272px] bg-white shadow-2xl z-50 flex flex-col"
+              className="lg:hidden fixed left-0 top-0 bottom-0 w-[272px] bg-white dark:bg-slate-900 shadow-2xl z-50 flex flex-col"
             >
               {sidebarContent}
             </motion.aside>
