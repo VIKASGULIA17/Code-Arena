@@ -4169,9 +4169,9 @@ function multiSourceBFS(adj, colors, n) {
 
 // Example usage (you can adapt input as needed)`
                     },
-                    "0-1-BFS":{
-                        title:"0/1 BFS",
-                        cpp:`#include <bits/stdc++.h>
+                    "0-1-BFS": {
+                        title: "0/1 BFS",
+                        cpp: `#include <bits/stdc++.h>
 using namespace std;
 
 vector<int> zeroOneBFS(vector<vector<int>>& adj, vector<int>& colors, int n){
@@ -4238,7 +4238,7 @@ int main() {
     
     return 0;
 }`,
-                        python:`from collections import deque
+                        python: `from collections import deque
 import sys
 
 def zeroOneBFS(adj, colors, n):
@@ -4279,7 +4279,7 @@ colors = list(map(int, input().split()))
 
 res = zeroOneBFS(adj, colors, n)
 print(*res)`,
-                        java:`import java.util.*;
+                        java: `import java.util.*;
 
 public class Main {
 
@@ -4346,7 +4346,7 @@ public class Main {
         for (int x : res) System.out.print(x + " ");
     }
 }`,
-                        javascript:`function zeroOneBFS(adj, colors, n) {
+                        javascript: `function zeroOneBFS(adj, colors, n) {
     let INF = Infinity;
     let dist = new Array(n).fill(INF);
     let dq = [];
@@ -4397,6 +4397,304 @@ for (let i = 0; i < m; i++) {
 let colors = input[idx++].split(" ").map(Number);
 
 console.log(zeroOneBFS(adj, colors, n).join(" "));`
+                    },
+                    "bipartite-graph-bfs": {
+                        title: "Bipartite Graph using(BFS)",
+                        cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+bool isBipartite(vector<vector<int>>& adj,vector<int>& colors,int start,int n){
+    
+    queue<vector<int>> q;
+    q.push({start,0});
+    colors[start] = 0;
+    
+    while(!q.empty()){
+        
+        int u = q.front()[0];
+        int currColor = q.front()[1];
+        int newColor = 1 - currColor;
+        
+        q.pop();
+        
+        for(int v : adj[u]){
+            if(colors[v] == -1){
+                colors[v] = newColor;
+                q.push({v,newColor});
+            }
+            else if(colors[v] != newColor){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
+vector<vector<int>> makeAdj(vector<vector<int>>& edges,int n){
+    
+    vector<vector<int>> adj(n+1);
+    
+    for(vector<int>& edge : edges){
+        
+        int u = edge[0];
+        int v = edge[1];
+        
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        
+    }
+    
+    return adj;
+    
+}
+
+int main() {
+    
+    int n;
+    cin>>n;
+    
+    // assuming n size of edges where n+1 is the no. of nodes
+    
+    vector<vector<int>> edges(n,vector<int>(2));
+    
+    for(int i=0;i<n;i++){
+        cin>>edges[i][0]>>edges[i][1];
+    }
+    
+    vector<vector<int>> adj = makeAdj(edges,n);
+    
+    
+    vector<int> colors(n+1,-1);
+    
+    bool isBipartiteGraph = true;
+    
+    for(int i=0;i<=n;i++){
+        if(colors[i]==-1 && isBipartite(adj,colors,i,n)==false){
+            isBipartiteGraph = false;
+            break;
+        }
+    }
+    
+    if(isBipartiteGraph == true){
+        cout<<"Graph is Bipartite"<<endl;
+    }
+    else{
+        cout<<"Graph is not Bipartite"<<endl;
+    }
+    
+    return 0;
+
+}
+`,
+                        python: `from collections import deque
+
+def isBipartite(adj, colors, start, n):
+    q = deque()
+    q.append([start, 0])
+    colors[start] = 0
+
+    while q:
+        u, currColor = q.popleft()
+        newColor = 1 - currColor
+
+        for v in adj[u]:
+            if colors[v] == -1:
+                colors[v] = newColor
+                q.append([v, newColor])
+            elif colors[v] != newColor:
+                return False
+
+    return True
+
+
+def makeAdj(edges, n):
+    adj = [[] for _ in range(n + 1)]
+
+    for edge in edges:
+        u, v = edge
+        adj[u].append(v)
+        adj[v].append(u)
+
+    return adj
+
+
+n = int(input())
+
+edges = []
+for i in range(n):
+    u, v = map(int, input().split())
+    edges.append([u, v])
+
+adj = makeAdj(edges, n)
+
+colors = [-1] * (n + 1)
+
+isBipartiteGraph = True
+
+for i in range(n + 1):
+    if colors[i] == -1 and not isBipartite(adj, colors, i, n):
+        isBipartiteGraph = False
+        break
+
+if isBipartiteGraph:
+    print("Graph is Bipartite")
+else:
+    print("Graph is not Bipartite")`,
+                        java: `import java.util.*;
+
+public class Main {
+
+    static boolean isBipartite(List<List<Integer>> adj, int[] colors, int start, int n) {
+
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{start, 0});
+        colors[start] = 0;
+
+        while (!q.isEmpty()) {
+
+            int[] front = q.poll();
+            int u = front[0];
+            int currColor = front[1];
+            int newColor = 1 - currColor;
+
+            for (int v : adj.get(u)) {
+                if (colors[v] == -1) {
+                    colors[v] = newColor;
+                    q.add(new int[]{v, newColor});
+                } else if (colors[v] != newColor) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    static List<List<Integer>> makeAdj(List<int[]> edges, int n) {
+
+        List<List<Integer>> adj = new ArrayList<>();
+
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        return adj;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        List<int[]> edges = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            edges.add(new int[]{u, v});
+        }
+
+        List<List<Integer>> adj = makeAdj(edges, n);
+
+        int[] colors = new int[n + 1];
+        Arrays.fill(colors, -1);
+
+        boolean isBipartiteGraph = true;
+
+        for (int i = 0; i <= n; i++) {
+            if (colors[i] == -1 && !isBipartite(adj, colors, i, n)) {
+                isBipartiteGraph = false;
+                break;
+            }
+        }
+
+        if (isBipartiteGraph) {
+            System.out.println("Graph is Bipartite");
+        } else {
+            System.out.println("Graph is not Bipartite");
+        }
+    }
+}`,
+                        javascript: `function isBipartite(adj, colors, start, n) {
+    let q = [];
+    q.push([start, 0]);
+    colors[start] = 0;
+
+    while (q.length > 0) {
+        let [u, currColor] = q.shift();
+        let newColor = 1 - currColor;
+
+        for (let v of adj[u]) {
+            if (colors[v] === -1) {
+                colors[v] = newColor;
+                q.push([v, newColor]);
+            } else if (colors[v] !== newColor) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function makeAdj(edges, n) {
+    let adj = Array.from({ length: n + 1 }, () => []);
+
+    for (let edge of edges) {
+        let u = edge[0];
+        let v = edge[1];
+
+        adj[u].push(v);
+        adj[v].push(u);
+    }
+
+    return adj;
+}
+
+// Input (Node.js)
+const readline = require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+let input = [];
+readline.on("line", line => input.push(line));
+readline.on("close", () => {
+
+    let n = parseInt(input[0]);
+    let edges = [];
+
+    for (let i = 1; i <= n; i++) {
+        let [u, v] = input[i].split(" ").map(Number);
+        edges.push([u, v]);
+    }
+
+    let adj = makeAdj(edges, n);
+    let colors = new Array(n + 1).fill(-1);
+
+    let isBipartiteGraph = true;
+
+    for (let i = 0; i <= n; i++) {
+        if (colors[i] === -1 && !isBipartite(adj, colors, i, n)) {
+            isBipartiteGraph = false;
+            break;
+        }
+    }
+
+    if (isBipartiteGraph) {
+        console.log("Graph is Bipartite");
+    } else {
+        console.log("Graph is not Bipartite");
+    }
+});`
                     }
                 }
             },
