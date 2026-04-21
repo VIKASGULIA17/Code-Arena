@@ -27,6 +27,8 @@ export const dsaCategories = {
                 codeTemplates: {
                     "array-basics": {
                         title: "Array Basics - Declaration & Operations",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -142,6 +144,8 @@ arrayBasics();`
                     },
                     "two-sum": {
                         title: "Two Sum Problem",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <iostream>
 #include <vector>
 #include <unordered_map>
@@ -316,6 +320,8 @@ main();`
                 codeTemplates: {
                     "stack-implementation": {
                         title: "Stack Implementation using Array",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -651,6 +657,8 @@ main();`
                 codeTemplates: {
                     "binary-tree": {
                         title: "Binary Tree Implementation",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <iostream>
 #include <queue>
 using namespace std;
@@ -1180,6 +1188,8 @@ main();`
                 codeTemplates: {
                     "singly-linked-list": {
                         title: "Singly Linked List Implementation",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <iostream>
 using namespace std;
 
@@ -1627,6 +1637,8 @@ main();`
                 codeTemplates: {
                     "bubble-sort": {
                         title: "Bubble Sort Algorithm",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -1838,6 +1850,8 @@ main();`
                 codeTemplates: {
                     "merge-sort-algorithm": {
                         title: "Merge Sort Implementation",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -2266,6 +2280,8 @@ main();`
                 codeTemplates: {
                     "fibonacci-dp": {
                         title: "Fibonacci - Dynamic Programming",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <iostream>
 #include <vector>
 #include <unordered_map>
@@ -2724,6 +2740,8 @@ main();`
                 codeTemplates: {
                     "graph-bfs-dfs": {
                         title: "Graph BFS and DFS Implementation",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <iostream>
 #include <vector>
 #include <queue>
@@ -3444,6 +3462,8 @@ main();`
                     },
                     "disjoint-set-union-by-rank": {
                         title: "Disjoint Set Union-Find Implementation By Rank",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 
@@ -3691,6 +3711,8 @@ if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
                     },
                     "disjoint-set-union-by-size": {
                         title: "Disjoint Set Union-Find Implementation by Size",
+                        videoLink: "https://youtu.be/aBxjDBC4M1U?si=2q0Q6J83H26bQGZ0",
+                        problemLink: "https://leetcode.com/problems/number-of-provinces/",
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 
@@ -3932,6 +3954,8 @@ if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
                     },
                     "multi-source-BFS-having-equal-weight": {
                         title: "Multi-Source BFS (having equal weight)",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 
@@ -4171,6 +4195,8 @@ function multiSourceBFS(adj, colors, n) {
                     },
                     "0-1-BFS":{
                         title:"0/1 BFS",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp:`#include <bits/stdc++.h>
 using namespace std;
 
@@ -4407,6 +4433,8 @@ console.log(zeroOneBFS(adj, colors, n).join(" "));`
                 codeTemplates: {
                     "difference-array-without-steps": {
                         title: "Difference Array Technique - With no Jumps",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <bits/stdc++.h>
 
 using namespace std;
@@ -4572,6 +4600,8 @@ console.log(arr.join(" "));`
                     },
                     "difference-array-with-steps": {
                         title: "Difference Array Technique - With Jumps",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <bits/stdc++.h>
 
 using namespace std;
@@ -4850,6 +4880,8 @@ console.log(arr.join(" "));`
                 codeTemplates: {
                     "minimum-element-in-range": {
                         title: "Minimum Element in Range using Square Decomposition",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 

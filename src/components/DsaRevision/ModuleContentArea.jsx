@@ -2,7 +2,7 @@ import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   CheckCircle2, Circle, ArrowLeft, ArrowRight,
-  BookOpen, Code2, Clock, Zap, Target, ChevronRight
+  BookOpen, Code2, Clock, Zap, Target, ChevronRight, PlayCircle, ExternalLink
 } from 'lucide-react'
 import { dsaCategories } from '../../data/DsaTopics'
 import { TheorySection } from '../theory/TheorySection'
@@ -258,7 +258,7 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
           <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-gray-200 dark:border-slate-700/50 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-gray-100 dark:border-slate-700/50">
               <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-2">{topic.codeTemplates[subtopic.id].title}</h3>
-              <div className="flex items-center gap-4 text-sm text-gray-400 dark:text-slate-500">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400 dark:text-slate-500">
                 <div className="flex items-center gap-1">
                   <Code2 size={14} />
                   <span>4 Languages</span>
@@ -267,6 +267,28 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
                   <Target size={14} />
                   <span>Production Ready</span>
                 </div>
+                {topic.codeTemplates[subtopic.id].videoLink && (
+                  <a
+                    href={topic.codeTemplates[subtopic.id].videoLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors"
+                  >
+                    <PlayCircle size={14} />
+                    <span>Watch Tutorial</span>
+                  </a>
+                )}
+                {topic.codeTemplates[subtopic.id].problemLink && (
+                  <a
+                    href={topic.codeTemplates[subtopic.id].problemLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                  >
+                    <ExternalLink size={14} />
+                    <span>Practice Problem</span>
+                  </a>
+                )}
               </div>
             </div>
             <CodeBlock codeTemplates={topic.codeTemplates[subtopic.id]} templateId={subtopic.id} />
