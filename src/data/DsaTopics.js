@@ -4426,6 +4426,8 @@ console.log(zeroOneBFS(adj, colors, n).join(" "));`
                     },
                     "bipartite-graph-bfs": {
                         title: "Bipartite Graph using(BFS)",
+                        videoLink: "https://youtube.com/",
+                        problemLink: "https://leetcode.com/",
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 
