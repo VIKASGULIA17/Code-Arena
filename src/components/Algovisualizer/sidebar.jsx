@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { BarChart3, GitBranch, TreeDeciduous, Repeat, X, Cpu } from "lucide-react"
+import { BarChart3, GitBranch, TreeDeciduous, Repeat, X, Cpu, Box, ListTree } from "lucide-react"
 
 const categories = [
   {
@@ -35,6 +35,22 @@ const categories = [
     description: "Fibonacci · Factorial · Hanoi",
     color: "#ec4899",
     badge: "3 algos",
+  },
+  {
+    id: "tree_builder",
+    label: "Tree Builder",
+    icon: Box,
+    description: "Interactive BST Construction",
+    color: "#10b981",
+    badge: "New",
+  },
+  {
+    id: "traversal_converter",
+    label: "Traversal Converter",
+    icon: ListTree,
+    description: "Binary Tree to Array Trace",
+    color: "#a855f7",
+    badge: "New",
   },
 ]
 

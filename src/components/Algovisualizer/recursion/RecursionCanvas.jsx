@@ -13,38 +13,43 @@ const NODE_STYLES = {
     textFill: "#94a3b8",
     dash: "4 3",
     glow: null,
+    glowColor: null,
     r: 22,
   },
   [STATE.ACTIVE]: {
-    fill: "#1e40af",
-    stroke: "#3b82f6",
+    fill: "#006064",
+    stroke: "#00e5ff",
     textFill: "#fff",
     dash: null,
-    glow: "#3b82f6",
+    glow: "rgba(0,255,255,0.6)",
+    glowColor: "#00e5ff",
     r: 26,
   },
   [STATE.COMPUTING]: {
-    fill: "#1e40af",
-    stroke: "#60a5fa",
+    fill: "#4a1d96",
+    stroke: "#bf5af2",
     textFill: "#fff",
     dash: null,
-    glow: "#60a5fa",
+    glow: "rgba(191,90,242,0.55)",
+    glowColor: "#bf5af2",
     r: 24,
   },
   [STATE.BASE_CASE]: {
-    fill: "#065f46",
-    stroke: "#10b981",
+    fill: "#064e3b",
+    stroke: "#34d399",
     textFill: "#fff",
     dash: null,
-    glow: "#10b981",
+    glow: "rgba(52,211,153,0.5)",
+    glowColor: "#34d399",
     r: 24,
   },
   [STATE.RETURNING]: {
     fill: "#713f12",
-    stroke: "#eab308",
+    stroke: "#fbbf24",
     textFill: "#fff",
     dash: null,
-    glow: "#eab308",
+    glow: "rgba(251,191,36,0.5)",
+    glowColor: "#fbbf24",
     r: 24,
   },
   [STATE.RESOLVED]: {
@@ -53,14 +58,16 @@ const NODE_STYLES = {
     textFill: "#e2e8f0",
     dash: null,
     glow: null,
+    glowColor: null,
     r: 22,
   },
   [STATE.MEMOIZED]: {
-    fill: "#581c87",
-    stroke: "#a855f7",
+    fill: "#701a75",
+    stroke: "#f0abfc",
     textFill: "#fff",
     dash: null,
-    glow: "#a855f7",
+    glow: "rgba(240,171,252,0.55)",
+    glowColor: "#f0abfc",
     r: 26,
   },
 };
@@ -304,7 +311,7 @@ export function RecursionCanvas({
           {["blue", "green", "yellow", "purple"].map(
             (name, i) => {
               const colors = [
-                "#3b82f6",
+                "#00e5ff",
                 "#10b981",
                 "#eab308",
                 "#a855f7",
@@ -338,6 +345,13 @@ export function RecursionCanvas({
               );
             }
           )}
+          {/* Dijkstra neon cyan glow */}
+          <filter id="dijkstra-glow" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feFlood floodColor="#00ffff" floodOpacity="0.45" />
+            <feComposite in2="blur" operator="in" />
+            <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
           <filter
             id="edge-glow"
             x="-20%"
@@ -449,17 +463,9 @@ export function RecursionCanvas({
                 NODE_STYLES[node.state] ||
                 NODE_STYLES[STATE.PENDING];
               const isActive = node.id === activeNodeId;
-              const dropShadow =
-                node.state === STATE.ACTIVE ||
-                node.state === STATE.COMPUTING
-                  ? 'drop-shadow(0 0 6px #3b82f6)'
-                  : node.state === STATE.BASE_CASE
-                    ? 'drop-shadow(0 0 6px #10b981)'
-                    : node.state === STATE.RETURNING
-                      ? 'drop-shadow(0 0 6px #eab308)'
-                      : node.state === STATE.MEMOIZED
-                        ? 'drop-shadow(0 0 6px #a855f7)'
-                        : 'none';
+              const dropShadow = style.glow
+                ? `drop-shadow(0 0 12px ${style.glow})`
+                : 'none';
 
               return (
                 <motion.g
@@ -479,27 +485,49 @@ export function RecursionCanvas({
                   }}
                 >
                   {/* Pulsating ring for active node */}
-                  {isActive && style.glow && (
-                    <motion.circle
-                      r={style.r + 8}
-                      fill="none"
-                      stroke={style.glow}
-                      strokeWidth={2}
-                      opacity={0.4}
-                      animate={{
-                        r: [
-                          style.r + 6,
-                          style.r + 12,
-                          style.r + 6,
-                        ],
-                        opacity: [0.4, 0.15, 0.4],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    />
+                  {isActive && style.glowColor && (
+                    <>
+                      <motion.circle
+                        r={style.r + 8}
+                        fill="none"
+                        stroke={style.glowColor}
+                        strokeWidth={2}
+                        opacity={0.4}
+                        animate={{
+                          r: [
+                            style.r + 6,
+                            style.r + 14,
+                            style.r + 6,
+                          ],
+                          opacity: [0.4, 0.1, 0.4],
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      />
+                      <motion.circle
+                        r={style.r + 4}
+                        fill="none"
+                        stroke={style.glowColor}
+                        strokeWidth={1}
+                        opacity={0.3}
+                        animate={{
+                          r: [
+                            style.r + 3,
+                            style.r + 9,
+                            style.r + 3,
+                          ],
+                          opacity: [0.35, 0.08, 0.35],
+                        }}
+                        transition={{
+                          duration: 1.2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    </>
                   )}
 
                   {/* Main circle */}

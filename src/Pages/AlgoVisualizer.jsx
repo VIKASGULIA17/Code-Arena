@@ -6,6 +6,8 @@ import { SortingVisualizer } from "@/components/Algovisualizer/sorting-visualize
 import { TreeVisualizer } from "@/components/Algovisualizer/tree-visualizer"
 import { RecursionVisualizer } from "@/components/Algovisualizer/recursion-visualizer"
 import { GraphVisualizer } from "@/components/Algovisualizer/graph-visualizer"
+import { InteractiveTreeBuilder } from "@/components/Algovisualizer/tree/InteractiveTreeBuilder"
+import { TraversalConverter } from "@/components/Algovisualizer/tree/TraversalConverter"
 import { ArrowLeft, Menu, Code2, Cpu, Sun, Moon } from "lucide-react"
 import { useNavigate, Link } from "react-router-dom"
 import { useAppContext } from "@/context/AppContext"
@@ -105,6 +107,8 @@ export default function AlgoVisualizerPage() {
           {activeCategory === "graph"     && <GraphVisualizer   theme={theme} />}
           {activeCategory === "tree"      && <TreeVisualizer theme={theme} />}
           {activeCategory === "recursion" && <RecursionVisualizer theme={theme} />}
+          {activeCategory === "tree_builder" && <InteractiveTreeBuilder theme={theme} />}
+          {activeCategory === "traversal_converter" && <TraversalConverter theme={theme} />}
         </main>
       </div>
     </div>

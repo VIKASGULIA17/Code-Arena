@@ -6,21 +6,23 @@ import {
   LineChart, Line, Legend, AreaChart, Area
 } from "recharts"
 import { Play, Pause, RotateCcw, Shuffle, Info, TrendingUp } from "lucide-react"
+import { GlobalMetricsPanel } from "./GlobalMetricsPanel"
+import { ComplexityPanel } from "./ComplexityPanel"
 
 /* ─── algorithm metadata ─────────────────────────── */
 const ALGO_META = {
-  bubble:    { name: "Bubble Sort",    complexity: "O(n²)",      space: "O(1)",      best: "O(n)",      color: "#6366f1", description: "Repeatedly compares adjacent elements and swaps them if out of order. Simple but slow." },
-  selection: { name: "Selection Sort", complexity: "O(n²)",      space: "O(1)",      best: "O(n²)",     color: "#10b981", description: "Finds the minimum element each pass and places it at the correct position." },
-  insertion: { name: "Insertion Sort", complexity: "O(n²)",      space: "O(1)",      best: "O(n)",      color: "#f59e0b", description: "Builds a sorted portion one element at a time — efficient for nearly-sorted data." },
-  merge:     { name: "Merge Sort",     complexity: "O(n log n)", space: "O(n)",      best: "O(n log n)", color: "#ec4899", description: "Divide-and-conquer: recursively splits the array and merges sorted halves." },
-  quick:     { name: "Quick Sort",     complexity: "O(n log n)", space: "O(log n)", best: "O(n log n)", color: "#0ea5e9", description: "Picks a pivot, partitions the array, and recursively sorts sub-arrays." },
-  heap:      { name: "Heap Sort",      complexity: "O(n log n)", space: "O(1)",      best: "O(n log n)", color: "#a855f7", description: "Uses a max-heap to extract elements in sorted order. In-place and efficient." },
+  bubble:    { name: "Bubble Sort",    complexity: "O(n²)",      space: "O(1)",      best: "O(n)",      color: "#6366f1", description: "Repeatedly compares adjacent elements and swaps them if out of order. Simple but slow.", timeExplanation: "Two nested loops iterate through the array, comparing each adjacent pair. n * n comparisons = O(n²).", spaceExplanation: "Swapping is done in-place, requiring only a constant amount of extra memory for the temporary variable." },
+  selection: { name: "Selection Sort", complexity: "O(n²)",      space: "O(1)",      best: "O(n²)",     color: "#10b981", description: "Finds the minimum element each pass and places it at the correct position.", timeExplanation: "For each element, it iterates through the rest of the unsorted array to find the minimum. n + (n-1) + ... + 1 = O(n²).", spaceExplanation: "In-place sorting requires no extra array, only a few variables for indices." },
+  insertion: { name: "Insertion Sort", complexity: "O(n²)",      space: "O(1)",      best: "O(n)",      color: "#f59e0b", description: "Builds a sorted portion one element at a time — efficient for nearly-sorted data.", timeExplanation: "In the worst case (reverse sorted), each element must be shifted to the very beginning. Average and worst cases are O(n²).", spaceExplanation: "Sorts in-place by shifting elements, so no extra memory is needed." },
+  merge:     { name: "Merge Sort",     complexity: "O(n log n)", space: "O(n)",      best: "O(n log n)", color: "#ec4899", description: "Divide-and-conquer: recursively splits the array and merges sorted halves.", timeExplanation: "The array is halved log(n) times, and each level requires O(n) work to merge the sub-arrays. Total: O(n log n).", spaceExplanation: "Merging requires a temporary array of the same size as the sub-arrays being merged, summing to O(n)." },
+  quick:     { name: "Quick Sort",     complexity: "O(n log n)", space: "O(log n)", best: "O(n log n)", color: "#0ea5e9", description: "Picks a pivot, partitions the array, and recursively sorts sub-arrays.", timeExplanation: "Average case partitions the array well, leading to log(n) levels of recursion with O(n) work per level. Worst case O(n²).", spaceExplanation: "In-place partitioning, but the recursive call stack takes O(log n) space on average." },
+  heap:      { name: "Heap Sort",      complexity: "O(n log n)", space: "O(1)",      best: "O(n log n)", color: "#a855f7", description: "Uses a max-heap to extract elements in sorted order. In-place and efficient.", timeExplanation: "Building the heap takes O(n), and extracting the maximum n times takes O(log n) each. Total: O(n log n).", spaceExplanation: "The array itself is treated as a heap, requiring no additional structures." },
 }
 
 /* ─── bar state → color ──────────────────────────── */
 const BAR_COLORS = {
   default:   { light: "#6366f1", dark: "#4f46e5" }, // Indigo
-  comparing: { light: "#f59e0b", dark: "#fbbf24" }, // Amber
+  comparing: { light: "#00bcd4", dark: "#00e5ff" }, // Cyan Dijkstra
   swapping:  { light: "#f43f5e", dark: "#fb7185" }, // Rose
   sorted:    { light: "#10b981", dark: "#34d399" }, // Emerald
   pivot:     { light: "#ec4899", dark: "#f472b6" }, // Pink
@@ -310,28 +312,24 @@ export function SortingVisualizer({ theme = "dark" }) {
         </div>
       </div>
 
-      {/* ── Stat chips ── */}
-      <div className="flex flex-wrap gap-2">
-        {[
-          { label: "Algorithm",    value: meta.name,                         color: meta.color },
-          { label: "Time",         value: meta.complexity,                   color: "#6366f1" },
-          { label: "Best",         value: meta.best,                         color: "#10b981" },
-          { label: "Space",        value: meta.space,                        color: "#8b5cf6" },
-          { label: "Comparisons",  value: comparisons,                       color: "#f59e0b" },
-          { label: "Swaps",        value: swaps,                             color: "#ef4444" },
-          { label: "Elapsed",      value: `${(elapsed/1000).toFixed(1)}s`,   color: "#0ea5e9" },
-        ].map(({ label, value, color }) => (
-          <div key={label} className="flex items-center gap-2 rounded-xl px-3 py-1.5"
-            style={{ background: c.panel, border: `1px solid ${c.border}` }}>
-            <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
-            <span className="text-[10px]" style={{ color: c.muted }}>{label}:</span>
-            <span className="text-[11px] font-bold font-mono" style={{ color: c.text }}>{value}</span>
-          </div>
-        ))}
-      </div>
-
       {/* ── Main bar chart (Recharts) ── */}
-      <div className="flex-1 rounded-2xl overflow-hidden" style={{ background: c.panel, border: `1px solid ${c.border}`, minHeight: 240 }}>
+      <div className="flex-1 rounded-2xl overflow-hidden relative" style={{ background: c.panel, border: `1px solid ${c.border}`, minHeight: 240 }}>
+        <GlobalMetricsPanel 
+          metrics={[
+            { label: "Comparisons", value: comparisons, color: "#f59e0b" },
+            { label: "Swaps", value: swaps, color: "#ef4444" }
+          ]}
+          timeMs={elapsed}
+          theme={theme}
+        />
+        <ComplexityPanel 
+          timeComplexity={meta.complexity}
+          spaceComplexity={meta.space}
+          timeExplanation={meta.timeExplanation}
+          spaceExplanation={meta.spaceExplanation}
+          theme={theme}
+          accentColor={meta.color}
+        />
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 12, right: 8, left: -24, bottom: 0 }} barCategoryGap="2%">
             <CartesianGrid vertical={false} stroke={c.border} opacity={0.5} />

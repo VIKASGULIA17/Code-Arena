@@ -5,6 +5,8 @@ import { ExecutionControls } from "./ExecutionControls";
 import { RecursionCanvas } from "./RecursionCanvas";
 import { CallStack } from "./CallStack";
 import { StateInspector } from "./StateInspector";
+import { GlobalMetricsPanel } from "../GlobalMetricsPanel";
+import { ComplexityPanel } from "../ComplexityPanel";
 
 /**
  * Layout shell — composes all panels for the Recursion Visualizer.
@@ -46,7 +48,23 @@ export function RecursionVisualizer({ theme = "dark" }) {
       {/* Main content: Canvas + Sidebar */}
       <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">
         {/* Canvas (center) */}
-        <div className="flex-1 flex min-h-[400px]">
+        <div className="flex-1 flex relative min-h-[400px]">
+          <GlobalMetricsPanel 
+            metrics={[
+              { label: "Operations", value: `${engine.currentStep}/${engine.totalSteps}`, color: "#f59e0b" },
+              { label: "Stack Depth", value: engine.currentCallStackDepth || 0, color: "#ec4899" }
+            ]}
+            timeMs={engine.currentStep * Math.max(80, 800 - engine.speed * 7.2)}
+            theme={theme}
+          />
+          <ComplexityPanel 
+            timeComplexity={engine.meta?.complexity || "O(1)"}
+            spaceComplexity={engine.meta?.space || "O(1)"}
+            timeExplanation={engine.meta?.timeExplanation}
+            spaceExplanation={engine.meta?.spaceExplanation}
+            theme={theme}
+            accentColor={engine.meta?.color}
+          />
           <RecursionCanvas
             snapshot={engine.currentSnapshot}
             theme={theme}

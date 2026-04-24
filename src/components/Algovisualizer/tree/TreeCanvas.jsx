@@ -9,46 +9,51 @@ const getNodeStyle = (state, isDark) => {
   switch (state) {
     case TREE_STATE.VISITING:
       return {
-        fill: "#7c3aed",
-        stroke: "#a78bfa",
+        fill: "#006064",
+        stroke: "#00e5ff",
         textFill: "#fff",
-        glow: "#a78bfa",
+        glow: "rgba(0,255,255,0.6)",
+        glowColor: "#00e5ff",
         r: 26,
-        filter: "url(#tree-glow-purple)",
+        filter: "url(#dijkstra-glow)",
       };
     case TREE_STATE.VISITED:
       return {
-        fill: isDark ? "#1e40af" : "#3b82f6",
-        stroke: "#60a5fa",
+        fill: isDark ? "#312e81" : "#c4b5fd",
+        stroke: isDark ? "#818cf8" : "#8b5cf6",
         textFill: "#fff",
-        glow: null,
+        glow: "rgba(129,140,248,0.3)",
+        glowColor: "#818cf8",
         r: 23,
         filter: null,
       };
     case TREE_STATE.FOUND:
       return {
-        fill: "#059669",
+        fill: "#064e3b",
         stroke: "#34d399",
         textFill: "#fff",
-        glow: "#34d399",
+        glow: "rgba(52,211,153,0.5)",
+        glowColor: "#34d399",
         r: 28,
         filter: "url(#tree-glow-green)",
       };
     case TREE_STATE.INSERTING:
       return {
-        fill: "#0891b2",
-        stroke: "#22d3ee",
+        fill: "#14532d",
+        stroke: "#4ade80",
         textFill: "#fff",
-        glow: "#22d3ee",
+        glow: "rgba(74,222,128,0.5)",
+        glowColor: "#4ade80",
         r: 26,
-        filter: "url(#tree-glow-cyan)",
+        filter: "url(#tree-glow-green)",
       };
     case TREE_STATE.CURRENT:
       return {
-        fill: "#d97706",
+        fill: "#78350f",
         stroke: "#fbbf24",
         textFill: "#fff",
-        glow: "#fbbf24",
+        glow: "rgba(251,191,36,0.55)",
+        glowColor: "#fbbf24",
         r: 26,
         filter: "url(#tree-glow-yellow)",
       };
@@ -58,6 +63,7 @@ const getNodeStyle = (state, isDark) => {
         stroke: isDark ? "#475569" : "#cbd5e1",
         textFill: isDark ? "#94a3b8" : "#fff",
         glow: null,
+        glowColor: null,
         r: 22,
         filter: null,
       };
@@ -266,6 +272,13 @@ export function TreeCanvas({ snapshot, theme = "dark" }) {
               </feMerge>
             </filter>
           ))}
+          {/* Dijkstra neon cyan glow */}
+          <filter id="dijkstra-glow" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="6" result="blur" />
+            <feFlood floodColor="#00ffff" floodOpacity="0.45" />
+            <feComposite in2="blur" operator="in" />
+            <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
           <filter id="tree-edge-glow" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="3" result="blur" />
             <feMerge>
@@ -339,23 +352,41 @@ export function TreeCanvas({ snapshot, theme = "dark" }) {
                   }}
                 >
                   {/* Pulsating ring for active */}
-                  {isActive && style.glow && (
-                    <motion.circle
-                      r={style.r + 8}
-                      fill="none"
-                      stroke={style.glow}
-                      strokeWidth={2}
-                      opacity={0.4}
-                      animate={{
-                        r: [style.r + 6, style.r + 12, style.r + 6],
-                        opacity: [0.4, 0.15, 0.4],
-                      }}
-                      transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    />
+                  {isActive && style.glowColor && (
+                    <>
+                      <motion.circle
+                        r={style.r + 8}
+                        fill="none"
+                        stroke={style.glowColor}
+                        strokeWidth={2}
+                        opacity={0.4}
+                        animate={{
+                          r: [style.r + 6, style.r + 14, style.r + 6],
+                          opacity: [0.4, 0.1, 0.4],
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      />
+                      <motion.circle
+                        r={style.r + 4}
+                        fill="none"
+                        stroke={style.glowColor}
+                        strokeWidth={1}
+                        opacity={0.3}
+                        animate={{
+                          r: [style.r + 3, style.r + 9, style.r + 3],
+                          opacity: [0.35, 0.08, 0.35],
+                        }}
+                        transition={{
+                          duration: 1.2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    </>
                   )}
 
                   {/* Main circle */}
@@ -364,7 +395,7 @@ export function TreeCanvas({ snapshot, theme = "dark" }) {
                     fill={style.fill}
                     stroke={style.stroke}
                     strokeWidth={2}
-                    style={{ filter: style.glow ? `drop-shadow(0 0 6px ${style.glow})` : 'none' }}
+                    style={{ filter: style.glow ? `drop-shadow(0 0 15px ${style.glow})` : 'none' }}
                     animate={{
                       r: style.r,
                       fill: style.fill,

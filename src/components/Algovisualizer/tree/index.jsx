@@ -4,6 +4,8 @@ import { useTreeEngine } from "./useTreeEngine";
 import { TreeControls } from "./TreeControls";
 import { TreeCanvas } from "./TreeCanvas";
 import { TraversalOrder } from "./TraversalOrder";
+import { GlobalMetricsPanel } from "../GlobalMetricsPanel";
+import { ComplexityPanel } from "../ComplexityPanel";
 
 /**
  * Layout shell — composes all panels for the Tree (BST) Visualizer.
@@ -47,7 +49,23 @@ export function TreeVisualizer({ theme = "dark" }) {
       {/* Main content: Canvas + sidebar */}
       <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">
         {/* Canvas (center) */}
-        <div className="flex-1 flex min-h-[400px]">
+        <div className="flex-1 flex relative min-h-[400px]">
+          <GlobalMetricsPanel 
+            metrics={[
+              { label: "Operations", value: `${engine.currentStep}/${engine.totalSteps}`, color: "#f59e0b" },
+              { label: "Nodes Visited", value: engine.currentSnapshot?.traversalOrder?.length || 0, color: "#0ea5e9" }
+            ]}
+            timeMs={engine.currentStep * Math.max(80, 800 - engine.speed * 7.2)}
+            theme={theme}
+          />
+          <ComplexityPanel 
+            timeComplexity={engine.meta.complexity}
+            spaceComplexity={engine.meta.space}
+            timeExplanation={engine.meta.timeExplanation}
+            spaceExplanation={engine.meta.spaceExplanation}
+            theme={theme}
+            accentColor={engine.meta.color}
+          />
           <TreeCanvas
             snapshot={engine.currentSnapshot}
             theme={theme}
@@ -107,37 +125,11 @@ export function TreeVisualizer({ theme = "dark" }) {
               </span>
             </div>
             <p
-              className="text-xs leading-relaxed mb-3"
+              className="text-xs leading-relaxed mb-1"
               style={{ color: c.muted }}
             >
               {engine.meta.description}
             </p>
-            <div className="flex gap-3">
-              <div
-                className="text-[10px] px-2 py-1 rounded-lg font-mono"
-                style={{
-                  background: isDark
-                    ? "rgba(99, 102, 241, 0.1)"
-                    : "rgba(99, 102, 241, 0.06)",
-                  color: "#818cf8",
-                  border: "1px solid rgba(99, 102, 241, 0.15)",
-                }}
-              >
-                Time: {engine.meta.complexity}
-              </div>
-              <div
-                className="text-[10px] px-2 py-1 rounded-lg font-mono"
-                style={{
-                  background: isDark
-                    ? "rgba(16, 185, 129, 0.1)"
-                    : "rgba(16, 185, 129, 0.06)",
-                  color: "#10b981",
-                  border: "1px solid rgba(16, 185, 129, 0.15)",
-                }}
-              >
-                Space: {engine.meta.space}
-              </div>
-            </div>
           </div>
         </div>
       </div>

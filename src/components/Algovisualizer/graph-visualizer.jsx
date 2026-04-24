@@ -6,6 +6,8 @@ import {
   ResponsiveContainer, Legend
 } from "recharts"
 import { Play, Pause, RotateCcw, MousePointer2, Info, TrendingUp } from "lucide-react"
+import { GlobalMetricsPanel } from "./GlobalMetricsPanel"
+import { ComplexityPanel } from "./ComplexityPanel"
 
 /* ─── algorithm metadata ────────────────────────────── */
 const ALGO_META = {
@@ -14,6 +16,8 @@ const ALGO_META = {
     complexity: "O((V+E) log V)",
     space: "O(V)",
     description: "Greedy shortest-path algorithm using a priority queue. Guarantees optimal path for non-negative weights.",
+    timeExplanation: "Explores nodes by distance using a priority queue. Each of V nodes is extracted (O(log V)), and each of E edges is relaxed (O(log V)).",
+    spaceExplanation: "Stores distances and the priority queue, which can contain up to V nodes.",
     color: "#6366f1",
   },
   bfs: {
@@ -21,6 +25,8 @@ const ALGO_META = {
     complexity: "O(V + E)",
     space: "O(V)",
     description: "Explores all neighbours level-by-level. Finds shortest path in unweighted graphs.",
+    timeExplanation: "Visits every vertex V and every edge E exactly once in the worst case.",
+    spaceExplanation: "The queue can hold up to V nodes at the widest level of the graph.",
     color: "#10b981",
   },
   dfs: {
@@ -28,6 +34,8 @@ const ALGO_META = {
     complexity: "O(V + E)",
     space: "O(V)",
     description: "Explores as deep as possible before backtracking. Does not guarantee shortest path.",
+    timeExplanation: "Visits every vertex V and every edge E exactly once in the worst case.",
+    spaceExplanation: "The recursion stack can go as deep as V nodes in a highly unbalanced graph.",
     color: "#f59e0b",
   },
   astar: {
@@ -35,6 +43,8 @@ const ALGO_META = {
     complexity: "O(E log V)",
     space: "O(V)",
     description: "Heuristic-guided search combining Dijkstra and greedy best-first. Optimal and complete.",
+    timeExplanation: "Similar to Dijkstra, but uses a heuristic to guide the search. In the worst case, it still explores E edges and V vertices.",
+    spaceExplanation: "Maintains a priority queue and a map of distances, up to V nodes.",
     color: "#ec4899",
   },
 }
@@ -385,12 +395,12 @@ export function GraphVisualizer({ theme = "dark" }) {
   /* ── node style based on theme ── */
   const NODE_STYLE_T = {
     default:  { fill: isDark ? "#334155" : "#94a3b8",  stroke: isDark ? "#475569" : "#cbd5e1", textFill: isDark ? "#94a3b8" : "#fff",    r: 22 },
-    start:    { fill: "#10b981", stroke: "#34d399", textFill: "#fff", r: 24, glow: "#10b981" },
-    end:      { fill: "#ef4444", stroke: "#f87171", textFill: "#fff", r: 24, glow: "#ef4444" },
-    visited:  { fill: isDark ? "#3730a3" : "#818cf8",  stroke: isDark ? "#6366f1" : "#6366f1", textFill: "#fff", r: 22 },
-    current:  { fill: "#7c3aed", stroke: "#c084fc", textFill: "#fff", r: 26, glow: "#c084fc" },
-    path:     { fill: "#f59e0b", stroke: "#fcd34d", textFill: "#fff", r: 24, glow: "#f59e0b" },
-    frontier: { fill: "#0ea5e9", stroke: "#38bdf8", textFill: "#fff", r: 22 },
+    start:    { fill: "#064e3b", stroke: "#34d399", textFill: "#fff", r: 24, glow: "rgba(52,211,153,0.5)", glowColor: "#34d399" },
+    end:      { fill: "#7f1d1d", stroke: "#f87171", textFill: "#fff", r: 24, glow: "rgba(248,113,113,0.5)", glowColor: "#f87171" },
+    visited:  { fill: isDark ? "#312e81" : "#c4b5fd",  stroke: isDark ? "#818cf8" : "#8b5cf6", textFill: "#fff", r: 22, glow: "rgba(129,140,248,0.3)", glowColor: "#818cf8" },
+    current:  { fill: "#006064", stroke: "#00e5ff", textFill: "#fff", r: 26, glow: "rgba(0,255,255,0.6)", glowColor: "#00e5ff" },
+    path:     { fill: "#78350f", stroke: "#fbbf24", textFill: "#fff", r: 24, glow: "rgba(251,191,36,0.5)", glowColor: "#fbbf24" },
+    frontier: { fill: isDark ? "#4a1d96" : "#c4b5fd", stroke: "#bf5af2", textFill: "#fff", r: 22, glow: "rgba(191,90,242,0.3)", glowColor: "#bf5af2" },
   }
 
   /* ── edge key helper ── */
@@ -464,28 +474,25 @@ export function GraphVisualizer({ theme = "dark" }) {
         </div>
       </div>
 
-      {/* ── Stats chips ── */}
-      <div className="flex flex-wrap gap-2">
-        {[
-          { label: "Algorithm",     value: meta.name,                  color: meta.color },
-          { label: "Complexity",    value: meta.complexity,            color: "#6366f1" },
-          { label: "Space",         value: meta.space,                 color: "#8b5cf6" },
-          { label: "Nodes visited", value: visitedCount,               color: "#0ea5e9" },
-          { label: "Path weight",   value: pathLength !== null ? pathLength : "—", color: "#f59e0b" },
-          { label: "Time",          value: `${(elapsed/1000).toFixed(1)}s`, color: "#10b981" },
-        ].map(({ label, value, color }) => (
-          <div key={label} className="flex items-center gap-2 border rounded-xl px-3 py-1.5"
-            style={{ background: c.panel, borderColor: c.border }}>
-            <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
-            <span className="text-[10px]" style={{ color: c.muted }}>{label}:</span>
-            <span className="text-[11px] font-bold font-mono" style={{ color: c.text }}>{value}</span>
-          </div>
-        ))}
-      </div>
-
       {/* ── Main graph SVG ── */}
       <div className="flex-1 rounded-2xl overflow-hidden relative min-h-[420px]"
         style={{ background: c.inner, border: `1px solid ${c.border}` }}>
+        <GlobalMetricsPanel 
+          metrics={[
+            { label: "Nodes visited", value: visitedCount, color: "#0ea5e9" },
+            { label: "Path weight", value: pathLength !== null ? pathLength : "—", color: "#f59e0b" }
+          ]}
+          timeMs={elapsed}
+          theme={theme}
+        />
+        <ComplexityPanel 
+          timeComplexity={meta.complexity}
+          spaceComplexity={meta.space}
+          timeExplanation={meta.timeExplanation}
+          spaceExplanation={meta.spaceExplanation}
+          theme={theme}
+          accentColor={meta.color}
+        />
         {/* Algorithm description overlay */}
         <div className="absolute top-3 left-3 z-10 max-w-[260px] backdrop-blur rounded-xl px-3 py-2 border"
           style={{ background: isDark ? "rgba(30, 41, 59, 0.9)" : "rgba(255, 255, 255, 0.9)", borderColor: c.border }}>
@@ -505,6 +512,13 @@ export function GraphVisualizer({ theme = "dark" }) {
                 <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
               </filter>
             ))}
+            {/* Dijkstra neon cyan glow */}
+            <filter id="dijkstra-glow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feFlood floodColor="#00ffff" floodOpacity="0.45" />
+              <feComposite in2="blur" operator="in" />
+              <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
             <filter id="glow-edge" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur stdDeviation="2.5" result="blur"/>
               <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -555,25 +569,41 @@ export function GraphVisualizer({ theme = "dark" }) {
           {/* Nodes */}
           {nodes.map(node => {
             const s    = NODE_STYLE_T[node.state] || NODE_STYLE_T.default
-            const glow = ["start","end","current","path"].includes(node.state)
+            const hasGlow = !!s.glowColor
+            const isCurrent = node.state === "current"
             return (
               <g
                 key={node.id}
                 onClick={() => handleNodeClick(node.id)}
                 style={{ cursor: selectMode ? "crosshair" : "pointer" }}
               >
-                {/* outer glow ring */}
-                {glow && (
+                {/* Neon pulse rings for current node */}
+                {isCurrent && (
+                  <>
+                    <circle cx={node.x} cy={node.y} r={s.r + 10} fill="none"
+                      stroke={s.glowColor} strokeWidth={1.5} opacity={0.2}
+                      filter="url(#dijkstra-glow)">
+                      <animate attributeName="r" values={`${s.r + 6};${s.r + 14};${s.r + 6}`} dur="1.5s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.35;0.1;0.35" dur="1.5s" repeatCount="indefinite" />
+                    </circle>
+                    <circle cx={node.x} cy={node.y} r={s.r + 5} fill="none"
+                      stroke={s.glowColor} strokeWidth={1} opacity={0.3}>
+                      <animate attributeName="r" values={`${s.r + 3};${s.r + 8};${s.r + 3}`} dur="1.2s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.4;0.12;0.4" dur="1.2s" repeatCount="indefinite" />
+                    </circle>
+                  </>
+                )}
+                {/* outer glow ring for non-current glowing states */}
+                {hasGlow && !isCurrent && (
                   <circle cx={node.x} cy={node.y} r={s.r + 6} fill="none"
-                    stroke={s.glow} strokeWidth={2} opacity={0.35}
-                    filter={`url(#glow-${node.state})`}
+                    stroke={s.glowColor} strokeWidth={2} opacity={0.25}
                   />
                 )}
                 {/* main circle */}
                 <circle
                   cx={node.x} cy={node.y} r={s.r}
                   fill={s.fill} stroke={s.stroke} strokeWidth={2}
-                  style={{ transition: "all 0.25s ease", filter: glow ? `drop-shadow(0 0 6px ${s.glow})` : "none" }}
+                  style={{ transition: "all 0.25s ease", filter: hasGlow ? `drop-shadow(0 0 12px ${s.glow})` : "none" }}
                 />
                 {/* node label */}
                 <text x={node.x} y={node.y + 1} fill={s.textFill}
