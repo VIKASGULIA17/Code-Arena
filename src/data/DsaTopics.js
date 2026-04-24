@@ -4193,11 +4193,11 @@ function multiSourceBFS(adj, colors, n) {
 
 // Example usage (you can adapt input as needed)`
                     },
-                    "0-1-BFS":{
-                        title:"0/1 BFS",
+                    "0-1-BFS": {
+                        title: "0/1 BFS",
                         videoLinks: ["https://youtube.com/"],
                         problemLinks: ["https://leetcode.com/"],
-                        cpp:`#include <bits/stdc++.h>
+                        cpp: `#include <bits/stdc++.h>
 using namespace std;
 
 vector<int> zeroOneBFS(vector<vector<int>>& adj, vector<int>& colors, int n){
@@ -4424,11 +4424,11 @@ let colors = input[idx++].split(" ").map(Number);
 
 console.log(zeroOneBFS(adj, colors, n).join(" "));`
                     },
-                    "grid BFS":{
-                        title:"Grid BFS",
+                    "grid BFS": {
+                        title: "Grid BFS",
                         videoLinks: ["https://youtube.com/"],
-                        problemLinks: ["https://leetcode.com/problems/shortest-path-in-binary-matrix/","https://leetcode.com/problems/as-far-from-land-as-possible/","https://leetcode.com/problems/map-of-highest-peak/","https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/","https://leetcode.com/problems/trapping-rain-water-ii/"],
-                        cpp:`#include <vector>
+                        problemLinks: ["https://leetcode.com/problems/shortest-path-in-binary-matrix/", "https://leetcode.com/problems/as-far-from-land-as-possible/", "https://leetcode.com/problems/map-of-highest-peak/", "https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/", "https://leetcode.com/problems/trapping-rain-water-ii/"],
+                        cpp: `#include <vector>
 #include <queue>
 using namespace std;
 
@@ -4586,11 +4586,11 @@ class Solution {
     return dist;
 }`
                     },
-                    "level order BFS":{
-                        title:"Level Order BFS",
+                    "level order BFS": {
+                        title: "Level Order BFS",
                         videoLinks: ["https://youtube.com/"],
-                        problemLinks: ["https://leetcode.com/problems/open-the-lock/","https://leetcode.com/problems/minimum-genetic-mutation/","https://leetcode.com/problems/snakes-and-ladders/","https://leetcode.com/problems/word-ladder/"],
-                        cpp:`#include <vector>
+                        problemLinks: ["https://leetcode.com/problems/open-the-lock/", "https://leetcode.com/problems/minimum-genetic-mutation/", "https://leetcode.com/problems/snakes-and-ladders/", "https://leetcode.com/problems/word-ladder/"],
+                        cpp: `#include <vector>
 #include <queue>
 using namespace std;
 
@@ -4730,7 +4730,7 @@ class Solution {
 }`
                     },
                     "bipartite-graph-bfs": {
-                        title: "Bipartite Graph using(BFS)",
+                        title: "Bipartite Graph (using BFS)",
                         videoLinks: ["https://youtube.com/"],
                         problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <bits/stdc++.h>
@@ -5023,6 +5023,340 @@ readline.on("close", () => {
     }
 
     if (isBipartiteGraph) {
+        console.log("Graph is Bipartite");
+    } else {
+        console.log("Graph is not Bipartite");
+    }
+});`
+                    },
+                    "bipartite-graph-union-find": {
+                        title: "Bipartite Graph (using Union Find)",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
+                        cpp:`#include <bits/stdc++.h>
+
+using namespace std;
+
+class DSU {
+    public: vector < int > parent,
+    rank;
+
+    DSU(int n) {
+        parent.resize(n);
+        rank.resize(n, 0);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int findUltimateParent(int node) {
+        if (parent[node] == node) {
+            return node;
+        }
+        return parent[node] = findUltimateParent(parent[node]);
+    }
+
+    void Union(int u, int v) {
+        int ulp_u = findUltimateParent(u);
+        int ulp_v = findUltimateParent(v);
+
+        if (ulp_v == ulp_u) return;
+        if (rank[ulp_u] > rank[ulp_v]) {
+            parent[ulp_v] = ulp_u;
+        }
+        else if (rank[ulp_v] > rank[ulp_u]) {
+            parent[ulp_u] = ulp_v;
+        }
+        else {
+            parent[ulp_u] = ulp_v;
+            rank[ulp_v]++;
+        }
+
+    }
+
+};
+
+bool isBipartite(vector < vector < int >> & adj, int n, auto & dsu) {
+
+    for (int u = 0; u <= n; u++) {
+        for (int v: adj[u]) {
+            if (dsu.findUltimateParent(u) == dsu.findUltimateParent(v)) {
+                return false;
+            }
+            if (adj[u].size() > 0) {
+                dsu.Union(adj[u][0], v);
+            }
+        }
+    }
+    return true;
+
+}
+
+vector < vector < int >> makeAdj(vector < vector < int >> & edges, int n) {
+
+    vector < vector < int >> adj(n + 1);
+
+    for (int i = 0; i < edges.size(); i++) {
+        int u = edges[i][0];
+        int v = edges[i][1];
+
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    return adj;
+}
+
+int main() {
+
+    int n;
+    cin >> n;
+
+    DSU dsu(n);
+    vector < vector < int >> edges(n, vector < int > (2, -1));
+
+    for (int i = 0; i < n; i++) {
+        cin >> edges[i][0] >> edges[i][1];
+    }
+
+    vector < vector < int >> adj = makeAdj(edges, n);
+
+    if (isBipartite(adj, n, dsu)) {
+        cout << "Graph is Bipartite" << endl;
+    }
+    else {
+        cout << "Graph is not Bipartite" << endl;
+    }
+
+
+}`,
+python:`class DSU:
+    def __init__(self, n):
+        self.parent = [i for i in range(n)]
+        self.rank = [0] * n
+
+    def findUltimateParent(self, node):
+        if self.parent[node] == node:
+            return node
+        self.parent[node] = self.findUltimateParent(self.parent[node])
+        return self.parent[node]
+
+    def Union(self, u, v):
+        pu = self.findUltimateParent(u)
+        pv = self.findUltimateParent(v)
+
+        if pu == pv:
+            return
+
+        if self.rank[pu] > self.rank[pv]:
+            self.parent[pv] = pu
+        elif self.rank[pv] > self.rank[pu]:
+            self.parent[pu] = pv
+        else:
+            self.parent[pu] = pv
+            self.rank[pv] += 1
+
+
+def isBipartite(adj, n, dsu):
+    for u in range(n + 1):
+        for v in adj[u]:
+            if dsu.findUltimateParent(u) == dsu.findUltimateParent(v):
+                return False
+            if len(adj[u]) > 0:
+                dsu.Union(adj[u][0], v)
+    return True
+
+
+def makeAdj(edges, n):
+    adj = [[] for _ in range(n + 1)]
+    for u, v in edges:
+        adj[u].append(v)
+        adj[v].append(u)
+    return adj
+
+
+n = int(input())
+edges = [list(map(int, input().split())) for _ in range(n)]
+
+dsu = DSU(n)
+adj = makeAdj(edges, n)
+
+if isBipartite(adj, n, dsu):
+    print("Graph is Bipartite")
+else:
+    print("Graph is not Bipartite")`,
+java:`import java.util.*;
+
+class DSU {
+    int[] parent, rank;
+
+    DSU(int n) {
+        parent = new int[n];
+        rank = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+    }
+
+    int findUltimateParent(int node) {
+        if (parent[node] == node) return node;
+        return parent[node] = findUltimateParent(parent[node]);
+    }
+
+    void Union(int u, int v) {
+        int pu = findUltimateParent(u);
+        int pv = findUltimateParent(v);
+
+        if (pu == pv) return;
+
+        if (rank[pu] > rank[pv]) {
+            parent[pv] = pu;
+        } else if (rank[pv] > rank[pu]) {
+            parent[pu] = pv;
+        } else {
+            parent[pu] = pv;
+            rank[pv]++;
+        }
+    }
+}
+
+public class Main {
+
+    static boolean isBipartite(List<List<Integer>> adj, int n, DSU dsu) {
+        for (int u = 0; u <= n; u++) {
+            for (int v : adj.get(u)) {
+                if (dsu.findUltimateParent(u) == dsu.findUltimateParent(v)) {
+                    return false;
+                }
+                if (adj.get(u).size() > 0) {
+                    dsu.Union(adj.get(u).get(0), v);
+                }
+            }
+        }
+        return true;
+    }
+
+    static List<List<Integer>> makeAdj(int[][] edges, int n) {
+        List<List<Integer>> adj = new ArrayList<>();
+
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        return adj;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int[][] edges = new int[n][2];
+
+        for (int i = 0; i < n; i++) {
+            edges[i][0] = sc.nextInt();
+            edges[i][1] = sc.nextInt();
+        }
+
+        DSU dsu = new DSU(n);
+        List<List<Integer>> adj = makeAdj(edges, n);
+
+        if (isBipartite(adj, n, dsu)) {
+            System.out.println("Graph is Bipartite");
+        } else {
+            System.out.println("Graph is not Bipartite");
+        }
+    }
+}`,
+javascript:`class DSU {
+    constructor(n) {
+        this.parent = [];
+        this.rank = new Array(n).fill(0);
+
+        for (let i = 0; i < n; i++) {
+            this.parent[i] = i;
+        }
+    }
+
+    findUltimateParent(node) {
+        if (this.parent[node] === node) return node;
+        this.parent[node] = this.findUltimateParent(this.parent[node]);
+        return this.parent[node];
+    }
+
+    Union(u, v) {
+        let pu = this.findUltimateParent(u);
+        let pv = this.findUltimateParent(v);
+
+        if (pu === pv) return;
+
+        if (this.rank[pu] > this.rank[pv]) {
+            this.parent[pv] = pu;
+        } else if (this.rank[pv] > this.rank[pu]) {
+            this.parent[pu] = pv;
+        } else {
+            this.parent[pu] = pv;
+            this.rank[pv]++;
+        }
+    }
+}
+
+function isBipartite(adj, n, dsu) {
+    for (let u = 0; u <= n; u++) {
+        for (let v of adj[u]) {
+            if (dsu.findUltimateParent(u) === dsu.findUltimateParent(v)) {
+                return false;
+            }
+            if (adj[u].length > 0) {
+                dsu.Union(adj[u][0], v);
+            }
+        }
+    }
+    return true;
+}
+
+function makeAdj(edges, n) {
+    let adj = Array.from({ length: n + 1 }, () => []);
+
+    for (let [u, v] of edges) {
+        adj[u].push(v);
+        adj[v].push(u);
+    }
+
+    return adj;
+}
+
+// Input example (Node.js)
+const readline = require("readline");
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+let input = [];
+rl.on("line", line => input.push(line));
+rl.on("close", () => {
+    let n = parseInt(input[0]);
+    let edges = [];
+
+    for (let i = 1; i <= n; i++) {
+        let [u, v] = input[i].split(" ").map(Number);
+        edges.push([u, v]);
+    }
+
+    let dsu = new DSU(n);
+    let adj = makeAdj(edges, n);
+
+    if (isBipartite(adj, n, dsu)) {
         console.log("Graph is Bipartite");
     } else {
         console.log("Graph is not Bipartite");
