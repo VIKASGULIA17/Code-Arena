@@ -258,7 +258,7 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
           <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-gray-200 dark:border-slate-700/50 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-gray-100 dark:border-slate-700/50">
               <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-2">{topic.codeTemplates[subtopic.id].title}</h3>
-              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400 dark:text-slate-500">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400 dark:text-slate-500 mb-6">
                 <div className="flex items-center gap-1">
                   <Code2 size={14} />
                   <span>4 Languages</span>
@@ -267,29 +267,46 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
                   <Target size={14} />
                   <span>Production Ready</span>
                 </div>
-                {topic.codeTemplates[subtopic.id].videoLink && (
-                  <a
-                    href={topic.codeTemplates[subtopic.id].videoLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors"
-                  >
-                    <PlayCircle size={14} />
-                    <span>Watch Tutorial</span>
-                  </a>
-                )}
-                {topic.codeTemplates[subtopic.id].problemLink && (
-                  <a
-                    href={topic.codeTemplates[subtopic.id].problemLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
-                  >
-                    <ExternalLink size={14} />
-                    <span>Practice Problem</span>
-                  </a>
-                )}
               </div>
+
+              {((topic.codeTemplates[subtopic.id].videoLinks?.length > 0) || (topic.codeTemplates[subtopic.id].problemLinks?.length > 0)) && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+                  {topic.codeTemplates[subtopic.id].videoLinks?.map((link, idx) => (
+                    <a
+                      key={`video-${idx}`}
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-red-200 bg-gray-50/50 hover:bg-red-50/50 dark:bg-slate-900/50 dark:border-slate-700/50 dark:hover:border-red-500/30 dark:hover:bg-red-500/10 transition-all group"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-red-100 text-red-500 dark:bg-red-500/20 dark:text-red-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                        <PlayCircle size={20} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-semibold text-gray-900 dark:text-slate-100 truncate">Video Tutorial{topic.codeTemplates[subtopic.id].videoLinks.length > 1 ? ` ${idx + 1}` : ''}</div>
+                        <div className="text-xs text-gray-500 dark:text-slate-400 truncate">Watch explanation</div>
+                      </div>
+                    </a>
+                  ))}
+                  {topic.codeTemplates[subtopic.id].problemLinks?.map((link, idx) => (
+                    <a
+                      key={`problem-${idx}`}
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-blue-200 bg-gray-50/50 hover:bg-blue-50/50 dark:bg-slate-900/50 dark:border-slate-700/50 dark:hover:border-blue-500/30 dark:hover:bg-blue-500/10 transition-all group"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-500 dark:bg-blue-500/20 dark:text-blue-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
+                        <ExternalLink size={18} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-semibold text-gray-900 dark:text-slate-100 truncate">Practice Problem{topic.codeTemplates[subtopic.id].problemLinks.length > 1 ? ` ${idx + 1}` : ''}</div>
+                        <div className="text-xs text-gray-500 dark:text-slate-400 truncate">Solve on LeetCode</div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
             <CodeBlock codeTemplates={topic.codeTemplates[subtopic.id]} templateId={subtopic.id} />
           </div>

@@ -27,8 +27,8 @@ export const dsaCategories = {
                 codeTemplates: {
                     "array-basics": {
                         title: "Array Basics - Declaration & Operations",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -144,8 +144,8 @@ arrayBasics();`
                     },
                     "two-sum": {
                         title: "Two Sum Problem",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <iostream>
 #include <vector>
 #include <unordered_map>
@@ -320,8 +320,8 @@ main();`
                 codeTemplates: {
                     "stack-implementation": {
                         title: "Stack Implementation using Array",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -657,8 +657,8 @@ main();`
                 codeTemplates: {
                     "binary-tree": {
                         title: "Binary Tree Implementation",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <iostream>
 #include <queue>
 using namespace std;
@@ -1188,8 +1188,8 @@ main();`
                 codeTemplates: {
                     "singly-linked-list": {
                         title: "Singly Linked List Implementation",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <iostream>
 using namespace std;
 
@@ -1637,8 +1637,8 @@ main();`
                 codeTemplates: {
                     "bubble-sort": {
                         title: "Bubble Sort Algorithm",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -1850,8 +1850,8 @@ main();`
                 codeTemplates: {
                     "merge-sort-algorithm": {
                         title: "Merge Sort Implementation",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <iostream>
 #include <vector>
 using namespace std;
@@ -2280,8 +2280,8 @@ main();`
                 codeTemplates: {
                     "fibonacci-dp": {
                         title: "Fibonacci - Dynamic Programming",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <iostream>
 #include <vector>
 #include <unordered_map>
@@ -2740,8 +2740,8 @@ main();`
                 codeTemplates: {
                     "graph-bfs-dfs": {
                         title: "Graph BFS and DFS Implementation",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <iostream>
 #include <vector>
 #include <queue>
@@ -3462,8 +3462,8 @@ main();`
                     },
                     "disjoint-set-union-by-rank": {
                         title: "Disjoint Set Union-Find Implementation By Rank",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 
@@ -3711,8 +3711,8 @@ if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
                     },
                     "disjoint-set-union-by-size": {
                         title: "Disjoint Set Union-Find Implementation by Size",
-                        videoLink: "https://youtu.be/aBxjDBC4M1U?si=2q0Q6J83H26bQGZ0",
-                        problemLink: "https://leetcode.com/problems/number-of-provinces/",
+                        videoLinks: ["https://youtu.be/aBxjDBC4M1U?si=2q0Q6J83H26bQGZ0"],
+                        problemLinks: ["https://leetcode.com/problems/number-of-provinces/"],
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 
@@ -3954,8 +3954,8 @@ if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
                     },
                     "multi-source-BFS-having-equal-weight": {
                         title: "Multi-Source BFS (having equal weight)",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 
@@ -4193,11 +4193,11 @@ function multiSourceBFS(adj, colors, n) {
 
 // Example usage (you can adapt input as needed)`
                     },
-                    "0-1-BFS":{
-                        title:"0/1 BFS",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
-                        cpp:`#include <bits/stdc++.h>
+                    "0-1-BFS": {
+                        title: "0/1 BFS",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
+                        cpp: `#include <bits/stdc++.h>
 using namespace std;
 
 vector<int> zeroOneBFS(vector<vector<int>>& adj, vector<int>& colors, int n){
@@ -4424,10 +4424,315 @@ let colors = input[idx++].split(" ").map(Number);
 
 console.log(zeroOneBFS(adj, colors, n).join(" "));`
                     },
+                    "grid BFS": {
+                        title: "Grid BFS",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/problems/shortest-path-in-binary-matrix/", "https://leetcode.com/problems/as-far-from-land-as-possible/", "https://leetcode.com/problems/map-of-highest-peak/", "https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/", "https://leetcode.com/problems/trapping-rain-water-ii/"],
+                        cpp: `#include <vector>
+#include <queue>
+using namespace std;
+
+vector<vector<int>> gridBFS(vector<vector<int>>& grid) {
+    int n = grid.size();
+    int m = grid[0].size();
+    
+    queue<pair<int, int>> q;
+    vector<vector<int>> dist(n, vector<int>(m, -1)); // -1 represents "unvisited"
+
+    // 1. Multi-Source Setup: Push all starting points
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (grid[i][j] == 0) { // Assuming 0 is our starting source
+                q.push({i, j});
+                dist[i][j] = 0;
+            }
+        }
+    }
+
+    // 2. Optimal Direction Arrays (Up, Down, Left, Right)
+    int dx[] = {-1, 1, 0, 0};
+    int dy[] = {0, 0, -1, 1};
+
+    // 3. Grid BFS Execution
+    while (!q.empty()) {
+        auto [r, c] = q.front(); 
+        q.pop();
+
+        for (int d = 0; d < 4; d++) {
+            int nr = r + dx[d];
+            int nc = c + dy[d];
+
+            // Boundary Check + Unvisited Check
+            if (nr >= 0 && nr < n && nc >= 0 && nc < m && dist[nr][nc] == -1) {
+                dist[nr][nc] = dist[r][c] + 1;
+                q.push({nr, nc});
+            }
+        }
+    }
+    
+    return dist;
+}`,
+                        python: `from collections import deque
+
+def grid_bfs(grid):
+    n, m = len(grid), len(grid[0])
+    q = deque()
+    dist = [[-1] * m for _ in range(n)]
+
+    # 1. Multi-Source Setup
+    for i in range(n):
+        for j in range(m):
+            if grid[i][j] == 0:
+                q.append((i, j))
+                dist[i][j] = 0
+
+    # 2. Direction Tuples
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    # 3. Grid BFS Execution
+    while q:
+        r, c = q.popleft()
+
+        for dr, dc in directions:
+            nr, nc = r + dr, c + dc
+
+            if 0 <= nr < n and 0 <= nc < m and dist[nr][nc] == -1:
+                dist[nr][nc] = dist[r][c] + 1
+                q.append((nr, nc))
+
+    return dist`,
+                        java: `import java.util.*;
+
+class Solution {
+    public int[][] gridBFS(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        Queue<int[]> q = new LinkedList<>();
+        int[][] dist = new int[n][m];
+
+        // Fill distance array with -1
+        for (int[] row : dist) {
+            Arrays.fill(row, -1);
+        }
+
+        // 1. Multi-Source Setup
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 0) {
+                    q.offer(new int[]{i, j});
+                    dist[i][j] = 0;
+                }
+            }
+        }
+
+        // 2. Direction Arrays
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
+
+        // 3. Grid BFS Execution
+        while (!q.isEmpty()) {
+            int[] curr = q.poll();
+            int r = curr[0];
+            int c = curr[1];
+
+            for (int d = 0; d < 4; d++) {
+                int nr = r + dx[d];
+                int nc = c + dy[d];
+
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m && dist[nr][nc] == -1) {
+                    dist[nr][nc] = dist[r][c] + 1;
+                    q.offer(new int[]{nr, nc});
+                }
+            }
+        }
+        
+        return dist;
+    }
+}`,
+                        javascript: `function gridBFS(grid) {
+    const n = grid.length;
+    const m = grid[0].length;
+    const q = [];
+    const dist = Array.from({ length: n }, () => Array(m).fill(-1));
+
+    // 1. Multi-Source Setup
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < m; j++) {
+            if (grid[i][j] === 0) {
+                q.push([i, j]);
+                dist[i][j] = 0;
+            }
+        }
+    }
+
+    const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    let head = 0; // O(1) popping optimization
+
+    // 3. Grid BFS Execution
+    while (head < q.length) {
+        const [r, c] = q[head++]; // Move pointer instead of shifting array
+
+        for (const [dr, dc] of dirs) {
+            const nr = r + dr;
+            const nc = c + dc;
+
+            if (nr >= 0 && nr < n && nc >= 0 && nc < m && dist[nr][nc] === -1) {
+                dist[nr][nc] = dist[r][c] + 1;
+                q.push([nr, nc]);
+            }
+        }
+    }
+    
+    return dist;
+}`
+                    },
+                    "level order BFS": {
+                        title: "Level Order BFS",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/problems/open-the-lock/", "https://leetcode.com/problems/minimum-genetic-mutation/", "https://leetcode.com/problems/snakes-and-ladders/", "https://leetcode.com/problems/word-ladder/"],
+                        cpp: `#include <vector>
+#include <queue>
+using namespace std;
+
+int levelOrderBFS(int startNode, vector<vector<int>>& adj) {
+    int n = adj.size();
+    vector<bool> visited(n, false);
+    queue<int> q;
+
+    // 1. Setup the starting node
+    q.push(startNode);
+    visited[startNode] = true;
+    int level = 0; // Or distance, or steps
+
+    while (!q.empty()) {
+        // 2. THE LOCK: Capture the exact number of nodes on this level
+        int size = q.size(); 
+
+        // 3. Process ONLY the nodes that were in the queue at the start of this level
+        for (int i = 0; i < size; i++) {
+            int curr = q.front();
+            q.pop();
+
+            // (Optional: Check if 'curr' is the target node here)
+
+            for (int neighbor : adj[curr]) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    q.push(neighbor);
+                }
+            }
+        }
+        
+        // 4. INCREMENT: The entire level is finished processing
+        level++; 
+    }
+    
+    return level;
+}`,
+                        python: `from collections import deque
+
+def level_order_bfs(start_node, adj):
+    visited = set()
+    q = deque([start_node])
+    
+    visited.add(start_node)
+    level = 0
+
+    while q:
+        # 2. THE LOCK: len(q) is evaluated exactly once when the loop starts
+        level_size = len(q)
+
+        # 3. Process the level
+        for _ in range(level_size):
+            curr = q.popleft()
+
+            # (Optional: Check if 'curr' is the target node here)
+
+            for neighbor in adj[curr]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    q.append(neighbor)
+
+        # 4. INCREMENT: After the inner for-loop finishes
+        level += 1
+
+    return level`,
+                        java: `import java.util.*;
+
+class Solution {
+    public int levelOrderBFS(int startNode, List<List<Integer>> adj) {
+        int n = adj.size();
+        boolean[] visited = new boolean[n];
+        Queue<Integer> q = new LinkedList<>();
+
+        q.offer(startNode);
+        visited[startNode] = true;
+        int level = 0;
+
+        while (!q.isEmpty()) {
+            // 2. THE LOCK
+            int size = q.size();
+
+            // 3. Process the level
+            for (int i = 0; i < size; i++) {
+                int curr = q.poll();
+
+                // (Optional: Check target here)
+
+                for (int neighbor : adj.get(curr)) {
+                    if (!visited[neighbor]) {
+                        visited[neighbor] = true;
+                        q.offer(neighbor);
+                    }
+                }
+            }
+            
+            // 4. INCREMENT
+            level++;
+        }
+        
+        return level;
+    }
+}`,
+                        javascript: `function levelOrderBFS(startNode, adj) {
+    const visited = new Set();
+    const q = [];
+
+    q.push(startNode);
+    visited.add(startNode);
+    
+    let level = 0;
+    let head = 0; // Pointer to simulate popping
+
+    while (head < q.length) {
+        // 2. THE LOCK: Calculate how many items are currently waiting to be processed
+        let size = q.length - head; 
+
+        // 3. Process the level
+        for (let i = 0; i < size; i++) {
+            let curr = q[head++]; // "Pop" by moving the pointer forward
+
+            // (Optional: Check target here)
+
+            for (let neighbor of adj[curr]) {
+                if (!visited.has(neighbor)) {
+                    visited.add(neighbor);
+                    q.push(neighbor);
+                }
+            }
+        }
+        
+        // 4. INCREMENT
+        level++;
+    }
+    
+    return level;
+}`
+                    },
                     "bipartite-graph-bfs": {
                         title: "Bipartite Graph using(BFS)",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 
@@ -4724,8 +5029,8 @@ readline.on("close", () => {
     }
 });`
                     },
-                    "bipartite-graph-unioon-find":{
-                        
+                    "bipartite-graph-unioon-find": {
+
                     }
                 }
             },
@@ -4736,8 +5041,8 @@ readline.on("close", () => {
                 codeTemplates: {
                     "difference-array-without-steps": {
                         title: "Difference Array Technique - With no Jumps",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <bits/stdc++.h>
 
 using namespace std;
@@ -4903,8 +5208,8 @@ console.log(arr.join(" "));`
                     },
                     "difference-array-with-steps": {
                         title: "Difference Array Technique - With Jumps",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <bits/stdc++.h>
 
 using namespace std;
@@ -5183,8 +5488,8 @@ console.log(arr.join(" "));`
                 codeTemplates: {
                     "minimum-element-in-range": {
                         title: "Minimum Element in Range using Square Decomposition",
-                        videoLink: "https://youtube.com/",
-                        problemLink: "https://leetcode.com/",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 
