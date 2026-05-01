@@ -5033,7 +5033,7 @@ readline.on("close", () => {
                         title: "Bipartite Graph (using Union Find)",
                         videoLinks: ["https://youtube.com/"],
                         problemLinks: ["https://leetcode.com/"],
-                        cpp:`#include <bits/stdc++.h>
+                        cpp: `#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -5130,7 +5130,7 @@ int main() {
 
 
 }`,
-python:`class DSU:
+                        python: `class DSU:
     def __init__(self, n):
         self.parent = [i for i in range(n)]
         self.rank = [0] * n
@@ -5185,7 +5185,7 @@ if isBipartite(adj, n, dsu):
     print("Graph is Bipartite")
 else:
     print("Graph is not Bipartite")`,
-java:`import java.util.*;
+                        java: `import java.util.*;
 
 class DSU {
     int[] parent, rank;
@@ -5277,7 +5277,7 @@ public class Main {
         }
     }
 }`,
-javascript:`class DSU {
+                        javascript: `class DSU {
     constructor(n) {
         this.parent = [];
         this.rank = new Array(n).fill(0);
@@ -5362,6 +5362,92 @@ rl.on("close", () => {
         console.log("Graph is not Bipartite");
     }
 });`
+                    },
+                    "find-bridge-in-graph": {
+                        title: "Count Bridges in a Graph",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
+                        cpp: `#include <bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> Bridges;
+
+vector<vector<int>> makeAdj(vector<vector<int>>& edges,int n){
+
+    vector<vector<int>> adj(n+1);
+
+    for(auto &edge : edges){
+
+        int u = edge[0];
+        int v = edge[1];
+
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    return adj;
+}
+
+void dfs(int u,int par,vector<vector<int>>& adj,vector<bool>& visited,
+vector<int>& disc,vector<int>& low,int &count){
+
+    visited[u] = true;
+    disc[u] = low[u] = count++;
+
+    for(int v : adj[u]){
+
+        if(v == par) continue;
+
+        if(visited[v]){
+            low[u] = min(low[u], disc[v]);
+        }
+        else{
+            dfs(v,u,adj,visited,disc,low,count);
+
+            low[u] = min(low[u], low[v]);
+
+            if(low[v] > disc[u]){
+                Bridges.push_back({u,v});
+            }
+        }
+    }
+}
+
+int main(){
+
+    int n;
+    cin >> n;
+
+    vector<vector<int>> edges(n, vector<int>(2));
+
+    for(int i=0;i<n;i++){
+        cin >> edges[i][0] >> edges[i][1];
+    }
+
+    int mx = 0;
+    for(auto &e : edges){
+        mx = max(mx, max(e[0], e[1]));
+    }
+
+    vector<vector<int>> adj = makeAdj(edges,mx);
+
+    vector<int> disc(mx+1), low(mx+1);
+    vector<bool> visited(mx+1,false);
+
+    int count = 0;
+
+    for(int i=0;i<=mx;i++){
+        if(!visited[i]){
+            dfs(i,-1,adj,visited,disc,low,count);
+        }
+    }
+
+    for(auto &x : Bridges){
+        cout << x[0] << " " << x[1] << endl;
+    }
+
+    return 0;
+}`
                     }
                 }
             },
