@@ -10,6 +10,7 @@ export const AppProvider = (props) => {
   const [userDetails,setuserDetails] = useState(null);
   const [userProfile,setuserProfile] = useState(null);
   const [username,setUsername] = useState(null);
+  const [avatar, setAvatar] = useState(null);
   const [allProblem,setallProblems] = useState(null);
   const [allContest,setallContest] = useState(null);
   const [users, setUsers] = useState(null);
@@ -91,6 +92,9 @@ export const AppProvider = (props) => {
         // console.log("User Profile Data : ");
         // console.log(res.data.data);
         setuserProfile(res.data.data);
+        if (res.data.data?.avatarLink) {
+          setAvatar(res.data.data.avatarLink);
+        }
       }
       else{
         setuserProfile(null);
@@ -124,7 +128,7 @@ export const AppProvider = (props) => {
     getAllUsers();
   },[isLoggedIn]);
 
-  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData,username,allProblem,allContest,showAllContest,showAllProblems,getAllUsers,users,totalActiveUsers};
+  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData,username,allProblem,allContest,showAllContest,showAllProblems,getAllUsers,users,totalActiveUsers, avatar, setAvatar};
 
   return (
     <AppContext.Provider value={values}>{props.children}</AppContext.Provider>

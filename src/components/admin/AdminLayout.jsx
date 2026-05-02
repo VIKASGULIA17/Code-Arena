@@ -6,7 +6,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { Search, Bell, ChevronRight, Home, Menu, X, Sun, Moon } from 'lucide-react';
 
 const AdminLayout = () => {
-    const { isAdmin, isJwtExist, userDetails, username, userProfile } = useAppContext();
+    const { isAdmin, isJwtExist, userDetails, username, userProfile, avatar } = useAppContext();
     const { resolvedTheme, cycleTheme, theme } = useTheme();
     const navigate = useNavigate();
     const location = useLocation();
@@ -106,7 +106,7 @@ const AdminLayout = () => {
                         {/* Profile */}
                         <div className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-700">
                             <img
-                                src={userProfile?.avatarLink || 'https://i.pravatar.cc/100?img=5'}
+                                src={avatar || userProfile?.avatarLink || 'https://i.pravatar.cc/100?img=5'}
                                 alt="Avatar"
                                 className="w-7 h-7 rounded-full border border-slate-200 dark:border-slate-700 object-cover"
                             />

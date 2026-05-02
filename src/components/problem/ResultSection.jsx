@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CircleCheck, ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const ResultSection = ({ filters, filteredProblems }) => {
+const ResultSection = ({ filters, filteredProblems, uniqueSubmissions = [] }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
@@ -19,6 +19,19 @@ const ResultSection = ({ filters, filteredProblems }) => {
     Easy: "bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-100 dark:border-emerald-500/20",
     Medium: "bg-amber-50 dark:bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-100 dark:border-amber-500/20",
     Hard: "bg-red-50 dark:bg-red-500/15 text-red-700 dark:text-red-400 border-red-100 dark:border-red-500/20",
+  };
+
+  const isProblemSolved = (obj) => {
+    if (obj.status === true) return true;
+    if (uniqueSubmissions && uniqueSubmissions.length > 0) {
+      return uniqueSubmissions.some(sub => {
+        if (typeof sub === 'object') {
+          return sub.problemId == obj.id || sub.id == obj.id;
+        }
+        return sub == obj.id;
+      });
+    }
+    return false;
   };
 
   return (
@@ -40,14 +53,14 @@ const ResultSection = ({ filters, filteredProblems }) => {
         currElements.map((obj, idx) => (
           <div
             key={obj.sno || idx}
-            className={`flex items-center justify-between py-3.5 px-6 transition-colors hover:bg-gray-50/80 dark:hover:bg-slate-700/30 ${
+            className={`flex items-center justify-between py-3.5 px-6 transition-colors hover:bg-indigo-50/60 dark:hover:bg-slate-700/50 ${
               idx !== currElements.length - 1 ? "border-b border-gray-100 dark:border-slate-700/30" : ""
             }`}
           >
             <div className="flex items-center gap-8 min-w-0">
               <div className="w-8 flex-shrink-0">
-                {obj.status === true ? (
-                  <CircleCheck size={20} className="text-emerald-500 fill-emerald-500" />
+                {isProblemSolved(obj) ? (
+                  <CircleCheck size={20} className="text-emerald-500 " />
                 ) : (
                   <div className="w-5 h-5 rounded-full border-2 border-gray-200 dark:border-slate-600" />
                 )}

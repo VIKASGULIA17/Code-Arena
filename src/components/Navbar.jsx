@@ -39,7 +39,8 @@ export function EnhancedNavbar() {
     setjwtToken,
     userDetails,
     setisLoggedIn,
-    userProfile
+    userProfile,
+    avatar
   } = useAppContext()
 
   const isAdmin = (userDetails?.roles || []).includes("ADMIN") || (userDetails?.roles || []).includes("ROLE_ADMIN")
@@ -178,7 +179,7 @@ export function EnhancedNavbar() {
                 className="flex items-center gap-2 px-2 py-1.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200"
               >
                 <img
-                  src={userProfile?.avatarLink || 'https://i.pravatar.cc/100?img=5'}
+                  src={avatar || userProfile?.avatarLink || 'https://i.pravatar.cc/100?img=5'}
                   alt="Avatar"
                   className="w-7 h-7 rounded-full border-2 border-slate-200 dark:border-slate-700 object-cover"
                 />

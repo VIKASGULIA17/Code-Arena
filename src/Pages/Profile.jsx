@@ -97,7 +97,7 @@ const Profile = () => {
   const solvedPercent = (solved.length / total) * 100;
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const { getUserProfileData, getUserData, userProfile, jwtToken, allProblem } = useAppContext();
+  const { getUserProfileData, getUserData, userProfile, jwtToken, allProblem, avatar } = useAppContext();
   // console.log(userProfile)
 
   const LANG_COLORS = {
@@ -575,9 +575,7 @@ const Profile = () => {
               <div className="flex items-center gap-4">
                 <img
                   src={
-                    userProfile?.avatarLink
-                      ? userProfile?.avatarLink
-                      : "https://i.pravatar.cc/100?img=5"
+                    avatar || userProfile?.avatarLink || "https://i.pravatar.cc/100?img=5"
                   }
                   alt="avatar"
                   className="h-16 w-16 rounded-xl object-cover"
