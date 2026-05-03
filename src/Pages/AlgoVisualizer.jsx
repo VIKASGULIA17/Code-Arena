@@ -17,7 +17,7 @@ export default function AlgoVisualizerPage() {
   const [activeCategory, setActiveCategory] = useState("graph")
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const navigate = useNavigate()
-  const { isJwtExist, userDetails, username } = useAppContext()
+  const { isJwtExist, userDetails, username, avatar, userProfile } = useAppContext()
   const { resolvedTheme, cycleTheme } = useTheme()
 
   // Derive theme string for child components that still use the "light"/"dark" prop
@@ -70,7 +70,7 @@ export default function AlgoVisualizerPage() {
           {isJwtExist ? (
             <Link to={`/profile/${username}`}>
               <img
-                src={userDetails?.avatar || "https://i.pravatar.cc/150"}
+                src={avatar || userProfile?.avatarLink || userDetails?.avatar || "https://i.pravatar.cc/150"}
                 alt="Avatar"
                 className={`w-7 h-7 rounded-full border object-cover hover:ring-2 ring-indigo-500 transition-all ${isDark ? "border-slate-700" : "border-slate-200"}`}
               />

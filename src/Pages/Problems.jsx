@@ -17,11 +17,14 @@ import Countdown from "../components/others/CountDown";
 import Footer from "../components/Footer";
 import Loading from "../components/others/Loading";
 import { useAppContext } from "../context/AppContext";
+import axios from "axios";
 
 const Problems = () => {
   const [loading, setLoading] = useState(true);
   const [potd, setpotd] = useState(null);
   const { jwtToken, allProblem, showAllProblems } = useAppContext();
+  const [uniqueSubmissions, setUniqueSubmissions] = useState([]);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   const problemOfTheDay = (problems) => {
     if (!problems || problems.length === 0) return;
@@ -30,8 +33,30 @@ const Problems = () => {
     setpotd(problems[index]);
   };
 
+  const fetchSubmissions = async () => {
+    const token = jwtToken ;
+    if (!token) {
+      console.log("No token found");
+      return;
+    }
+    try {
+      const response = await axios.get(`${BACKEND_URL}/submission/getStatusOfUserProblems`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("Submissions fetched successfully:", response.data);
+      setUniqueSubmissions(response.data)
+    } catch (error) {
+      console.error("Failed to fetch submissions:", error);
+    
+    }
+  };
+
   useEffect(() => {
     showAllProblems();
+    fetchSubmissions();
     setLoading(false);
   }, []);
 
@@ -109,6 +134,7 @@ const Problems = () => {
             <ResultSection
               filters={filters}
               filteredProblems={filteredProblems}
+              uniqueSubmissions={uniqueSubmissions}
             />
           </div>
 
@@ -133,15 +159,14 @@ const Problems = () => {
 
                 <div className="flex items-center gap-3">
                   <span
-                    className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
-                      potd
+                    className={`text-xs px-2.5 py-1 rounded-full font-semibold ${potd
                         ? potd.difficulty === "Easy"
                           ? "bg-emerald-400/20 text-emerald-200"
                           : potd.difficulty === "Medium"
-                          ? "bg-amber-400/20 text-amber-200"
-                          : "bg-red-400/20 text-red-200"
+                            ? "bg-amber-400/20 text-amber-200"
+                            : "bg-red-400/20 text-red-200"
                         : "bg-white/10 text-white/60"
-                    }`}
+                      }`}
                   >
                     {potd ? potd.difficulty : "—"}
                   </span>

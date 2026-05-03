@@ -40,12 +40,16 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
                 ) : (
                     <>
                         <div className="flex items-center gap-2.5">
+                            <Link to="/">
                             <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center shadow-sm">
                                 <Code2 size={16} className="text-white" />
                             </div>
+                            </Link>
                             <div>
                                 <h1 className="text-sm font-bold text-slate-800 dark:text-slate-100">Admin Panel</h1>
+                                <Link to="/">
                                 <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Code Arena</p>
+                                </Link>
                             </div>
                         </div>
                         {/* Mobile close button */}
