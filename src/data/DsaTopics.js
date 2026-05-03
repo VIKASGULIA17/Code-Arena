@@ -6242,7 +6242,38 @@ for i in range(n):
     else:
         print(str(i) + " is not a prime number")
 
-print("Total Prime numbers are :", count)`
+print("Total Prime numbers are :", count)`,
+js:`let n = 100005;
+
+function sieve(isPrime) {
+    isPrime[0] = false;
+    isPrime[1] = false;
+
+    for (let i = 2; i * i < n; i++) {
+        if (isPrime[i] == true) {
+            for (let j = i * i; j < n; j += i) {
+                isPrime[j] = false;
+            }
+        }
+    }
+}
+
+let isPrime = new Array(n).fill(true);
+
+sieve(isPrime);
+
+let count = 0;
+
+for (let i = 0; i < n; i++) {
+    if (isPrime[i] == true) {
+        console.log(i + " is a Prime number");
+        count++;
+    } else {
+        console.log(i + " is not a prime number");
+    }
+}
+
+console.log("Total Prime numbers are : " + count);`
                     }
                 }
             }
