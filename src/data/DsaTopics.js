@@ -6243,7 +6243,7 @@ for i in range(n):
         print(str(i) + " is not a prime number")
 
 print("Total Prime numbers are :", count)`,
-                        js: `let n = 100005;
+                        javascript: `let n = 100005;
 
 function sieve(isPrime) {
     isPrime[0] = false;
