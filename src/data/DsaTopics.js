@@ -6159,5 +6159,64 @@ console.log(result.join("\n"));`
                 }
             }
         }
+    },
+    "optimized-techniques": {
+        title: "Optimized Techniques",
+        description: "Exploring the time saving technique to find out the approach for dealing with simple tasks",
+        topics: {
+            "Prime Numbers": {
+                title: "Prime Number related Algorithms",
+                difficulty: "Medium",
+                theory: {},
+                codeTemplates: {
+                    "sieve-of-eratosthenes": {
+                        title: "Sieve of Eratosthenes Implementation",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
+                        cpp: `#include <bits/stdc++.h>
+
+using namespace std;
+
+void sieve(vector < bool > & isPrime) {
+
+    isPrime[0] = false;
+    isPrime[1] = false;
+
+    for (int i = 2; i * i < 100005; i++) {
+        if (isPrime[i] == true) {
+            for (int j = i * i; j < 100005; j += i) {
+                isPrime[j] = false;
+            }
+        }
+    }
+}
+
+int main() {
+
+    vector < bool > isPrime(100005, true);
+
+    sieve(isPrime);
+
+    int count = 0;
+
+    for (int i = 0; i < 100005; i++) {
+        if (isPrime[i] == true) {
+            cout << i << " is a Prime number" << endl;
+            count++;
+        }
+        else {
+            cout << i << " is not a prime number" << endl;
+        }
+    }
+
+    cout << "Total Prime numbers are : " << count << endl;
+
+    return 0;
+
+}`
+                    }
+                }
+            }
+        }
     }
 };
