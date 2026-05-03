@@ -6318,6 +6318,12 @@ console.log("Total Prime numbers are : " + count);`,
 }`
                     }
                 }
+            },
+            "Median of all numbers in a List":{
+                title: "Finding Median related Algorithms",
+                difficulty: "Hard",
+                theory: {},
+                codeTemplates: {}
             }
         }
     }
