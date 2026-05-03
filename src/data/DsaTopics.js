@@ -6213,7 +6213,36 @@ int main() {
 
     return 0;
 
-}`
+}`,
+python:`n = 100005
+
+def sieve(isPrime):
+    isPrime[0] = False
+    isPrime[1] = False
+
+    i = 2
+    while i * i < n:
+        if isPrime[i] == True:
+            j = i * i
+            while j < n:
+                isPrime[j] = False
+                j += i
+        i += 1
+
+isPrime = [True] * n
+
+sieve(isPrime)
+
+count = 0
+
+for i in range(n):
+    if isPrime[i] == True:
+        print(str(i) + " is a Prime number")
+        count += 1
+    else:
+        print(str(i) + " is not a prime number")
+
+print("Total Prime numbers are :", count)`
                     }
                 }
             }
