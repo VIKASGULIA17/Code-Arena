@@ -6214,7 +6214,7 @@ int main() {
     return 0;
 
 }`,
-python:`n = 100005
+                        python: `n = 100005
 
 def sieve(isPrime):
     isPrime[0] = False
@@ -6243,7 +6243,7 @@ for i in range(n):
         print(str(i) + " is not a prime number")
 
 print("Total Prime numbers are :", count)`,
-js:`let n = 100005;
+                        js: `let n = 100005;
 
 function sieve(isPrime) {
     isPrime[0] = false;
@@ -6273,7 +6273,49 @@ for (let i = 0; i < n; i++) {
     }
 }
 
-console.log("Total Prime numbers are : " + count);`
+console.log("Total Prime numbers are : " + count);`,
+                        java: `public class Main {
+
+    static int n = 100005;
+
+    static void sieve(boolean[] isPrime) {
+
+        isPrime[0] = false;
+        isPrime[1] = false;
+
+        for (int i = 2; i * i < n; i++) {
+            if (isPrime[i] == true) {
+                for (int j = i * i; j < n; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        boolean[] isPrime = new boolean[n];
+
+        for (int i = 0; i < n; i++) {
+            isPrime[i] = true;
+        }
+
+        sieve(isPrime);
+
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (isPrime[i] == true) {
+                System.out.println(i + " is a Prime number");
+                count++;
+            } else {
+                System.out.println(i + " is not a prime number");
+            }
+        }
+
+        System.out.println("Total Prime numbers are : " + count);
+    }
+}`
                     }
                 }
             }
