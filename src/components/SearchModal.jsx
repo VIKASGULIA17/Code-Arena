@@ -31,13 +31,17 @@ const VISUALIZER_ITEMS = [
 function buildRevisionIndex() {
   const items = []
   for (const [catId, cat] of Object.entries(dsaCategories)) {
+    if (!cat.topics) continue;
+    
+    const firstTopicId = Object.keys(cat.topics)[0];
+    
     // Category-level entry
     items.push({
       label: cat.title,
       desc: cat.description || '',
-      route: `/revision/${catId}`,
+      route: `/revision/${catId}/${firstTopicId}`,
     })
-    if (!cat.topics) continue
+    
     for (const [topicId, topic] of Object.entries(cat.topics)) {
       // Topic-level entry
       items.push({

@@ -13,6 +13,7 @@ import {
   Camera,
   X,
   Trash2,
+  Flame
 } from "lucide-react";
 import { CheckCircle2, XCircle, Clock, AlertTriangle } from "lucide-react";
 import { EnhancedNavbar } from "../components/Navbar";
@@ -138,13 +139,40 @@ const Profile = () => {
 
   const solvedPercent = total ? (solved.length / total) * 100 : 0;
 
+  // Compute language stats from real submissions
+  const langStats = useMemo(() => {
+    if (!submissions || submissions.length === 0) return [];
+    const counts = {};
+    submissions.forEach((s) => {
+      const lang = s.language?.toLowerCase() || "unknown";
+      counts[lang] = (counts[lang] || 0) + 1;
+    });
+    const totalSubs = submissions.length;
+    const LANG_META = {
+      python: { name: "Python", color: "bg-emerald-500 dark:bg-emerald-400" },
+      "c++": { name: "C++", color: "bg-sky-500 dark:bg-sky-400" },
+      java: { name: "Java", color: "bg-orange-500 dark:bg-orange-400" },
+      js: { name: "JavaScript", color: "bg-amber-500 dark:bg-amber-400" },
+      javascript: { name: "JavaScript", color: "bg-amber-500 dark:bg-amber-400" },
+    };
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4)
+      .map(([lang, count]) => ({
+        name: LANG_META[lang]?.name || lang,
+        pct: Math.round((count / totalSubs) * 100),
+        color: LANG_META[lang]?.color || "bg-slate-400",
+        count,
+      }));
+  }, [submissions]);
+
   // console.log(userProfile)
 
   const LANG_COLORS = {
-    python: "bg-blue-100 text-blue-700 border-blue-200",
-    "c++": "bg-purple-100 text-purple-700 border-purple-200",
-    js: "bg-yellow-100 text-yellow-700 border-yellow-200",
-    java: "bg-orange-100 text-orange-700 border-orange-200",
+    python: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/30",
+    "c++": "bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-500/15 dark:text-purple-300 dark:border-purple-500/30",
+    js: "bg-yellow-100 text-yellow-700 border-yellow-200 dark:bg-yellow-500/15 dark:text-yellow-300 dark:border-yellow-500/30",
+    java: "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-500/15 dark:text-orange-300 dark:border-orange-500/30",
   };
 
   const LANG_LABELS = {
@@ -182,7 +210,7 @@ const Profile = () => {
       color: "text-green-600",
       bg: "bg-green-50",
       border: "border-green-200",
-      badge: "bg-green-100 text-green-700 border-green-300",
+      badge: "bg-green-100 text-green-700 border-green-300 dark:bg-green-500/15 dark:text-green-400 dark:border-green-500/30",
       glow: "shadow-green-100",
     },
     WRONG_ANSWER: {
@@ -191,7 +219,7 @@ const Profile = () => {
       color: "text-red-500",
       bg: "bg-red-50",
       border: "border-red-200",
-      badge: "bg-red-100 text-red-700 border-red-300",
+      badge: "bg-red-100 text-red-700 border-red-300 dark:bg-red-500/15 dark:text-red-400 dark:border-red-500/30",
       glow: "shadow-red-100",
     },
     TIME_LIMIT_EXCEEDED: {
@@ -200,7 +228,7 @@ const Profile = () => {
       color: "text-yellow-600",
       bg: "bg-yellow-50",
       border: "border-yellow-200",
-      badge: "bg-yellow-100 text-yellow-700 border-yellow-300",
+      badge: "bg-yellow-100 text-yellow-700 border-yellow-300 dark:bg-yellow-500/15 dark:text-yellow-400 dark:border-yellow-500/30",
       glow: "shadow-yellow-100",
     },
     COMPILATION_ERROR: {
@@ -209,7 +237,7 @@ const Profile = () => {
       color: "text-orange-600",
       bg: "bg-orange-50",
       border: "border-orange-200",
-      badge: "bg-orange-100 text-orange-700 border-orange-300",
+      badge: "bg-orange-100 text-orange-700 border-orange-300 dark:bg-orange-500/15 dark:text-orange-400 dark:border-orange-500/30",
       glow: "shadow-orange-100",
     },
   };
@@ -507,8 +535,8 @@ const Profile = () => {
                               setFieldValue("avatarLink", url);
                             }}
                             className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${values?.avatarLink === url
-                                ? "border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500/20"
-                                : "border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300"
+                              ? "border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500/20"
+                              : "border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300"
                               }`}
                           >
                             <img
@@ -695,21 +723,23 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
-              <h3 className="font-semibold mb-4">Community</h3>
-              <div className="space-y-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <User2 className="h-4 w-4 text-emerald-600" /> 15.2k{" "}
-                  <span className="text-zinc-500">Profile views</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Trophy className="h-4 w-4 text-indigo-600" /> 1,250{" "}
-                  <span className="text-zinc-500">Reputation</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-amber-500" /> 85{" "}
-                  <span className="text-zinc-500">Discussions</span>
-                </div>
+            <div className="card-elevated p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <Flame size={15} className="text-slate-400 dark:text-slate-500" />
+                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Quick Stats</h3>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { label: "Submissions", value: submissions.length, bg: "bg-indigo-50 dark:bg-indigo-500/10", text: "text-indigo-600 dark:text-indigo-400", sub: "text-indigo-500/60 dark:text-indigo-400/50" },
+                  { label: "Solved", value: solved.length, bg: "bg-emerald-50 dark:bg-emerald-500/10", text: "text-emerald-600 dark:text-emerald-400", sub: "text-emerald-500/60 dark:text-emerald-400/50" },
+                  { label: "Accepted", value: submissions.filter(s => s.status === "ACCEPTED").length, bg: "bg-amber-50 dark:bg-amber-500/10", text: "text-amber-600 dark:text-amber-400", sub: "text-amber-500/60 dark:text-amber-400/50" },
+                  { label: "Languages", value: langStats.length, bg: "bg-purple-50 dark:bg-purple-500/10", text: "text-purple-600 dark:text-purple-400", sub: "text-purple-500/60 dark:text-purple-400/50" },
+                ].map((stat) => (
+                  <div key={stat.label} className={`rounded-xl ${stat.bg} border border-transparent p-3 text-center`}>
+                    <p className={`text-xl font-bold ${stat.text}`}>{stat.value}</p>
+                    <p className={`text-[11px] font-medium mt-0.5 ${stat.sub}`}>{stat.label}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </aside>
@@ -785,23 +815,23 @@ const Profile = () => {
                 <button className="text-xs text-indigo-600">View All</button>
               </div>
               <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
-                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-orange-50 text-orange-600">
+                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400">
                   <Trophy className="h-8 w-8" />
                   <p className="mt-2 text-sm font-medium">Winner 2023</p>
                 </div>
-                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-blue-50 text-blue-600">
+                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">
                   <Zap className="h-8 w-8" />
                   <p className="mt-2 text-sm font-medium">100 Streak</p>
                 </div>
-                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-violet-50 text-violet-600">
+                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-violet-50 dark:bg-violet-500/10 text-violet-600 dark:text-violet-400">
                   <BarChart3 className="h-8 w-8" />
                   <p className="mt-2 text-sm font-medium">Problem Solver</p>
                 </div>
-                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-emerald-50 text-emerald-600">
+                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                   <Bug className="h-8 w-8" />
                   <p className="mt-2 text-sm font-medium">Bug Hunter</p>
                 </div>
-                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-zinc-100 text-zinc-400">
+                <div className="flex flex-col items-center justify-center rounded-xl p-4 bg-zinc-100 dark:bg-zinc-800/50 text-zinc-400 dark:text-zinc-500">
                   <Lock className="h-8 w-8" />
                   <p className="mt-2 text-sm font-medium">Locked</p>
                 </div>
@@ -1080,7 +1110,7 @@ const daysInMonth = (year, monthIndex) =>
 
 const MonthActivityGrid = ({ submissions = [] }) => {
   const year = new Date().getFullYear();
-  
+
   const activityMap = useMemo(() => {
     const map = {};
     submissions.forEach(sub => {
@@ -1114,7 +1144,7 @@ const MonthActivityGrid = ({ submissions = [] }) => {
                 {[...Array(dim)].map((_, d) => {
                   const dateStr = `${year}-${String(idx + 1).padStart(2, '0')}-${String(d + 1).padStart(2, '0')}`;
                   const count = activityMap[dateStr] || 0;
-                  
+
                   let bgColor = "bg-zinc-100 dark:bg-zinc-800";
                   if (count > 0 && count <= 2) bgColor = "bg-emerald-200 dark:bg-emerald-900";
                   else if (count > 2 && count <= 4) bgColor = "bg-emerald-400 dark:bg-emerald-700";
