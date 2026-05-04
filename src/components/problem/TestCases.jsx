@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { CloudUpload, Play, CheckCircle, XCircle } from "lucide-react";
 import { useTestRunner } from '../../hooks/useTestRunner';
-
+import { useAppContext } from "../../context/AppContext";
+import { toast } from "react-toastify";
 
 const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,setcurrentTopBar,testcaseData, problemMeta }) => {
+  const { isJwtExist } = useAppContext();
 
   const [isActive, setIsActive] = useState(0);
   const {
@@ -41,7 +43,13 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,se
             <p>{isLoading ? "Running..." : "Run"}</p>
           </Button>
           <Button
-            onClick={submitCode}
+            onClick={() => {
+              if (!isJwtExist) {
+                toast.error("Please login to submit code!", { position: "top-right" });
+                return;
+              }
+              submitCode();
+            }}
             disabled={isLoading || isSubmitting}
             className="border rounded-xl bg-brand-gradient text-white disabled:opacity-70"
           >
@@ -54,7 +62,6 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,se
       {/* BODY */}
       <div className="px-10 py-6 overflow-y-auto flex-1 bg-white dark:bg-slate-900">
 
-        {/* VIEW 1: SUBMISSION RESULT ( when Submission Status exists) */}
         {submissionStatus ? (
           <div className="flex flex-col items-center justify-center h-full gap-4 animate-in fade-in zoom-in duration-300">
             {submissionStatus === "ACCEPTED" ? (
