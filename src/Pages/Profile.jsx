@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { dsaProblems } from "../data/dsaProblem";
 import { Button } from "../components/ui/button";
 import {
   Trophy,
@@ -66,22 +65,65 @@ const Donut = ({ percent = 0, color = "#4f46e5" }) => {
 };
 
 const Profile = () => {
-  const solved = useMemo(() => dsaProblems.filter((p) => p.status), []);
-  const total = dsaProblems.length;
-  const [confirmDelete,setConfirmDelete] = useState("");
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const { getUserProfileData, getUserData, userProfile, jwtToken, allProblem, avatar } = useAppContext();
+
+  const [uniqueSubmissions, setUniqueSubmissions] = useState([]);
+
+  const solved = useMemo(() => {
+    if (!allProblem) return [];
+    return allProblem.filter((p) => {
+      if (p.status === true) return true;
+      if (uniqueSubmissions && uniqueSubmissions.length > 0) {
+        return uniqueSubmissions.some(sub => {
+          if (typeof sub === 'object') {
+            return sub.problemId == p.id || sub.id == p.id;
+          }
+          return sub == p.id;
+        });
+      }
+      return false;
+    });
+  }, [allProblem, uniqueSubmissions]);
+
+  const total = allProblem?.length || 0;
+
+  const [confirmDelete, setConfirmDelete] = useState("");
   const easy = useMemo(
-    () => dsaProblems.filter((p) => p.difficulty === "Easy"),
-    [],
+    () => (allProblem || []).filter((p) => p.difficulty === "Easy"),
+    [allProblem],
   );
   const medium = useMemo(
-    () => dsaProblems.filter((p) => p.difficulty === "Medium"),
-    [],
+    () => (allProblem || []).filter((p) => p.difficulty === "Medium"),
+    [allProblem],
   );
   const hard = useMemo(
-    () => dsaProblems.filter((p) => p.difficulty === "Hard"),
-    [],
+    () => (allProblem || []).filter((p) => p.difficulty === "Hard"),
+    [allProblem],
   );
   const navigate = useNavigate();
+
+
+  const fetchUniqueSubmissions = async () => {
+    const token = jwtToken;
+    if (!token) {
+      console.log("No token found");
+      return;
+    }
+    try {
+      const response = await axios.get(`${BACKEND_URL}/submission/getStatusOfUserProblems`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("Submissions fetched successfully:", response.data);
+      setUniqueSubmissions(response.data)
+    } catch (error) {
+      console.error("Failed to fetch submissions:", error);
+
+    }
+  };
 
   const solvedEasy = solved.filter((p) => p.difficulty === "Easy").length;
   const solvedMed = solved.filter((p) => p.difficulty === "Medium").length;
@@ -94,10 +136,8 @@ const Profile = () => {
 
   const [IsDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const solvedPercent = (solved.length / total) * 100;
+  const solvedPercent = total ? (solved.length / total) * 100 : 0;
 
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const { getUserProfileData, getUserData, userProfile, jwtToken, allProblem, avatar } = useAppContext();
   // console.log(userProfile)
 
   const LANG_COLORS = {
@@ -208,13 +248,13 @@ const Profile = () => {
 
   const handleDeleteUserProfile = async () => {
     try {
-      const result = await axios.delete(`${BACKEND_URL}/userProfile/delete`,{
-        headers : {
-          Authorization : `Bearer ${jwtToken}`
+      const result = await axios.delete(`${BACKEND_URL}/userProfile/delete`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`
         }
       });
       const res = result.data;
-      if(res.status == 1){
+      if (res.status == 1) {
         toast.success(`User Profile deleted..`);
         getUserProfileData();
         getUserData();
@@ -267,6 +307,7 @@ const Profile = () => {
 
   useEffect(() => {
     fetchSubmissions();
+    fetchUniqueSubmissions();
   }, [userProfile]);
 
   // Calculation indices for pagination
@@ -465,11 +506,10 @@ const Profile = () => {
                             onClick={() => {
                               setFieldValue("avatarLink", url);
                             }}
-                            className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${
-                              values?.avatarLink === url
+                            className={`group relative aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${values?.avatarLink === url
                                 ? "border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20 ring-2 ring-indigo-500/20"
                                 : "border-transparent bg-white dark:bg-zinc-900 hover:border-zinc-300"
-                            }`}
+                              }`}
                           >
                             <img
                               src={url}
@@ -736,7 +776,7 @@ const Profile = () => {
 
             <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
               <h3 className="font-semibold">Submission Activity</h3>
-              <MonthActivityGrid />
+              <MonthActivityGrid submissions={submissions} />
             </div>
 
             <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
@@ -807,11 +847,11 @@ const Profile = () => {
 
                         const rawProblemId =
                           typeof sub.problemId === "object" &&
-                          sub.problemId !== null
+                            sub.problemId !== null
                             ? sub.problemId.$oid ||
-                              sub.problemId.id ||
-                              sub.problemId._id ||
-                              JSON.stringify(sub.problemId)
+                            sub.problemId.id ||
+                            sub.problemId._id ||
+                            JSON.stringify(sub.problemId)
                             : sub.problemId;
 
                         const problemInfo = (allProblem || []).find(
@@ -825,12 +865,12 @@ const Profile = () => {
 
                         const formattedDate = sub.submittedAt
                           ? new Date(sub.submittedAt).toLocaleString("en-IN", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
                           : "—";
 
                         const rowContent = (
@@ -884,35 +924,35 @@ const Profile = () => {
                   </tbody>
                 </table>
                 {/* Pagination Controls */}
-              {submissions.length > itemsPerPage && (
-                <div className="flex items-center justify-between px-2 py-4 border-t border-zinc-200 dark:border-zinc-800">
-                  <span className="text-xs text-zinc-500">
-                    Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, submissions.length)} of {submissions.length} entries
-                  </span>
-                  
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                      disabled={currentPage === 1}
-                      className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
-                    >
-                      Previous
-                    </button>
-                    
-                    <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300 px-2">
-                      Page {currentPage} of {totalPages}
+                {submissions.length > itemsPerPage && (
+                  <div className="flex items-center justify-between px-2 py-4 border-t border-zinc-200 dark:border-zinc-800">
+                    <span className="text-xs text-zinc-500">
+                      Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, submissions.length)} of {submissions.length} entries
                     </span>
-                    
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                      disabled={currentPage === totalPages}
-                      className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
-                    >
-                      Next
-                    </button>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                      >
+                        Previous
+                      </button>
+
+                      <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300 px-2">
+                        Page {currentPage} of {totalPages}
+                      </span>
+
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                      >
+                        Next
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
               </div>
             </div>
           </main>
@@ -925,7 +965,7 @@ const Profile = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-              // onClick={(e) => e.target === e.currentTarget && cancelDelete()}
+            // onClick={(e) => e.target === e.currentTarget && cancelDelete()}
             >
               <motion.div
                 initial={{ scale: 0.92, opacity: 0, y: 20 }}
@@ -979,12 +1019,12 @@ const Profile = () => {
                       type="text"
                       placeholder="Type the username name exactly..."
                       autoFocus
-                      onChange={(e)=>setConfirmDelete(e.target.value)}
+                      onChange={(e) => setConfirmDelete(e.target.value)}
                       value={confirmDelete}
-                      className={`${confirmDelete.trim().toLowerCase()!=(userProfile?.username).trim().toLowerCase()?"bg-red-100 text-red-400 border-red-300 ring-2 ring-red-100":"border-green-300 ring-2  ring-green-100 bg-green-100 text-green-400"} px-4 py-2.5 border rounded-xl text-sm w-full outline-none transition-all`}
+                      className={`${confirmDelete.trim().toLowerCase() != (userProfile?.username).trim().toLowerCase() ? "bg-red-100 text-red-400 border-red-300 ring-2 ring-red-100" : "border-green-300 ring-2  ring-green-100 bg-green-100 text-green-400"} px-4 py-2.5 border rounded-xl text-sm w-full outline-none transition-all`}
                     />
 
-                    {confirmDelete.trim().toLowerCase()!=(userProfile?.username).trim().toLowerCase()  && <p className="text-xs text-red-500">
+                    {confirmDelete.trim().toLowerCase() != (userProfile?.username).trim().toLowerCase() && <p className="text-xs text-red-500">
                       Name doesn't match. Please type it exactly.
                     </p>}
                   </div>
@@ -1003,10 +1043,10 @@ const Profile = () => {
                   </button>
                   <button
                     disabled={
-                      confirmDelete.trim().toLowerCase()!=(userProfile?.username).trim().toLowerCase()
+                      confirmDelete.trim().toLowerCase() != (userProfile?.username).trim().toLowerCase()
                     }
                     onClick={handleDeleteUserProfile}
-                    className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all ${confirmDelete.trim().toLowerCase()!=(userProfile?.username).trim().toLowerCase()?"bg-red-200 text-red-400 cursor-not-allowed":"cursor-pointer bg-green-100 text-green-400 border-green-500"}`}
+                    className={`px-5 py-2.5 text-sm font-semibold rounded-xl flex items-center gap-2 transition-all ${confirmDelete.trim().toLowerCase() != (userProfile?.username).trim().toLowerCase() ? "bg-red-200 text-red-400 cursor-not-allowed" : "cursor-pointer bg-green-100 text-green-400 border-green-500"}`}
                   >
                     <Trash2 size={14} />
                     Delete Profile
@@ -1038,8 +1078,23 @@ const monthNames = [
 const daysInMonth = (year, monthIndex) =>
   new Date(year, monthIndex + 1, 0).getDate();
 
-const MonthActivityGrid = () => {
+const MonthActivityGrid = ({ submissions = [] }) => {
   const year = new Date().getFullYear();
+  
+  const activityMap = useMemo(() => {
+    const map = {};
+    submissions.forEach(sub => {
+      if (sub.submittedAt) {
+        const dateObj = new Date(sub.submittedAt);
+        if (dateObj.getFullYear() === year) {
+          const dateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+          map[dateStr] = (map[dateStr] || 0) + 1;
+        }
+      }
+    });
+    return map;
+  }, [submissions, year]);
+
   return (
     <div className="mt-4 overflow-x-auto">
       <div className="flex items-start gap-8 min-w-max pr-2">
@@ -1056,16 +1111,23 @@ const MonthActivityGrid = () => {
                   gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
                 }}
               >
-                {[...Array(dim)].map((_, d) => (
-                  <div
-                    key={d}
-                    className="h-2.5 w-2.5 rounded-[3px]"
-                    style={{
-                      backgroundColor: `hsl(142, 70%, ${80 - (d % 5) * 10}%)`,
-                    }}
-                    title={`${m} ${d + 1}, ${year}`}
-                  />
-                ))}
+                {[...Array(dim)].map((_, d) => {
+                  const dateStr = `${year}-${String(idx + 1).padStart(2, '0')}-${String(d + 1).padStart(2, '0')}`;
+                  const count = activityMap[dateStr] || 0;
+                  
+                  let bgColor = "bg-zinc-100 dark:bg-zinc-800";
+                  if (count > 0 && count <= 2) bgColor = "bg-emerald-200 dark:bg-emerald-900";
+                  else if (count > 2 && count <= 4) bgColor = "bg-emerald-400 dark:bg-emerald-700";
+                  else if (count > 4) bgColor = "bg-emerald-500 dark:bg-emerald-500";
+
+                  return (
+                    <div
+                      key={d}
+                      className={`h-2.5 w-2.5 rounded-[3px] ${bgColor}`}
+                      title={`${m} ${d + 1}, ${year}: ${count} submissions`}
+                    />
+                  );
+                })}
               </div>
               <span className="mt-2 text-[11px] text-zinc-500">{m}</span>
             </div>
