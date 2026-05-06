@@ -27,6 +27,8 @@ import axios from "axios";
 import Loading from "../../components/others/Loading";
 import { useAppContext } from "../../context/AppContext";
 import ResizablePanels from "../utils/ResizablePanel";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProblemTopBar = ({
   problemData,
@@ -300,6 +302,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-[#fafafa]">
+      <ToastContainer />
       <ProblemTopBar
         problemData={problemDetailsInfo}
         isJwtExist={isJwtExist}
