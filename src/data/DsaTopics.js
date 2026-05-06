@@ -6167,7 +6167,22 @@ console.log(result.join("\n"));`
             "Prime Numbers": {
                 title: "Prime Number related Algorithms",
                 difficulty: "Medium",
-                theory: {},
+                 theory: {
+                    definition: "A graph is a collection of nodes (vertices) connected by edges. Graphs are used to represent relationships between objects and solve complex problems like finding shortest paths, network analysis, and social networks.",
+                    realWorldAnalogy: "Think of a social network like Facebook - people are nodes and friendships are edges connecting them. Or consider a road map where cities are nodes and roads are edges.",
+                    coreOperations: [
+                        "Graph Traversal (BFS, DFS) - O(V + E)",
+                        "Shortest Path (Dijkstra) - O(V log V + E)",
+                        "Minimum Spanning Tree - O(E log V)",
+                        "Topological Sort - O(V + E)"
+                    ],
+                    timeComplexity: {
+                        bfs: { best: "O(V + E)", average: "O(V + E)", worst: "O(V + E)" },
+                        dfs: { best: "O(V + E)", average: "O(V + E)", worst: "O(V + E)" },
+                        dijkstra: { best: "O(V log V + E)", average: "O(V log V + E)", worst: "O(V log V + E)" }
+                    },
+                    spaceComplexity: "O(V + E)"
+                },
                 codeTemplates: {
                     "sieve-of-eratosthenes": {
                         title: "Sieve of Eratosthenes Implementation",
