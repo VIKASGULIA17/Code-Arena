@@ -6338,7 +6338,12 @@ console.log("Total Prime numbers are : " + count);`,
                 title: "Finding Median related Algorithms",
                 difficulty: "Hard",
                 theory: {},
-                codeTemplates: {}
+                codeTemplates: {
+                    cpp:``,
+                    java:``,
+                    python:``,
+                    javascript:``
+                }
             }
         }
     }
