@@ -6339,7 +6339,73 @@ console.log("Total Prime numbers are : " + count);`,
                 difficulty: "Hard",
                 theory: {},
                 codeTemplates: {
-                    cpp:``,
+                    cpp:`bro is it right #include <bits/stdc++.h>
+
+using namespace std;
+
+void rebalance(multiset<int>& left, multiset<int>& right) {
+    while (left.size() < right.size()) {
+        auto it = right.begin();
+        left.insert( * it);
+        right.erase(it);
+    }
+    while (left.size() > 1 + right.size()) {
+        auto it = prev(left.end());
+        right.insert( * it);
+        left.erase(it);
+    }
+}
+
+int main() {
+    
+    int n,k;
+    cin>>n>>k;
+    
+    vector<int> a(n,0);
+    
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+    }
+    
+    
+    int i=0;
+    multiset<int> left,right;
+    
+    while(i<k){
+        if(left.empty() || a[i]<=*left.rbegin()){
+            left.insert(a[i]);
+        }
+        else{
+            right.insert(a[i]);
+        }
+        rebalance(left,right);
+        i++;
+    }
+    cout<<*(left.rbegin())<<endl;
+    
+    while(i<n){
+        int curr = a[i];
+        int prev = a[i-k];
+        if(left.empty() || curr<=*left.rbegin()){
+            left.insert(curr);
+        }
+        else{
+            right.insert(curr);
+        }
+        auto it = left.find(prev);
+        if(it==left.end()){
+            it = right.find(prev);
+            right.erase(it);
+        }
+        else{
+            left.erase(it);
+        }
+        rebalance(left,right);
+        cout<<*(left.rbegin())<<endl;
+        i++;
+    }
+
+}`,
                     java:``,
                     python:``,
                     javascript:``
