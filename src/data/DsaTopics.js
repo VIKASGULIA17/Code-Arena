@@ -6407,7 +6407,56 @@ int main() {
 
 }`,
                     java:``,
-                    python:``,
+                    python:`from sortedcontainers import SortedList
+
+def rebalance(left, right):
+    while len(left) < len(right):
+        left.add(right[0])
+        right.pop(0)
+
+    while len(left) > len(right) + 1:
+        right.add(left[-1])
+        left.pop(-1)
+
+
+n, k = map(int, input().split())
+a = list(map(int, input().split()))
+
+left = SortedList()
+right = SortedList()
+
+i = 0
+
+while i < k:
+    if not left or a[i] <= left[-1]:
+        left.add(a[i])
+    else:
+        right.add(a[i])
+
+    rebalance(left, right)
+    i += 1
+
+print(left[-1])
+
+while i < n:
+    curr = a[i]
+    prev = a[i - k]
+
+    if not left or curr <= left[-1]:
+        left.add(curr)
+    else:
+        right.add(curr)
+
+    if prev in left:
+        left.remove(prev)
+    else:
+        right.remove(prev)
+
+    rebalance(left, right)
+
+    print(left[-1])
+
+    i += 1`,
                     javascript:``
                 }
             }
