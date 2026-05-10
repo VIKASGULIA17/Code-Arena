@@ -6167,7 +6167,7 @@ console.log(result.join("\n"));`
             "Prime Numbers": {
                 title: "Prime Number related Algorithms",
                 difficulty: "Medium",
-                 theory: {
+                theory: {
                     definition: "A graph is a collection of nodes (vertices) connected by edges. Graphs are used to represent relationships between objects and solve complex problems like finding shortest paths, network analysis, and social networks.",
                     realWorldAnalogy: "Think of a social network like Facebook - people are nodes and friendships are edges connecting them. Or consider a road map where cities are nodes and roads are edges.",
                     coreOperations: [
@@ -6334,12 +6334,17 @@ console.log("Total Prime numbers are : " + count);`,
                     }
                 }
             },
-            "Median of all numbers in a List":{
+            "Median of all numbers in a List": {
                 title: "Finding Median related Algorithms",
                 difficulty: "Hard",
                 theory: {},
+
                 codeTemplates: {
-                    cpp:`bro is it right #include <bits/stdc++.h>
+                    "median-of-numbers": {
+                        title: "Find Median Implementation",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
+                        cpp: `bro is it right #include <bits/stdc++.h>
 
 using namespace std;
 
@@ -6406,7 +6411,7 @@ int main() {
     }
 
 }`,
-                    java:`import java.util.*;
+                        java: `import java.util.*;
 
 public class Main {
 
@@ -6515,7 +6520,7 @@ public class Main {
         }
     }
 }`,
-                    python:`from sortedcontainers import SortedList
+                        python: `from sortedcontainers import SortedList
 
 def rebalance(left, right):
     while len(left) < len(right):
@@ -6565,7 +6570,7 @@ while i < n:
     print(left[-1])
 
     i += 1`,
-                    javascript:`class MultiSet {
+                        javascript: `class MultiSet {
     constructor() {
         this.arr = [];
     }
@@ -6668,8 +6673,8 @@ while (i < n) {
 
     i++;
 }`
+                    }
                 }
             }
         }
-    }
-};
+    };
