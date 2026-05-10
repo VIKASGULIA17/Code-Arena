@@ -4196,7 +4196,7 @@ function multiSourceBFS(adj, colors, n) {
                     "0-1-BFS": {
                         title: "0/1 BFS",
                         videoLinks: ["https://youtube.com/"],
-                        problemLinks: ["https://leetcode.com/"],
+                        problemLinks: ["https://leetcode.com/problems/grid-teleportation-traversal/"],
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
 
