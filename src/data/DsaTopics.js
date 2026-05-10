@@ -6677,7 +6677,7 @@ while (i < n) {
                 }
             },
             "Count Divisors (Optimized)": {
-                title: "Count Divisors of a Number (Optimized)",
+                title: "Divisors related Algorithms",
                 difficulty: "Medium",
                 theory: {},
                 codeTemplates: {
