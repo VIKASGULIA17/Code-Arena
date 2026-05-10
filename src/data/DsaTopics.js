@@ -6675,6 +6675,126 @@ while (i < n) {
 }`
                     }
                 }
+            },
+            "Count Divisors (Optimized)": {
+                title: "",
+                difficulty: "Medium",
+                theory: {},
+                codeTemplates: {
+                    "count-divisors-of-numbers-optimized": {
+                        title: "Count Divisors of a Number (Optimized)",
+                        videoLinks: ["https://youtube.com/"],
+                        problemLinks: ["https://leetcode.com/"],
+                        cpp: `#include <bits/stdc++.h>
+
+using namespace std;
+
+void printAllDivisors(int num) {
+    cout << "Divisors are : " << endl;
+    for (int j = 1; j * j <= num; j++) {
+        if (num % j == 0) {
+            // j is divisor
+            cout << j << ' ';
+            if (num / j != j) {
+                // num/j is divisor
+                cout << num / j << ' ';
             }
         }
-    }}
+    }
+    cout << endl;
+
+}
+
+int main() {
+
+    int num;
+    cin>>num;
+
+    printAllDivisors(num);
+    return 0;
+
+}`,
+                        python: `def printAllDivisors(num):
+    print("Divisors are :")
+
+    j = 1
+
+    while j * j <= num:
+
+        if num % j == 0:
+
+            print(j, end=" ")
+
+            if num // j != j:
+                print(num // j, end=" ")
+
+        j += 1
+
+    print()
+
+
+num = int(input())
+
+printAllDivisors(num)`,
+                        javascript: `function printAllDivisors(num) {
+
+    console.log("Divisors are :");
+
+    for (let j = 1; j * j <= num; j++) {
+
+        if (num % j === 0) {
+
+            process.stdout.write(j + " ");
+
+            if (Math.floor(num / j) !== j) {
+                process.stdout.write(Math.floor(num / j) + " ");
+            }
+        }
+    }
+
+    console.log();
+}
+
+const fs = require("fs");
+
+const num = Number(fs.readFileSync(0, "utf-8").trim());
+
+printAllDivisors(num);`,
+                        java: `import java.util.*;
+
+public class Main {
+
+    static void printAllDivisors(int num) {
+
+        System.out.println("Divisors are :");
+
+        for (int j = 1; j * j <= num; j++) {
+
+            if (num % j == 0) {
+
+                System.out.print(j + " ");
+
+                if (num / j != j) {
+                    System.out.print((num / j) + " ");
+                }
+            }
+        }
+
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int num = sc.nextInt();
+
+        printAllDivisors(num);
+    }
+}`
+                    }
+                }
+            }
+        }
+    }
+}
