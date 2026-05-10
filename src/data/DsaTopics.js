@@ -6565,7 +6565,109 @@ while i < n:
     print(left[-1])
 
     i += 1`,
-                    javascript:``
+                    javascript:`class MultiSet {
+    constructor() {
+        this.arr = [];
+    }
+
+    insert(x) {
+        this.arr.push(x);
+        this.arr.sort((a, b) => a - b);
+    }
+
+    erase(x) {
+        let idx = this.arr.indexOf(x);
+        if (idx !== -1) {
+            this.arr.splice(idx, 1);
+        }
+    }
+
+    first() {
+        return this.arr[0];
+    }
+
+    last() {
+        return this.arr[this.arr.length - 1];
+    }
+
+    size() {
+        return this.arr.length;
+    }
+}
+
+function rebalance(left, right) {
+
+    while (left.size() < right.size()) {
+        let val = right.first();
+        right.erase(val);
+        left.insert(val);
+    }
+
+    while (left.size() > right.size() + 1) {
+        let val = left.last();
+        left.erase(val);
+        right.insert(val);
+    }
+}
+
+const fs = require("fs");
+
+const input = fs.readFileSync(0, "utf-8").trim().split(/\s+/).map(Number);
+
+let idx = 0;
+
+const n = input[idx++];
+const k = input[idx++];
+
+const a = [];
+
+for (let i = 0; i < n; i++) {
+    a.push(input[idx++]);
+}
+
+const left = new MultiSet();
+const right = new MultiSet();
+
+let i = 0;
+
+while (i < k) {
+
+    if (left.size() === 0 || a[i] <= left.last()) {
+        left.insert(a[i]);
+    } else {
+        right.insert(a[i]);
+    }
+
+    rebalance(left, right);
+
+    i++;
+}
+
+console.log(left.last());
+
+while (i < n) {
+
+    let curr = a[i];
+    let prev = a[i - k];
+
+    if (left.size() === 0 || curr <= left.last()) {
+        left.insert(curr);
+    } else {
+        right.insert(curr);
+    }
+
+    if (left.arr.includes(prev)) {
+        left.erase(prev);
+    } else {
+        right.erase(prev);
+    }
+
+    rebalance(left, right);
+
+    console.log(left.last());
+
+    i++;
+}`
                 }
             }
         }
