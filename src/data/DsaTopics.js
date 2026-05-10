@@ -6406,7 +6406,115 @@ int main() {
     }
 
 }`,
-                    java:``,
+                    java:`import java.util.*;
+
+public class Main {
+
+    static void rebalance(TreeMap<Integer, Integer> left,
+                          TreeMap<Integer, Integer> right,
+                          int[] leftSize,
+                          int[] rightSize) {
+
+        while (leftSize[0] < rightSize[0]) {
+            int val = right.firstKey();
+
+            add(left, val);
+            remove(right, val);
+
+            leftSize[0]++;
+            rightSize[0]--;
+        }
+
+        while (leftSize[0] > rightSize[0] + 1) {
+            int val = left.lastKey();
+
+            add(right, val);
+            remove(left, val);
+
+            leftSize[0]--;
+            rightSize[0]++;
+        }
+    }
+
+    static void add(TreeMap<Integer, Integer> map, int x) {
+        map.put(x, map.getOrDefault(x, 0) + 1);
+    }
+
+    static void remove(TreeMap<Integer, Integer> map, int x) {
+        map.put(x, map.get(x) - 1);
+
+        if (map.get(x) == 0) {
+            map.remove(x);
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+
+        int[] a = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            a[i] = sc.nextInt();
+        }
+
+        TreeMap<Integer, Integer> left = new TreeMap<>();
+        TreeMap<Integer, Integer> right = new TreeMap<>();
+
+        int[] leftSize = {0};
+        int[] rightSize = {0};
+
+        int i = 0;
+
+        while (i < k) {
+
+            if (left.isEmpty() || a[i] <= left.lastKey()) {
+                add(left, a[i]);
+                leftSize[0]++;
+            } else {
+                add(right, a[i]);
+                rightSize[0]++;
+            }
+
+            rebalance(left, right, leftSize, rightSize);
+
+            i++;
+        }
+
+        System.out.println(left.lastKey());
+
+        while (i < n) {
+
+            int curr = a[i];
+            int prev = a[i - k];
+
+            if (left.isEmpty() || curr <= left.lastKey()) {
+                add(left, curr);
+                leftSize[0]++;
+            } else {
+                add(right, curr);
+                rightSize[0]++;
+            }
+
+            if (left.containsKey(prev)) {
+                remove(left, prev);
+                leftSize[0]--;
+            } else {
+                remove(right, prev);
+                rightSize[0]--;
+            }
+
+            rebalance(left, right, leftSize, rightSize);
+
+            System.out.println(left.lastKey());
+
+            i++;
+        }
+    }
+}`,
                     python:`from sortedcontainers import SortedList
 
 def rebalance(left, right):
