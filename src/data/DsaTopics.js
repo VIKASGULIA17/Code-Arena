@@ -3952,6 +3952,361 @@ if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
     console.log("0 and 5 are NOT connected");
 }`
                     },
+                    "dijkstra-algorithm": {
+                        title: "Dijkstra's Algorithm",
+                        videoLinks: ["https://youtu.be/wSQRc6Uw3zY?si=2q0Q6J83H26bQGZ0"],
+                        problemLinks: ["https://leetcode.com/problems/network-delay-time/"],
+                        cpp: `#include <bits/stdc++.h>
+
+using namespace std;
+
+void dijkstra(vector<vector<vector<int>>> &adj, int source, int n,
+              int (&dist)[1001]) {
+
+    priority_queue<pair<int, int>,
+                   vector<pair<int, int>>,
+                   greater<pair<int, int>>> pq;
+
+    pq.push(make_pair(0, source));
+    dist[source] = 0;
+
+    while (!pq.empty()) {
+
+        auto [d, u] = pq.top();
+        pq.pop();
+
+        if (dist[u] < d) continue;
+
+        for (auto &t : adj[u]) {
+
+            int v = t[0];
+            int w = t[1];
+
+            if (dist[u] + w < dist[v]) {
+
+                dist[v] = dist[u] + w;
+                pq.push(make_pair(dist[v], v));
+            }
+        }
+    }
+}
+
+int main() {
+
+    int n, m;
+    cin >> n >> m;
+
+    vector<vector<vector<int>>> adj(n + 1);
+
+    for (int i = 0; i < m; i++) {
+
+        int u, v, w;
+        cin >> u >> v >> w;
+
+        adj[u].push_back({v, w});
+        adj[v].push_back({u, w});
+    }
+
+    int source;
+    cin >> source;
+
+    int dist[1001];
+
+    for (int i = 0; i <= n; i++) {
+        dist[i] = INT_MAX;
+    }
+
+    dijkstra(adj, source, n, dist);
+
+    for (int i = 1; i <= n; i++) {
+
+        if (dist[i] == INT_MAX)
+            cout << "INF ";
+        else
+            cout << dist[i] << " ";
+    }
+
+    cout << endl;
+
+    return 0;
+}`,
+                        python: `import heapq
+
+def dijkstra(adj, source, n, dist):
+
+    pq = []
+    
+    heapq.heappush(pq, (0, source))
+    dist[source] = 0
+
+    while pq:
+
+        d, u = heapq.heappop(pq)
+
+        if dist[u] < d:
+            continue
+
+        for t in adj[u]:
+
+            v = t[0]
+            w = t[1]
+
+            if dist[u] + w < dist[v]:
+
+                dist[v] = dist[u] + w
+                heapq.heappush(pq, (dist[v], v))
+
+
+n, m = map(int, input().split())
+
+adj = [[] for i in range(n + 1)]
+
+for i in range(m):
+
+    u, v, w = map(int, input().split())
+
+    adj[u].append([v, w])
+    adj[v].append([u, w])
+
+source = int(input())
+
+INF = 10**18
+
+dist = [INF] * (n + 1)
+
+dijkstra(adj, source, n, dist)
+
+for i in range(1, n + 1):
+
+    if dist[i] == INF:
+        print("INF", end=" ")
+    else:
+        print(dist[i], end=" ")`,
+                        javascript: `class MinHeap {
+
+    constructor() {
+        this.heap = [];
+    }
+
+    push(x) {
+
+        this.heap.push(x);
+
+        let i = this.heap.length - 1;
+
+        while (i > 0) {
+
+            let p = Math.floor((i - 1) / 2);
+
+            if (this.heap[p][0] <= this.heap[i][0]) {
+                break;
+            }
+
+            [this.heap[p], this.heap[i]] =
+            [this.heap[i], this.heap[p]];
+
+            i = p;
+        }
+    }
+
+    pop() {
+
+        if (this.heap.length === 1) {
+            return this.heap.pop();
+        }
+
+        let top = this.heap[0];
+
+        this.heap[0] = this.heap.pop();
+
+        let i = 0;
+
+        while (true) {
+
+            let l = 2 * i + 1;
+            let r = 2 * i + 2;
+
+            let smallest = i;
+
+            if (l < this.heap.length &&
+                this.heap[l][0] < this.heap[smallest][0]) {
+                smallest = l;
+            }
+
+            if (r < this.heap.length &&
+                this.heap[r][0] < this.heap[smallest][0]) {
+                smallest = r;
+            }
+
+            if (smallest === i) {
+                break;
+            }
+
+            [this.heap[i], this.heap[smallest]] =
+            [this.heap[smallest], this.heap[i]];
+
+            i = smallest;
+        }
+
+        return top;
+    }
+
+    isEmpty() {
+        return this.heap.length === 0;
+    }
+}
+
+function dijkstra(adj, source, n, dist) {
+
+    let pq = new MinHeap();
+
+    pq.push([0, source]);
+
+    dist[source] = 0;
+
+    while (!pq.isEmpty()) {
+
+        let [d, u] = pq.pop();
+
+        if (dist[u] < d) {
+            continue;
+        }
+
+        for (let t of adj[u]) {
+
+            let v = t[0];
+            let w = t[1];
+
+            if (dist[u] + w < dist[v]) {
+
+                dist[v] = dist[u] + w;
+
+                pq.push([dist[v], v]);
+            }
+        }
+    }
+}
+
+const fs = require("fs");
+
+let input = fs.readFileSync(0, "utf-8").trim().split("\n");
+
+let [n, m] = input[0].split(" ").map(Number);
+
+let adj = Array.from({ length: n + 1 }, () => []);
+
+for (let i = 1; i <= m; i++) {
+
+    let [u, v, w] = input[i].split(" ").map(Number);
+
+    adj[u].push([v, w]);
+    adj[v].push([u, w]);
+}
+
+let source = Number(input[m + 1]);
+
+let INF = 1e18;
+
+let dist = Array(n + 1).fill(INF);
+
+dijkstra(adj, source, n, dist);
+
+let ans = [];
+
+for (let i = 1; i <= n; i++) {
+
+    if (dist[i] === INF) {
+        ans.push("INF");
+    } else {
+        ans.push(dist[i]);
+    }
+}
+
+console.log(ans.join(" "));`,
+                        java: `import java.util.*;
+
+public class Main {
+
+    static void dijkstra(ArrayList<ArrayList<int[]>> adj,
+                         int source,
+                         int n,
+                         int[] dist) {
+
+        PriorityQueue<int[]> pq =
+                new PriorityQueue<>((a, b) -> a[0] - b[0]);
+
+        pq.add(new int[]{0, source});
+
+        dist[source] = 0;
+
+        while (!pq.isEmpty()) {
+
+            int[] temp = pq.poll();
+
+            int d = temp[0];
+            int u = temp[1];
+
+            if (dist[u] < d) {
+                continue;
+            }
+
+            for (int[] t : adj.get(u)) {
+
+                int v = t[0];
+                int w = t[1];
+
+                if (dist[u] + w < dist[v]) {
+
+                    dist[v] = dist[u] + w;
+
+                    pq.add(new int[]{dist[v], v});
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+        ArrayList<ArrayList<int[]>> adj = new ArrayList<>();
+
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < m; i++) {
+
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            int w = sc.nextInt();
+
+            adj.get(u).add(new int[]{v, w});
+            adj.get(v).add(new int[]{u, w});
+        }
+
+        int source = sc.nextInt();
+
+        int[] dist = new int[n + 1];
+
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+        dijkstra(adj, source, n, dist);
+
+        for (int i = 1; i <= n; i++) {
+
+            if (dist[i] == Integer.MAX_VALUE) {
+                System.out.print("INF ");
+            } else {
+                System.out.print(dist[i] + " ");
+            }
+        }
+    }
+}`
+                    },
                     "multi-source-BFS-having-equal-weight": {
                         title: "Multi-Source BFS (having equal weight)",
                         videoLinks: ["https://youtube.com/"],
