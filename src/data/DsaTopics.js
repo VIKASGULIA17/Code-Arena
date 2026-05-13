@@ -7149,6 +7149,23 @@ public class Main {
 }`
                     }
                 }
+            },
+            "string-related-algo":{
+                title: "String related Algorithms",
+                description: "Master string manipulation, pattern matching, and advanced string algorithms",
+                difficulty:"Hard",
+                theory:{},
+                codeTemplates:{
+                    "kmp-algorithm":{
+                        title: "Knuth-Morris-Pratt (KMP) Algorithm for Pattern Matching",
+                        videoLinks: ["https://youtu.be/wSQRc6Uw3zY?si=2q0Q6J83H26bQGZ0"],
+                        problemLinks: ["https://leetcode.com/problems/network-delay-time/"],
+                        cpp:``,
+                        python:``,
+                        java:``,
+                        javascript:``
+                    }
+                }
             }
         }
     }
