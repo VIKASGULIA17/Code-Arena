@@ -4,16 +4,18 @@ import { X, Plus, Trash2, Loader } from 'lucide-react'
 import { toast, ToastContainer } from 'react-toastify'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as yup from 'yup'
+import axios from 'axios'
 
-const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null }) => {
+const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null ,parentTemplateId}) => {
   const [isLoading, setIsLoading] = useState(false)
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   // Validation schema
   const validationSchema = yup.object().shape({
-    parentTemplateId: yup.string().required('Parent Template ID is required'),
+    // parentTemplateId: yup.string().required('Parent Template ID is required'),
     title: yup.string().required('Title is required'),
     templateId: yup.string().required('Template ID is required'),
-    status: yup.boolean(),
+    // status: yup.boolean(),
     problemLinks: yup.array().of(
       yup.string().test('url', 'Invalid URL', function(value) {
         if (!value) return true; // Allow empty
@@ -43,10 +45,10 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
   })
 
   const initialValues = initialData || {
-    parentTemplateId: '',
+    // parentTemplateId: '',
     title: '',
     templateId: '',
-    status: true,
+    // status: true,
     problemLinks: [''],
     videoLinks: [''],
     cpp: '',
@@ -58,14 +60,22 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
   // Dummy storage function - just shows toast
   const handleStorageSubmit = async (values) => {
     setIsLoading(true)
+    console.log("parent template ID is : ",parentTemplateId);
+    console.log("Submitting DSA Template:", values);
+    // console.log(parentTemplateId);
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Dummy storage - just log and toast
-      console.log('Storing DSA Template:', values)
-      
-      toast.success(`Template "${values.title}" ${mode === 'create' ? 'created' : 'updated'} successfully!`)
+      const response = await axios.post(`${BACKEND_URL}/DsaTemplateController/addTemplate/${parentTemplateId}`,{
+        values
+      })
+
+      // console.log(response.data);
+
+      if(response.data.status==1){
+        toast.success(`Template "${values.title}" ${mode === 'create' ? 'created' : 'updated'} successfully!`)
+      }
+      else{
+        toast.error(`Template "${values.title}" not ${mode === 'create' ? 'created' : 'updated'}`)
+      }
       
       setTimeout(() => {
         setIsLoading(false)
@@ -131,29 +141,7 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                   {({ values, errors, touched, setFieldValue }) => (
                     <Form className="space-y-6">
                       {/* Basic Info Grid */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Parent Template ID */}
-                        <div>
-                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                            Parent Template ID <span className="text-red-500">*</span>
-                          </label>
-                          <Field
-                            as="input"
-                            type="text"
-                            name="parentTemplateId"
-                            placeholder="e.g., arrays, linked-lists"
-                            className={`w-full px-4 py-2 rounded-lg border transition-colors font-mono text-sm
-                              ${touched.parentTemplateId && errors.parentTemplateId
-                                ? 'border-red-300 bg-red-50 dark:bg-red-500/10 dark:border-red-500/30'
-                                : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50'
-                              }
-                              text-slate-900 dark:text-slate-100
-                              placeholder:text-slate-400 dark:placeholder:text-slate-600
-                              focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
-                          />
-                          <ErrorMessage name="parentTemplateId" component="p" className="text-xs text-red-500 mt-1" />
-                        </div>
-
+                  
                         {/* Template ID */}
                         <div>
                           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -175,8 +163,7 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                           />
                           <ErrorMessage name="templateId" component="p" className="text-xs text-red-500 mt-1" />
                         </div>
-                      </div>
-
+                   
                       {/* Title */}
                       <div>
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -199,24 +186,7 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                         <ErrorMessage name="title" component="p" className="text-xs text-red-500 mt-1" />
                       </div>
 
-                      {/* Status Toggle */}
-                      <div className="flex items-center gap-3">
-                        <label className="flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="status"
-                            checked={values.status}
-                            onChange={(e) => setFieldValue('status', e.target.checked)}
-                            className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 dark:bg-slate-900 dark:border-slate-600"
-                          />
-                          <span className="ml-2 text-sm font-medium text-slate-700 dark:text-slate-300">
-                            Active Status
-                          </span>
-                        </label>
-                        <span className="text-xs text-slate-500 dark:text-slate-400">
-                          {values.status ? '✓ Active' : '✗ Inactive'}
-                        </span>
-                      </div>
+                    
 
                       {/* Problem Links Section */}
                       <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
@@ -230,7 +200,7 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                               const links = [...values.problemLinks, '']
                               setFieldValue('problemLinks', links)
                             }}
-                            className="flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-500/30 transition-colors"
+                            className="flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-500/30 transition-colors cursor-pointer"
                           >
                             <Plus size={14} />
                             Add Link
@@ -259,9 +229,9 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                                   const links = values.problemLinks.filter((_, i) => i !== idx)
                                   setFieldValue('problemLinks', links)
                                 }}
-                                className="p-2 rounded-lg text-slate-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-500/20 dark:hover:text-red-400 transition-colors"
+                                className="p-2 rounded-lg text-slate-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-500/20 dark:hover:text-red-400 transition-colors cursor-pointer"
                               >
-                                <Trash2 size={16} />
+                                <Trash2 size={16} className='cursor-pointer' />
                               </button>
                             </div>
                           ))}
@@ -280,9 +250,9 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                               const links = [...values.videoLinks, '']
                               setFieldValue('videoLinks', links)
                             }}
-                            className="flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-lg bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 transition-colors"
+                            className="flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-lg bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 cursor-pointer transition-colors"
                           >
-                            <Plus size={14} />
+                            <Plus size={14} className='cursor-pointer' />
                             Add Link
                           </button>
                         </div>
@@ -346,14 +316,14 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                           type="button"
                           onClick={onClose}
                           disabled={isLoading}
-                          className="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors disabled:opacity-50"
+                          className="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors cursor-pointer disabled:opacity-50"
                         >
                           Cancel
                         </button>
                         <button
                           type="submit"
                           disabled={isLoading}
-                          className="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                          className="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-colors disabled:opacity-50 flex cursor-pointer items-center justify-center gap-2"
                         >
                           {isLoading && <Loader size={16} className="animate-spin" />}
                           {mode === 'create' ? 'Create Template' : 'Update Template'}

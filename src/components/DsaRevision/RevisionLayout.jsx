@@ -10,6 +10,11 @@ import { useRevisionProgress } from '../../hooks/useRevisionProgress'
 
 const RevisionLayout = () => {
   const { categoryId, topicId, subtopicId } = useParams()
+
+  // console.log("categoryID : ",categoryId);
+  // console.log("topicId :",topicId);
+  // console.log("subTopicId : ",subtopicId);
+
   const navigate = useNavigate()
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -115,6 +120,7 @@ const RevisionLayout = () => {
         isOpen={templateModalOpen}
         onClose={() => setTemplateModalOpen(false)}
         mode="create"
+        parentTemplateId={topicId}
       />
     </div>
   )
