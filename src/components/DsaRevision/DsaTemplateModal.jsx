@@ -60,8 +60,8 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
   // Dummy storage function - just shows toast
   const handleStorageSubmit = async (values) => {
     setIsLoading(true)
-    console.log("parent template ID is : ",parentTemplateId);
-    console.log("Submitting DSA Template:", values);
+    // console.log("parent template ID is : ",parentTemplateId);
+    // console.log("Submitting DSA Template:", values);
     // console.log(parentTemplateId);
     try {
       const response = await axios.post(`${BACKEND_URL}/DsaTemplateController/addTemplate/${parentTemplateId}`,values)
