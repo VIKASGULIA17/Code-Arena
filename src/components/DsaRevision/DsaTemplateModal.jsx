@@ -1,23 +1,29 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, Plus, Trash2, Loader } from 'lucide-react'
-import { toast, ToastContainer } from 'react-toastify'
-import { Formik, Form, Field, ErrorMessage } from 'formik'
-import * as yup from 'yup'
-import axios from 'axios'
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Plus, Trash2, Loader } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as yup from "yup";
+import axios from "axios";
 
-const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null ,parentTemplateId}) => {
-  const [isLoading, setIsLoading] = useState(false)
+const DsaTemplateModal = ({
+  isOpen,
+  onClose,
+  mode = "create",
+  initialData = null,
+  parentTemplateId,
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   // Validation schema
   const validationSchema = yup.object().shape({
     // parentTemplateId: yup.string().required('Parent Template ID is required'),
-    title: yup.string().required('Title is required'),
-    templateId: yup.string().required('Template ID is required'),
+    title: yup.string().required("Title is required"),
+    templateId: yup.string().required("Template ID is required"),
     // status: yup.boolean(),
     problemLinks: yup.array().of(
-      yup.string().test('url', 'Invalid URL', function(value) {
+      yup.string().test("url", "Invalid URL", function (value) {
         if (!value) return true; // Allow empty
         try {
           new URL(value);
@@ -25,10 +31,10 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
         } catch {
           return false;
         }
-      })
+      }),
     ),
     videoLinks: yup.array().of(
-      yup.string().test('url', 'Invalid URL', function(value) {
+      yup.string().test("url", "Invalid URL", function (value) {
         if (!value) return true; // Allow empty
         try {
           new URL(value);
@@ -36,54 +42,60 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
         } catch {
           return false;
         }
-      })
+      }),
     ),
     cpp: yup.string(),
     java: yup.string(),
     javascript: yup.string(),
-    python: yup.string()
-  })
+    python: yup.string(),
+  });
 
   const initialValues = initialData || {
     // parentTemplateId: '',
-    title: '',
-    templateId: '',
+    title: "",
+    templateId: "",
     // status: true,
-    problemLinks: [''],
-    videoLinks: [''],
-    cpp: '',
-    java: '',
-    javascript: '',
-    python: ''
-  }
+    problemLinks: [""],
+    videoLinks: [""],
+    cpp: "",
+    java: "",
+    javascript: "",
+    python: "",
+  };
 
   // Dummy storage function - just shows toast
   const handleStorageSubmit = async (values) => {
-    setIsLoading(true)
+    setIsLoading(true);
     // console.log("parent template ID is : ",parentTemplateId);
     // console.log("Submitting DSA Template:", values);
     // console.log(parentTemplateId);
     try {
-      const response = await axios.post(`${BACKEND_URL}/DsaTemplateController/addTemplate/${parentTemplateId}`,values)
+      const response = await axios.post(
+        `${BACKEND_URL}/DsaTemplateController/addTemplate/${parentTemplateId}`,
+        values,
+      );
 
       // console.log(response.data);
 
-      if(response.data.status==1){
-        toast.success(`Template ${mode === 'create' ? 'created' : 'updated'} successfully!`)
+      if (response.data.status == 1) {
+        toast.success(
+          `Template ${mode === "create" ? "created" : "updated"} successfully!`,
+        );
+      } else {
+        toast.error(
+          `Template not ${mode === "create" ? "created" : "updated"}`,
+        );
       }
-      else{
-        toast.error(`Template not ${mode === 'create' ? 'created' : 'updated'}`)
-      }
-      
+
       setTimeout(() => {
-        setIsLoading(false)
-        onClose()
-      }, 500)
+        setIsLoading(false);
+        onClose();
+      }, 500);
     } catch (error) {
-      toast.error('Failed to save template')
-      setIsLoading(false)
+      toast.error("Failed to save template");
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <AnimatePresence>
@@ -112,12 +124,12 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
               <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-700">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900 dark:text-slate-50">
-                    {mode === 'create' ? 'Create' : 'Edit'} DSA Template
+                    {mode === "create" ? "Create" : "Edit"} DSA Template
                   </h2>
                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    {mode === 'create'
-                      ? 'Add a new DSA code template with examples in multiple languages'
-                      : 'Update existing DSA template'}
+                    {mode === "create"
+                      ? "Add a new DSA code template with examples in multiple languages"
+                      : "Update existing DSA template"}
                   </p>
                 </div>
                 <button
@@ -130,7 +142,10 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
               </div>
 
               {/* Form Content */}
-              <div className="overflow-y-auto p-6" style={{ maxHeight: 'calc(90vh - 140px)' }}>
+              <div
+                className="overflow-y-auto p-6"
+                style={{ maxHeight: "calc(90vh - 140px)" }}
+              >
                 <Formik
                   initialValues={initialValues}
                   validationSchema={validationSchema}
@@ -139,29 +154,34 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                   {({ values, errors, touched, setFieldValue }) => (
                     <Form className="space-y-6">
                       {/* Basic Info Grid */}
-                  
-                        {/* Template ID */}
-                        <div>
-                          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                            Template ID <span className="text-red-500">*</span>
-                          </label>
-                          <Field
-                            as="input"
-                            type="text"
-                            name="templateId"
-                            placeholder="e.g., array-basics, two-sum"
-                            className={`w-full px-4 py-2 rounded-lg border transition-colors font-mono text-sm
-                              ${touched.templateId && errors.templateId
-                                ? 'border-red-300 bg-red-50 dark:bg-red-500/10 dark:border-red-500/30'
-                                : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50'
+
+                      {/* Template ID */}
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                          Template ID <span className="text-red-500">*</span>
+                        </label>
+                        <Field
+                          as="input"
+                          type="text"
+                          name="templateId"
+                          placeholder="e.g., array-basics, two-sum"
+                          className={`w-full px-4 py-2 rounded-lg border transition-colors font-mono text-sm
+                              ${
+                                touched.templateId && errors.templateId
+                                  ? "border-red-300 bg-red-50 dark:bg-red-500/10 dark:border-red-500/30"
+                                  : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50"
                               }
                               text-slate-900 dark:text-slate-100
                               placeholder:text-slate-400 dark:placeholder:text-slate-600
                               focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
-                          />
-                          <ErrorMessage name="templateId" component="p" className="text-xs text-red-500 mt-1" />
-                        </div>
-                   
+                        />
+                        <ErrorMessage
+                          name="templateId"
+                          component="p"
+                          className="text-xs text-red-500 mt-1"
+                        />
+                      </div>
+
                       {/* Title */}
                       <div>
                         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -173,18 +193,21 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                           name="title"
                           placeholder="e.g., Array Basics - Declaration & Operations"
                           className={`w-full px-4 py-2 rounded-lg border transition-colors
-                            ${touched.title && errors.title
-                              ? 'border-red-300 bg-red-50 dark:bg-red-500/10 dark:border-red-500/30'
-                              : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50'
+                            ${
+                              touched.title && errors.title
+                                ? "border-red-300 bg-red-50 dark:bg-red-500/10 dark:border-red-500/30"
+                                : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50"
                             }
                             text-slate-900 dark:text-slate-100
                             placeholder:text-slate-400 dark:placeholder:text-slate-600
                             focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
                         />
-                        <ErrorMessage name="title" component="p" className="text-xs text-red-500 mt-1" />
+                        <ErrorMessage
+                          name="title"
+                          component="p"
+                          className="text-xs text-red-500 mt-1"
+                        />
                       </div>
-
-                    
 
                       {/* Problem Links Section */}
                       <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
@@ -195,8 +218,8 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                           <button
                             type="button"
                             onClick={() => {
-                              const links = [...values.problemLinks, '']
-                              setFieldValue('problemLinks', links)
+                              const links = [...values.problemLinks, ""];
+                              setFieldValue("problemLinks", links);
                             }}
                             className="flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-lg bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-500/30 transition-colors cursor-pointer"
                           >
@@ -213,9 +236,11 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                                 name={`problemLinks.${idx}`}
                                 placeholder="https://leetcode.com/..."
                                 className={`flex-1 px-4 py-2 rounded-lg border transition-colors text-sm
-                                  ${touched.problemLinks?.[idx] && errors.problemLinks?.[idx]
-                                    ? 'border-red-300 bg-red-50 dark:bg-red-500/10 dark:border-red-500/30'
-                                    : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50'
+                                  ${
+                                    touched.problemLinks?.[idx] &&
+                                    errors.problemLinks?.[idx]
+                                      ? "border-red-300 bg-red-50 dark:bg-red-500/10 dark:border-red-500/30"
+                                      : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50"
                                   }
                                   text-slate-900 dark:text-slate-100
                                   placeholder:text-slate-400 dark:placeholder:text-slate-600
@@ -224,12 +249,14 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                               <button
                                 type="button"
                                 onClick={() => {
-                                  const links = values.problemLinks.filter((_, i) => i !== idx)
-                                  setFieldValue('problemLinks', links)
+                                  const links = values.problemLinks.filter(
+                                    (_, i) => i !== idx,
+                                  );
+                                  setFieldValue("problemLinks", links);
                                 }}
                                 className="p-2 rounded-lg text-slate-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-500/20 dark:hover:text-red-400 transition-colors cursor-pointer"
                               >
-                                <Trash2 size={16} className='cursor-pointer' />
+                                <Trash2 size={16} className="cursor-pointer" />
                               </button>
                             </div>
                           ))}
@@ -245,12 +272,12 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                           <button
                             type="button"
                             onClick={() => {
-                              const links = [...values.videoLinks, '']
-                              setFieldValue('videoLinks', links)
+                              const links = [...values.videoLinks, ""];
+                              setFieldValue("videoLinks", links);
                             }}
                             className="flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-lg bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-500/30 cursor-pointer transition-colors"
                           >
-                            <Plus size={14} className='cursor-pointer' />
+                            <Plus size={14} className="cursor-pointer" />
                             Add Link
                           </button>
                         </div>
@@ -263,9 +290,11 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                                 name={`videoLinks.${idx}`}
                                 placeholder="https://youtube.com/..."
                                 className={`flex-1 px-4 py-2 rounded-lg border transition-colors text-sm
-                                  ${touched.videoLinks?.[idx] && errors.videoLinks?.[idx]
-                                    ? 'border-red-300 bg-red-50 dark:bg-red-500/10 dark:border-red-500/30'
-                                    : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50'
+                                  ${
+                                    touched.videoLinks?.[idx] &&
+                                    errors.videoLinks?.[idx]
+                                      ? "border-red-300 bg-red-50 dark:bg-red-500/10 dark:border-red-500/30"
+                                      : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50"
                                   }
                                   text-slate-900 dark:text-slate-100
                                   placeholder:text-slate-400 dark:placeholder:text-slate-600
@@ -274,8 +303,10 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                               <button
                                 type="button"
                                 onClick={() => {
-                                  const links = values.videoLinks.filter((_, i) => i !== idx)
-                                  setFieldValue('videoLinks', links)
+                                  const links = values.videoLinks.filter(
+                                    (_, i) => i !== idx,
+                                  );
+                                  setFieldValue("videoLinks", links);
                                 }}
                                 className="p-2 rounded-lg text-slate-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-500/20 dark:hover:text-red-400 transition-colors"
                               >
@@ -292,19 +323,21 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                           Code Templates
                         </h3>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                          {['cpp', 'java', 'javascript', 'python'].map((lang) => (
-                            <div key={lang}>
-                              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 capitalize">
-                                {lang}
-                              </label>
-                              <Field
-                                as="textarea"
-                                name={lang}
-                                placeholder={`Enter ${lang} code here...`}
-                                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none h-32"
-                              />
-                            </div>
-                          ))}
+                          {["cpp", "java", "javascript", "python"].map(
+                            (lang) => (
+                              <div key={lang}>
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 capitalize">
+                                  {lang}
+                                </label>
+                                <Field
+                                  as="textarea"
+                                  name={lang}
+                                  placeholder={`Enter ${lang} code here...`}
+                                  className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none h-32"
+                                />
+                              </div>
+                            ),
+                          )}
                         </div>
                       </div>
 
@@ -321,10 +354,23 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
                         <button
                           type="submit"
                           disabled={isLoading}
-                          className="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-colors disabled:opacity-50 flex cursor-pointer items-center justify-center gap-2"
+                          className="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg bg-slate-900 text-white 
+    hover:bg-slate-800 
+    active:bg-slate-950
+    border border-slate-900
+    shadow-sm hover:shadow-md
+
+    dark:bg-white dark:text-slate-950
+    dark:hover:bg-slate-200
+    dark:active:bg-slate-300
+    dark:border-white transition-colors disabled:opacity-50 flex cursor-pointer items-center justify-center gap-2"
                         >
-                          {isLoading && <Loader size={16} className="animate-spin" />}
-                          {mode === 'create' ? 'Create Template' : 'Update Template'}
+                          {isLoading && (
+                            <Loader size={16} className="animate-spin" />
+                          )}
+                          {mode === "create"
+                            ? "Create Template"
+                            : "Update Template"}
                         </button>
                       </div>
                     </Form>
@@ -336,7 +382,7 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
         </>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-export default DsaTemplateModal
+export default DsaTemplateModal;
