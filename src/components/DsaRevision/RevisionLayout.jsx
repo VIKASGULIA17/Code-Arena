@@ -4,6 +4,8 @@ import { Menu } from 'lucide-react'
 import { EnhancedNavbar } from '../Navbar'
 import ModuleSidebar from './ModuleSidebar'
 import ModuleContentArea from './ModuleContentArea'
+import DsaTemplateModal from './DsaTemplateModal'
+import DsaTemplateButton from './DsaTemplateButton'
 import { useRevisionProgress } from '../../hooks/useRevisionProgress'
 
 const RevisionLayout = () => {
@@ -13,6 +15,7 @@ const RevisionLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024)
+  const [templateModalOpen, setTemplateModalOpen] = useState(false)
 
   const {
     toggleComplete,
@@ -57,6 +60,9 @@ const RevisionLayout = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120] transition-colors">
       <EnhancedNavbar />
 
+      {/* Top-level admin button - only on welcome page */}
+     
+
       {/* Mobile sidebar toggle */}
       <div className="lg:hidden fixed bottom-6 left-6 z-30">
         <button
@@ -100,8 +106,16 @@ const RevisionLayout = () => {
           getModuleProgress={getModuleProgress}
           getOverallProgress={getOverallProgress}
           onSelectSubtopic={handleSelectSubtopic}
+          onOpenTemplateModal={() => setTemplateModalOpen(true)}
         />
       </div>
+
+      {/* DSA Template Modal */}
+      <DsaTemplateModal
+        isOpen={templateModalOpen}
+        onClose={() => setTemplateModalOpen(false)}
+        mode="create"
+      />
     </div>
   )
 }

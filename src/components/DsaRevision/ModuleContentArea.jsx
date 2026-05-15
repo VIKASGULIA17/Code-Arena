@@ -7,6 +7,7 @@ import {
 import { dsaCategories } from '../../data/DsaTopics'
 import { TheorySection } from '../theory/TheorySection'
 import { CodeBlock } from '../code/codeblock'
+import DsaTemplateButton from './DsaTemplateButton'
 
 const difficultyColors = {
   'Beginner': 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20',
@@ -88,7 +89,7 @@ const WelcomeScreen = ({ getOverallProgress }) => {
 }
 
 /** Module overview when topic is selected but no subtopic */
-const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, onSelectSubtopic }) => {
+const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, onSelectSubtopic, onOpenTemplateModal }) => {
   const progress = getModuleProgress(catId, topicId)
   const icon = topicIcons[topicId] || '💡'
   const subtopics = buildSubtopicList(catId, topicId, topic)
@@ -121,6 +122,13 @@ const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, on
               </span>
             </div>
             <p className="text-gray-500 dark:text-slate-400 text-base sm:text-lg">{topic.description}</p>
+          </div>
+          <div className="flex-shrink-0">
+            <DsaTemplateButton
+              onClick={onOpenTemplateModal}
+              variant="primary"
+              size="sm"
+            />
           </div>
         </div>
 
@@ -358,14 +366,15 @@ const ModuleContentArea = ({
   toggleComplete,
   getModuleProgress,
   getOverallProgress,
-  onSelectSubtopic
+  onSelectSubtopic,
+  onOpenTemplateModal
 }) => {
   const category = activeCategoryId ? dsaCategories[activeCategoryId] : null
   const topic = category?.topics?.[activeTopicId]
 
   return (
     <div className="flex-1 min-w-0 overflow-y-auto">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 md:p-8 lg:p-10 py-6 md:py-8 lg:py-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-6 md:py-8 lg:py-80 pt-12 md:pt-16 lg:pt-60">
         <AnimatePresence mode="wait">
           {!activeCategoryId || !activeTopicId ? (
             <WelcomeScreen key="welcome" getOverallProgress={getOverallProgress} />
@@ -378,6 +387,7 @@ const ModuleContentArea = ({
               category={category}
               getModuleProgress={getModuleProgress}
               onSelectSubtopic={onSelectSubtopic}
+              onOpenTemplateModal={onOpenTemplateModal}
             />
           ) : (
             <SubtopicContent

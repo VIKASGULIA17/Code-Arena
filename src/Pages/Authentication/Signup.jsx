@@ -157,14 +157,14 @@ const Signup = () => {
                     <ErrorMessage component="p" name="password" className="text-xs text-red-500 pl-1" />
                   </div>
 
-                  <div className="flex justify-center lg:justify-start pt-1 overflow-hidden">
+                  {/* <div className="flex justify-center lg:justify-start pt-1 overflow-hidden">
                     <div className="scale-90 sm:scale-100 origin-center lg:origin-top-left">
                       <ReCAPTCHA
                         sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
                         onChange={(val) => setCapVal(val)}
                       />
                     </div>
-                  </div>
+                  </div> */}
 
                   <p className="text-xs text-slate-500 dark:text-slate-400 px-1 leading-relaxed">
                     By signing up, you agree with our{" "}

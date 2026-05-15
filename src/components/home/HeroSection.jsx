@@ -377,7 +377,7 @@ export default function HeroSection() {
             <div className="space-y-7">
 
               {/* Live contest badge */}
-              <div className="flex items-center gap-3">
+              {/* <div className="flex items-center gap-3">
                 <a
                   href="/contest"
                   className="inline-flex items-center gap-2 bg-white dark:bg-slate-800 border border-indigo-100 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400 px-4 py-1.5 rounded-full text-sm font-semibold shadow-sm hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-500/40 transition-all duration-200 group"
@@ -390,7 +390,7 @@ export default function HeroSection() {
                   <ChevronRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                 </a>
                 <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">Ends in <span className="text-slate-600 dark:text-slate-300 font-semibold">2h 14m</span></span>
-              </div>
+              </div> */}
 
               {/* Headline */}
               <div className="space-y-2">
