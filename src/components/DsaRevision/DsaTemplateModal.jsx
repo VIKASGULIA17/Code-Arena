@@ -64,17 +64,15 @@ const DsaTemplateModal = ({ isOpen, onClose, mode = 'create', initialData = null
     console.log("Submitting DSA Template:", values);
     // console.log(parentTemplateId);
     try {
-      const response = await axios.post(`${BACKEND_URL}/DsaTemplateController/addTemplate/${parentTemplateId}`,{
-        values
-      })
+      const response = await axios.post(`${BACKEND_URL}/DsaTemplateController/addTemplate/${parentTemplateId}`,values)
 
       // console.log(response.data);
 
       if(response.data.status==1){
-        toast.success(`Template "${values.title}" ${mode === 'create' ? 'created' : 'updated'} successfully!`)
+        toast.success(`Template ${mode === 'create' ? 'created' : 'updated'} successfully!`)
       }
       else{
-        toast.error(`Template "${values.title}" not ${mode === 'create' ? 'created' : 'updated'}`)
+        toast.error(`Template not ${mode === 'create' ? 'created' : 'updated'}`)
       }
       
       setTimeout(() => {
