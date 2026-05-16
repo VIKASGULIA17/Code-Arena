@@ -120,7 +120,7 @@ const RevisionLayout = () => {
         isOpen={templateModalOpen}
         onClose={() => setTemplateModalOpen(false)}
         mode="create"
-        parentTemplateId={topicId}
+        parentId={topicId}
       />
     </div>
   )

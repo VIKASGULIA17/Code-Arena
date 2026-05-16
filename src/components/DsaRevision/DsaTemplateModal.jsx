@@ -11,14 +11,14 @@ const DsaTemplateModal = ({
   onClose,
   mode = "create",
   initialData = null,
-  parentTemplateId,
+  parentId,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
   // Validation schema
   const validationSchema = yup.object().shape({
-    // parentTemplateId: yup.string().required('Parent Template ID is required'),
+    // parentId: yup.string().required('Parent ID is required'),
     title: yup.string().required("Title is required"),
     templateId: yup.string().required("Template ID is required"),
     // status: yup.boolean(),
@@ -51,7 +51,7 @@ const DsaTemplateModal = ({
   });
 
   const initialValues = initialData || {
-    // parentTemplateId: '',
+    // parentId: '',
     title: "",
     templateId: "",
     // status: true,
@@ -66,12 +66,12 @@ const DsaTemplateModal = ({
   // Dummy storage function - just shows toast
   const handleStorageSubmit = async (values) => {
     setIsLoading(true);
-    // console.log("parent template ID is : ",parentTemplateId);
+    // console.log("parent ID is : ",parentId);
     // console.log("Submitting DSA Template:", values);
-    // console.log(parentTemplateId);
+    // console.log(parentId);
     try {
       const response = await axios.post(
-        `${BACKEND_URL}/DsaTemplateController/addTemplate/${parentTemplateId}`,
+        `${BACKEND_URL}/DsaTemplateController/addTemplate/${parentId}`,
         values,
       );
 
