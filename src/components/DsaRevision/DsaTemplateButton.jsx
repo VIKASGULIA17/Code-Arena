@@ -84,7 +84,7 @@ const DsaTemplateButton = ({ onClick, variant = 'primary', size = 'md' }) => {
   return (
     <button
       onClick={onClick}
-      className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} shadow-sm`}
+      className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} shadow-sm cursor-pointer`}
       title="Add or manage DSA templates (admin only)"
     >
       <Plus size={size === 'sm' ? 14 : size === 'md' ? 16 : 18} />
