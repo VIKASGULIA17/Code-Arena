@@ -71,7 +71,7 @@ const DsaTemplateModal = ({
     // console.log(parentId);
     try {
       const response = await axios.post(
-        `${BACKEND_URL}/DsaTemplateController/addTemplate/${parentId}`,
+        `${BACKEND_URL}/DsaTemplate/addTemplate/${parentId}`,
         values,
       );
 
