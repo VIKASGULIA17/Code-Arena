@@ -3,7 +3,7 @@ export const dsaCategories = {
         title: "Data Structures",
         description: "Learn fundamental and advanced data structures",
         topics: {
-            arrays: {
+            "arrays": {
                 title: "Arrays & Strings",
                 difficulty: "Beginner",
                 description: "Master array operations, string manipulation, and related algorithms",
@@ -1612,7 +1612,7 @@ main();`
         title: "Algorithms",
         description: "Master essential algorithms for problem solving",
         topics: {
-            sorting: {
+            "sorting": {
                 title: "Sorting Algorithms",
                 difficulty: "Intermediate",
                 description: "Learn various sorting techniques from basic to advanced",
@@ -7150,20 +7150,20 @@ public class Main {
                     }
                 }
             },
-            "string-related-algo":{
+            "string-related-algo": {
                 title: "String related Algorithms",
                 description: "Master string manipulation, pattern matching, and advanced string algorithms",
-                difficulty:"Hard",
-                theory:{},
-                codeTemplates:{
-                    "kmp-algorithm":{
+                difficulty: "Hard",
+                theory: {},
+                codeTemplates: {
+                    "kmp-algorithm": {
                         title: "Knuth-Morris-Pratt (KMP) Algorithm for Pattern Matching",
                         videoLinks: ["https://youtu.be/wSQRc6Uw3zY?si=2q0Q6J83H26bQGZ0"],
                         problemLinks: ["https://leetcode.com/problems/network-delay-time/"],
-                        cpp:``,
-                        python:``,
-                        java:``,
-                        javascript:``
+                        cpp: ``,
+                        python: ``,
+                        java: ``,
+                        javascript: ``
                     }
                 }
             }
