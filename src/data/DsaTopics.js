@@ -5806,7 +5806,7 @@ int main(){
                     }
                 }
             },
-            "difference array": {
+            "difference-array": {
                 title: "Difference Array",
                 difficulty: "Advanced",
                 description: "Master graph traversal, shortest paths, and advanced graph algorithms",
@@ -6253,7 +6253,7 @@ console.log(arr.join(" "));`
                     }
                 }
             },
-            "square decomposition technique": {
+            "square-decomposition-technique": {
                 title: "Square Decomposition Technique",
                 difficulty: "Advanced",
                 description: "Master graph traversal, shortest paths, and advanced graph algorithms",
