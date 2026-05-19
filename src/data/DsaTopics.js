@@ -5719,7 +5719,7 @@ rl.on("close", () => {
 });`
                     },
                     "find-bridge-in-graph": {
-                        title: "Count Bridges in a Graph",
+                        title: "Find Bridges in a Graph",
                         videoLinks: ["https://youtube.com/"],
                         problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <bits/stdc++.h>
@@ -5802,6 +5802,246 @@ int main(){
     }
 
     return 0;
+}`,
+                        python: `from collections import defaultdict
+
+Bridges = []
+
+def makeAdj(edges, n):
+    adj = [[] for _ in range(n + 1)]
+
+    for edge in edges:
+        u, v = edge
+
+        adj[u].append(v)
+        adj[v].append(u)
+
+    return adj
+
+def dfs(u, par, adj, visited, disc, low, count):
+    visited[u] = True
+    disc[u] = low[u] = count[0]
+    count[0] += 1
+
+    for v in adj[u]:
+
+        if v == par:
+            continue
+
+        if visited[v]:
+            low[u] = min(low[u], disc[v])
+
+        else:
+            dfs(v, u, adj, visited, disc, low, count)
+
+            low[u] = min(low[u], low[v])
+
+            if low[v] > disc[u]:
+                Bridges.append([u, v])
+
+n = int(input())
+
+edges = []
+
+for _ in range(n):
+    u, v = map(int, input().split())
+    edges.append([u, v])
+
+mx = 0
+
+for e in edges:
+    mx = max(mx, e[0], e[1])
+
+adj = makeAdj(edges, mx)
+
+disc = [0] * (mx + 1)
+low = [0] * (mx + 1)
+visited = [False] * (mx + 1)
+
+count = [0]
+
+for i in range(mx + 1):
+    if not visited[i]:
+        dfs(i, -1, adj, visited, disc, low, count)
+
+for x in Bridges:
+    print(x[0], x[1])`,
+                        java: `import java.util.*;
+
+public class Main {
+
+    static List<List<Integer>> Bridges = new ArrayList<>();
+
+    static List<List<Integer>> makeAdj(List<List<Integer>> edges, int n) {
+
+        List<List<Integer>> adj = new ArrayList<>();
+
+        for (int i = 0; i <= n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (List<Integer> edge : edges) {
+
+            int u = edge.get(0);
+            int v = edge.get(1);
+
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        return adj;
+    }
+
+    static void dfs(int u, int par, List<List<Integer>> adj,
+                    boolean[] visited, int[] disc, int[] low, int[] count) {
+
+        visited[u] = true;
+        disc[u] = low[u] = count[0]++;
+
+        for (int v : adj.get(u)) {
+
+            if (v == par)
+                continue;
+
+            if (visited[v]) {
+                low[u] = Math.min(low[u], disc[v]);
+            } else {
+
+                dfs(v, u, adj, visited, disc, low, count);
+
+                low[u] = Math.min(low[u], low[v]);
+
+                if (low[v] > disc[u]) {
+                    Bridges.add(Arrays.asList(u, v));
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        List<List<Integer>> edges = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+
+            edges.add(Arrays.asList(u, v));
+        }
+
+        int mx = 0;
+
+        for (List<Integer> e : edges) {
+            mx = Math.max(mx, Math.max(e.get(0), e.get(1)));
+        }
+
+        List<List<Integer>> adj = makeAdj(edges, mx);
+
+        int[] disc = new int[mx + 1];
+        int[] low = new int[mx + 1];
+        boolean[] visited = new boolean[mx + 1];
+
+        int[] count = {0};
+
+        for (int i = 0; i <= mx; i++) {
+            if (!visited[i]) {
+                dfs(i, -1, adj, visited, disc, low, count);
+            }
+        }
+
+        for (List<Integer> x : Bridges) {
+            System.out.println(x.get(0) + " " + x.get(1));
+        }
+
+        sc.close();
+    }
+}`,
+                        javascript: `const fs = require("fs");
+
+const input = fs.readFileSync(0, "utf-8").trim().split("\n");
+
+let idx = 0;
+
+const Bridges = [];
+
+function makeAdj(edges, n) {
+
+    const adj = Array.from({ length: n + 1 }, () => []);
+
+    for (const edge of edges) {
+
+        const [u, v] = edge;
+
+        adj[u].push(v);
+        adj[v].push(u);
+    }
+
+    return adj;
+}
+
+function dfs(u, par, adj, visited, disc, low, count) {
+
+    visited[u] = true;
+    disc[u] = low[u] = count.value++;
+
+    for (const v of adj[u]) {
+
+        if (v === par) continue;
+
+        if (visited[v]) {
+            low[u] = Math.min(low[u], disc[v]);
+        }
+        else {
+
+            dfs(v, u, adj, visited, disc, low, count);
+
+            low[u] = Math.min(low[u], low[v]);
+
+            if (low[v] > disc[u]) {
+                Bridges.push([u, v]);
+            }
+        }
+    }
+}
+
+const n = parseInt(input[idx++]);
+
+const edges = [];
+
+for (let i = 0; i < n; i++) {
+
+    const [u, v] = input[idx++].split(" ").map(Number);
+
+    edges.push([u, v]);
+}
+
+let mx = 0;
+
+for (const e of edges) {
+    mx = Math.max(mx, Math.max(e[0], e[1]));
+}
+
+const adj = makeAdj(edges, mx);
+
+const disc = Array(mx + 1).fill(0);
+const low = Array(mx + 1).fill(0);
+const visited = Array(mx + 1).fill(false);
+
+const count = { value: 0 };
+
+for (let i = 0; i <= mx; i++) {
+    if (!visited[i]) {
+        dfs(i, -1, adj, visited, disc, low, count);
+    }
+}
+
+for (const x of Bridges) {
+    console.log(x[0], x[1]);
 }`
                     }
                 }
