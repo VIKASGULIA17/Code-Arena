@@ -4779,7 +4779,7 @@ let colors = input[idx++].split(" ").map(Number);
 
 console.log(zeroOneBFS(adj, colors, n).join(" "));`
                     },
-                    "grid BFS": {
+                    "grid-BFS": {
                         title: "Grid BFS",
                         videoLinks: ["https://youtube.com/"],
                         problemLinks: ["https://leetcode.com/problems/shortest-path-in-binary-matrix/", "https://leetcode.com/problems/as-far-from-land-as-possible/", "https://leetcode.com/problems/map-of-highest-peak/", "https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/", "https://leetcode.com/problems/trapping-rain-water-ii/"],
@@ -4941,7 +4941,7 @@ class Solution {
     return dist;
 }`
                     },
-                    "level order BFS": {
+                    "level-order-BFS": {
                         title: "Level Order BFS",
                         videoLinks: ["https://youtube.com/"],
                         problemLinks: ["https://leetcode.com/problems/open-the-lock/", "https://leetcode.com/problems/minimum-genetic-mutation/", "https://leetcode.com/problems/snakes-and-ladders/", "https://leetcode.com/problems/word-ladder/"],
