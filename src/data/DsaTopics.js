@@ -5718,7 +5718,7 @@ rl.on("close", () => {
     }
 });`
                     },
-                    "find-bridge-in-graph": {
+                    "find-bridges-in-graph": {
                         title: "Find Bridges in a Graph",
                         videoLinks: ["https://youtube.com/"],
                         problemLinks: ["https://leetcode.com/"],
