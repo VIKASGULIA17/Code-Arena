@@ -77,12 +77,12 @@ const DSAHubPage = () => {
               {/* Category Header */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-gray-200 dark:border-slate-800 pb-3 sm:pb-4 gap-2">
                 <div className="min-w-0">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-50 mb-1 break-words">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-50 mb-1 wrap-break-word">
                     {category.title}
                   </h2>
                   <p className="text-sm sm:text-base text-gray-500 dark:text-slate-400">{category.description}</p>
                 </div>
-                <div className="hidden md:flex items-center space-x-2 text-xs sm:text-sm text-gray-400 flex-shrink-0">
+                <div className="hidden md:flex items-center space-x-2 text-xs sm:text-sm text-gray-400 shrink-0">
                   <TrendingUp size={16} />
                   <span className="whitespace-nowrap">{Object.keys(category.topics).length} Topics</span>
                 </div>

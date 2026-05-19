@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   CheckCircle2, Circle, ArrowLeft, ArrowRight,
-  BookOpen, Code2, Clock, Zap, Target, ChevronRight, PlayCircle, ExternalLink
+  BookOpen, Code2, Clock, Zap, Target, ChevronRight, PlayCircle, ExternalLink,Plus
 } from 'lucide-react'
 import { dsaCategories } from '../../data/DsaTopics'
 import { TheorySection } from '../theory/TheorySection'
 import { CodeBlock } from '../code/codeblock'
 import DsaTemplateButton from './DsaTemplateButton'
+import AddTopicModal from './AddTopicModal'
+
 
 const difficultyColors = {
   'Beginner': 'bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20',
@@ -41,49 +43,92 @@ const buildSubtopicList = (catId, topicId, topic) => {
 
 /** Welcome/overview screen when no subtopic is selected */
 const WelcomeScreen = ({ getOverallProgress }) => {
+  const [modalOpen, setModalOpen] = useState(false)
   const overall = getOverallProgress()
+
+  const categoryColors = [
+    'from-blue-500 to-cyan-500',
+    'from-purple-500 to-pink-500',
+    'from-amber-500 to-orange-500',
+    'from-emerald-500 to-teal-500',
+  ]
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4"
+      transition={{ duration: 0.4 }}
+      className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 py-8"
     >
-      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg">
-        <BookOpen size={36} className="text-white" />
+      {/* Icon */}
+      <div className="relative mb-8">
+        <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-blue-500/30">
+          <BookOpen size={40} className="text-white" />
+        </div>
+        <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md">
+          <Zap size={12} className="text-white" />
+        </div>
       </div>
-      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-slate-100 mb-3">
-        Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">DSA Revision</span>
+
+      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-slate-100 mb-3 tracking-tight">
+        Welcome to{' '}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+          DSA Revision
+        </span>
       </h1>
-      <p className="text-gray-500 dark:text-slate-400 text-lg max-w-xl mb-8">
-        Select a module from the sidebar to begin your learning journey. Track your progress as you master each topic.
+      <p className="text-gray-500 dark:text-slate-400 text-base md:text-lg max-w-lg mb-10 leading-relaxed">
+        Pick a module from the sidebar to start learning. Track your progress as you master each topic.
       </p>
 
-      {/* Progress summary */}
-      <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-gray-200 dark:border-slate-700/50 shadow-sm p-6 w-full max-w-md">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-medium text-gray-600 dark:text-slate-300">Your Progress</span>
-          <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{overall.percent}%</span>
+      {/* Progress card */}
+      <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-gray-200 dark:border-slate-700/50 shadow-sm p-6 w-full max-w-md mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Target size={16} className="text-blue-500" />
+            <span className="text-sm font-semibold text-gray-700 dark:text-slate-200">Overall Progress</span>
+          </div>
+          <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{overall.percent}%</span>
         </div>
-        <div className="w-full h-3 bg-gray-100 dark:bg-slate-700/50 rounded-full overflow-hidden mb-2">
+        <div className="w-full h-3 bg-gray-100 dark:bg-slate-700/60 rounded-full overflow-hidden mb-3">
           <motion.div
             className="h-full rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
             initial={{ width: 0 }}
             animate={{ width: `${overall.percent}%` }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
+            transition={{ duration: 0.9, ease: 'easeOut' }}
           />
         </div>
-        <span className="text-xs text-gray-400 dark:text-slate-500">{overall.done} of {overall.total} items completed</span>
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-gray-400 dark:text-slate-500">{overall.done} of {overall.total} completed</span>
+          <span className="text-emerald-600 dark:text-emerald-400 font-medium">{overall.total - overall.done} remaining</span>
+        </div>
       </div>
 
-      {/* Quick module cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 w-full max-w-2xl">
-        {Object.entries(dsaCategories).map(([catId, category]) => (
-          <div key={catId} className="bg-white dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-700/50 p-4 text-left">
-            <h3 className="font-semibold text-gray-900 dark:text-slate-200 text-sm mb-1">{category.title}</h3>
+      {/* Category cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-2xl">
+        {Object.entries(dsaCategories).map(([catId, category], i) => (
+          <div
+            key={catId}
+            className="group bg-white dark:bg-slate-800/60 rounded-2xl border border-gray-200 dark:border-slate-700/50 p-5 text-left hover:border-blue-300 dark:hover:border-blue-500/40 hover:shadow-md dark:hover:shadow-blue-900/20 transition-all duration-200"
+          >
+            <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${categoryColors[i % categoryColors.length]} flex items-center justify-center mb-3 shadow-sm group-hover:scale-110 transition-transform duration-200`}>
+              <Code2 size={16} className="text-white" />
+            </div>
+            <h3 className="font-semibold text-gray-900 dark:text-slate-100 text-sm mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{category.title}</h3>
             <p className="text-xs text-gray-400 dark:text-slate-500">{Object.keys(category.topics).length} modules</p>
           </div>
         ))}
       </div>
+
+      {/* Add Topic CTA */}
+      <button
+        onClick={() => setModalOpen(true)}
+        className="mt-6 flex items-center gap-2 px-5 py-2.5 rounded-xl border border-dashed border-gray-300 dark:border-slate-600 text-sm font-medium text-gray-500 dark:text-slate-400 hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/5 transition-all duration-200"
+      >
+        <Plus size={15} />
+        Add New Topic
+      </button>
+
+      <AddTopicModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </motion.div>
   )
 }
@@ -102,26 +147,26 @@ const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, on
       className="space-y-6"
     >
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-slate-500">
-        <span>Modules</span>
-        <ChevronRight size={14} />
-        <span>{category.title}</span>
-        <ChevronRight size={14} />
-        <span className="text-gray-700 dark:text-slate-300 font-medium">{topic.title}</span>
-      </div>
+      <nav className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-slate-500 bg-white dark:bg-slate-800/60 border border-gray-100 dark:border-slate-700/50 rounded-xl px-4 py-2.5 w-fit">
+        <span className="hover:text-gray-600 dark:hover:text-slate-300 transition-colors">Modules</span>
+        <ChevronRight size={12} />
+        <span className="hover:text-gray-600 dark:hover:text-slate-300 transition-colors">{category.title}</span>
+        <ChevronRight size={12} />
+        <span className="text-gray-700 dark:text-slate-200 font-semibold">{topic.title}</span>
+      </nav>
 
       {/* Module Header Card */}
       <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-gray-200 dark:border-slate-700/50 shadow-sm p-6 md:p-8">
         <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5 mb-6">
-          <div className="text-4xl sm:text-5xl flex-shrink-0">{icon}</div>
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-500/10 dark:to-purple-500/10 border border-blue-100 dark:border-blue-500/20 flex items-center justify-center text-4xl flex-shrink-0">{icon}</div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 mb-2">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 break-words">{topic.title}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 break-words tracking-tight">{topic.title}</h1>
               <span className={`text-xs px-2.5 py-1 rounded-full font-semibold border flex-shrink-0 ${difficultyColors[topic.difficulty] || ''}`}>
                 {topic.difficulty}
               </span>
             </div>
-            <p className="text-gray-500 dark:text-slate-400 text-base sm:text-lg">{topic.description}</p>
+            <p className="text-gray-500 dark:text-slate-400 text-sm sm:text-base leading-relaxed">{topic.description}</p>
           </div>
           <div className="flex-shrink-0">
             <DsaTemplateButton
@@ -133,41 +178,41 @@ const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, on
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-gray-50 dark:bg-slate-900/50 rounded-xl p-4 text-center border border-gray-100 dark:border-slate-700/50">
-            <Code2 className="mx-auto mb-1.5 text-blue-500 dark:text-blue-400" size={22} />
-            <div className="text-lg font-bold text-gray-900 dark:text-slate-100">{Object.keys(topic.codeTemplates || {}).length}</div>
-            <div className="text-xs text-gray-400 dark:text-slate-500">Templates</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          <div className="bg-blue-50 dark:bg-blue-500/10 rounded-xl p-4 text-center border border-blue-100 dark:border-blue-500/20">
+            <Code2 className="mx-auto mb-1.5 text-blue-500 dark:text-blue-400" size={20} />
+            <div className="text-xl font-bold text-blue-700 dark:text-blue-300">{Object.keys(topic.codeTemplates || {}).length}</div>
+            <div className="text-xs text-blue-500/70 dark:text-blue-400/70 font-medium">Templates</div>
           </div>
-          <div className="bg-gray-50 dark:bg-slate-900/50 rounded-xl p-4 text-center border border-gray-100 dark:border-slate-700/50">
-            <Zap className="mx-auto mb-1.5 text-amber-500 dark:text-amber-400" size={22} />
-            <div className="text-lg font-bold text-gray-900 dark:text-slate-100">4</div>
-            <div className="text-xs text-gray-400 dark:text-slate-500">Languages</div>
+          <div className="bg-amber-50 dark:bg-amber-500/10 rounded-xl p-4 text-center border border-amber-100 dark:border-amber-500/20">
+            <Zap className="mx-auto mb-1.5 text-amber-500 dark:text-amber-400" size={20} />
+            <div className="text-xl font-bold text-amber-700 dark:text-amber-300">4</div>
+            <div className="text-xs text-amber-500/70 dark:text-amber-400/70 font-medium">Languages</div>
           </div>
-          <div className="bg-gray-50 dark:bg-slate-900/50 rounded-xl p-4 text-center border border-gray-100 dark:border-slate-700/50">
-            <Target className="mx-auto mb-1.5 text-purple-500 dark:text-purple-400" size={22} />
-            <div className="text-lg font-bold text-gray-900 dark:text-slate-100">{progress.percent}%</div>
-            <div className="text-xs text-gray-400 dark:text-slate-500">Completed</div>
+          <div className="bg-purple-50 dark:bg-purple-500/10 rounded-xl p-4 text-center border border-purple-100 dark:border-purple-500/20">
+            <Target className="mx-auto mb-1.5 text-purple-500 dark:text-purple-400" size={20} />
+            <div className="text-xl font-bold text-purple-700 dark:text-purple-300">{progress.percent}%</div>
+            <div className="text-xs text-purple-500/70 dark:text-purple-400/70 font-medium">Completed</div>
           </div>
-          <div className="bg-gray-50 dark:bg-slate-900/50 rounded-xl p-4 text-center border border-gray-100 dark:border-slate-700/50">
-            <Clock className="mx-auto mb-1.5 text-green-500 dark:text-green-400" size={22} />
-            <div className="text-lg font-bold text-gray-900 dark:text-slate-100">{subtopics.length}</div>
-            <div className="text-xs text-gray-400 dark:text-slate-500">Subtopics</div>
+          <div className="bg-emerald-50 dark:bg-emerald-500/10 rounded-xl p-4 text-center border border-emerald-100 dark:border-emerald-500/20">
+            <Clock className="mx-auto mb-1.5 text-emerald-500 dark:text-emerald-400" size={20} />
+            <div className="text-xl font-bold text-emerald-700 dark:text-emerald-300">{subtopics.length}</div>
+            <div className="text-xs text-emerald-500/70 dark:text-emerald-400/70 font-medium">Subtopics</div>
           </div>
         </div>
 
         {/* Progress */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500 dark:text-slate-400">Module Progress</span>
-            <span className="font-bold text-blue-600 dark:text-blue-400">{progress.done}/{progress.total}</span>
+            <span className="text-gray-500 dark:text-slate-400 font-medium">Module Progress</span>
+            <span className="font-bold text-blue-600 dark:text-blue-400">{progress.done}/{progress.total} completed</span>
           </div>
-          <div className="w-full h-2.5 bg-gray-100 dark:bg-slate-700/50 rounded-full overflow-hidden">
+          <div className="w-full h-2.5 bg-gray-100 dark:bg-slate-700/60 rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full bg-gradient-to-r from-blue-500 to-purple-500"
               initial={{ width: 0 }}
               animate={{ width: `${progress.percent}%` }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
             />
           </div>
         </div>
@@ -175,24 +220,30 @@ const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, on
 
       {/* Subtopic List */}
       <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-gray-200 dark:border-slate-700/50 shadow-sm overflow-hidden">
-        <div className="p-5 border-b border-gray-100 dark:border-slate-700/50">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100">Contents</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700/50">
+          <h2 className="text-base font-bold text-gray-900 dark:text-slate-100">Contents</h2>
+          <span className="text-xs font-medium text-gray-400 dark:text-slate-500 bg-gray-100 dark:bg-slate-900/60 px-2.5 py-1 rounded-full">{subtopics.length} items</span>
         </div>
-        <div className="divide-y divide-gray-100 dark:divide-slate-700/50">
+        <div className="divide-y divide-gray-100 dark:divide-slate-700/40">
           {subtopics.map((sub, index) => (
             <button
               key={`${sub.type}-${sub.id}`}
               onClick={() => onSelectSubtopic(catId, topicId, sub.type, sub.id)}
-              className="w-full flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-slate-700/30 transition-colors text-left group"
+              className="w-full flex items-center gap-4 px-5 py-3.5 hover:bg-blue-50/60 dark:hover:bg-blue-500/5 transition-colors text-left group"
             >
-              <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-slate-900 flex items-center justify-center text-sm font-bold text-gray-500 dark:text-slate-400 group-hover:bg-blue-100 dark:group-hover:bg-blue-500/20 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <div className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-slate-900/60 flex items-center justify-center text-sm font-bold text-gray-500 dark:text-slate-400 group-hover:bg-blue-500 group-hover:text-white transition-all duration-200 flex-shrink-0">
                 {index + 1}
               </div>
-              <div className="flex-1">
-                <span className="text-sm font-medium text-gray-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{sub.label}</span>
-                <span className="block text-xs text-gray-400 dark:text-slate-500 mt-0.5 capitalize">{sub.type === 'theory' ? 'Theory & Concepts' : 'Code Template'}</span>
+              <div className="flex-1 min-w-0">
+                <span className="block text-sm font-semibold text-gray-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">{sub.label}</span>
+                <span className="block text-xs text-gray-400 dark:text-slate-500 mt-0.5">
+                  {sub.type === 'theory'
+                    ? <span className="inline-flex items-center gap-1"><BookOpen size={10} /> Theory &amp; Concepts</span>
+                    : <span className="inline-flex items-center gap-1"><Code2 size={10} /> Code Template</span>
+                  }
+                </span>
               </div>
-              <ChevronRight size={16} className="text-gray-300 dark:text-slate-500 group-hover:text-blue-400 dark:group-hover:text-blue-400 transition-colors" />
+              <ChevronRight size={16} className="text-gray-300 dark:text-slate-600 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
             </button>
           ))}
         </div>
@@ -223,34 +274,39 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
       className="space-y-6"
     >
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-gray-400 dark:text-slate-500 flex-wrap">
+      <nav className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-slate-500 bg-white dark:bg-slate-800/60 border border-gray-100 dark:border-slate-700/50 rounded-xl px-4 py-2.5 w-fit flex-wrap">
         <span>Modules</span>
-        <ChevronRight size={14} />
+        <ChevronRight size={12} />
         <span>{category.title}</span>
-        <ChevronRight size={14} />
-        <span className="hover:text-blue-500 dark:hover:text-blue-400 cursor-pointer" onClick={() => onSelectSubtopic(catId, topicId, null, null)}>{topic.title}</span>
-        <ChevronRight size={14} />
-        <span className="text-gray-700 dark:text-slate-300 font-medium">
+        <ChevronRight size={12} />
+        <button
+          className="hover:text-blue-500 dark:hover:text-blue-400 transition-colors font-medium"
+          onClick={() => onSelectSubtopic(catId, topicId, null, null)}
+        >
+          {topic.title}
+        </button>
+        <ChevronRight size={12} />
+        <span className="text-gray-700 dark:text-slate-200 font-semibold">
           {subtopic.type === 'theory' ? 'Theory' : topic.codeTemplates?.[subtopic.id]?.title || subtopic.id}
         </span>
-      </div>
+      </nav>
 
-      {/* Mark Complete Button */}
+      {/* Title + Mark Complete */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 order-1 break-words">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 order-1 break-words tracking-tight">
           {subtopic.type === 'theory' ? `${topic.title} — Theory` : topic.codeTemplates?.[subtopic.id]?.title}
         </h1>
         <button
           onClick={() => toggleComplete(itemKey)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 flex-shrink-0 order-2 sm:order-3
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex-shrink-0 order-2 sm:order-3 shadow-sm
             ${completed
-              ? 'bg-green-100 text-green-700 border border-green-200 hover:bg-green-50 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20'
-              : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-blue-500/10 dark:hover:text-blue-400 dark:hover:border-blue-500/30'
+              ? 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-200 dark:shadow-emerald-900/30'
+              : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500/50 hover:text-blue-600 dark:hover:text-blue-400'
             }
           `}
           data-testid="mark-complete-btn"
         >
-          {completed ? <CheckCircle2 size={18} /> : <Circle size={18} />}
+          {completed ? <CheckCircle2 size={16} /> : <Circle size={16} />}
           <span className="hidden sm:inline">{completed ? 'Completed' : 'Mark Complete'}</span>
           <span className="sm:hidden">{completed ? 'Done' : 'Mark'}</span>
         </button>
@@ -265,16 +321,14 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
         {subtopic.type === 'template' && topic.codeTemplates?.[subtopic.id] && (
           <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-gray-200 dark:border-slate-700/50 shadow-sm overflow-hidden">
             <div className="p-6 border-b border-gray-100 dark:border-slate-700/50">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-2">{topic.codeTemplates[subtopic.id].title}</h3>
-              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400 dark:text-slate-500 mb-6">
-                <div className="flex items-center gap-1">
-                  <Code2 size={14} />
-                  <span>4 Languages</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Target size={14} />
-                  <span>Production Ready</span>
-                </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-3 tracking-tight">{topic.codeTemplates[subtopic.id].title}</h3>
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 px-2.5 py-1 rounded-full">
+                  <Code2 size={12} /> 4 Languages
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 px-2.5 py-1 rounded-full">
+                  <Target size={12} /> Production Ready
+                </span>
               </div>
 
               {((topic.codeTemplates[subtopic.id].videoLinks?.length > 0) || (topic.codeTemplates[subtopic.id].problemLinks?.length > 0)) && (
@@ -322,16 +376,16 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
       </div>
 
       {/* Prev/Next Navigation */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-6 border-t border-gray-200 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-6 border-t border-gray-200 dark:border-slate-700/50">
         {prevSub ? (
           <button
             onClick={() => onSelectSubtopic(catId, topicId, prevSub.type, prevSub.id)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 text-sm font-medium hover:bg-gray-50 dark:hover:bg-slate-700 hover:border-gray-300 dark:hover:border-slate-600 transition-all order-2 sm:order-1"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-slate-800/80 border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 text-sm font-medium hover:border-blue-300 dark:hover:border-blue-500/50 hover:text-blue-600 dark:hover:text-blue-400 transition-all order-2 sm:order-1 group shadow-sm"
           >
-            <ArrowLeft size={16} className="flex-shrink-0" />
+            <ArrowLeft size={16} className="flex-shrink-0 group-hover:-translate-x-0.5 transition-transform" />
             <div className="text-left min-w-0">
-              <span className="block text-[10px] text-gray-400 dark:text-slate-500 uppercase">Previous</span>
-              <span className="block truncate max-w-[160px]">{prevSub.label}</span>
+              <span className="block text-[10px] text-gray-400 dark:text-slate-500 uppercase tracking-wider mb-0.5">Previous</span>
+              <span className="block truncate max-w-[160px] font-semibold">{prevSub.label}</span>
             </div>
           </button>
         ) : <div className="order-2 sm:order-1" />}
@@ -339,16 +393,16 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
         {nextSub ? (
           <button
             onClick={() => onSelectSubtopic(catId, topicId, nextSub.type, nextSub.id)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium hover:from-blue-600 hover:to-purple-600 transition-all shadow-sm order-1 sm:order-2"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-semibold hover:from-blue-600 hover:to-purple-700 transition-all shadow-md shadow-blue-500/20 order-1 sm:order-2 group"
           >
             <div className="text-right min-w-0">
-              <span className="block text-[10px] text-blue-100 uppercase">Next</span>
+              <span className="block text-[10px] text-blue-100 uppercase tracking-wider mb-0.5">Next</span>
               <span className="block truncate max-w-[160px]">{nextSub.label}</span>
             </div>
-            <ArrowRight size={16} className="flex-shrink-0" />
+            <ArrowRight size={16} className="flex-shrink-0 group-hover:translate-x-0.5 transition-transform" />
           </button>
         ) : (
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-400 text-sm font-medium border border-green-200 dark:border-green-500/20 order-1 sm:order-2">
+          <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-emerald-500 text-white text-sm font-semibold shadow-md shadow-emerald-500/20 order-1 sm:order-2">
             <CheckCircle2 size={16} />
             Module Complete!
           </div>
@@ -374,7 +428,7 @@ const ModuleContentArea = ({
 
   return (
     <div className="flex-1 min-w-0 overflow-y-auto">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 py-6 md:py-8 lg:py-80 pt-12 md:pt-16 lg:pt-60">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-8 pt-16 md:pt-20">
         <AnimatePresence mode="wait">
           {!activeCategoryId || !activeTopicId ? (
             <WelcomeScreen key="welcome" getOverallProgress={getOverallProgress} />
