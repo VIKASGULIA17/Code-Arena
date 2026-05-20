@@ -6759,30 +6759,16 @@ console.log(result.join("\n"));`
         title: "Optimized Techniques",
         description: "Exploring the time saving technique to find out the approach for dealing with simple tasks",
         topics: {
-            "Prime Numbers": {
-                title: "Prime Number related Algorithms",
+            "math-related-algo": {
+                title: "Math related Algorithms",
+                description: "Master mathematical algorithms, number theory, and combinatorics for competitive programming",
                 difficulty: "Medium",
-                theory: {
-                    definition: "A graph is a collection of nodes (vertices) connected by edges. Graphs are used to represent relationships between objects and solve complex problems like finding shortest paths, network analysis, and social networks.",
-                    realWorldAnalogy: "Think of a social network like Facebook - people are nodes and friendships are edges connecting them. Or consider a road map where cities are nodes and roads are edges.",
-                    coreOperations: [
-                        "Graph Traversal (BFS, DFS) - O(V + E)",
-                        "Shortest Path (Dijkstra) - O(V log V + E)",
-                        "Minimum Spanning Tree - O(E log V)",
-                        "Topological Sort - O(V + E)"
-                    ],
-                    timeComplexity: {
-                        bfs: { best: "O(V + E)", average: "O(V + E)", worst: "O(V + E)" },
-                        dfs: { best: "O(V + E)", average: "O(V + E)", worst: "O(V + E)" },
-                        dijkstra: { best: "O(V log V + E)", average: "O(V log V + E)", worst: "O(V log V + E)" }
-                    },
-                    spaceComplexity: "O(V + E)"
-                },
+                theory: {},
                 codeTemplates: {
                     "sieve-of-eratosthenes": {
-                        title: "Sieve of Eratosthenes Implementation",
-                        videoLinks: ["https://youtube.com/"],
-                        problemLinks: ["https://leetcode.com/"],
+                        title: "Sieve of Eratosthenes",
+                        videoLinks: ["https://youtu.be/wSQRc6Uw3zY?si=2q0Q6J83H26bQGZ0"],
+                        problemLinks: ["https://leetcode.com/problems/network-delay-time/"],
                         cpp: `#include <bits/stdc++.h>
 
 using namespace std;
@@ -6853,37 +6839,6 @@ for i in range(n):
         print(str(i) + " is not a prime number")
 
 print("Total Prime numbers are :", count)`,
-                        javascript: `let n = 100005;
-
-function sieve(isPrime) {
-    isPrime[0] = false;
-    isPrime[1] = false;
-
-    for (let i = 2; i * i < n; i++) {
-        if (isPrime[i] == true) {
-            for (let j = i * i; j < n; j += i) {
-                isPrime[j] = false;
-            }
-        }
-    }
-}
-
-let isPrime = new Array(n).fill(true);
-
-sieve(isPrime);
-
-let count = 0;
-
-for (let i = 0; i < n; i++) {
-    if (isPrime[i] == true) {
-        console.log(i + " is a Prime number");
-        count++;
-    } else {
-        console.log(i + " is not a prime number");
-    }
-}
-
-console.log("Total Prime numbers are : " + count);`,
                         java: `public class Main {
 
     static int n = 100005;
@@ -6925,21 +6880,44 @@ console.log("Total Prime numbers are : " + count);`,
 
         System.out.println("Total Prime numbers are : " + count);
     }
-}`
-                    }
-                }
-            },
-            "Median of all numbers in a List": {
-                title: "Finding Median related Algorithms",
-                difficulty: "Hard",
-                theory: {},
+}`,
+                        javascript: `let n = 100005;
 
-                codeTemplates: {
-                    "median-of-numbers": {
-                        title: "Find Median Implementation",
-                        videoLinks: ["https://youtube.com/"],
-                        problemLinks: ["https://leetcode.com/"],
-                        cpp: `bro is it right #include <bits/stdc++.h>
+function sieve(isPrime) {
+    isPrime[0] = false;
+    isPrime[1] = false;
+
+    for (let i = 2; i * i < n; i++) {
+        if (isPrime[i] == true) {
+            for (let j = i * i; j < n; j += i) {
+                isPrime[j] = false;
+            }
+        }
+    }
+}
+
+let isPrime = new Array(n).fill(true);
+
+sieve(isPrime);
+
+let count = 0;
+
+for (let i = 0; i < n; i++) {
+    if (isPrime[i] == true) {
+        console.log(i + " is a Prime number");
+        count++;
+    } else {
+        console.log(i + " is not a prime number");
+    }
+}
+
+console.log("Total Prime numbers are : " + count);`
+                    },
+                    "median-using-multiset": {
+                        title: "Median using Multiset",
+                        videoLinks: ["https://youtu.be/wSQRc6Uw3zY?si=2q0Q6J83H26bQGZ0"],
+                        problemLinks: ["https://leetcode.com/problems/network-delay-time/"],
+                        cpp: `#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -7006,6 +6984,56 @@ int main() {
     }
 
 }`,
+                        python: `from sortedcontainers import SortedList
+
+def rebalance(left, right):
+    while len(left) < len(right):
+        left.add(right[0])
+        right.pop(0)
+
+    while len(left) > len(right) + 1:
+        right.add(left[-1])
+        left.pop(-1)
+
+
+n, k = map(int, input().split())
+a = list(map(int, input().split()))
+
+left = SortedList()
+right = SortedList()
+
+i = 0
+
+while i < k:
+    if not left or a[i] <= left[-1]:
+        left.add(a[i])
+    else:
+        right.add(a[i])
+
+    rebalance(left, right)
+    i += 1
+
+print(left[-1])
+
+while i < n:
+    curr = a[i]
+    prev = a[i - k]
+
+    if not left or curr <= left[-1]:
+        left.add(curr)
+    else:
+        right.add(curr)
+
+    if prev in left:
+        left.remove(prev)
+    else:
+        right.remove(prev)
+
+    rebalance(left, right)
+
+    print(left[-1])
+
+    i += 1`,
                         java: `import java.util.*;
 
 public class Main {
@@ -7115,56 +7143,6 @@ public class Main {
         }
     }
 }`,
-                        python: `from sortedcontainers import SortedList
-
-def rebalance(left, right):
-    while len(left) < len(right):
-        left.add(right[0])
-        right.pop(0)
-
-    while len(left) > len(right) + 1:
-        right.add(left[-1])
-        left.pop(-1)
-
-
-n, k = map(int, input().split())
-a = list(map(int, input().split()))
-
-left = SortedList()
-right = SortedList()
-
-i = 0
-
-while i < k:
-    if not left or a[i] <= left[-1]:
-        left.add(a[i])
-    else:
-        right.add(a[i])
-
-    rebalance(left, right)
-    i += 1
-
-print(left[-1])
-
-while i < n:
-    curr = a[i]
-    prev = a[i - k]
-
-    if not left or curr <= left[-1]:
-        left.add(curr)
-    else:
-        right.add(curr)
-
-    if prev in left:
-        left.remove(prev)
-    else:
-        right.remove(prev)
-
-    rebalance(left, right)
-
-    print(left[-1])
-
-    i += 1`,
                         javascript: `class MultiSet {
     constructor() {
         this.arr = [];
@@ -7212,7 +7190,7 @@ function rebalance(left, right) {
 
 const fs = require("fs");
 
-const input = fs.readFileSync(0, "utf-8").trim().split(/\s+/).map(Number);
+const input = fs.readFileSync(0, "utf-8").trim().split(/s+/).map(Number);
 
 let idx = 0;
 
@@ -7268,18 +7246,11 @@ while (i < n) {
 
     i++;
 }`
-                    }
-                }
-            },
-            "Count Divisors (Optimized)": {
-                title: "Divisors related Algorithms",
-                difficulty: "Medium",
-                theory: {},
-                codeTemplates: {
+                    },
                     "count-divisors-of-numbers-optimized": {
                         title: "Count Divisors of a Number (Optimized)",
-                        videoLinks: ["https://youtube.com/"],
-                        problemLinks: ["https://leetcode.com/"],
+                        videoLinks: ["https://youtu.be/wSQRc6Uw3zY?si=2q0Q6J83H26bQGZ0"],
+                        problemLinks: ["https://leetcode.com/problems/network-delay-time/"],
                         cpp: `#include <bits/stdc++.h>
 
 using namespace std;
@@ -7331,30 +7302,6 @@ int main() {
 num = int(input())
 
 printAllDivisors(num)`,
-                        javascript: `function printAllDivisors(num) {
-
-    console.log("Divisors are :");
-
-    for (let j = 1; j * j <= num; j++) {
-
-        if (num % j === 0) {
-
-            process.stdout.write(j + " ");
-
-            if (Math.floor(num / j) !== j) {
-                process.stdout.write(Math.floor(num / j) + " ");
-            }
-        }
-    }
-
-    console.log();
-}
-
-const fs = require("fs");
-
-const num = Number(fs.readFileSync(0, "utf-8").trim());
-
-printAllDivisors(num);`,
                         java: `import java.util.*;
 
 public class Main {
@@ -7386,7 +7333,31 @@ public class Main {
 
         printAllDivisors(num);
     }
-}`
+}`,
+                        javascript: `function printAllDivisors(num) {
+
+    console.log("Divisors are :");
+
+    for (let j = 1; j * j <= num; j++) {
+
+        if (num % j === 0) {
+
+            process.stdout.write(j + " ");
+
+            if (Math.floor(num / j) !== j) {
+                process.stdout.write(Math.floor(num / j) + " ");
+            }
+        }
+    }
+
+    console.log();
+}
+
+const fs = require("fs");
+
+const num = Number(fs.readFileSync(0, "utf-8").trim());
+
+printAllDivisors(num);`
                     }
                 }
             },
@@ -7407,6 +7378,7 @@ public class Main {
                     }
                 }
             }
+
         }
     }
 }
