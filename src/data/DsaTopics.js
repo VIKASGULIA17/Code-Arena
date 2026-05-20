@@ -7371,14 +7371,337 @@ printAllDivisors(num);`
                         title: "Knuth-Morris-Pratt (KMP) Algorithm for Pattern Matching",
                         videoLinks: ["https://youtu.be/wSQRc6Uw3zY?si=2q0Q6J83H26bQGZ0"],
                         problemLinks: ["https://leetcode.com/problems/network-delay-time/"],
-                        cpp: ``,
-                        python: ``,
-                        java: ``,
-                        javascript: ``
+                        cpp: `#include<bits/stdc++.h>
+using namespace std;
+
+vector<int> buildLPS(string& s,int n){
+
+	vector<int> LPS(n,0);
+
+	int length = 0;
+	int i=1;
+
+	while(i<n){
+		if(s[i]==s[length]){
+			length++;
+			LPS[i++] = length;
+		}
+		else{
+			if(length>0){
+				length = LPS[length-1];
+			}
+			else{
+				LPS[i++] = 0;
+			}
+		}
+	}
+
+	return LPS;
+
+}
+
+vector<int> findIndicies(vector<int>& LPS,string& s,string& target){
+
+	int i=0,j=0;
+	vector<int> indicies;
+
+	int m = s.length(),n = target.length();
+
+	while(i<m){
+		if(s[i]==target[j]){
+			i++,j++;
+		}
+		if(j==n){
+			indicies.push_back(i-n);
+			j = LPS[j-1];
+		}
+		else if(i<m && s[i]!=target[j]){
+			if(j>0){
+				j = LPS[j-1];
+			}
+			else{
+				i++;
+			}
+		}
+	}
+	return indicies;
+}
+
+int main(){
+
+	int n,m;
+	cin>>n>>m;
+	string s;
+	cin>>s;
+	string target;
+	cin>>target;
+
+
+
+	vector<int> LPS = buildLPS(target,m);
+
+	cout<<"LPS is : ";
+
+	for(int i=0;i<m;i++){
+		cout<<LPS[i]<<' ';
+	}
+	cout<<endl;
+
+	cout<<"Indicies where target found are : "<<endl;
+	vector<int> indicies = findIndicies(LPS,s,target);
+	for(int index : indicies){
+		cout<<index<<' ';
+	}
+	cout<<endl;
+
+	return 0;
+}`,
+                        python: `def build_lps(s):
+    n = len(s)
+
+    lps = [0] * n
+
+    length = 0
+    i = 1
+
+    while i < n:
+
+        if s[i] == s[length]:
+            length += 1
+            lps[i] = length
+            i += 1
+
+        else:
+            if length > 0:
+                length = lps[length - 1]
+            else:
+                lps[i] = 0
+                i += 1
+
+    return lps
+
+
+def find_indices(lps, s, target):
+
+    i = 0
+    j = 0
+
+    indices = []
+
+    m = len(s)
+    n = len(target)
+
+    while i < m:
+
+        if s[i] == target[j]:
+            i += 1
+            j += 1
+
+        if j == n:
+            indices.append(i - n)
+            j = lps[j - 1]
+
+        elif i < m and s[i] != target[j]:
+
+            if j > 0:
+                j = lps[j - 1]
+            else:
+                i += 1
+
+    return indices
+
+
+n, m = map(int, input().split())
+
+s = input()
+target = input()
+
+lps = build_lps(target)
+
+print("LPS is :")
+print(*lps)
+
+print("Indices where target found are :")
+print(*find_indices(lps, s, target))`,
+                        java: `import java.util.*;
+
+public class Main {
+
+    public static int[] buildLPS(String s, int n) {
+
+        int[] LPS = new int[n];
+
+        int length = 0;
+        int i = 1;
+
+        while (i < n) {
+
+            if (s.charAt(i) == s.charAt(length)) {
+                length++;
+                LPS[i] = length;
+                i++;
+            } else {
+
+                if (length > 0) {
+                    length = LPS[length - 1];
+                } else {
+                    LPS[i] = 0;
+                    i++;
+                }
+            }
+        }
+
+        return LPS;
+    }
+
+    public static List<Integer> findIndices(int[] LPS, String s, String target) {
+
+        int i = 0, j = 0;
+
+        List<Integer> indices = new ArrayList<>();
+
+        int m = s.length();
+        int n = target.length();
+
+        while (i < m) {
+
+            if (s.charAt(i) == target.charAt(j)) {
+                i++;
+                j++;
+            }
+
+            if (j == n) {
+                indices.add(i - n);
+                j = LPS[j - 1];
+            }
+
+            else if (i < m && s.charAt(i) != target.charAt(j)) {
+
+                if (j > 0) {
+                    j = LPS[j - 1];
+                } else {
+                    i++;
+                }
+            }
+        }
+
+        return indices;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+        String s = sc.next();
+        String target = sc.next();
+
+        int[] LPS = buildLPS(target, m);
+
+        System.out.println("LPS is :");
+
+        for (int x : LPS) {
+            System.out.print(x + " ");
+        }
+
+        System.out.println();
+
+        System.out.println("Indices where target found are :");
+
+        List<Integer> indices = findIndices(LPS, s, target);
+
+        for (int index : indices) {
+            System.out.print(index + " ");
+        }
+
+        System.out.println();
+    }
+}`,
+                        javascript: `function buildLPS(s, n) {
+
+    let LPS = new Array(n).fill(0);
+
+    let length = 0;
+    let i = 1;
+
+    while (i < n) {
+
+        if (s[i] === s[length]) {
+            length++;
+            LPS[i] = length;
+            i++;
+        }
+        else {
+
+            if (length > 0) {
+                length = LPS[length - 1];
+            }
+            else {
+                LPS[i] = 0;
+                i++;
+            }
+        }
+    }
+
+    return LPS;
+}
+
+function findIndices(LPS, s, target) {
+
+    let i = 0;
+    let j = 0;
+
+    let indices = [];
+
+    let m = s.length;
+    let n = target.length;
+
+    while (i < m) {
+
+        if (s[i] === target[j]) {
+            i++;
+            j++;
+        }
+
+        if (j === n) {
+            indices.push(i - n);
+            j = LPS[j - 1];
+        }
+
+        else if (i < m && s[i] !== target[j]) {
+
+            if (j > 0) {
+                j = LPS[j - 1];
+            }
+            else {
+                i++;
+            }
+        }
+    }
+
+    return indices;
+}
+
+
+// Input Example
+let n = 10;
+let m = 3;
+
+let s = "ababcabcab";
+let target = "abc";
+
+let LPS = buildLPS(target, m);
+
+console.log("LPS is :");
+console.log(LPS.join(" "));
+
+console.log("Indices where target found are :");
+console.log(findIndices(LPS, s, target).join(" "));`
                     }
                 }
             }
-
         }
     }
 }
