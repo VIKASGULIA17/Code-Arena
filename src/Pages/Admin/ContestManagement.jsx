@@ -10,15 +10,25 @@ import {
   Edit2,
   Trash2,
   AlertTriangle,
+  Save
 } from "lucide-react";
 import axios from "axios";
 import * as yup from "yup";
 import { useAppContext } from "../../context/AppContext";
 import { toast, ToastContainer } from "react-toastify";
 import { AnimatePresence, motion } from "framer-motion";
+import { Form, Field, Formik, FieldArray, ErrorMessage } from "formik";
+
+const tabs = [
+    { id: "basic", label: "Basic Info" },
+    { id: "details", label: "Details" },
+    { id: "testcases", label: "Test Cases" },
+    { id: "templates", label: "templates" },
+    { id: "solution", label: "Solution" },
+  ];
 
 const ContestManagement = () => {
-  const { allContest, showAllContest, allProblem } = useAppContext();
+  const { allContest, showAllContest } = useAppContext();
   const [deleteTarget, setdeleteTarget] = useState("");
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [targetContestDelete, settargetContestDelete] = useState({
@@ -26,7 +36,15 @@ const ContestManagement = () => {
     contestName: "",
     countOfParticipants: 0,
   });
-
+  const [targetContestAddProblem,setTargetContestAddProblem]= useState({
+    contestId: "",
+    contestName: "",
+  })
+  const [activeTab, setActiveTab] = useState("basic");
+  
+    const [editActiveTab, setEditActiveTab] = useState("basic");
+  const [isAddMode, setIsAddMode] = useState(false);
+  const [editingProblem, setEditingProblem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("create");
   const [editingContestId, setEditingContestId] = useState(null);
@@ -47,7 +65,7 @@ const ContestManagement = () => {
     problemIds: [],
   };
 
-  console.log(allContest);
+  // console.log(allContest);
 
   const validationSchema = yup.object({
     contestName: yup.string().required("Contest Name is required"),
@@ -58,12 +76,138 @@ const ContestManagement = () => {
     duration: yup.string().required("Duration is required"),
   });
 
+  const problemInitialValues = {
+    sno: "",
+    title: "",
+    problemOrder:"",
+    slug: "",
+    topicTags: "",
+    difficulty: "Easy",
+    problemTopic: "",
+    inputType: "",
+    returnType: "",
+    functionName: "",
+    description: "",
+    algorithmSteps: [""],
+    timeComplexity: { value: "", explanation: "" },
+    spaceComplexity: { value: "", explanation: "" },
+    testCases: [{ input: "", output: "", explanation: "", hidden: false }],
+    templates: {
+      javascript: "",
+      java: "",
+      python: "",
+      cpp: "",
+    },
+    solutions: {
+      javascript: "",
+      java: "",
+      python: "",
+      cpp: "",
+    },
+  };
+
+  const problemValidationSchema = yup.object({
+    sno: yup.number().typeError("S. No must be a number"),
+    title: yup.string().required("Title is required"),
+    problemOrder: yup.number().required("Problem Order is required"),
+    slug: yup.string().required("Slug is required"),
+    topicTags: yup.string().required("Tags are required"),
+    difficulty: yup.string().required("Difficulty is required"),
+    inputType: yup.string().required("Input Type is required"),
+    returnType: yup.string().required("Return Type is required"),
+    functionName: yup.string().required("Function name is required"),
+    description: yup.string().required("Description is required"),
+    timeComplexity: yup.object({
+      value: yup.string().required("Time complexity value is required"),
+      explanation: yup.string().required("Explanation is required"),
+    }),
+    spaceComplexity: yup.object({
+      value: yup.string().required("Space complexity value is required"),
+      explanation: yup.string().required("Explanation is required"),
+    }),
+    testCases: yup.array().of(
+      yup.object({
+        input: yup.string().required("Input is required"),
+        output: yup.string().required("Output is required"),
+        explanation: yup.string(),
+      })
+    ).min(1, "At least one test case is required"),
+    templates: yup.object({
+      javascript: yup.string().required("templates is required"),
+      java: yup.string().required("templates is required"),
+      python: yup.string().required("templates is required"),
+      cpp: yup.string().required("templates is required"),
+    }),
+    solutions: yup.object({
+      javascript: yup.string().required("Solution is required"),
+      java: yup.string().required("Solution is required"),
+      python: yup.string().required("Solution is required"),
+      cpp: yup.string().required("Solution is required"),
+    }),
+  });
+
   // console.log(isAdmin)
   const [activeMenuContestName, setActiveMenuContestName] = useState(null);
   const menuRef = useRef(null);
   const { jwtToken } = useAppContext();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [errors, setErrors] = useState({});
+  const [contestProblems, setContestProblems] = useState([]);
+
+  const fetchContestProblems = async (contestId) => {
+    if (!contestId) return;
+    try {
+      const res = await axios.get(`${BACKEND_URL}/public/fetchContestProblem/${contestId}`);
+      setContestProblems(res.data);
+    } catch (e) {
+      console.error("Failed to fetch contest problems:", e);
+    }
+  };
+
+  const startEditingProblem = (problem) => {
+    setEditingProblem({
+      sno: problem.sno || "",
+      title: problem.title || "",
+      problemOrder: problem.problemOrder || "",
+      slug: problem.slug || "",
+      topicTags: problem.topicTags || "",
+      difficulty: problem.difficulty || "Easy",
+      problemTopic: problem.problemTopic || "",
+      inputType: problem.inputType || "",
+      returnType: problem.returnType || "",
+      functionName: problem.functionName || "",
+      description: problem.description || "",
+      algorithmSteps: problem.algorithmSteps || [""],
+      timeComplexity: problem.timeComplexity || { value: "", explanation: "" },
+      spaceComplexity: problem.spaceComplexity || { value: "", explanation: "" },
+      testCases: problem.testCases || [{ input: "", output: "", explanation: "", hidden: false }],
+      templates: problem.templates || {
+        javascript: "",
+        java: "",
+        python: "",
+        cpp: "",
+      },
+      solutions: problem.solutions || {
+        javascript: "",
+        java: "",
+        python: "",
+        cpp: "",
+      },
+    });
+  };
+
+  const handleUpdateProblem = async (values, { resetForm }) => {
+    console.log("here in update problem");
+    try {
+      console.log("Update Form Values:", values);
+      // Dummy update logic - e.g., toast success
+      toast.success("Problem Updated Successfully (Dummy)");
+      setEditingProblem(null);
+      resetForm();
+    } catch (e) {
+      toast.error("Failed to update problem");
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -85,6 +229,7 @@ const ContestManagement = () => {
       duration: contest.duration,
       problemIds: contest.problemIds || [],
     });
+    fetchContestProblems(contest.contestId);
     setIsModalOpen(true);
     setActiveMenuContestName(null);
   };
@@ -107,7 +252,7 @@ const ContestManagement = () => {
       // console.log("here in create mode");
       try {
         await validationSchema.validate(currentContest, { abortEarly: false });
-        console.log("Submitting contest:", currentContest);
+        // console.log("Submitting contest:", currentContest);
         setErrors({});
 
         const res = await axios.post(
@@ -144,11 +289,11 @@ const ContestManagement = () => {
       }
     } else if (modalMode == "edit") {
       // console.log("here in edit mode");
-      console.log(currentContest);
-      console.log(editingContestId);
+      // console.log(currentContest);
+      // console.log(editingContestId);
       try {
         const result = await axios.put(
-          `${BACKEND_URL}/admin/updateContest/${editingContestId}`,
+          `${BACKEND_URL}/admin/contest/update/${editingContestId}`,
           currentContest,
           {
             headers: {
@@ -177,7 +322,32 @@ const ContestManagement = () => {
     }
   };
 
-  console.log(allContest);
+  // console.log(allContest);
+
+  const handleAddProblem = async (values, { resetForm }) => {
+      console.log("here");
+      try {
+        values.sno = parseInt(values.sno);
+        console.log("Form Values:", values);
+        // console.log("Jwt is : ",jwtToken);
+        const result = await axios.post(`${BACKEND_URL}/contestProblem/${targetContestAddProblem.contestId}/problem`, values, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
+        // console.log("API Response:", result.data);
+        if (result.data.status == 1) {
+          setIsAddMode(false);
+          toast.success("New Problem Added");
+          resetForm();
+          fetchContestProblems(targetContestAddProblem.contestId);
+        } else {
+          throw new Error();
+        }
+      } catch (e) {
+        toast.error("Failed to add problem");
+      }
+    };
 
   const deleteContestToSpringboot = async () => {
     const result = await axios.delete(
@@ -228,7 +398,7 @@ const ContestManagement = () => {
     setActiveMenuContestName(null);
   };
 
-  console.log(targetContestDelete);
+  // console.log(targetContestDelete);
 
   const toggleMenu = (name, e) => {
     e.stopPropagation();
@@ -325,6 +495,21 @@ const ContestManagement = () => {
                       ref={menuRef}
                       className="absolute right-0 bottom-full mb-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl dark:shadow-black/40 border border-gray-100 dark:border-slate-700 z-10 overflow-hidden animate-in fade-in zoom-in duration-200"
                     >
+                      <button
+                        onClick={() => {
+                          setTargetContestAddProblem({
+                            contestId: contest.contestId,
+                            contestName: contest.contestName,
+                          });
+                          fetchContestProblems(contest.contestId);
+                          setIsAddMode(true);
+                          setActiveMenuContestName(null);
+                        }}
+                        className="w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-500/10 hover:text-purple-700 dark:hover:text-purple-400 flex items-center gap-2 transition-colors"
+                      >
+                        <Plus size={16} />
+                        Add Problem
+                      </button>
                       <button
                         onClick={() => handleEditClick(contest)}
                         className="w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-purple-500/10 hover:text-purple-700 dark:hover:text-purple-400 flex items-center gap-2 transition-colors"
@@ -474,52 +659,62 @@ const ContestManagement = () => {
                   </div>
                 </div>
 
-                {/* PROBLEM SELECTION */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
-                    Select Problems
-                  </label>
-                  <div className="h-40 overflow-y-auto border border-gray-300 dark:border-slate-600 rounded-lg p-2 space-y-1 bg-gray-50 dark:bg-slate-900">
-                    {allProblem && allProblem.length > 0 ? (
-                      allProblem.map((prob) => {
-                        const isSelected = currentContest.problemIds?.includes(prob.id);
-                        return (
+                {modalMode === "edit" && (
+                  <div className="pt-4 border-t border-gray-100 dark:border-slate-700/50">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-slate-200 mb-3">
+                      Associated Problems
+                    </h3>
+                    {contestProblems.length === 0 ? (
+                      <p className="text-xs text-gray-500 dark:text-slate-400">
+                        No problems associated with this contest.
+                      </p>
+                    ) : (
+                      <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                        {contestProblems.map((problem, idx) => (
                           <div 
-                            key={prob.id}
-                            onClick={() => {
-                              setCurrentContest(prev => {
-                                const ids = prev.problemIds || [];
-                                return {
-                                  ...prev,
-                                  problemIds: isSelected 
-                                    ? ids.filter(id => id !== prob.id)
-                                    : [...ids, prob.id]
-                                };
-                              });
-                            }}
-                            className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${isSelected ? 'bg-indigo-100 dark:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-800' : 'hover:bg-gray-100 dark:hover:bg-slate-800 border border-transparent'}`}
+                            key={problem.id || idx} 
+                            className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900/50 border border-gray-100 dark:border-slate-700/50 rounded-xl"
                           >
-                            <input 
-                              type="checkbox" 
-                              checked={isSelected}
-                              readOnly
-                              className="w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
-                            />
-                            <div className="flex-1 flex justify-between items-center">
-                              <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{prob.title}</span>
-                              <span className={`text-xs px-2 py-0.5 rounded-full ${prob.difficulty === 'Easy' ? 'bg-emerald-100 text-emerald-700' : prob.difficulty === 'Medium' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}`}>
-                                {prob.difficulty}
+                            <div className="flex items-center gap-3">
+                              <span className="text-xs font-semibold text-gray-400 font-mono">
+                                #{problem.problemOrder || idx + 1}
                               </span>
+                              <div>
+                                <h4 className="text-sm font-medium text-gray-800 dark:text-slate-200">
+                                  {problem.title}
+                                </h4>
+                                <p className="text-[11px] text-gray-400 dark:text-slate-500">
+                                  {problem.slug}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span 
+                                className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                                  problem.difficulty?.toLowerCase() === "easy"
+                                    ? "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400"
+                                    : problem.difficulty?.toLowerCase() === "medium"
+                                      ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400"
+                                      : "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400"
+                                }`}
+                              >
+                                {problem.difficulty || "Easy"}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => startEditingProblem(problem)}
+                                className="p-1 text-gray-400 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-500/20 rounded-lg transition-colors cursor-pointer animate-in fade-in zoom-in duration-200"
+                                title="Edit Problem"
+                              >
+                                <Edit2 size={14} />
+                              </button>
                             </div>
                           </div>
-                        )
-                      })
-                    ) : (
-                       <p className="text-xs text-gray-500 text-center py-4">No problems found. Add problems first.</p>
+                        ))}
+                      </div>
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Select the problems you want to feature in this contest.</p>
-                </div>
+                )}
 
                 {/* BUTTONS */}
                 <div className="pt-4 flex justify-end gap-3">
@@ -551,6 +746,393 @@ const ContestManagement = () => {
             </div>
           </div>
         )}
+        <AnimatePresence>
+                  {(isAddMode || editingProblem) && (
+                    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
+                      <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden">
+                        <div className="flex justify-between items-center p-6 border-b border-gray-100 bg-gray-50">
+                          <h2 className="text-2xl font-bold text-gray-800">
+                            {editingProblem ? "Edit Problem" : "Add New Problem"}
+                          </h2>
+                          <button
+                            onClick={() => {
+                              setIsAddMode(false);
+                              setEditingProblem(null);
+                            }}
+                            className="p-2 hover:bg-white rounded-full transition-colors text-gray-500 hover:text-gray-700 shadow-sm"
+                          >
+                            <X size={24} />
+                          </button>
+                        </div>
+        
+                        <Formik
+                          initialValues={editingProblem || problemInitialValues}
+                          validationSchema={problemValidationSchema}
+                          onSubmit={editingProblem ? handleUpdateProblem : handleAddProblem}
+                          enableReinitialize
+                        >
+                          {({ values }) => (
+                            <Form className="flex flex-col flex-1 overflow-hidden">
+                              {/* Persistent Title Field */}
+                              <div className="p-4 sm:p-6 bg-white">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  <FormGroup
+                                    label="S. No"
+                                    name="sno"
+                                    placeholder="Enter problem number"
+                                  />
+        
+                                  <FormGroup
+                                    label="Problem Title"
+                                    name="title"
+                                    placeholder="Enter problem title"
+                                  />
+                                  <FormGroup
+                                    label="Problem Order"
+                                    name="problemOrder"
+                                    placeholder="Enter Problem order"
+                                  />
+                                </div>
+                              </div>
+        
+                              {/* Tabs */}
+                              <div className="flex border-b border-gray-200 bg-white sticky top-0 z-10">
+                                {tabs.map((tab) => (
+                                  <button
+                                    key={tab.id}
+                                    type="button"
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`flex-1 py-4 cursor-pointer text-sm font-medium transition-colors relative ${activeTab === tab.id
+                                        ? "text-blue-600 bg-blue-50/50"
+                                        : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                                      }`}
+                                  >
+                                    {tab.label}
+                                    {activeTab === tab.id && (
+                                      <motion.div
+                                        layoutId="activeTab"
+                                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600"
+                                      />
+                                    )}
+                                  </button>
+                                ))}
+                              </div>
+        
+                              <div className="flex-1 overflow-y-auto p-6 bg-gray-50/30">
+                                {/* Basic Info Tab */}
+                                {activeTab === "basic" && (
+                                  <div className="space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                      <FormGroup
+                                        label="Slug"
+                                        name="slug"
+                                        placeholder="e.g., two-sum"
+                                      />
+                                      <FormGroup
+                                        label="Tags"
+                                        name="topicTags"
+                                        placeholder="e.g., Array, Hash Table"
+                                      />
+        
+                                      <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-gray-700">
+                                          Difficulty
+                                        </label>
+                                        <Field
+                                          as="select"
+                                          name="difficulty"
+                                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                        >
+                                          <option value="Easy">Easy</option>
+                                          <option value="Medium">Medium</option>
+                                          <option value="Hard">Hard</option>
+                                        </Field>
+                                      </div>
+        
+                                      {/* <FormGroup
+                                        label="Problem Topic"
+                                        name="problemTopic"
+                                        placeholder="e.g., Algorithms"
+                                      /> */}
+                                      <FormGroup
+                                        label="Function Name"
+                                        name="functionName"
+                                        placeholder="e.g., twoSum"
+                                      />
+                                      <FormGroup
+                                        label="Input Type"
+                                        name="inputType"
+                                        placeholder="e.g., nums: int[], target: int"
+                                      />
+                                      <FormGroup
+                                        label="Return Type"
+                                        name="returnType"
+                                        placeholder="e.g., int[]"
+                                      />
+                                    </div>
+                                  </div>
+                                )}
+        
+                                {/* Details Tab */}
+                                {activeTab === "details" && (
+                                  <div className="space-y-6">
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium text-gray-700">
+                                        Description
+                                      </label>
+                                      <Field
+                                        as="textarea"
+                                        name="description"
+                                        rows={5}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+                                        placeholder="Detailed problem description..."
+                                      />
+                                      <ErrorMessage
+                                        name="description"
+                                        component="div"
+                                        className="text-red-500 text-sm"
+                                      />
+                                    </div>
+                                  </div>
+                                )}
+        
+                                {/* Test Cases Tab */}
+                                {activeTab === "testcases" && (
+                                  <div className="space-y-6">
+                                    <FieldArray name="testCases">
+                                      {({ push, remove }) => (
+                                        <div className="space-y-6">
+                                          {values.testCases.map((_, index) => (
+                                            <div
+                                              key={index}
+                                              className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm relative group"
+                                            >
+                                              <div className="absolute top-4 right-4">
+                                                <button
+                                                  type="button"
+                                                  onClick={() => remove(index)}
+                                                  className="text-gray-400 hover:text-red-500 transition-colors"
+                                                  title="Remove Test Case"
+                                                >
+                                                  <Trash2 size={18} />
+                                                </button>
+                                              </div>
+                                              <h4 className="font-medium text-gray-900 mb-4">
+                                                Test Case #{index + 1}
+                                              </h4>
+                                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="md:col-span-2">
+                                                  <FormGroup
+                                                    label="Input"
+                                                    name={`testCases.${index}.input`}
+                                                    placeholder="Input values..."
+                                                  />
+                                                </div>
+                                                <FormGroup
+                                                  label="Expected Output"
+                                                  name={`testCases.${index}.output`}
+                                                  placeholder="Expected result..."
+                                                />
+                                                <FormGroup
+                                                  label="Explanation"
+                                                  name={`testCases.${index}.explanation`}
+                                                  placeholder="Why this output?"
+                                                />
+                                                <div className="flex items-center gap-2 mt-2">
+                                                  <Field
+                                                    type="checkbox"
+                                                    name={`testCases.${index}.hidden`}
+                                                    id={`hidden-${index}`}
+                                                    className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                                                  />
+                                                  <label
+                                                    htmlFor={`hidden-${index}`}
+                                                    className="text-sm text-gray-700"
+                                                  >
+                                                    Hidden Test Case
+                                                  </label>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          ))}
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              push({
+                                                input: "",
+                                                output: "",
+                                                explanation: "",
+                                                hidden: false,
+                                              })
+                                            }
+                                            className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-blue-500 hover:text-blue-600 transition-all font-medium flex items-center justify-center gap-2"
+                                          >
+                                            <Plus size={20} /> Add Test Case
+                                          </button>
+                                        </div>
+                                      )}
+                                    </FieldArray>
+                                  </div>
+                                )}
+        
+                                {/* templates Tab */}
+                                {activeTab === "templates" && (
+                                  <div className="space-y-6">
+                                    <div className="grid grid-cols-1 gap-6">
+                                      {["javascript", "java", "python", "cpp"].map(
+                                        (lang) => (
+                                          <div key={lang} className="space-y-2">
+                                            <label className="block text-sm font-medium text-gray-700 capitalize">
+                                              {lang} templates
+                                            </label>
+                                            <Field
+                                              as="textarea"
+                                              name={`templates.${lang}`}
+                                              rows={6}
+                                              className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
+                                              placeholder={`Paste your ${lang} templates here...`}
+                                            />
+                                            <ErrorMessage
+                                              name={`templates.${lang}`}
+                                              component="div"
+                                              className="text-red-500 text-sm"
+                                            />
+                                          </div>
+                                        ),
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+        
+                                {/* Solution Tab */}
+                                {activeTab === "solution" && (
+                                  <div className="flex gap-3 justify-center flex-col">
+                                    <div className="space-y-2">
+                                      <label className="block text-sm font-medium text-gray-700">
+                                        Algorithm Steps
+                                      </label>
+                                      <FieldArray name="algorithmSteps">
+                                        {({ push, remove }) => (
+                                          <div className="space-y-3">
+                                            {values.algorithmSteps.map(
+                                              (step, index) => (
+                                                <div key={index} className="flex gap-2">
+                                                  <Field
+                                                    name={`algorithmSteps.${index}`}
+                                                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                                    placeholder={`Step ${index + 1}`}
+                                                  />
+                                                  <button
+                                                    type="button"
+                                                    onClick={() => remove(index)}
+                                                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                                  >
+                                                    <Trash2 size={18} />
+                                                  </button>
+                                                </div>
+                                              ),
+                                            )}
+                                            <button
+                                              type="button"
+                                              onClick={() => push("")}
+                                              className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                                            >
+                                              <Plus size={16} /> Add Step
+                                            </button>
+                                          </div>
+                                        )}
+                                      </FieldArray>
+                                    </div>
+        
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                      <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
+                                        <h3 className="font-semibold text-gray-900">
+                                          Time Complexity
+                                        </h3>
+                                        <FormGroup
+                                          label="Value"
+                                          name="timeComplexity.value"
+                                          placeholder="e.g., O(n)"
+                                        />
+                                        <FormGroup
+                                          label="Explanation"
+                                          name="timeComplexity.explanation"
+                                          placeholder="Brief explanation..."
+                                        />
+                                      </div>
+                                      <div className="space-y-4 p-4 bg-white rounded-xl border border-gray-200">
+                                        <h3 className="font-semibold text-gray-900">
+                                          Space Complexity
+                                        </h3>
+                                        <FormGroup
+                                          label="Value"
+                                          name="spaceComplexity.value"
+                                          placeholder="e.g., O(1)"
+                                        />
+                                        <FormGroup
+                                          label="Explanation"
+                                          name="spaceComplexity.explanation"
+                                          placeholder="Brief explanation..."
+                                        />
+                                      </div>
+                                    </div>
+        
+                                    <div className="space-y-6">
+                                      <div className="grid grid-cols-1 gap-6">
+                                        {["javascript", "java", "python", "cpp"].map(
+                                          (lang) => (
+                                            <div key={lang} className="space-y-2">
+                                              <label className="block text-sm font-medium text-gray-700 capitalize">
+                                                {lang} Solution
+                                              </label>
+                                              <Field
+                                                as="textarea"
+                                                name={`solutions.${lang}`}
+                                                rows={6}
+                                                className="w-full px-4 py-2 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50"
+                                                placeholder={`Paste your ${lang} solution here...`}
+                                              />
+                                              <ErrorMessage
+                                                name={`solutions.${lang}`}
+                                                component="div"
+                                                className="text-red-500 text-sm"
+                                              />
+                                            </div>
+                                          ),
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+        
+                              {/* Footer Actions */}
+                              <div className="p-6 border-t border-gray-200 bg-white flex justify-end gap-3 sticky bottom-0">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setIsAddMode(false);
+                                    setEditingProblem(null);
+                                  }}
+                                  className="px-6 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
+                                >
+                                  Cancel
+                                </button>
+                                <button
+                                  type="submit"
+                                  className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/30 flex items-center gap-2"
+                                >
+                                  <Save size={18} />
+                                  {editingProblem ? "Update Problem" : "Save Problem"}
+                                </button>
+                              </div>
+                            </Form>
+                          )}
+                        </Formik>
+                      </div>
+                    </div>
+                  )}
+                </AnimatePresence>
         <AnimatePresence>
           {deleteTarget && (
             <motion.div
@@ -702,5 +1284,21 @@ const ContestManagement = () => {
     </>
   );
 };
-
+// Helper component for standard form fields
+const FormGroup = ({ label, name, placeholder, type = "text" }) => (
+  <div className="space-y-2">
+    <label className="block text-sm font-medium text-gray-700">{label}</label>
+    <Field
+      type={type}
+      name={name}
+      placeholder={placeholder}
+      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+    />
+    <ErrorMessage
+      name={name}
+      component="div"
+      className="text-red-500 text-sm"
+    />
+  </div>
+);
 export default ContestManagement;
