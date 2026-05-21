@@ -53,11 +53,21 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
   // - parse `input` string → object
   // - map `output` → `expected`
   // - map `hidden` → split logic (hidden:false = visible)
-  const normalizeTestCase = (tc) => ({
-    ...tc,
-    input: parseInputString(tc.input),
-    expected: tc.expected !== undefined ? tc.expected : tc.output,
-  });
+  const normalizeTestCase = (tc) => {
+    let expected = tc.expected !== undefined ? tc.expected : tc.output;
+    if (typeof expected === "string") {
+      try {
+        expected = JSON.parse(expected);
+      } catch (e) {
+        // Keep as string if it's a primitive string (e.g. "fl")
+      }
+    }
+    return {
+      ...tc,
+      input: parseInputString(tc.input),
+      expected: expected,
+    };
+  };
 
   const allCases = Array.isArray(testcaseData) ? testcaseData.map(normalizeTestCase) : [];
 
