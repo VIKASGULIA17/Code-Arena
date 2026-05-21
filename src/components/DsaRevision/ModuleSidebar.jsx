@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronRight, ChevronLeft, Menu,
   BookOpen, Code2, X, RotateCcw, Search,
-  CheckCircle2, Circle, Trophy, Zap, Target
+  CheckCircle2, Circle, Trophy, Zap, Target,Plus
 } from 'lucide-react'
 import { dsaCategories } from '../../data/DsaTopics'
-
+import AddTopicModal from './AddTopicModal'
 /* ─── static maps ─────────────────────────────────── */
 const topicIcons = {
   'arrays': '📊', 'linked-lists': '🔗', 'stacks': '📚',
@@ -17,10 +17,10 @@ const topicIcons = {
 }
 
 const difficultyMeta = {
-  'Beginner':     { cls: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400', dot: 'bg-emerald-500' },
-  'Intermediate': { cls: 'bg-amber-100   text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',   dot: 'bg-amber-500'   },
-  'Advanced':     { cls: 'bg-rose-100    text-rose-700 dark:bg-rose-500/10 dark:text-rose-400',    dot: 'bg-rose-500'     },
-  'Extreme':      { cls: 'bg-purple-100  text-purple-700 dark:bg-purple-500/10 dark:text-purple-400',  dot: 'bg-purple-500'   },
+  'Beginner': { cls: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400', dot: 'bg-emerald-500' },
+  'Intermediate': { cls: 'bg-amber-100   text-amber-700 dark:bg-amber-500/10 dark:text-amber-400', dot: 'bg-amber-500' },
+  'Advanced': { cls: 'bg-rose-100    text-rose-700 dark:bg-rose-500/10 dark:text-rose-400', dot: 'bg-rose-500' },
+  'Extreme': { cls: 'bg-purple-100  text-purple-700 dark:bg-purple-500/10 dark:text-purple-400', dot: 'bg-purple-500' },
 }
 
 /* ─── tiny circular progress SVG ─────────────────── */
@@ -88,6 +88,8 @@ const ModuleSidebar = ({
     })
     return result
   }, [query])
+
+  const [modalOpen, setModalOpen] = useState(false)
 
   /* ──────────────────────── sidebar body ──── */
   const sidebarContent = (
@@ -201,7 +203,7 @@ const ModuleSidebar = ({
         {Object.entries(filteredCategories).map(([catId, category]) => {
           /* category-level progress */
           const topicIds = Object.keys(category.topics)
-          const catDone  = topicIds.filter(tid => getModuleProgress(catId, tid).percent === 100).length
+          const catDone = topicIds.filter(tid => getModuleProgress(catId, tid).percent === 100).length
           const catTotal = topicIds.length
 
           return (
@@ -217,20 +219,29 @@ const ModuleSidebar = ({
                       {category.title}
                     </span>
                   </div>
-                  <span className="text-[10px] text-gray-300 dark:text-slate-600 tabular-nums">
-                    {catDone}/{catTotal}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setModalOpen(true)}
+                      title="Add New Topic"
+                      className="w-4 h-4 rounded flex items-center justify-center text-gray-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-all cursor-pointer"
+                    >
+                      <Plus size={11} />
+                    </button>
+                    <span className="text-[10px] text-gray-300 dark:text-slate-600 tabular-nums">
+                      {catDone}/{catTotal}
+                    </span>
+                  </div>
                 </div>
               )}
 
               {Object.entries(category.topics).map(([topicId, topic]) => {
-                const key      = `${catId}:${topicId}`
-                const isExp    = expandedTopics[key]
+                const key = `${catId}:${topicId}`
+                const isExp = expandedTopics[key]
                 const isActive = activeCategoryId === catId && activeTopicId === topicId
-                const prog     = getModuleProgress(catId, topicId)
-                const icon     = topicIcons[topicId] || '💡'
-                const diff     = difficultyMeta[topic.difficulty] || difficultyMeta['Beginner']
-                const done100  = prog.percent === 100
+                const prog = getModuleProgress(catId, topicId)
+                const icon = topicIcons[topicId] || '💡'
+                const diff = difficultyMeta[topic.difficulty] || difficultyMeta['Beginner']
+                const done100 = prog.percent === 100
 
                 const subtopics = []
                 if (topic.theory) subtopics.push({ type: 'theory', id: 'theory', label: 'Theory & Concepts', icon: BookOpen })
@@ -318,8 +329,8 @@ const ModuleSidebar = ({
                                   className={`
                                     w-full flex items-center gap-1.5 px-2 py-1.5 rounded-md text-left transition-all duration-100
                                       ${isSubActive
-                                        ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-medium'
-                                        : 'text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800/50 hover:text-gray-700 dark:hover:text-slate-200'}
+                                      ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 font-medium'
+                                      : 'text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800/50 hover:text-gray-700 dark:hover:text-slate-200'}
                                     `}
                                 >
                                   <SubIcon size={11} className="flex-shrink-0 opacity-70" />
@@ -392,6 +403,8 @@ const ModuleSidebar = ({
           </>
         )}
       </AnimatePresence>
+
+      <AddTopicModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </>
   )
 }

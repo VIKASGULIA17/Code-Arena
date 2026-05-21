@@ -22,14 +22,14 @@ const AddTopicModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-md p-6 border border-gray-100 dark:border-slate-700/50">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-gray-900">Add New Topic</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100">Add New Topic</h2>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors cursor-pointer"
+            className="p-1 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 hover:text-gray-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
           >
             <X size={20} />
           </button>
@@ -38,7 +38,7 @@ const AddTopicModal = ({ isOpen, onClose }) => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex gap-4 items-center">
-            <label className="text-sm font-medium text-gray-700 mb-1">
+            <label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 w-20 flex-shrink-0">
               Title:
             </label>
             <input
@@ -47,13 +47,13 @@ const AddTopicModal = ({ isOpen, onClose }) => {
               value={form.title}
               onChange={handleChange}
               placeholder="e.g., String related Algorithms"
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900/50 text-sm text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 dark:focus:border-blue-500 transition-colors"
               required
             />
           </div>
 
           <div className="flex gap-4 items-center">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 w-20 flex-shrink-0">
               TitleId:
             </label>
             <input
@@ -62,13 +62,13 @@ const AddTopicModal = ({ isOpen, onClose }) => {
               value={form.titleId}
               onChange={handleChange}
               placeholder="e.g., string-related-algo"
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900/50 text-sm text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 dark:focus:border-blue-500 transition-colors"
               required
             />
           </div>
 
           <div className="flex gap-4 items-center">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 w-20 flex-shrink-0">
               Description:
             </label>
             <input
@@ -76,14 +76,14 @@ const AddTopicModal = ({ isOpen, onClose }) => {
               name="description"
               value={form.description}
               onChange={handleChange}
-              placeholder="e.g., Master string manipulation, pattern matching..."
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+              placeholder="e.g., Master string manipulation..."
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900/50 text-sm text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 dark:focus:border-blue-500 transition-colors"
               required
             />
           </div>
 
           <div className="flex gap-4 items-center">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 w-20 flex-shrink-0">
               Difficulty:
             </label>
             <input
@@ -92,7 +92,7 @@ const AddTopicModal = ({ isOpen, onClose }) => {
               value={form.difficulty}
               onChange={handleChange}
               placeholder="e.g., hard"
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900/50 text-sm text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 dark:focus:border-blue-500 transition-colors"
               required
             />
           </div>
@@ -102,13 +102,13 @@ const AddTopicModal = ({ isOpen, onClose }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 rounded-lg bg-gray-100 text-gray-700 text-sm font-medium hover:bg-gray-200 transition-colors cursor-pointer"
+              className="flex-1 px-4 py-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 text-sm font-medium hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer"
+              className="flex-1 px-4 py-2 rounded-lg bg-blue-600 dark:bg-blue-600 text-white dark:text-white text-sm font-medium hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors cursor-pointer"
             >
               Add Topic
             </button>

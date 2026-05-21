@@ -5,7 +5,6 @@ import { EnhancedNavbar } from '../Navbar'
 import ModuleSidebar from './ModuleSidebar'
 import ModuleContentArea from './ModuleContentArea'
 import DsaTemplateModal from './DsaTemplateModal'
-import DsaTemplateButton from './DsaTemplateButton'
 import { useRevisionProgress } from '../../hooks/useRevisionProgress'
 
 const RevisionLayout = () => {

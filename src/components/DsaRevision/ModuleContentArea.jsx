@@ -9,6 +9,7 @@ import { TheorySection } from '../theory/TheorySection'
 import { CodeBlock } from '../code/codeblock'
 import DsaTemplateButton from './DsaTemplateButton'
 import AddTopicModal from './AddTopicModal'
+import AddHeaderModal from './AddHeaderModal'
 
 
 const difficultyColors = {
@@ -44,6 +45,7 @@ const buildSubtopicList = (catId, topicId, topic) => {
 /** Welcome/overview screen when no subtopic is selected */
 const WelcomeScreen = ({ getOverallProgress }) => {
   const [modalOpen, setModalOpen] = useState(false)
+  const [headerModalOpen, setHeaderModalOpen] = useState(false)
   const overall = getOverallProgress()
 
   const categoryColors = [
@@ -119,16 +121,21 @@ const WelcomeScreen = ({ getOverallProgress }) => {
         ))}
       </div>
 
-      {/* Add Topic CTA */}
-      <button
-        onClick={() => setModalOpen(true)}
-        className="mt-6 flex items-center gap-2 px-5 py-2.5 rounded-xl border border-dashed border-gray-300 dark:border-slate-600 text-sm font-medium text-gray-500 dark:text-slate-400 hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/5 transition-all duration-200 cursor-pointer"
-      >
-        <Plus size={15} />
-        Add New Topic
-      </button>
+      {/* Action buttons */}
+      <div className="mt-6 flex items-center gap-3">
+        
 
-      <AddTopicModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+        <button
+          onClick={() => setHeaderModalOpen(true)}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-dashed border-gray-300 dark:border-slate-600 text-sm font-medium text-gray-500 dark:text-slate-400 hover:border-purple-400 dark:hover:border-purple-500 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50/50 dark:hover:bg-purple-500/5 transition-all duration-200 cursor-pointer"
+        >
+          <Plus size={15} />
+          Add New Category
+        </button>
+      </div>
+
+      
+      <AddHeaderModal isOpen={headerModalOpen} onClose={() => setHeaderModalOpen(false)} />
     </motion.div>
   )
 }
