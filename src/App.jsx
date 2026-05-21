@@ -27,12 +27,14 @@ import DSAHubPage from './components/DsaRevision/DsaHubPage'
 import TopicPage from './components/DsaRevision/TopicsPage'
 import RevisionLayout from './components/DsaRevision/RevisionLayout'
 import { MainLayout } from './components/layouts/MainLayout'
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
 
   return (
     <>
+    <ToastContainer/>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='problem' element={<Problems />} />
