@@ -50,6 +50,7 @@ const ModuleSidebar = ({
   getModuleProgress, getOverallProgress, onResetProgress,
   mobileOpen, onCloseMobile
 }) => {
+  const [targetCategory,setTargetCategoryId] = useState("");
   const [expandedTopics, setExpandedTopics] = useState({})
   const [query, setQuery] = useState('')
   const overall = getOverallProgress()
@@ -58,6 +59,7 @@ const ModuleSidebar = ({
     setExpandedTopics(prev => ({ ...prev, [key]: !prev[key] }))
 
   const handleTopicClick = (catId, topicId) => {
+    // console.log(catId);
     const key = `${catId}:${topicId}`
     toggleExpand(key)
     onSelectTopic(catId, topicId)
@@ -221,7 +223,9 @@ const ModuleSidebar = ({
                   </div>
                   <div className="flex items-center gap-1.5">
                     <button
-                      onClick={() => setModalOpen(true)}
+                      onClick={() => {setModalOpen(true);
+                        setTargetCategoryId(catId);
+                      }}
                       title="Add New Topic"
                       className="w-4 h-4 rounded flex items-center justify-center text-gray-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-all cursor-pointer"
                     >
@@ -242,7 +246,6 @@ const ModuleSidebar = ({
                 const icon = topicIcons[topicId] || '💡'
                 const diff = difficultyMeta[topic.difficulty] || difficultyMeta['Beginner']
                 const done100 = prog.percent === 100
-
                 const subtopics = []
                 if (topic.theory) subtopics.push({ type: 'theory', id: 'theory', label: 'Theory & Concepts', icon: BookOpen })
                 if (topic.codeTemplates) {
@@ -404,7 +407,7 @@ const ModuleSidebar = ({
         )}
       </AnimatePresence>
 
-      <AddTopicModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <AddTopicModal isOpen={modalOpen} onClose={() => setModalOpen(false)}  targetCategory={targetCategory}/>
     </>
   )
 }
