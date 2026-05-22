@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import axios from "axios";
+import { useAppContext } from "../../context/AppContext";
 
 const DsaTemplateModal = ({
   isOpen,
@@ -15,6 +16,7 @@ const DsaTemplateModal = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const {jwtToken} = useAppContext();
 
   // Validation schema
   const validationSchema = yup.object().shape({
@@ -66,16 +68,21 @@ const DsaTemplateModal = ({
   // Dummy storage function - just shows toast
   const handleStorageSubmit = async (values) => {
     setIsLoading(true);
-    // console.log("parent ID is : ",parentId);
-    // console.log("Submitting DSA Template:", values);
-    // console.log(parentId);
+    console.log("parent ID is : ",parentId);
+    console.log("Submitting DSA Template:", values);
+    console.log(parentId);
+    console.log(jwtToken);
     try {
       const response = await axios.post(
         `${BACKEND_URL}/DsaTemplate/addTemplate/${parentId}`,
-        values,
+        values,{
+          headers:{
+            Authorization: `Bearer ${jwtToken}`,
+          }
+        }
       );
 
-      // console.log(response.data);
+      console.log(response.data);
 
       if (response.data.status == 1) {
         toast.success(

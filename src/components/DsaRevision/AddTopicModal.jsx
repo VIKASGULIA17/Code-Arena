@@ -81,6 +81,23 @@ const AddTopicModal = ({ isOpen, onClose, targetCategory }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+
+            
+          <div className="flex gap-4 items-center">
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 w-20 flex-shrink-0">
+              TitleId:
+            </label>
+            <input
+              type="text"
+              name="titleId"
+              value={form.titleId}
+              onChange={handleChange}
+              placeholder="e.g., string-related-algo"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900/50 text-sm text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 dark:focus:border-blue-500 transition-colors"
+              required
+            />
+          </div>
+
           <div className="flex gap-4 items-center">
             <label className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 w-20 flex-shrink-0">
               Title:
@@ -96,20 +113,6 @@ const AddTopicModal = ({ isOpen, onClose, targetCategory }) => {
             />
           </div>
 
-          <div className="flex gap-4 items-center">
-            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 w-20 flex-shrink-0">
-              TitleId:
-            </label>
-            <input
-              type="text"
-              name="titleId"
-              value={form.titleId}
-              onChange={handleChange}
-              placeholder="e.g., string-related-algo"
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900/50 text-sm text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 dark:focus:border-blue-500 transition-colors"
-              required
-            />
-          </div>
 
           <div className="flex gap-4 items-center">
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1 w-20 flex-shrink-0">
