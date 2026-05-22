@@ -157,8 +157,13 @@ const ContestManagement = () => {
   const fetchContestProblems = async (contestId) => {
     if (!contestId) return;
     try {
-      const res = await axios.get(`${BACKEND_URL}/public/fetchContestProblem/${contestId}`);
+      const res = await axios.get(`${BACKEND_URL}/contestProblem/fetchContestProblemForEditor/${contestId}`,{
+        headers:{
+          'Authorization':`Bearer ${jwtToken}`
+        }
+      });
       setContestProblems(res.data);
+      console.table("Contest Problems:", res.data);
     } catch (e) {
       console.error("Failed to fetch contest problems:", e);
     }
