@@ -42,15 +42,15 @@ const AddTopicModal = ({ isOpen, onClose, targetCategory }) => {
     } else {
       toast.error(`Topic not added`);
     }
-    setForm({
-      title: "",
-      description: "",
-      difficulty: "",
-      titleId: "",
-    });
+    
     setTimeout(() => {
       setLoadingState(false);
-
+      setForm({
+        title: "",
+        description: "",
+        difficulty: "",
+        titleId: "",
+      });
       onClose();
     }, 1600);
   };

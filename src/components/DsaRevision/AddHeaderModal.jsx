@@ -56,14 +56,14 @@ const AddHeaderModal = ({ isOpen, onClose }) => {
     } else {
       toast.error(`Category not added`);
     }
-    setForm({
-      headerId: "",
-      title: "",
-      description: "",
-    });
+
     setTimeout(() => {
       setLoadingState(false);
-
+      setForm({
+        headerId: "",
+        title: "",
+        description: "",
+      });
       onClose();
     }, 1500);
     // console.log("Form Data:", form);
