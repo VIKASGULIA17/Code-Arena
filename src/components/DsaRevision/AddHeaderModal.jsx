@@ -7,6 +7,7 @@ import { useAppContext } from "../../context/AppContext";
 const AddHeaderModal = ({ isOpen, onClose }) => {
   const { jwtToken } = useAppContext();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const [loading, setLoadingState] = useState(false);
 
   // console.log("jwt Token is : ",jwtToken);
 
@@ -39,25 +40,38 @@ const AddHeaderModal = ({ isOpen, onClose }) => {
   };
 
   const handleSubmit = async (e) => {
+    setLoadingState(true);
     e.preventDefault();
+
     const response = await axios.post(`${BACKEND_URL}/dsaHeader/add`, form, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
     });
 
-    console.log(response.data);
+    // console.log(response.data);
 
     if (response.data.status == 1) {
       toast.success(`Category added successfully`);
-      setForm({
-        headerId: "",
-        title: "",
-        description: "",
-      });
-      onClose();
+      setTimeout(() => {
+        setLoadingState(false);
+        setForm({
+          headerId: "",
+          title: "",
+          description: "",
+        });
+        onClose();
+      }, 1500);
     } else {
       toast.error(`Category not added`);
+      setTimeout(() => {
+        setLoadingState(false);
+        setForm({
+          headerId: "",
+          title: "",
+          description: "",
+        });
+      }, 1500);
     }
     // console.log("Form Data:", form);
   };
@@ -157,7 +171,7 @@ const AddHeaderModal = ({ isOpen, onClose }) => {
                 type="submit"
                 className="flex-1 px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors cursor-pointer"
               >
-                Add Category
+                {loading ? "Adding..." : "Add Category"}
               </button>
             </div>
           </form>
