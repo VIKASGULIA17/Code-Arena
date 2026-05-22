@@ -39,30 +39,20 @@ const AddTopicModal = ({ isOpen, onClose, targetCategory }) => {
     );
     if (response.data.status == 1) {
       toast.success(`Topic added successfully`);
-      setTimeout(() => {
-        setLoadingState(false);
-        setForm({
-          title: "",
-          description: "",
-          difficulty: "",
-          titleId: "",
-        });
-        onClose();
-      }, 1600);
     } else {
       toast.error(`Topic not added`);
-      setTimeout(() => {
-        
-        setForm({
-          title: "",
-          description: "",
-          difficulty: "",
-          titleId: "",
-        });
-        onClose();
-
-      }, 1600);
     }
+    setForm({
+      title: "",
+      description: "",
+      difficulty: "",
+      titleId: "",
+    });
+    setTimeout(() => {
+      setLoadingState(false);
+
+      onClose();
+    }, 1600);
   };
 
   return (
@@ -172,7 +162,7 @@ const AddTopicModal = ({ isOpen, onClose, targetCategory }) => {
               type="submit"
               className="flex-1 px-4 py-2 rounded-lg bg-blue-600 dark:bg-blue-600 text-white dark:text-white text-sm font-medium hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors cursor-pointer"
             >
-              {loading?"Adding...":"Add Topic"}
+              {loading ? "Adding..." : "Add Topic"}
             </button>
           </div>
         </form>
