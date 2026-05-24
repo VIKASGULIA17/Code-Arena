@@ -2789,7 +2789,66 @@ int main(){
     cout<<endl;
     return 0;
 }`,
-                        java: ``,
+                        java: `import java.util.*;
+
+public class Main {
+
+    static void dfs(int u, ArrayList<ArrayList<Integer>> adj, boolean[] visited) {
+
+        System.out.print(u + " ");
+
+        visited[u] = true;
+
+        for (int v : adj.get(u)) {
+
+            if (visited[v] == false) {
+                dfs(v, adj, visited);
+            }
+        }
+    }
+
+    static ArrayList<ArrayList<Integer>> makeAdj(int[][] edges, int n) {
+
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int[] t : edges) {
+
+            int u = t[0];
+            int v = t[1];
+
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+
+        return adj;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        int x = sc.nextInt();
+
+        int[][] edges = new int[x][2];
+
+        for (int i = 0; i < x; i++) {
+
+            edges[i][0] = sc.nextInt();
+            edges[i][1] = sc.nextInt();
+        }
+
+        ArrayList<ArrayList<Integer>> adj = makeAdj(edges, n);
+
+        boolean[] visited = new boolean[n];
+
+        dfs(0, adj, visited);
+    }
+}`,
                         python: `def dfs(u, adj, visited):
     print(u, end=" ")
     visited[u] = True
