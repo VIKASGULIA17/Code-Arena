@@ -2790,7 +2790,38 @@ int main(){
     return 0;
 }`,
                         java: ``,
-                        python: ``,
+                        python: `def dfs(u, adj, visited):
+    print(u, end=" ")
+    visited[u] = True
+
+    for v in adj[u]:
+        if visited[v] == False:
+            dfs(v, adj, visited)
+
+
+def makeAdj(edges, n):
+    adj = [[] for i in range(n)]
+
+    for u, v in edges:
+        adj[u].append(v)
+        adj[v].append(u)
+
+    return adj
+
+
+n, x = map(int, input().split())
+
+edges = []
+
+for i in range(x):
+    u, v = map(int, input().split())
+    edges.append((u, v))
+
+adj = makeAdj(edges, n)
+
+visited = [False] * n
+
+dfs(0, adj, visited)`,
                         javascript: ``
                     },
                     "disjoint-set-union-by-rank": {
