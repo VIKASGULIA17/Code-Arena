@@ -2881,7 +2881,61 @@ adj = makeAdj(edges, n)
 visited = [False] * n
 
 dfs(0, adj, visited)`,
-                        javascript: ``
+                        javascript: `function dfs(u, adj, visited) {
+
+    process.stdout.write(u + " ");
+
+    visited[u] = true;
+
+    for (let v of adj[u]) {
+
+        if (visited[v] == false) {
+            dfs(v, adj, visited);
+        }
+    }
+}
+
+function makeAdj(edges, n) {
+
+    let adj = [];
+
+    for (let i = 0; i < n; i++) {
+        adj.push([]);
+    }
+
+    for (let [u, v] of edges) {
+
+        adj[u].push(v);
+        adj[v].push(u);
+    }
+
+    return adj;
+}
+
+const fs = require("fs");
+
+const input = fs.readFileSync(0, "utf-8").trim().split(/\s+/).map(Number);
+
+let idx = 0;
+
+let n = input[idx++];
+let x = input[idx++];
+
+let edges = [];
+
+for (let i = 0; i < x; i++) {
+
+    let u = input[idx++];
+    let v = input[idx++];
+
+    edges.push([u, v]);
+}
+
+let adj = makeAdj(edges, n);
+
+let visited = new Array(n).fill(false);
+
+dfs(0, adj, visited);`
                     },
                     "disjoint-set-union-by-rank": {
                         title: "Disjoint Set Union-Find Implementation By Rank",
