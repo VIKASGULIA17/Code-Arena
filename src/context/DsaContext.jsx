@@ -40,7 +40,7 @@ export const DsaContextProvider = (props) => {
     },[dsaContent]);
 
     return (
-        <DsaContext.Provider value={{ dsaContent, setdsaContext }}>
+        <DsaContext.Provider value={{ dsaContent, setdsaContext, getDSAContent }}>
             {props.children}
         </DsaContext.Provider>
     );

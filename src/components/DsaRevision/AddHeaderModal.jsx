@@ -3,9 +3,11 @@ import { X, Plus, Trash2 } from "lucide-react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useAppContext } from "../../context/AppContext";
+import { useDsaContext } from "../../context/DsaContext";
 
 const AddHeaderModal = ({ isOpen, onClose }) => {
   const { jwtToken } = useAppContext();
+  const { getDSAContent } = useDsaContext();
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [loading, setLoadingState] = useState(false);
 
@@ -53,6 +55,8 @@ const AddHeaderModal = ({ isOpen, onClose }) => {
 
     if (response.data.status == 1) {
       toast.success(`Category added successfully`);
+      getDSAContent();
+      
     } else {
       toast.error(`Category not added`);
     }
