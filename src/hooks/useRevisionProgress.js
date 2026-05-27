@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react'
-import { dsaCategories } from '../data/DsaTopics'
+import { useDsaContext } from '../context/DsaContext'
 
 const STORAGE_KEY = 'dsa-revision-progress'
 
@@ -21,13 +21,13 @@ const saveProgress = (data) => {
 }
 
 /**
- * Build a flat list of all completable items from dsaCategories.
+ * Build a flat list of all completable items from dsaContent.
  * Each item key: "categoryId:topicId:subtopicType:subtopicId"
  * subtopicType is either "theory" or "template"
- */
-const getAllItems = () => {
+*/
+const getAllItems = (dsaContent) => {
   const items = []
-  Object.entries(dsaCategories).forEach(([catId, category]) => {
+  Object.entries(dsaContent || {}).forEach(([catId, category]) => {
     Object.entries(category.topics).forEach(([topicId, topic]) => {
       // Theory counts as one item
       if (topic.theory) {
@@ -46,8 +46,8 @@ const getAllItems = () => {
 
 export const useRevisionProgress = () => {
   const [completed, setCompleted] = useState(loadProgress)
-
-  const allItems = useMemo(() => getAllItems(), [])
+  const {dsaContent} = useDsaContext();
+  const allItems = useMemo(() => getAllItems(dsaContent || {}), [dsaContent])
 
   const toggleComplete = useCallback((key) => {
     setCompleted(prev => {

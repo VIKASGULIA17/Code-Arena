@@ -5,8 +5,8 @@ import {
   BookOpen, Code2, X, RotateCcw, Search,
   CheckCircle2, Circle, Trophy, Zap, Target,Plus
 } from 'lucide-react'
-import { dsaCategories } from '../../data/DsaTopics'
 import AddTopicModal from './AddTopicModal'
+import { useDsaContext } from '../../context/DsaContext'
 /* ─── static maps ─────────────────────────────────── */
 const topicIcons = {
   'arrays': '📊', 'linked-lists': '🔗', 'stacks': '📚',
@@ -54,6 +54,9 @@ const ModuleSidebar = ({
   const [expandedTopics, setExpandedTopics] = useState({})
   const [query, setQuery] = useState('')
   const overall = getOverallProgress()
+  const {dsaContent} = useDsaContext();
+
+  console.log("DSA Content in ModuleSidebar is : ",dsaContent);
 
   const toggleExpand = (key) =>
     setExpandedTopics(prev => ({ ...prev, [key]: !prev[key] }))
@@ -72,10 +75,10 @@ const ModuleSidebar = ({
 
   /* filter topics by search query */
   const filteredCategories = useMemo(() => {
-    if (!query.trim()) return dsaCategories
+    if (!query.trim()) return dsaContent
     const q = query.toLowerCase()
     const result = {}
-    Object.entries(dsaCategories).forEach(([catId, cat]) => {
+    Object.entries(dsaContent).forEach(([catId, cat]) => {
       const topics = {}
       Object.entries(cat.topics).forEach(([topicId, topic]) => {
         if (

@@ -1,10 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { dsaCategories } from '../../data/DsaTopics'
 import { Code2, BookOpen, ArrowRight, Star, TrendingUp } from 'lucide-react'
 import { EnhancedNavbar } from '../../components/Navbar'
+import { useDsaContext } from '../../context/DsaContext'
 
 const DSAHubPage = () => {
+
+  const {dsaContent} = useDsaContext();
+
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case 'Beginner': return 'text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-500/10 border-green-300 dark:border-green-500/20'
@@ -70,7 +73,7 @@ const DSAHubPage = () => {
 
         {/* Categories Grid */}
         <div className="space-y-12 sm:space-y-16">
-          {Object.entries(dsaCategories).map(([categoryKey, category]) => (
+          {Object.entries(dsaContent).map(([categoryKey, category]) => (
 
             <section key={categoryKey} className="space-y-6 sm:space-y-8">
 

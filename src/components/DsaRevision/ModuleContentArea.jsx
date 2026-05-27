@@ -4,12 +4,12 @@ import {
   CheckCircle2, Circle, ArrowLeft, ArrowRight,
   BookOpen, Code2, Clock, Zap, Target, ChevronRight, PlayCircle, ExternalLink,Plus
 } from 'lucide-react'
-import { dsaCategories } from '../../data/DsaTopics'
 import { TheorySection } from '../theory/TheorySection'
 import { CodeBlock } from '../code/codeblock'
 import DsaTemplateButton from './DsaTemplateButton'
 import AddTopicModal from './AddTopicModal'
 import AddHeaderModal from './AddHeaderModal'
+import { useDsaContext } from '../../context/DsaContext'
 
 
 const difficultyColors = {
@@ -47,6 +47,8 @@ const WelcomeScreen = ({ getOverallProgress }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [headerModalOpen, setHeaderModalOpen] = useState(false)
   const overall = getOverallProgress()
+
+  const {dsaContent} = useDsaContext();
 
   const categoryColors = [
     'from-blue-500 to-cyan-500',
@@ -107,7 +109,7 @@ const WelcomeScreen = ({ getOverallProgress }) => {
 
       {/* Category cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-2xl">
-        {Object.entries(dsaCategories).map(([catId, category], i) => (
+        {Object.entries(dsaContent).map(([catId, category], i) => (
           <div
             key={catId}
             className="group bg-white dark:bg-slate-800/60 rounded-2xl border border-gray-200 dark:border-slate-700/50 p-5 text-left hover:border-blue-300 dark:hover:border-blue-500/40 hover:shadow-md dark:hover:shadow-blue-900/20 transition-all duration-200"
@@ -430,7 +432,8 @@ const ModuleContentArea = ({
   onSelectSubtopic,
   onOpenTemplateModal
 }) => {
-  const category = activeCategoryId ? dsaCategories[activeCategoryId] : null
+  const {dsaContent} = useDsaContext();
+  const category = activeCategoryId ? dsaContent[activeCategoryId] : null
   const topic = category?.topics?.[activeTopicId]
 
   return (

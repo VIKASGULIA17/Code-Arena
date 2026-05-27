@@ -15,7 +15,7 @@ import {
   ArrowDown,
 } from 'lucide-react'
 import { useAppContext } from '../context/AppContext'
-import { dsaCategories } from '../data/DsaTopics'
+import { useDsaContext } from '../context/DsaContext'
 
 // ── Static visualizer entries ──
 const VISUALIZER_ITEMS = [
@@ -28,9 +28,9 @@ const VISUALIZER_ITEMS = [
 ]
 
 // ── Build a flat revision index once ──
-function buildRevisionIndex() {
+function buildRevisionIndex(dsaContent) {
   const items = []
-  for (const [catId, cat] of Object.entries(dsaCategories)) {
+  for (const [catId, cat] of Object.entries(dsaContent || {})) {
     if (!cat.topics) continue;
     
     const firstTopicId = Object.keys(cat.topics)[0];
@@ -64,8 +64,6 @@ function buildRevisionIndex() {
   return items
 }
 
-const REVISION_INDEX = buildRevisionIndex()
-
 // ── Category config ──
 const CATEGORIES = {
   problems: { icon: Code, color: '#6366f1', label: 'Problems' },
@@ -82,6 +80,8 @@ export default function SearchModal({ isOpen, onClose }) {
   const inputRef = useRef(null)
   const listRef = useRef(null)
   const navigate = useNavigate()
+  const {dsaContent} = useDsaContext();
+  const REVISION_INDEX = useMemo(() => { return buildRevisionIndex(dsaContent || {}); }, [dsaContent]);
   const { allProblem, allContest } = useAppContext()
 
   // Focus input on open
@@ -153,7 +153,7 @@ export default function SearchModal({ isOpen, onClose }) {
     out.push(...vizMatched)
 
     return out
-  }, [query, allProblem, allContest])
+  }, [query, allProblem, allContest, REVISION_INDEX])
 
   // Reset active index when results change
   useEffect(() => {

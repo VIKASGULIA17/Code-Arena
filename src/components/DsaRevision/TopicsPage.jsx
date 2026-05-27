@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { dsaCategories } from '@/data/DsaTopics'
 import { CodeBlock } from '../../components/code/codeblock'
 import { TheorySection } from '@/components/theory/TheorySection'
 import { ArrowLeft, Code2, BookOpen, Clock, Target, Zap } from 'lucide-react'
+import { useDsaContext } from '../../context/DsaContext'
 
 const TopicPage = () => {
   const { categoryId, topicId } = useParams()
   const [activeTab, setActiveTab] = useState('theory')
-
-  const category = dsaCategories[categoryId]
+  const {dsaContent} = useDsaContext();
+  const category = dsaContent[categoryId]
   const topic = category?.topics[topicId]
 
   if (!topic) {
