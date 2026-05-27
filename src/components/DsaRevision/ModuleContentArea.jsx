@@ -31,6 +31,8 @@ const topicIcons = {
  */
 const buildSubtopicList = (catId, topicId, topic) => {
   const list = []
+  console.log(topic);
+  console.log(topicId);
   if (topic.theory) {
     list.push({ type: 'theory', id: 'theory', label: 'Theory & Concepts', key: `${catId}:${topicId}:theory` })
   }
@@ -146,6 +148,7 @@ const WelcomeScreen = ({ getOverallProgress }) => {
 const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, onSelectSubtopic, onOpenTemplateModal }) => {
   const progress = getModuleProgress(catId, topicId)
   const icon = topicIcons[topicId] || '💡'
+  console.log("topicId : ",topicId);
   const subtopics = buildSubtopicList(catId, topicId, topic)
 
   return (
@@ -263,6 +266,8 @@ const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, on
 
 /** Subtopic content view */
 const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isCompleted, toggleComplete, onSelectSubtopic }) => {
+  console.log("start");
+  console.log(catId+" "+topicId+" "+topic);
   const subtopics = buildSubtopicList(catId, topicId, topic)
   const currentIndex = subtopics.findIndex(s => s.type === subtopic.type && s.id === subtopic.id)
   const prevSub = currentIndex > 0 ? subtopics[currentIndex - 1] : null
@@ -435,6 +440,8 @@ const ModuleContentArea = ({
   const {dsaContent} = useDsaContext();
   const category = activeCategoryId ? dsaContent[activeCategoryId] : null
   const topic = category?.topics?.[activeTopicId]
+
+  console.log("In Module Content Area : ",topic," and ",category);
 
   return (
     <div className="flex-1 min-w-0 overflow-y-auto">

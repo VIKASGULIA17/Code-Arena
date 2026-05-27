@@ -14,7 +14,7 @@ export const DsaContextProvider = (props) => {
     async function getDSAContent(){
         try{
             const response = await axios.get(`${BACKEND_URL}/public/getDSAContent`);
-            console.log("response is : ",response.data);
+            // console.log("response is : ",response.data);
             const data = response.data;
             if(data && Object.keys(data).length > 0){
                 // console.log("DSA Content fetched successfully : ",data);

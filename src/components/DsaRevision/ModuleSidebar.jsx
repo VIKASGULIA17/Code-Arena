@@ -92,7 +92,7 @@ const ModuleSidebar = ({
       if (Object.keys(topics).length) result[catId] = { ...cat, topics }
     })
     return result
-  }, [query])
+  }, [query, dsaContent]);
 
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -128,6 +128,8 @@ const ModuleSidebar = ({
             </button>
           </div>
         </div>
+
+        {/* {console.log(dsaContent)} */}
 
         {/* Overall progress strip */}
         {!collapsed && (
