@@ -56,7 +56,7 @@ const ModuleSidebar = ({
   const overall = getOverallProgress()
   const {dsaContent} = useDsaContext();
 
-  console.log("DSA Content in ModuleSidebar is : ",dsaContent);
+  // console.log("DSA Content in ModuleSidebar is : ",dsaContent);
 
   const toggleExpand = (key) =>
     setExpandedTopics(prev => ({ ...prev, [key]: !prev[key] }))

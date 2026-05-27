@@ -31,12 +31,12 @@ export const DsaContextProvider = (props) => {
     }
 
     useEffect(()=>{
-        console.log("calling getDSAContent...");
+        // console.log("calling getDSAContent...");
         getDSAContent();
     },[]);
 
     useEffect(()=>{
-        console.log("DSA Content is :",dsaContent);
+        // console.log("DSA Content is :",dsaContent);
     },[dsaContent]);
 
     return (
