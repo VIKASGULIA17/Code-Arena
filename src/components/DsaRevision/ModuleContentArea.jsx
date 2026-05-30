@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   CheckCircle2, Circle, ArrowLeft, ArrowRight,
-  BookOpen, Code2, Clock, Zap, Target, ChevronRight, PlayCircle, ExternalLink,Plus
+  BookOpen, Code2, Clock, Zap, Target, ChevronRight, PlayCircle, ExternalLink, Plus,
+  Pen,
+  Share
 } from 'lucide-react'
 import { TheorySection } from '../theory/TheorySection'
 import { CodeBlock } from '../code/codeblock'
@@ -50,7 +52,7 @@ const WelcomeScreen = ({ getOverallProgress }) => {
   const [headerModalOpen, setHeaderModalOpen] = useState(false)
   const overall = getOverallProgress()
 
-  const {dsaContent} = useDsaContext();
+  const { dsaContent } = useDsaContext();
 
   const categoryColors = [
     'from-blue-500 to-cyan-500',
@@ -127,7 +129,7 @@ const WelcomeScreen = ({ getOverallProgress }) => {
 
       {/* Action buttons */}
       <div className="mt-6 flex items-center gap-3">
-        
+
 
         <button
           onClick={() => setHeaderModalOpen(true)}
@@ -138,7 +140,7 @@ const WelcomeScreen = ({ getOverallProgress }) => {
         </button>
       </div>
 
-      
+
       <AddHeaderModal isOpen={headerModalOpen} onClose={() => setHeaderModalOpen(false)} />
     </motion.div>
   )
@@ -148,7 +150,7 @@ const WelcomeScreen = ({ getOverallProgress }) => {
 const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, onSelectSubtopic, onOpenTemplateModal }) => {
   const progress = getModuleProgress(catId, topicId)
   const icon = topicIcons[topicId] || '💡'
-  console.log("topicId : ",topicId);
+  console.log("topicId : ", topicId);
   const subtopics = buildSubtopicList(catId, topicId, topic)
 
   return (
@@ -265,9 +267,9 @@ const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, on
 }
 
 /** Subtopic content view */
-const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isCompleted, toggleComplete, onSelectSubtopic }) => {
+const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isCompleted, toggleComplete, onSelectSubtopic, onOpenTemplateModal }) => {
   console.log("start");
-  console.log(catId+" "+topicId+" "+topic);
+  console.log(catId + " " + topicId + " " + topic);
   const subtopics = buildSubtopicList(catId, topicId, topic)
   const currentIndex = subtopics.findIndex(s => s.type === subtopic.type && s.id === subtopic.id)
   const prevSub = currentIndex > 0 ? subtopics[currentIndex - 1] : null
@@ -277,6 +279,21 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
     ? `${catId}:${topicId}:theory`
     : `${catId}:${topicId}:template:${subtopic.id}`
   const completed = isCompleted(itemKey)
+
+  const handleEditTemplate = () => {
+    const template = topic.codeTemplates?.[subtopic.id] || {}
+    const initialData = {
+      templateId: subtopic.id,
+      title: template.title || "",
+      problemLinks: template.problemLinks && template.problemLinks.length > 0 ? template.problemLinks : [""],
+      videoLinks: template.videoLinks && template.videoLinks.length > 0 ? template.videoLinks : [""],
+      cpp: template.cpp || "",
+      java: template.java || "",
+      javascript: template.javascript || "",
+      python: template.python || "",
+    }
+    onOpenTemplateModal("edit", initialData)
+  }
 
   return (
     <motion.div
@@ -332,10 +349,28 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
           <TheorySection theory={topic.theory} topicTitle={topic.title} />
         )}
 
+
         {subtopic.type === 'template' && topic.codeTemplates?.[subtopic.id] && (
           <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-gray-200 dark:border-slate-700/50 shadow-sm overflow-hidden">
+
+
             <div className="p-6 border-b border-gray-100 dark:border-slate-700/50">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-3 tracking-tight">{topic.codeTemplates[subtopic.id].title}</h3>
+
+              <div className="flex justify-between">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-slate-100 mb-3 tracking-tight">{topic.codeTemplates[subtopic.id].title}</h3>
+                <div className="flex gap-3">
+
+                  <button
+                    onClick={handleEditTemplate}
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 px-2.5 py-1 rounded-full cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
+                  >
+                    <Pen size={12} />
+                  </button>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 border border-green-100 dark:border-green-500/20 px-2.5 py-1 rounded-full">
+                    <Share size={12} />
+                  </span>
+                </div>
+              </div>
               <div className="flex flex-wrap items-center gap-2 mb-6">
                 <span className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 px-2.5 py-1 rounded-full">
                   <Code2 size={12} /> 4 Languages
@@ -437,11 +472,11 @@ const ModuleContentArea = ({
   onSelectSubtopic,
   onOpenTemplateModal
 }) => {
-  const {dsaContent} = useDsaContext();
+  const { dsaContent } = useDsaContext();
   const category = activeCategoryId ? dsaContent[activeCategoryId] : null
   const topic = category?.topics?.[activeTopicId]
 
-  console.log("In Module Content Area : ",topic," and ",category);
+  console.log("In Module Content Area : ", topic, " and ", category);
 
   return (
     <div className="flex-1 min-w-0 overflow-y-auto">
@@ -471,6 +506,7 @@ const ModuleContentArea = ({
               isCompleted={isCompleted}
               toggleComplete={toggleComplete}
               onSelectSubtopic={onSelectSubtopic}
+              onOpenTemplateModal={onOpenTemplateModal}
             />
           )}
         </AnimatePresence>

@@ -20,6 +20,8 @@ const RevisionLayout = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024)
   const [templateModalOpen, setTemplateModalOpen] = useState(false)
+  const [templateModalMode, setTemplateModalMode] = useState("create")
+  const [templateInitialData, setTemplateInitialData] = useState(null)
 
   const {
     toggleComplete,
@@ -110,15 +112,24 @@ const RevisionLayout = () => {
           getModuleProgress={getModuleProgress}
           getOverallProgress={getOverallProgress}
           onSelectSubtopic={handleSelectSubtopic}
-          onOpenTemplateModal={() => setTemplateModalOpen(true)}
+          onOpenTemplateModal={(mode, initialData) => {
+            setTemplateModalMode(mode === "edit" ? "edit" : "create")
+            setTemplateInitialData(mode === "edit" ? initialData : null)
+            setTemplateModalOpen(true)
+          }}
         />
       </div>
 
       {/* DSA Template Modal */}
       <DsaTemplateModal
         isOpen={templateModalOpen}
-        onClose={() => setTemplateModalOpen(false)}
-        mode="create"
+        onClose={() => {
+          setTemplateModalOpen(false)
+          setTemplateInitialData(null)
+          setTemplateModalMode("create")
+        }}
+        mode={templateModalMode}
+        initialData={templateInitialData}
         parentId={topicId}
       />
     </div>
