@@ -16,7 +16,7 @@ const DsaTemplateModal = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-  const {jwtToken} = useAppContext();
+  const { jwtToken } = useAppContext();
 
   // Validation schema
   const validationSchema = yup.object().shape({
@@ -68,21 +68,38 @@ const DsaTemplateModal = ({
   // Dummy storage function - just shows toast
   const handleStorageSubmit = async (values) => {
     setIsLoading(true);
-    console.log("parent ID is : ",parentId);
+    // console.log("parent ID is : ", parentId);
     console.log("Submitting DSA Template:", values);
-    console.log(parentId);
-    console.log(jwtToken);
+    // console.log(parentId);
+    // console.log(jwtToken);
     try {
-      const response = await axios.post(
-        `${BACKEND_URL}/DsaTemplate/addTemplate/${parentId}`,
-        values,{
-          headers:{
-            Authorization: `Bearer ${jwtToken}`,
-          }
-        }
-      );
+      let response = undefined;
+      if (mode === "create") {
+        // console.log("Creating new template...");
+        response = await axios.post(
+          `${BACKEND_URL}/DsaTemplate/addTemplate/${parentId}`,
+          values,
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          },
+        );
+      } else {
+        response = await axios.put(
+          `${BACKEND_URL}/DsaTemplate/updateTemplate/${values.templateId}`,
+          values,
+          {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          },
+        );
+      }
+      console.log("API call successful, response received.");
+      console.log("API Response:", response);
 
-      console.log(response.data);
+      // console.log(response.data);
 
       if (response.data.status == 1) {
         toast.success(
@@ -99,6 +116,7 @@ const DsaTemplateModal = ({
         onClose();
       }, 500);
     } catch (error) {
+      // console.error("Error saving template:", error);
       toast.error("Failed to save template");
       setIsLoading(false);
     }
