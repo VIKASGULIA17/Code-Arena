@@ -5977,7 +5977,7 @@ console.log(arr.join(" "));`
                 codeTemplates: {
                     "minimum-element-in-range": {
                         title: "Minimum Element in Range using Square Decomposition",
-                        videoLinks: ["https://youtu.be/gWbDocYhwDA?si=-uMYju3pVGRaUu8y","https://youtu.be/gWbDocYhwDA?si=-uMYju3pVGRaUu8t"],
+                        videoLinks: ["https://youtu.be/gWbDocYhwDA?si=-uMYju3pVGRaUu8y"],
                         problemLinks: ["https://leetcode.com/"],
                         cpp: `#include <bits/stdc++.h>
 using namespace std;
