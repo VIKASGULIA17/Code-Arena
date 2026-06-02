@@ -7182,3 +7182,5 @@ console.log(findIndices(LPS, s, target).join(" "));`
         }
     }
 }
+
+// segment tree added
