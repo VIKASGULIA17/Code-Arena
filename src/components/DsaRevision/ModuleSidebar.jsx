@@ -7,6 +7,8 @@ import {
 } from 'lucide-react'
 import AddTopicModal from './AddTopicModal'
 import { useDsaContext } from '../../context/DsaContext'
+import { useAppContext } from '../../context/AppContext'
+import axios from 'axios'
 /* ─── static maps ─────────────────────────────────── */
 const topicIcons = {
   'arrays': '📊', 'linked-lists': '🔗', 'stacks': '📚',
@@ -55,8 +57,13 @@ const ModuleSidebar = ({
   const [query, setQuery] = useState('')
   const overall = getOverallProgress()
   const {dsaContent} = useDsaContext();
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const {jwtToken} = useAppContext();
 
   // console.log("DSA Content in ModuleSidebar is : ",dsaContent);
+  // console.log("activesubtopic is : ",activeSubtopic);
+  // console.log("activeTopicId is : ",activeTopicId);
+  // console.log("activeCategoryId is : ",activeCategoryId);
 
   const toggleExpand = (key) =>
     setExpandedTopics(prev => ({ ...prev, [key]: !prev[key] }))
@@ -95,6 +102,22 @@ const ModuleSidebar = ({
   }, [query, dsaContent]);
 
   const [modalOpen, setModalOpen] = useState(false)
+
+  const deleteDSATemplate = async (templateId) => {
+    // console.log();
+    // console.log("delete DSA Templated hit...");
+    try{
+      const result = await axios.delete(`${BACKEND_URL}/DsaTemplate/deleteTemplate/${templateId}`,{
+        headers:{
+          Authorization:`Bearer ${jwtToken}`
+        }
+      });
+      // console.log("delete response ye h : ");
+      // console.log(result.data);
+    }catch(e){
+      // console.log(`Not deleted`+e);
+    }
+  }
 
   /* ──────────────────────── sidebar body ──── */
   const sidebarContent = (
@@ -254,8 +277,11 @@ const ModuleSidebar = ({
                 const subtopics = []
                 if (topic.theory) subtopics.push({ type: 'theory', id: 'theory', label: 'Theory & Concepts', icon: BookOpen })
                 if (topic.codeTemplates) {
-                  Object.entries(topic.codeTemplates).forEach(([tid, tpl]) =>
-                    subtopics.push({ type: 'template', id: tid, label: tpl.title, icon: Code2 })
+                  // {console.log("yeayyy!");console.log("code templates are : ",topic.codeTemplates);}
+                  Object.entries(topic.codeTemplates).forEach(([tid, tpl]) =>{
+                    // console.log("template id is : ",tid)
+                    // console.log("template details are : ",tpl.id)
+                    subtopics.push({ type: 'template', id: tid, label: tpl.title, icon: Code2,dbId:tpl.id})}
                   )
                 }
 
@@ -325,6 +351,7 @@ const ModuleSidebar = ({
                         >
                           <div className="ml-7 mr-2 mb-1 space-y-0.5 border-l border-gray-200 dark:border-slate-700 pl-2">
                             {subtopics.map(sub => {
+                              // {console.log("**",sub.dbId)}
                               const SubIcon = sub.icon
                               const isSubActive = activeSubtopic?.type === sub.type
                                 && activeSubtopic?.id === sub.id
@@ -344,7 +371,8 @@ const ModuleSidebar = ({
                                   <SubIcon size={11} className="flex-shrink-0 opacity-70" />
                                   <span className="truncate text-[11px] leading-tight">{sub.label}</span>
                                   {isSubActive && (
-                                    <Target size={9} className="ml-auto flex-shrink-0 text-indigo-500" />
+                                    <><Target size={9} className="ml-auto flex-shrink-0 text-indigo-500" />
+                                    <button onClick={() => deleteDSATemplate(sub.dbId)} className="w-4 h-4 bg-red-600 text-[12px] text-white">del</button></>
                                   )}
                                 </button>
                               )
