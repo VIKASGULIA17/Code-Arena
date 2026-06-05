@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronRight, ChevronLeft, Menu,
   BookOpen, Code2, X, RotateCcw, Search,
-  CheckCircle2, Circle, Trophy, Zap, Target,Plus
+  CheckCircle2, Circle, Trophy, Zap, Target,Plus,
+  Trash2
 } from 'lucide-react'
 import AddTopicModal from './AddTopicModal'
 import { useDsaContext } from '../../context/DsaContext'
