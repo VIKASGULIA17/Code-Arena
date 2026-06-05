@@ -372,7 +372,12 @@ const ModuleSidebar = ({
                                   <span className="truncate text-[11px] leading-tight">{sub.label}</span>
                                   {isSubActive && (
                                     <><Target size={9} className="ml-auto flex-shrink-0 text-indigo-500" />
-                                    <button onClick={() => deleteDSATemplate(sub.dbId)} className="w-4 h-4 bg-red-600 text-[12px] text-white">del</button></>
+
+
+                                    <button onClick={() => deleteDSATemplate(sub.dbId)} className="w-4 h-4 rounded flex items-center justify-center text-gray-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-all cursor-pointer">
+                                      
+                                      <Trash2 size={12} className="shrink-0" />
+                                      </button></>
                                   )}
                                 </button>
                               )
