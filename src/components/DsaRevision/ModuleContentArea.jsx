@@ -4,7 +4,8 @@ import {
   CheckCircle2, Circle, ArrowLeft, ArrowRight,
   BookOpen, Code2, Clock, Zap, Target, ChevronRight, PlayCircle, ExternalLink, Plus,
   Pen,
-  Share
+  Share,
+  Trash2
 } from 'lucide-react'
 import { TheorySection } from '../theory/TheorySection'
 import { CodeBlock } from '../code/codeblock'
@@ -118,8 +119,15 @@ const WelcomeScreen = ({ getOverallProgress }) => {
             key={catId}
             className="group bg-white dark:bg-slate-800/60 rounded-2xl border border-gray-200 dark:border-slate-700/50 p-5 text-left hover:border-blue-300 dark:hover:border-blue-500/40 hover:shadow-md dark:hover:shadow-blue-900/20 transition-all duration-200"
           >
-            <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${categoryColors[i % categoryColors.length]} flex items-center justify-center mb-3 shadow-sm group-hover:scale-110 transition-transform duration-200`}>
+           <div className='flex gap-2  items-start'> <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${categoryColors[i % categoryColors.length]} flex items-center justify-center mb-3 shadow-sm group-hover:scale-110 transition-transform duration-200`}>
               <Code2 size={16} className="text-white" />
+            </div>
+            <button
+              // onClick={() => handleDeleteCategory(catId)}
+              className="cursor-pointer ml-auto text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors"
+            >
+              <Trash2 size={18} />
+            </button>
             </div>
             <h3 className="font-semibold text-gray-900 dark:text-slate-100 text-sm mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{category.title}</h3>
             <p className="text-xs text-gray-400 dark:text-slate-500">{Object.keys(category.topics).length} modules</p>
