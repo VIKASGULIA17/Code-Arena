@@ -5,7 +5,8 @@ import {
   BookOpen, Code2, Clock, Zap, Target, ChevronRight, PlayCircle, ExternalLink, Plus,
   Pen,
   Share,
-  Trash2
+  Trash2,
+  X
 } from 'lucide-react'
 import { TheorySection } from '../theory/TheorySection'
 import { CodeBlock } from '../code/codeblock'
@@ -51,9 +52,32 @@ const buildSubtopicList = (catId, topicId, topic) => {
 const WelcomeScreen = ({ getOverallProgress }) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [headerModalOpen, setHeaderModalOpen] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [categoryToDelete, setCategoryToDelete] = useState(null)
+  const [confirmInput, setConfirmInput] = useState('')
+
   const overall = getOverallProgress()
 
   const { dsaContent } = useDsaContext();
+
+  const openDeleteModal = (catId, title) => {
+    setCategoryToDelete({ id: catId, title })
+    setConfirmInput('')
+    setDeleteModalOpen(true)
+  }
+
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false)
+    setCategoryToDelete(null)
+    setConfirmInput('')
+  }
+
+  const handleConfirmDelete = () => {
+    if (categoryToDelete && confirmInput === categoryToDelete.title) {
+      console.log(`Confirmed delete for category ID: ${categoryToDelete.id}, Title: ${categoryToDelete.title}`);
+      closeDeleteModal()
+    }
+  }
 
   const categoryColors = [
     'from-blue-500 to-cyan-500',
@@ -123,7 +147,7 @@ const WelcomeScreen = ({ getOverallProgress }) => {
               <Code2 size={16} className="text-white" />
             </div>
             <button
-              // onClick={() => handleDeleteCategory(catId)}
+              onClick={() => openDeleteModal(catId, category.title)}
               className="cursor-pointer ml-auto text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors"
             >
               <Trash2 size={18} />
@@ -150,6 +174,70 @@ const WelcomeScreen = ({ getOverallProgress }) => {
 
 
       <AddHeaderModal isOpen={headerModalOpen} onClose={() => setHeaderModalOpen(false)} />
+
+      {/* Delete Confirmation Modal */}
+      {deleteModalOpen && categoryToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md mx-4 border border-gray-100 dark:border-slate-700/50 overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-700">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-slate-100">
+                Delete Category
+              </h2>
+              <button
+                onClick={closeDeleteModal}
+                className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 hover:text-gray-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-4">
+              <p className="text-sm text-gray-650 dark:text-slate-300">
+                This will delete all the templates inside <span className="font-semibold text-gray-950 dark:text-white">"{categoryToDelete.title}"</span>. Are you sure you want to delete it?
+              </p>
+              
+              <div className="space-y-2">
+                <label className="block text-xs font-semibold text-gray-500 dark:text-slate-400 uppercase tracking-wider">
+                  Please type <span className="font-bold text-red-500">"{categoryToDelete.title}"</span> to confirm:
+                </label>
+                <input
+                  type="text"
+                  value={confirmInput}
+                  onChange={(e) => setConfirmInput(e.target.value)}
+                  placeholder="Type category name"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-slate-600 bg-gray-50 dark:bg-slate-900/50 text-sm text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-400 transition-colors"
+                />
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="px-6 py-4 bg-gray-50 dark:bg-slate-800/50 border-t border-gray-100 dark:border-slate-700 flex gap-3">
+              <button
+                type="button"
+                onClick={closeDeleteModal}
+                className="flex-1 px-4 py-2.5 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-300 text-sm font-semibold hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                disabled={confirmInput !== categoryToDelete.title}
+                className={`flex-1 px-4 py-2.5 rounded-lg text-white text-sm font-semibold transition-colors cursor-pointer
+                  ${confirmInput === categoryToDelete.title
+                    ? 'bg-red-650 hover:bg-red-700'
+                    : 'bg-red-400/50 cursor-not-allowed text-white/70'
+                  }
+                `}
+              >
+                Confirm Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </motion.div>
   )
 }
