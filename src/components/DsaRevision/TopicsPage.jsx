@@ -14,7 +14,7 @@ const TopicPage = () => {
 
   if (!topic) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120] pt-32 flex items-center justify-center transition-colors">
+      <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120] pt-32 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-red-500 mb-4">Topic Not Found</h1>
           <p className="text-gray-500 dark:text-slate-400 mb-8">The requested topic could not be found.</p>
@@ -45,7 +45,7 @@ const TopicPage = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120] pt-32 pb-20 transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120] pt-32 pb-20">
       {/* Header */}
       <div className="border-b border-gray-200 dark:border-slate-800 pb-8 mb-8 bg-white dark:bg-slate-900 shadow-sm dark:shadow-none">
         <div className="container mx-auto max-w-7xl px-4">

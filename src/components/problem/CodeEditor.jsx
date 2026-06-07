@@ -73,7 +73,13 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
         Output={Output}
         setOutput={setOutput}
       />
-      <ResizablePanels direction="vertical" initialSize={60}>
+      <ResizablePanels
+        direction="vertical"
+        initialSize={60}
+        minSize={15}
+        maxSize={85}
+        className="flex-1 min-h-0 w-full"
+      >
         {/* Editor Panel */}
         <div className="flex flex-col h-full w-full overflow-hidden">
           <Editor

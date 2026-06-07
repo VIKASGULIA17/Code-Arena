@@ -131,11 +131,12 @@
 }
 
 /* ─── Smooth theme transitions ─── */
+/* Apply to all real elements but NOT pseudo-elements (::before/::after).
+   Pseudo-elements were the performance bottleneck — Tailwind generates
+   hundreds of them for borders, decorations, etc. Real elements only. */
 html.theme-transitioning,
-html.theme-transitioning *,
-html.theme-transitioning *::before,
-html.theme-transitioning *::after {
-  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.25s ease, box-shadow 0.3s ease !important;
+html.theme-transitioning * {
+  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.25s ease, box-shadow 0.3s ease, fill 0.3s ease !important;
 }
 
 @theme{
@@ -225,31 +226,31 @@ html.theme-transitioning *::after {
 }
 
 /* ─── Scrollbar — subtle thin style ─── */
-* {
+html, body, [class*="overflow-y-auto"], [class*="overflow-x-auto"], [class*="overflow-auto"] {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
 }
-.dark * {
+.dark html, .dark body, .dark [class*="overflow-y-auto"], .dark [class*="overflow-x-auto"], .dark [class*="overflow-auto"] {
   scrollbar-color: #334155 transparent;
 }
-*::-webkit-scrollbar {
+html::-webkit-scrollbar, body::-webkit-scrollbar, [class*="overflow-y-auto"]::-webkit-scrollbar, [class*="overflow-x-auto"]::-webkit-scrollbar, [class*="overflow-auto"]::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-*::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track, body::-webkit-scrollbar-track, [class*="overflow-y-auto"]::-webkit-scrollbar-track, [class*="overflow-x-auto"]::-webkit-scrollbar-track, [class*="overflow-auto"]::-webkit-scrollbar-track {
   background: transparent;
 }
-*::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb, [class*="overflow-y-auto"]::-webkit-scrollbar-thumb, [class*="overflow-x-auto"]::-webkit-scrollbar-thumb, [class*="overflow-auto"]::-webkit-scrollbar-thumb {
   background-color: #cbd5e1;
   border-radius: 999px;
 }
-.dark *::-webkit-scrollbar-thumb {
+.dark html::-webkit-scrollbar-thumb, .dark body::-webkit-scrollbar-thumb, .dark [class*="overflow-y-auto"]::-webkit-scrollbar-thumb, .dark [class*="overflow-x-auto"]::-webkit-scrollbar-thumb, .dark [class*="overflow-auto"]::-webkit-scrollbar-thumb {
   background-color: #334155;
 }
-*::-webkit-scrollbar-thumb:hover {
+html::-webkit-scrollbar-thumb:hover, body::-webkit-scrollbar-thumb:hover, [class*="overflow-y-auto"]::-webkit-scrollbar-thumb:hover, [class*="overflow-x-auto"]::-webkit-scrollbar-thumb:hover, [class*="overflow-auto"]::-webkit-scrollbar-thumb:hover {
   background-color: #94a3b8;
 }
-.dark *::-webkit-scrollbar-thumb:hover {
+.dark html::-webkit-scrollbar-thumb:hover, .dark body::-webkit-scrollbar-thumb:hover, .dark [class*="overflow-y-auto"]::-webkit-scrollbar-thumb:hover, .dark [class*="overflow-x-auto"]::-webkit-scrollbar-thumb:hover, .dark [class*="overflow-auto"]::-webkit-scrollbar-thumb:hover {
   background-color: #475569;
 }
 

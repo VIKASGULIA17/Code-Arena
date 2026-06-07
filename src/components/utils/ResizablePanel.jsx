@@ -1,6 +1,13 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 
-export const ResizablePanels = ({ children, direction = 'horizontal', initialSize = 50 }) => {
+export const ResizablePanels = ({ 
+  children, 
+  direction = 'horizontal', 
+  initialSize = 50,
+  minSize = 30,
+  maxSize = 70,
+  className = "h-full w-full"
+}) => {
   const [size, setSize] = useState(initialSize);
   const containerRef = useRef(null);
   const isDraggingRef = useRef(false);
@@ -13,16 +20,16 @@ export const ResizablePanels = ({ children, direction = 'horizontal', initialSiz
 
     if (direction === 'horizontal') {
       const newSize = ((e.clientX - rect.left) / rect.width) * 100;
-      if (newSize > 30 && newSize < 70) {
+      if (newSize >= minSize && newSize <= maxSize) {
         setSize(newSize);
       }
     } else {
       const newSize = ((e.clientY - rect.top) / rect.height) * 100;
-      if (newSize > 30 && newSize < 70) {
+      if (newSize >= minSize && newSize <= maxSize) {
         setSize(newSize);
       }
     }
-  }, [direction]);
+  }, [direction, minSize, maxSize]);
 
   const handleMouseUp = useCallback(() => {
     isDraggingRef.current = false;
@@ -50,7 +57,7 @@ export const ResizablePanels = ({ children, direction = 'horizontal', initialSiz
   return (
     <div
       ref={containerRef}
-      className={`flex ${isHorizontal ? 'flex-row' : 'flex-col'} h-full w-full`}
+      className={`flex ${isHorizontal ? 'flex-row' : 'flex-col'} ${className}`}
       style={{ userSelect: isDraggingRef.current ? 'none' : 'auto' }}
     >
       {/* First Panel */}
