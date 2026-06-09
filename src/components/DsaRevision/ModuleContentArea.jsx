@@ -53,10 +53,6 @@ const WelcomeScreen = ({ getOverallProgress }) => {
   const [headerModalOpen, setHeaderModalOpen] = useState(false)
   const overall = getOverallProgress()
 
-  // const handleDeleteCategory = () => {
-  //   // Implement category deletion logic here
-  // }
-
   const { dsaContent } = useDsaContext();
 
   const categoryColors = [

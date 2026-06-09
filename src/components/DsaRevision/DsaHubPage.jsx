@@ -34,7 +34,7 @@ const DSAHubPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120] pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 sm:px-4 transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120] pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 sm:px-4">
       <EnhancedNavbar />
       <div className="container mx-auto max-w-7xl">
 

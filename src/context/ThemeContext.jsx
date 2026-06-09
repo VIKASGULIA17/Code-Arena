@@ -36,35 +36,31 @@ export const ThemeProvider = ({ children }) => {
 
   const applyTheme = useCallback((resolved, isInitial = false) => {
     const root = document.documentElement;
-    
-    const doThemeChange = () => {
-      if (resolved === 'dark') {
-        root.classList.add('dark');
-      } else {
-        root.classList.remove('dark');
-      }
-      setResolvedTheme(resolved);
-    };
 
-    if (!isInitial && document.startViewTransition) {
-      document.startViewTransition(() => {
-        flushSync(() => {
-          doThemeChange();
-        });
-      });
+    if (!isInitial) {
+      if (transitionTimeout) clearTimeout(transitionTimeout);
+      root.classList.add('theme-transitioning');
+    }
+
+    // Toggle dark class and color-scheme simultaneously
+    if (resolved === 'dark') {
+      root.classList.add('dark');
+      root.style.colorScheme = 'dark';
     } else {
-      if (!isInitial) {
-        root.classList.add('theme-transitioning');
-        if (transitionTimeout) clearTimeout(transitionTimeout);
-      }
-      
-      doThemeChange();
+      root.classList.remove('dark');
+      root.style.colorScheme = 'light';
+    }
 
-      if (!isInitial) {
-        transitionTimeout = setTimeout(() => {
-          root.classList.remove('theme-transitioning');
-        }, 300);
-      }
+    // flushSync forces React to re-render all consumers of resolvedTheme
+    // synchronously — no frame delay between CSS class change and React state.
+    flushSync(() => {
+      setResolvedTheme(resolved);
+    });
+
+    if (!isInitial) {
+      transitionTimeout = setTimeout(() => {
+        root.classList.remove('theme-transitioning');
+      }, 350);
     }
   }, []);
 

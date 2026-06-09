@@ -109,13 +109,6 @@ export function EnhancedNavbar() {
     navigate('/')
   }
 
-  const handleThemeToggle = () => {
-    document.documentElement.classList.add('theme-transitioning')
-    cycleTheme()
-    setTimeout(() => {
-      document.documentElement.classList.remove('theme-transitioning')
-    }, 350)
-  }
 
   const ThemeIcon = resolvedTheme === 'dark' ? Moon : Sun
   const themeLabel = theme === 'system' ? 'System' : theme === 'dark' ? 'Dark' : 'Light'
@@ -123,7 +116,7 @@ export function EnhancedNavbar() {
   return (
     <>
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-[shadow,border-color,backdrop-filter] duration-300 ${
         scrolled
           ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl shadow-[0_1px_2px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_2px_rgba(0,0,0,0.3)] border-b border-slate-200/60 dark:border-slate-700/50'
           : 'bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl border-b border-transparent'
@@ -183,7 +176,7 @@ export function EnhancedNavbar() {
 
           {/* Theme Toggle */}
           <button
-            onClick={handleThemeToggle}
+            onClick={cycleTheme}
             className="flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-200 transition-all duration-200"
             title={`Theme: ${themeLabel}`}
           >
@@ -285,7 +278,7 @@ export function EnhancedNavbar() {
         <div className="flex items-center gap-2 lg:hidden">
           {/* Mobile Theme Toggle */}
           <button
-            onClick={handleThemeToggle}
+            onClick={cycleTheme}
             className="p-2 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200"
             title={`Theme: ${themeLabel}`}
           >

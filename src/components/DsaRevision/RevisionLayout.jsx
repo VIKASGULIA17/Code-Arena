@@ -63,7 +63,7 @@ const RevisionLayout = () => {
   }, [navigate])
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120] transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120]">
       <EnhancedNavbar />
 
       {/* Top-level admin button - only on welcome page */}

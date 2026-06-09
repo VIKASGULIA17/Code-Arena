@@ -314,7 +314,13 @@ const ProblemDetails = ({ isContest, problemId }) => {
       />
 
       {/* Main Content Area */}
-      <ResizablePanels direction="horizontal" initialSize={50}>
+      <ResizablePanels
+        direction="horizontal"
+        initialSize={50}
+        minSize={20}
+        maxSize={80}
+        className="flex-1 min-h-0 w-full"
+      >
         {/* Left Pane (Description) */}
         <div className="flex flex-col h-full w-full border-r border-slate-200 bg-white">
           <div className="flex items-center justify-between border-b border-slate-200 bg-white px-2 min-h-10 shrink-0">

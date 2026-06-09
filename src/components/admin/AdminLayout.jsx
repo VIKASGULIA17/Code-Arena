@@ -21,13 +21,6 @@ const AdminLayout = () => {
         isLast: index === pathSegments.length - 1,
     }));
 
-    const handleThemeToggle = () => {
-        document.documentElement.classList.add('theme-transitioning');
-        cycleTheme();
-        setTimeout(() => {
-            document.documentElement.classList.remove('theme-transitioning');
-        }, 350);
-    };
 
     const ThemeIcon = resolvedTheme === 'dark' ? Moon : Sun;
 
@@ -90,7 +83,7 @@ const AdminLayout = () => {
 
                         {/* Theme Toggle */}
                         <button
-                            onClick={handleThemeToggle}
+                            onClick={cycleTheme}
                             className="p-2 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200"
                             title={`Theme: ${theme}`}
                         >
