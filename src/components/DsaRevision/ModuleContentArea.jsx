@@ -55,6 +55,10 @@ const WelcomeScreen = ({ getOverallProgress }) => {
 
   const { dsaContent } = useDsaContext();
 
+  // const handleDeleteCategory = () => {
+
+  // }
+
   const categoryColors = [
     'from-blue-500 to-cyan-500',
     'from-purple-500 to-pink-500',
