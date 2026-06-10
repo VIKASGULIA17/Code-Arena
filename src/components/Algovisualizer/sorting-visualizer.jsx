@@ -8,6 +8,7 @@ import {
 import { Play, Pause, RotateCcw, Shuffle, Info, TrendingUp } from "lucide-react"
 import { GlobalMetricsPanel } from "./GlobalMetricsPanel"
 import { ComplexityPanel } from "./ComplexityPanel"
+import { useToolbar, ToolbarPortal } from "@/context/ToolbarContext"
 
 /* ─── algorithm metadata ─────────────────────────── */
 const ALGO_META = {
@@ -49,6 +50,7 @@ const CustomBar = (props) => {
 
 export function SortingVisualizer({ theme = "dark" }) {
   const isDark = theme === "dark"
+  const { setActiveAlgorithm, setIsPlaying } = useToolbar()
   const [array,       setArray]       = useState([])
   const [algorithm,   setAlgorithm]   = useState("bubble")
   const [speed,       setSpeed]       = useState(50)
@@ -65,6 +67,16 @@ export function SortingVisualizer({ theme = "dark" }) {
   const compRef  = useRef(0)
   const swapRef  = useRef(0)
   const tRef     = useRef(0)
+
+  useEffect(() => {
+    setActiveAlgorithm(ALGO_META[algorithm]?.name || algorithm)
+    return () => setActiveAlgorithm("")
+  }, [algorithm, setActiveAlgorithm])
+
+  useEffect(() => {
+    setIsPlaying(isRunning)
+    return () => setIsPlaying(false)
+  }, [isRunning, setIsPlaying])
 
   /* colours for the current theme */
   const c = {
@@ -260,57 +272,58 @@ export function SortingVisualizer({ theme = "dark" }) {
   return (
     <div className="flex flex-col gap-4 p-4 md:p-6 h-full" style={{ background: c.bg, color: c.text }}>
 
-      {/* ── Top: algo tabs + controls ── */}
-      <div className="flex flex-wrap items-center gap-3">
-        {/* Algo pills */}
-        <div className="flex gap-1 rounded-xl p-1 flex-wrap" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
-          {Object.entries(ALGO_META).map(([key, m]) => (
-            <button key={key} onClick={() => !isRunning && setAlgorithm(key)} disabled={isRunning}
-              className="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-200"
-              style={algorithm === key
-                ? { background: m.color, color: "#fff", boxShadow: `0 2px 8px ${m.color}66` }
-                : { color: c.muted }
-              }>
-              {m.name.split(" ")[0]}
+      <ToolbarPortal>
+        <div className="flex items-center gap-3 flex-nowrap">
+          {/* Algo pills */}
+          <div className="flex gap-1 rounded-xl p-1 flex-wrap" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+            {Object.entries(ALGO_META).map(([key, m]) => (
+              <button key={key} onClick={() => !isRunning && setAlgorithm(key)} disabled={isRunning}
+                className="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-200"
+                style={algorithm === key
+                  ? { background: m.color, color: "#fff", boxShadow: `0 2px 8px ${m.color}66` }
+                  : { color: c.muted }
+                }>
+                {m.name.split(" ")[0]}
+              </button>
+            ))}
+          </div>
+
+          {/* Speed */}
+          <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+            <span className="text-[11px]" style={{ color: c.muted }}>Speed</span>
+            <input type="range" min={1} max={100} value={speed} onChange={e => setSpeed(+e.target.value)}
+              className="w-20" style={{ accentColor: c.accent }} />
+            <span className="text-[11px] font-bold w-7" style={{ color: c.text }}>{speed}%</span>
+          </div>
+
+          {/* Size */}
+          <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+            <span className="text-[11px]" style={{ color: c.muted }}>Size</span>
+            <input type="range" min={10} max={80} value={size} disabled={isRunning}
+              onChange={e => setSize(+e.target.value)} className="w-20" style={{ accentColor: c.accent }} />
+            <span className="text-[11px] font-bold w-5" style={{ color: c.text }}>{size}</span>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-2 ml-auto">
+            <button onClick={generateArray} disabled={isRunning}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
+              style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
+              <Shuffle size={13} /> Shuffle
             </button>
-          ))}
+            <button onClick={isRunning ? togglePause : runSort}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all shadow-lg"
+              style={{ background: `linear-gradient(135deg, ${meta.color}, ${meta.color}bb)` }}>
+              {isRunning ? (isPaused ? <><Play size={14}/>Resume</> : <><Pause size={14}/>Pause</>) : <><Play size={14}/>Sort</>}
+            </button>
+            <button onClick={stop}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
+              style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
+              <RotateCcw size={13} /> Reset
+            </button>
+          </div>
         </div>
-
-        {/* Speed */}
-        <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
-          <span className="text-[11px]" style={{ color: c.muted }}>Speed</span>
-          <input type="range" min={1} max={100} value={speed} onChange={e => setSpeed(+e.target.value)}
-            className="w-20" style={{ accentColor: c.accent }} />
-          <span className="text-[11px] font-bold w-7" style={{ color: c.text }}>{speed}%</span>
-        </div>
-
-        {/* Size */}
-        <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
-          <span className="text-[11px]" style={{ color: c.muted }}>Size</span>
-          <input type="range" min={10} max={80} value={size} disabled={isRunning}
-            onChange={e => setSize(+e.target.value)} className="w-20" style={{ accentColor: c.accent }} />
-          <span className="text-[11px] font-bold w-5" style={{ color: c.text }}>{size}</span>
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-2 ml-auto">
-          <button onClick={generateArray} disabled={isRunning}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
-            style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
-            <Shuffle size={13} /> Shuffle
-          </button>
-          <button onClick={isRunning ? togglePause : runSort}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all shadow-lg"
-            style={{ background: `linear-gradient(135deg, ${meta.color}, ${meta.color}bb)` }}>
-            {isRunning ? (isPaused ? <><Play size={14}/>Resume</> : <><Pause size={14}/>Pause</>) : <><Play size={14}/>Sort</>}
-          </button>
-          <button onClick={stop}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
-            style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
-            <RotateCcw size={13} /> Reset
-          </button>
-        </div>
-      </div>
+      </ToolbarPortal>
 
       {/* ── Main bar chart (Recharts) ── */}
       <div className="flex-1 rounded-2xl overflow-hidden relative" style={{ background: c.panel, border: `1px solid ${c.border}`, minHeight: 240 }}>

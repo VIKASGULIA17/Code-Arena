@@ -12,6 +12,7 @@ import {
   Hash,
   Activity,
 } from "lucide-react";
+import { ToolbarPortal } from "@/context/ToolbarContext";
 
 /**
  * Execution controls — algorithm picker, input, playback toolbar, speed, stats.
@@ -46,48 +47,47 @@ export function ExecutionControls({
   const meta = ALGORITHMS[algorithm];
 
   return (
-    <div className="flex flex-col gap-3">
-      {/* Algorithm picker */}
-      <div
-        className="flex gap-1 rounded-xl p-1 flex-wrap"
-        style={{
-          background: c.bg,
-          border: `1px solid ${c.border}`,
-        }}
-      >
-        {Object.entries(ALGORITHMS).map(([key, m]) => (
-          <button
-            key={key}
-            onClick={() => setAlgorithm(key)}
-            disabled={isPlaying}
-            className="px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap"
-            style={
-              algorithm === key
-                ? {
-                    background: m.color,
-                    color: "#fff",
-                    boxShadow: `0 4px 12px ${m.color}40`,
-                  }
-                : {
-                    color: c.muted,
-                    opacity: isPlaying ? 0.5 : 1,
-                  }
-            }
-          >
-            {key.includes("memo") ? (
-              <Zap size={12} />
-            ) : key === "factorial" ? (
-              <Hash size={12} />
-            ) : (
-              <TreePine size={12} />
-            )}
-            {m.name}
-          </button>
-        ))}
-      </div>
+    <ToolbarPortal>
+      <div className="flex items-center gap-3 flex-nowrap">
+        {/* Algorithm picker */}
+        <div
+          className="flex gap-1 rounded-xl p-1 flex-wrap"
+          style={{
+            background: c.bg,
+            border: `1px solid ${c.border}`,
+          }}
+        >
+          {Object.entries(ALGORITHMS).map(([key, m]) => (
+            <button
+              key={key}
+              onClick={() => setAlgorithm(key)}
+              disabled={isPlaying}
+              className="px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap"
+              style={
+                algorithm === key
+                  ? {
+                      background: m.color,
+                      color: "#fff",
+                      boxShadow: `0 2px 8px ${m.color}60`,
+                    }
+                  : {
+                      color: c.muted,
+                      opacity: isPlaying ? 0.5 : 1,
+                    }
+              }
+            >
+              {key.includes("memo") ? (
+                <Zap size={11} />
+              ) : key === "factorial" ? (
+                <Hash size={11} />
+              ) : (
+                <TreePine size={11} />
+              )}
+              {m.name.split(" ")[0]}
+            </button>
+          ))}
+        </div>
 
-      {/* Input + playback controls */}
-      <div className="flex flex-wrap items-center gap-3">
         {/* Input field */}
         <div
           className="flex items-center gap-2 rounded-xl px-3 py-1.5"
@@ -114,7 +114,7 @@ export function ExecutionControls({
             disabled={isPlaying}
             min={0}
             max={meta.maxInput}
-            className="w-14 bg-transparent text-center text-sm font-mono font-bold outline-none"
+            className="w-10 bg-transparent text-center text-xs font-mono font-bold outline-none"
             style={{
               color: c.text,
               opacity: isPlaying ? 0.5 : 1,
@@ -124,7 +124,7 @@ export function ExecutionControls({
             className="text-[9px]"
             style={{ color: c.muted }}
           >
-            max {meta.maxInput}
+            (max {meta.maxInput})
           </span>
         </div>
 
@@ -132,7 +132,7 @@ export function ExecutionControls({
         <div className="flex items-center gap-1">
           <button
             onClick={stepBack}
-            className="p-2 rounded-lg transition-all duration-150 hover:scale-105"
+            className="p-1.5 rounded-lg transition-all duration-150 hover:scale-105"
             style={{
               background: c.card,
               color: c.text,
@@ -140,31 +140,24 @@ export function ExecutionControls({
             }}
             title="Step Back"
           >
-            <SkipBack size={14} />
+            <SkipBack size={13} />
           </button>
 
           <button
             onClick={isPlaying ? pause : play}
-            className="px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 shadow-lg hover:scale-105 flex items-center gap-2"
+            className="px-3 py-1.5 rounded-xl text-xs font-semibold text-white transition-all duration-200 shadow-lg hover:scale-105 flex items-center gap-1.5"
             style={{
               background: `linear-gradient(135deg, ${meta.color}, ${meta.color}cc)`,
-              boxShadow: `0 4px 16px ${meta.color}40`,
+              boxShadow: `0 2px 8px ${meta.color}30`,
             }}
           >
-            {isPlaying ? (
-              <>
-                <Pause size={14} /> Pause
-              </>
-            ) : (
-              <>
-                <Play size={14} /> Play
-              </>
-            )}
+            {isPlaying ? <Pause size={13} /> : <Play size={13} />}
+            <span>{isPlaying ? "Pause" : "Play"}</span>
           </button>
 
           <button
             onClick={stepForward}
-            className="p-2 rounded-lg transition-all duration-150 hover:scale-105"
+            className="p-1.5 rounded-lg transition-all duration-150 hover:scale-105"
             style={{
               background: c.card,
               color: c.text,
@@ -172,12 +165,12 @@ export function ExecutionControls({
             }}
             title="Step Forward"
           >
-            <SkipForward size={14} />
+            <SkipForward size={13} />
           </button>
 
           <button
             onClick={reset}
-            className="p-2 rounded-lg transition-all duration-150 hover:scale-105 ml-1"
+            className="p-1.5 rounded-lg transition-all duration-150 hover:scale-105 ml-1"
             style={{
               background: c.card,
               color: c.muted,
@@ -185,7 +178,7 @@ export function ExecutionControls({
             }}
             title="Reset"
           >
-            <RotateCcw size={14} />
+            <RotateCcw size={13} />
           </button>
         </div>
 
@@ -210,7 +203,7 @@ export function ExecutionControls({
             max={100}
             value={speed}
             onChange={(e) => setSpeed(+e.target.value)}
-            className="w-20"
+            className="w-16"
             style={{ accentColor: meta.color }}
           />
           <span
@@ -221,77 +214,6 @@ export function ExecutionControls({
           </span>
         </div>
       </div>
-
-      {/* Stats chips */}
-      <div className="flex flex-wrap gap-2">
-        {[
-          {
-            label: "Algorithm",
-            value: meta.name,
-            color: meta.color,
-          },
-          {
-            label: "Complexity",
-            value: meta.complexity,
-            color: "#6366f1",
-          },
-          {
-            label: "Step",
-            value: `${currentStep + 1} / ${totalSteps}`,
-            color: "#0ea5e9",
-          },
-          {
-            label: "Total Nodes",
-            value: totalNodes,
-            color: "#10b981",
-          },
-          {
-            label: "Stack Depth",
-            value: currentCallStackDepth,
-            color: "#f59e0b",
-          },
-        ].map(({ label, value, color }) => (
-          <div
-            key={label}
-            className="flex items-center gap-2 border rounded-xl px-3 py-1.5"
-            style={{
-              background: c.bg,
-              borderColor: c.border,
-            }}
-          >
-            <span
-              className="w-2 h-2 rounded-full flex-shrink-0"
-              style={{ background: color }}
-            />
-            <span
-              className="text-[10px]"
-              style={{ color: c.muted }}
-            >
-              {label}:
-            </span>
-            <span
-              className="text-[11px] font-bold font-mono"
-              style={{ color: c.text }}
-            >
-              {value}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      {/* Progress bar */}
-      <div
-        className="h-1 rounded-full overflow-hidden"
-        style={{ background: c.card }}
-      >
-        <div
-          className="h-full rounded-full transition-all duration-200"
-          style={{
-            width: `${totalSteps > 0 ? ((currentStep + 1) / totalSteps) * 100 : 0}%`,
-            background: `linear-gradient(90deg, ${meta.color}, ${meta.color}aa)`,
-          }}
-        />
-      </div>
-    </div>
+    </ToolbarPortal>
   );
 }

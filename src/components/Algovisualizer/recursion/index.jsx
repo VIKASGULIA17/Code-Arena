@@ -1,5 +1,4 @@
-"use client";
-
+import { useEffect } from "react";
 import { useRecursionEngine } from "./useRecursionEngine";
 import { ExecutionControls } from "./ExecutionControls";
 import { RecursionCanvas } from "./RecursionCanvas";
@@ -7,6 +6,7 @@ import { CallStack } from "./CallStack";
 import { StateInspector } from "./StateInspector";
 import { GlobalMetricsPanel } from "../GlobalMetricsPanel";
 import { ComplexityPanel } from "../ComplexityPanel";
+import { useToolbar } from "@/context/ToolbarContext";
 
 /**
  * Layout shell — composes all panels for the Recursion Visualizer.
@@ -14,6 +14,23 @@ import { ComplexityPanel } from "../ComplexityPanel";
 export function RecursionVisualizer({ theme = "dark" }) {
   const isDark = theme === "dark";
   const engine = useRecursionEngine();
+  const { setActiveAlgorithm, setProgress, setIsPlaying } = useToolbar();
+
+  useEffect(() => {
+    setActiveAlgorithm(engine.meta?.name || engine.algorithm);
+    return () => setActiveAlgorithm("");
+  }, [engine.algorithm, engine.meta, setActiveAlgorithm]);
+
+  useEffect(() => {
+    setIsPlaying(engine.isPlaying);
+    return () => setIsPlaying(false);
+  }, [engine.isPlaying, setIsPlaying]);
+
+  useEffect(() => {
+    const pct = engine.totalSteps > 1 ? (engine.currentStep / (engine.totalSteps - 1)) * 100 : 0;
+    setProgress(pct);
+    return () => setProgress(0);
+  }, [engine.currentStep, engine.totalSteps, setProgress]);
 
   const c = {
     bg: isDark ? "#020617" : "#f8fafc",

@@ -1,11 +1,11 @@
-"use client";
-
+import { useEffect } from "react";
 import { useTreeEngine } from "./useTreeEngine";
 import { TreeControls } from "./TreeControls";
 import { TreeCanvas } from "./TreeCanvas";
 import { TraversalOrder } from "./TraversalOrder";
 import { GlobalMetricsPanel } from "../GlobalMetricsPanel";
 import { ComplexityPanel } from "../ComplexityPanel";
+import { useToolbar } from "@/context/ToolbarContext";
 
 /**
  * Layout shell — composes all panels for the Tree (BST) Visualizer.
@@ -13,6 +13,23 @@ import { ComplexityPanel } from "../ComplexityPanel";
 export function TreeVisualizer({ theme = "dark" }) {
   const isDark = theme === "dark";
   const engine = useTreeEngine();
+  const { setActiveAlgorithm, setProgress, setIsPlaying } = useToolbar();
+
+  useEffect(() => {
+    setActiveAlgorithm(engine.meta?.name || engine.algorithm);
+    return () => setActiveAlgorithm("");
+  }, [engine.algorithm, engine.meta, setActiveAlgorithm]);
+
+  useEffect(() => {
+    setIsPlaying(engine.isPlaying);
+    return () => setIsPlaying(false);
+  }, [engine.isPlaying, setIsPlaying]);
+
+  useEffect(() => {
+    const pct = engine.totalSteps > 1 ? (engine.currentStep / (engine.totalSteps - 1)) * 100 : 0;
+    setProgress(pct);
+    return () => setProgress(0);
+  }, [engine.currentStep, engine.totalSteps, setProgress]);
 
   const c = {
     bg: isDark ? "#020617" : "#f8fafc",

@@ -8,6 +8,7 @@ import {
 import { Play, Pause, RotateCcw, MousePointer2, Info, TrendingUp } from "lucide-react"
 import { GlobalMetricsPanel } from "./GlobalMetricsPanel"
 import { ComplexityPanel } from "./ComplexityPanel"
+import { useToolbar, ToolbarPortal } from "@/context/ToolbarContext"
 
 /* ─── algorithm metadata ────────────────────────────── */
 const ALGO_META = {
@@ -98,6 +99,8 @@ const heuristic = (a, b) => {
 
 export function GraphVisualizer({ theme = "dark" }) {
   const isDark = theme === "dark"
+  const { setActiveAlgorithm, setIsPlaying } = useToolbar()
+
   const c = {
     bg:     isDark ? "#020617" : "#f8fafc", // Slate 950 / Slate 50
     panel:  isDark ? "#0f172a" : "#ffffff", // Slate 900 / White
@@ -129,6 +132,16 @@ export function GraphVisualizer({ theme = "dark" }) {
   const stopRef  = useRef(false)
   const pauseRef = useRef(false)
   const visStepRef = useRef(0)
+
+  useEffect(() => {
+    setActiveAlgorithm(ALGO_META[algorithm]?.name || algorithm)
+    return () => setActiveAlgorithm("")
+  }, [algorithm, setActiveAlgorithm])
+
+  useEffect(() => {
+    setIsPlaying(isRunning)
+    return () => setIsPlaying(false)
+  }, [isRunning, setIsPlaying])
 
   /* ── init graph ── */
   const buildGraph = useCallback(() => {
@@ -409,70 +422,71 @@ export function GraphVisualizer({ theme = "dark" }) {
   return (
     <div className="flex flex-col gap-4 p-4 md:p-6 h-full" style={{ background: c.bg, color: c.text }}>
 
-      {/* ── Top controls bar ── */}
-      <div className="flex flex-wrap items-center gap-3">
+      <ToolbarPortal>
+        <div className="flex items-center gap-3 flex-nowrap">
 
-        {/* Algorithm selector */}
-        <div className="flex gap-1 rounded-xl p-1 flex-wrap" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
-          {Object.entries(ALGO_META).map(([key, m]) => (
+          {/* Algorithm selector */}
+          <div className="flex gap-1 rounded-xl p-1 flex-wrap" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+            {Object.entries(ALGO_META).map(([key, m]) => (
+              <button
+                key={key}
+                onClick={() => !isRunning && setAlgorithm(key)}
+                disabled={isRunning}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${algorithm === key ? "text-white shadow-md" : ""}`}
+                style={algorithm === key ? { background: m.color } : { color: c.muted }}
+                onMouseOver={e => { if (algorithm !== key) e.currentTarget.style.color = c.text }}
+                onMouseOut={e => { if (algorithm !== key) e.currentTarget.style.color = c.muted }}
+              >
+                {m.name.split(" ")[0]}
+              </button>
+            ))}
+          </div>
+
+          {/* Speed slider */}
+          <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+            <span className="text-[11px]" style={{ color: c.muted }}>Speed</span>
+            <input type="range" min={0} max={100} value={speed} onChange={e => setSpeed(+e.target.value)}
+              className="w-20" style={{ accentColor: meta.color }} />
+            <span className="text-[11px] font-bold w-8" style={{ color: c.text }}>{speed}%</span>
+          </div>
+
+          {/* Playback controls */}
+          <div className="flex gap-2 ml-auto">
             <button
-              key={key}
-              onClick={() => !isRunning && setAlgorithm(key)}
+              onClick={() => setSelectMode(m => m === "start" ? null : "start")}
               disabled={isRunning}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${algorithm === key ? "text-white shadow-md" : ""}`}
-              style={algorithm === key ? { background: m.color } : { color: c.muted }}
-              onMouseOver={e => { if (algorithm !== key) e.currentTarget.style.color = c.text }}
-              onMouseOut={e => { if (algorithm !== key) e.currentTarget.style.color = c.muted }}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${selectMode === "start" ? "text-white shadow-sm" : ""}`}
+              style={selectMode === "start" ? { background: "#10b981" } : { background: c.panel, border: `1px solid ${c.border}`, color: c.text }}
             >
-              {m.name.split(" ")[0]}
+              <MousePointer2 size={13} />
+              {selectMode === "start" ? "Pick start…" : "Set Start"}
             </button>
-          ))}
+            <button
+              onClick={() => setSelectMode(m => m === "end" ? null : "end")}
+              disabled={isRunning}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${selectMode === "end" ? "text-white shadow-sm" : ""}`}
+              style={selectMode === "end" ? { background: "#ef4444" } : { background: c.panel, border: `1px solid ${c.border}`, color: c.text }}
+            >
+              <MousePointer2 size={13} />
+              {selectMode === "end" ? "Pick end…" : "Set End"}
+            </button>
+            <button
+              onClick={isRunning ? togglePause : runAlgorithm}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 shadow-lg"
+              style={{ background: `linear-gradient(135deg, ${meta.color}, ${meta.color}cc)` }}
+            >
+              {isRunning ? (isPaused ? <><Play size={14}/> Resume</> : <><Pause size={14}/> Pause</>) : <><Play size={14}/> Run</>}
+            </button>
+            <button
+              onClick={reset}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
+              style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}
+            >
+              <RotateCcw size={13} /> Reset
+            </button>
+          </div>
         </div>
-
-        {/* Speed slider */}
-        <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
-          <span className="text-[11px]" style={{ color: c.muted }}>Speed</span>
-          <input type="range" min={0} max={100} value={speed} onChange={e => setSpeed(+e.target.value)}
-            className="w-20" style={{ accentColor: meta.color }} />
-          <span className="text-[11px] font-bold w-8" style={{ color: c.text }}>{speed}%</span>
-        </div>
-
-        {/* Playback controls */}
-        <div className="flex gap-2 ml-auto">
-          <button
-            onClick={() => setSelectMode(m => m === "start" ? null : "start")}
-            disabled={isRunning}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${selectMode === "start" ? "text-white shadow-sm" : ""}`}
-            style={selectMode === "start" ? { background: "#10b981" } : { background: c.panel, border: `1px solid ${c.border}`, color: c.text }}
-          >
-            <MousePointer2 size={13} />
-            {selectMode === "start" ? "Pick start…" : "Set Start"}
-          </button>
-          <button
-            onClick={() => setSelectMode(m => m === "end" ? null : "end")}
-            disabled={isRunning}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 ${selectMode === "end" ? "text-white shadow-sm" : ""}`}
-            style={selectMode === "end" ? { background: "#ef4444" } : { background: c.panel, border: `1px solid ${c.border}`, color: c.text }}
-          >
-            <MousePointer2 size={13} />
-            {selectMode === "end" ? "Pick end…" : "Set End"}
-          </button>
-          <button
-            onClick={isRunning ? togglePause : runAlgorithm}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all duration-200 shadow-lg"
-            style={{ background: `linear-gradient(135deg, ${meta.color}, ${meta.color}cc)` }}
-          >
-            {isRunning ? (isPaused ? <><Play size={14}/> Resume</> : <><Pause size={14}/> Pause</>) : <><Play size={14}/> Run</>}
-          </button>
-          <button
-            onClick={reset}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
-            style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}
-          >
-            <RotateCcw size={13} /> Reset
-          </button>
-        </div>
-      </div>
+      </ToolbarPortal>
 
       {/* ── Main graph SVG ── */}
       <div className="flex-1 rounded-2xl overflow-hidden relative min-h-[420px]"

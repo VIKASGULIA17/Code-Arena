@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Sidebar } from "@/components/Algovisualizer/sidebar"
 import { SortingVisualizer } from "@/components/Algovisualizer/sorting-visualizer"
 import { TreeVisualizer } from "@/components/Algovisualizer/tree-visualizer"
@@ -8,109 +8,159 @@ import { RecursionVisualizer } from "@/components/Algovisualizer/recursion-visua
 import { GraphVisualizer } from "@/components/Algovisualizer/graph-visualizer"
 import { InteractiveTreeBuilder } from "@/components/Algovisualizer/tree/InteractiveTreeBuilder"
 import { TraversalConverter } from "@/components/Algovisualizer/tree/TraversalConverter"
-import { ArrowLeft, Menu, Code2, Cpu, Sun, Moon } from "lucide-react"
-import { useNavigate, Link } from "react-router-dom"
-import { useAppContext } from "@/context/AppContext"
+import { Menu, Maximize, Minimize } from "lucide-react"
+import { Link } from "react-router-dom"
 import { useTheme } from "@/context/ThemeContext"
+import { EnhancedNavbar } from "@/components/Navbar"
+import { ToolbarProvider, useToolbar } from "@/context/ToolbarContext"
 
-export default function AlgoVisualizerPage() {
+function AlgoVisualizerPage() {
   const [activeCategory, setActiveCategory] = useState("graph")
-  const [sidebarOpen, setSidebarOpen] = useState(true)
-  const navigate = useNavigate()
-  const { isJwtExist, userDetails, username, avatar, userProfile } = useAppContext()
-  const { resolvedTheme, cycleTheme } = useTheme()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { resolvedTheme } = useTheme()
+  const workspaceRef = useRef(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
-  // Derive theme string for child components that still use the "light"/"dark" prop
-  const theme = resolvedTheme
+  const { setTargetNode, activeAlgorithm, progress, isPlaying } = useToolbar()
+
   const isDark = resolvedTheme === "dark"
+  const bgClass = isDark ? "bg-[#020617] text-[#f1f5f9]" : "bg-[#f8fafc] text-[#0f172a]"
 
-  const bgClass   = isDark ? "bg-[#020617] text-[#f1f5f9]" : "bg-[#f8fafc] text-[#0f172a]"
-  const headerBg  = isDark ? "bg-[#0f172a]/90 border-[#1e293b]" : "bg-[#ffffff]/90 border-[#e2e8f0]"
-  const btnClass  = isDark ? "bg-[#1e293b] hover:bg-[#334155] text-[#94a3b8]" : "bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#64748b]"
+  const toggleFullscreen = () => {
+    if (!workspaceRef.current) return
+    if (document.fullscreenElement) {
+      document.exitFullscreen()
+    } else {
+      workspaceRef.current.requestFullscreen().catch((err) => {
+        console.error("Error enabling fullscreen:", err)
+      })
+    }
+  }
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener("fullscreenchange", handleFullscreenChange)
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange)
+    }
+  }, [])
 
   return (
     <div className={`flex flex-col h-screen ${bgClass}`}>
+      <style>{`
+        @keyframes shimmer-bar {
+          0% { left: -33%; }
+          100% { left: 100%; }
+        }
+        .animate-shimmer-bar {
+          animation: shimmer-bar 1.5s infinite linear;
+        }
+        .scrollbar-none::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-none {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
 
-      {/* ── Top bar ── */}
-      <header className={`h-14 border-b ${headerBg} backdrop-blur-xl flex items-center justify-between px-4 gap-4 shrink-0 z-30`}>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate(-1)}
-            className={`flex items-center justify-center w-8 h-8 rounded-lg transition-colors ${btnClass}`}
-            title="Go back"
-          >
-            <ArrowLeft size={15} />
-          </button>
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md shadow-indigo-500/30">
-              <Code2 size={14} className="text-white" />
-            </div>
-            <span className="font-bold text-sm bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent hidden sm:block">
-              Code Arena
-            </span>
-          </Link>
-          <span className={isDark ? "text-slate-700" : "text-slate-300"}>|</span>
-          <div className="flex items-center gap-1.5">
-            <Cpu size={14} className="text-indigo-400" />
-            <h1 className={`text-sm font-semibold ${isDark ? "text-slate-300" : "text-slate-700"}`}>Algorithm Visualizer</h1>
-          </div>
-        </div>
+      {/* ── Global Navbar ── */}
+      <EnhancedNavbar />
 
-        <div className="flex items-center gap-2.5">
-          {/* Theme toggle — now uses global ThemeContext */}
-          <button
-            onClick={cycleTheme}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${btnClass}`}
-            title="Toggle theme"
-          >
-            {isDark ? <Sun size={13} /> : <Moon size={13} />}
-            {isDark ? "Light" : "Dark"}
-          </button>
-
-          {isJwtExist ? (
-            <Link to={`/profile/${username}`}>
-              <img
-                src={avatar || userProfile?.avatarLink || userDetails?.avatar || "https://i.pravatar.cc/150"}
-                alt="Avatar"
-                className={`w-7 h-7 rounded-full border object-cover hover:ring-2 ring-indigo-500 transition-all ${isDark ? "border-slate-700" : "border-slate-200"}`}
-              />
-            </Link>
-          ) : (
-            <Link
-              to="/login"
-              className="px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-500 transition-colors shadow-sm"
-            >
-              Login
-            </Link>
-          )}
-          <button
-            className={`lg:hidden p-2 rounded-lg transition-colors ${btnClass}`}
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu size={18} />
-          </button>
-        </div>
-      </header>
-
-      {/* ── Content ── */}
-      <div className="flex flex-1 overflow-hidden">
+      {/* ── Main Layout Container ── */}
+      <div className="pt-16 flex flex-1 overflow-hidden bg-slate-50 dark:bg-slate-950">
+        
+        {/* ── Sidebar (Left) ── */}
         <Sidebar
           activeCategory={activeCategory}
           setActiveCategory={setActiveCategory}
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
-          theme={theme}
+          theme={resolvedTheme}
         />
 
-        <main className={`flex-1 overflow-auto ${isDark ? "bg-slate-950" : "bg-slate-50"}`}>
-          {activeCategory === "sorting"   && <SortingVisualizer theme={theme} />}
-          {activeCategory === "graph"     && <GraphVisualizer   theme={theme} />}
-          {activeCategory === "tree"      && <TreeVisualizer theme={theme} />}
-          {activeCategory === "recursion" && <RecursionVisualizer theme={theme} />}
-          {activeCategory === "tree_builder" && <InteractiveTreeBuilder theme={theme} />}
-          {activeCategory === "traversal_converter" && <TraversalConverter theme={theme} />}
-        </main>
+        {/* ── Workspace Area (Right) ── */}
+        <div
+          ref={workspaceRef}
+          className="flex-1 flex flex-col overflow-hidden relative"
+        >
+          {/* ── Sticky Workspace Toolbar ── */}
+          <div className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shrink-0 min-h-14 flex items-center py-2 md:py-0">
+            <div className="px-4 flex flex-col md:flex-row md:items-center justify-between gap-3 w-full">
+              {/* Left: Breadcrumbs / Active states */}
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 flex-shrink-0">
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="lg:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors mr-2"
+                  title="Categories"
+                >
+                  <Menu size={13} />
+                  <span>Categories</span>
+                </button>
+
+                <span className="text-slate-500 dark:text-slate-400 font-medium text-xs">Visualizer</span>
+                <span className="text-slate-300 dark:text-slate-700">/</span>
+                <span className="text-slate-900 dark:text-white capitalize font-bold text-sm">
+                  {activeCategory.replace("_", " ")}
+                </span>
+              </div>
+
+              {/* Right: Controls & Fullscreen */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none justify-start md:ml-auto max-w-full min-w-0">
+                {/* Target for Portal */}
+                <div
+                  ref={setTargetNode}
+                  className="flex items-center gap-2 flex-shrink-0"
+                />
+
+                {/* Fullscreen button */}
+                <button
+                  onClick={toggleFullscreen}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-slate-600 dark:text-slate-300 flex-shrink-0"
+                  title="Toggle Fullscreen"
+                >
+                  {isFullscreen ? <Minimize size={13} /> : <Maximize size={13} />}
+                  <span className="hidden md:inline">{isFullscreen ? "Exit Fullscreen" : "Fullscreen"}</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Global Progress Bar */}
+            {progress > 0 ? (
+              <div className="h-[2px] w-full bg-slate-100 dark:bg-slate-800 overflow-hidden absolute bottom-0 left-0">
+                <div
+                  className="h-full bg-gradient-to-r from-indigo-50 to-purple-600 transition-all duration-300 ease-out"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            ) : isPlaying ? (
+              <div className="h-[2px] w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative absolute bottom-0 left-0">
+                <div className="h-full w-1/3 bg-gradient-to-r from-indigo-50 to-purple-600 absolute animate-shimmer-bar" />
+              </div>
+            ) : null}
+          </div>
+
+          {/* ── Main Canvas (Right-Bottom) ── */}
+          <main className="flex-1 overflow-auto relative">
+            {activeCategory === "sorting" && <SortingVisualizer theme={resolvedTheme} />}
+            {activeCategory === "graph" && <GraphVisualizer theme={resolvedTheme} />}
+            {activeCategory === "tree" && <TreeVisualizer theme={resolvedTheme} />}
+            {activeCategory === "recursion" && <RecursionVisualizer theme={resolvedTheme} />}
+            {activeCategory === "tree_builder" && <InteractiveTreeBuilder theme={resolvedTheme} />}
+            {activeCategory === "traversal_converter" && <TraversalConverter theme={resolvedTheme} />}
+          </main>
+        </div>
       </div>
     </div>
+  )
+}
+
+export default function AlgoVisualizerPageWrapper() {
+  return (
+    <ToolbarProvider>
+      <AlgoVisualizerPage />
+    </ToolbarProvider>
   )
 }

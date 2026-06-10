@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Play, RotateCcw, ListTree, AlertTriangle } from "lucide-react";
 import { GlobalMetricsPanel } from "../GlobalMetricsPanel";
 import { ComplexityPanel } from "../ComplexityPanel";
+import { useToolbar, ToolbarPortal } from "@/context/ToolbarContext";
 
 /* ── BST helpers ─────────────────────────────────── */
 function makeNode(value, id) {
@@ -64,10 +65,22 @@ function getTraversal(root, type) {
 /* ── Component ───────────────────────────────────── */
 export function TraversalConverter({ theme = "dark" }) {
   const isDark = theme === "dark";
+  const { setActiveAlgorithm, setIsPlaying: setToolbarPlaying } = useToolbar();
+
   const [inputVal, setInputVal] = useState("10, 5, 3, 7, 20, 15, 25");
   const [sourceType, setSourceType] = useState("preorder");
   const [targetType, setTargetType] = useState("inorder");
   const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    setActiveAlgorithm("Traversal Converter");
+    return () => setActiveAlgorithm("");
+  }, [setActiveAlgorithm]);
+
+  useEffect(() => {
+    setToolbarPlaying(isPlaying);
+    return () => setToolbarPlaying(false);
+  }, [isPlaying, setToolbarPlaying]);
   const [error, setError] = useState(null);
 
   const [nodesData, setNodesData] = useState([]);
@@ -304,49 +317,50 @@ export function TraversalConverter({ theme = "dark" }) {
 
   return (
     <div className="flex flex-col gap-4 p-4 md:p-6 h-full" style={{ background: c.bg, color: c.text }}>
-      {/* Controls */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
-          <ListTree size={14} className="text-purple-400" />
-          <span className="text-xs font-semibold">Traversal Converter</span>
-        </div>
+      <ToolbarPortal>
+        <div className="flex items-center gap-3 flex-nowrap">
+          <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+            <ListTree size={14} className="text-purple-400" />
+            <span className="text-xs font-semibold">Traversal Converter</span>
+          </div>
 
-        <div className="flex items-center gap-2 rounded-xl px-3 py-1.5 flex-1 max-w-sm" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
-          <input type="text" value={inputVal} onChange={e => setInputVal(e.target.value)} disabled={isPlaying}
-            placeholder="e.g. 10, 5, 3, 7, 20" className="w-full bg-transparent text-sm outline-none placeholder-slate-500 font-mono" style={{ color: c.text }} />
-        </div>
+          <div className="flex items-center gap-2 rounded-xl px-3 py-1.5 flex-1 max-w-sm" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+            <input type="text" value={inputVal} onChange={e => setInputVal(e.target.value)} disabled={isPlaying}
+              placeholder="e.g. 10, 5, 3, 7, 20" className="w-full bg-transparent text-sm outline-none placeholder-slate-500 font-mono" style={{ color: c.text }} />
+          </div>
 
-        <select value={sourceType} onChange={e => setSourceType(e.target.value)} disabled={isPlaying}
-          className="rounded-xl px-3 py-2 text-xs font-semibold outline-none cursor-pointer"
-          style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
-          <option value="preorder">Source: Preorder</option>
-          <option value="inorder">Source: Inorder</option>
-          <option value="postorder">Source: Postorder</option>
-        </select>
-
-        <span className="text-xs font-bold" style={{ color: "#00e5ff" }}>→</span>
-
-        <select value={targetType} onChange={e => setTargetType(e.target.value)} disabled={isPlaying}
-          className="rounded-xl px-3 py-2 text-xs font-semibold outline-none cursor-pointer"
-          style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
-          <option value="inorder">Target: Inorder</option>
-          <option value="preorder">Target: Preorder</option>
-          <option value="postorder">Target: Postorder</option>
-        </select>
-
-        <div className="flex gap-2 ml-auto">
-          <button onClick={handleConvert} disabled={isPlaying}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all shadow-lg"
-            style={{ background: "linear-gradient(135deg, #00e5ff, #006064)", opacity: isPlaying ? 0.7 : 1 }}>
-            <Play size={14} /> Convert
-          </button>
-          <button onClick={handleReset}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
+          <select value={sourceType} onChange={e => setSourceType(e.target.value)} disabled={isPlaying}
+            className="rounded-xl px-3 py-2 text-xs font-semibold outline-none cursor-pointer"
             style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
-            <RotateCcw size={13} /> Reset
-          </button>
+            <option value="preorder">Source: Preorder</option>
+            <option value="inorder">Source: Inorder</option>
+            <option value="postorder">Source: Postorder</option>
+          </select>
+
+          <span className="text-xs font-bold" style={{ color: "#00e5ff" }}>→</span>
+
+          <select value={targetType} onChange={e => setTargetType(e.target.value)} disabled={isPlaying}
+            className="rounded-xl px-3 py-2 text-xs font-semibold outline-none cursor-pointer"
+            style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
+            <option value="inorder">Target: Inorder</option>
+            <option value="preorder">Target: Preorder</option>
+            <option value="postorder">Target: Postorder</option>
+          </select>
+
+          <div className="flex gap-2 ml-auto">
+            <button onClick={handleConvert} disabled={isPlaying}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all shadow-lg"
+              style={{ background: "linear-gradient(135deg, #00e5ff, #006064)", opacity: isPlaying ? 0.7 : 1 }}>
+              <Play size={14} /> Convert
+            </button>
+            <button onClick={handleReset}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
+              style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
+              <RotateCcw size={13} /> Reset
+            </button>
+          </div>
         </div>
-      </div>
+      </ToolbarPortal>
 
       {/* Error */}
       {error && (

@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Play, RotateCcw, Box } from "lucide-react";
 import { GlobalMetricsPanel } from "../GlobalMetricsPanel";
 import { ComplexityPanel } from "../ComplexityPanel";
+import { useToolbar, ToolbarPortal } from "@/context/ToolbarContext";
 
 // Basic BST logic and layout
 function makeNode(value, id) {
@@ -52,8 +53,20 @@ function cloneTree(node) {
 
 export function InteractiveTreeBuilder({ theme = "dark" }) {
   const isDark = theme === "dark";
+  const { setActiveAlgorithm, setIsPlaying: setToolbarPlaying } = useToolbar();
+
   const [inputVal, setInputVal] = useState("10, 5, 20, 3, 7, 15, 25");
   const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    setActiveAlgorithm("BST Builder");
+    return () => setActiveAlgorithm("");
+  }, [setActiveAlgorithm]);
+
+  useEffect(() => {
+    setToolbarPlaying(isPlaying);
+    return () => setToolbarPlaying(false);
+  }, [isPlaying, setToolbarPlaying]);
   
   const [root, setRoot] = useState(null);
   const [nodesData, setNodesData] = useState([]);
@@ -223,38 +236,39 @@ export function InteractiveTreeBuilder({ theme = "dark" }) {
 
   return (
     <div className="flex flex-col gap-4 p-4 md:p-6 h-full" style={{ background: c.bg, color: c.text }}>
-      {/* Controls */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
-          <Box size={14} className="text-emerald-400" />
-          <span className="text-xs font-semibold">Tree Builder</span>
-        </div>
-        
-        <div className="flex items-center gap-2 rounded-xl px-3 py-1.5 flex-1 max-w-md" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
-          <input 
-            type="text" 
-            value={inputVal}
-            onChange={e => setInputVal(e.target.value)}
-            disabled={isPlaying}
-            placeholder="e.g. 10, 5, 20, 3, 7"
-            className="w-full bg-transparent text-sm outline-none placeholder-slate-500 font-mono"
-            style={{ color: c.text }}
-          />
-        </div>
+      <ToolbarPortal>
+        <div className="flex items-center gap-3 flex-nowrap">
+          <div className="flex items-center gap-2 rounded-xl px-3 py-1.5" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+            <Box size={14} className="text-emerald-400" />
+            <span className="text-xs font-semibold">Tree Builder</span>
+          </div>
+          
+          <div className="flex items-center gap-2 rounded-xl px-3 py-1.5 flex-1 max-w-md" style={{ background: c.panel, border: `1px solid ${c.border}` }}>
+            <input 
+              type="text" 
+              value={inputVal}
+              onChange={e => setInputVal(e.target.value)}
+              disabled={isPlaying}
+              placeholder="e.g. 10, 5, 20, 3, 7"
+              className="w-full bg-transparent text-sm outline-none placeholder-slate-500 font-mono"
+              style={{ color: c.text }}
+            />
+          </div>
 
-        <div className="flex gap-2 ml-auto">
-          <button onClick={handleBuild} disabled={isPlaying}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all shadow-lg"
-            style={{ background: `linear-gradient(135deg, #10b981, #059669)`, opacity: isPlaying ? 0.7 : 1 }}>
-            <Play size={14} /> Build BST
-          </button>
-          <button onClick={handleReset}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
-            style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
-            <RotateCcw size={13} /> Reset
-          </button>
+          <div className="flex gap-2 ml-auto">
+            <button onClick={handleBuild} disabled={isPlaying}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-all shadow-lg"
+              style={{ background: `linear-gradient(135deg, #10b981, #059669)`, opacity: isPlaying ? 0.7 : 1 }}>
+              <Play size={14} /> Build BST
+            </button>
+            <button onClick={handleReset}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all"
+              style={{ background: c.panel, border: `1px solid ${c.border}`, color: c.text }}>
+              <RotateCcw size={13} /> Reset
+            </button>
+          </div>
         </div>
-      </div>
+      </ToolbarPortal>
 
       {/* Canvas */}
       <div className="flex-1 rounded-2xl overflow-hidden relative min-h-[400px]" style={{ background: c.inner, border: `1px solid ${c.border}` }}>
