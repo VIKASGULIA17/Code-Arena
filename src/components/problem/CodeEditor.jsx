@@ -7,18 +7,18 @@ import { userCode } from "../../data/UserCodeTemplate";
 import { problemSolutions } from "../../data/solution";
 import ResizablePanels from "../utils/ResizablePanel";
 
-const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcaseData,problemMeta }) => {
+const CodeEditor = ({ problemId, codeTemplates, isContest, setcurrentTopBar, testcaseData, problemMeta }) => {
 
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);   //all the language and versions
-  const [Language, setLanguage] = useState(LanguageList[0]); 
+  const [Language, setLanguage] = useState(LanguageList[0]);
 
-// console.log("Available code templates for this problem:", codeTemplates);
+  // console.log("Available code templates for this problem:", codeTemplates);
 
   const CodeEditorRef = useRef(); //refrence ot code editor
   const [Output, setOutput] = useState(null); // output (here because if i want to reset the code ,testcases get reset too)
 
-  const currentLang=Language[0];
-  
+  const currentLang = Language[0];
+
   const onMount = (editor) => { //to focus on editor on refresh
     CodeEditorRef.current = editor;
     editor.focus();
@@ -31,7 +31,7 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
   const [Code, setCode] = useState(template); //current code of the user 
 
   // useEffect(() => {
-    
+
   //   const newLang=Language[0]
   //   // const new_template = userCode[problemId][newLang]['boilerplate'];
   //   // setCode(new_template)
@@ -40,15 +40,15 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
   //   if(CodeEditorRef.current){
   //     // CodeEditorRef.current.setValue(new_template);
   //   }
-  
+
   // }, [problemId,Language])
-  
+
 
   useEffect(() => {
     if (CodeEditorRef.current) {
       CodeEditorRef.current.setValue(Code);
     }
-  }, [Language]); 
+  }, [Language]);
 
   const handleReset = () => {
     const freshTemplate = codeTemplates?.[currentLang] || " no template found"
@@ -73,28 +73,22 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
         Output={Output}
         setOutput={setOutput}
       />
-      <ResizablePanels
-        direction="vertical"
-        initialSize={60}
-        minSize={15}
-        maxSize={85}
-        className="flex-1 min-h-0 w-full"
-      >
+      <ResizablePanels direction="vertical" initialSize={50}>
         {/* Editor Panel */}
         <div className="flex flex-col h-full w-full overflow-hidden">
           <Editor
             height="100%"
             language={Language[0]}
-            
-            defaultValue={template} 
-            
+
+            defaultValue={template}
+
             theme="vs-light"
             onMount={onMount}
-            
+
             onChange={(value) => {
               setCode(value);
             }}
-            
+
             options={{
               fontSize: 16,
               lineHeight: 24,
@@ -109,10 +103,10 @@ const CodeEditor = ({ problemId,codeTemplates,isContest,setcurrentTopBar,testcas
 
         {/* TestCases Panel */}
         <div className="flex flex-col h-full w-full overflow-hidden">
-          <TestCases 
-            Language={Language} 
-            value={Code} 
-            problemId={problemId} 
+          <TestCases
+            Language={Language}
+            value={Code}
+            problemId={problemId}
             Output={Output}
             setOutput={setOutput}
             isContest={isContest}
