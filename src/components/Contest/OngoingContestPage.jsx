@@ -585,8 +585,8 @@ const OngoingContestPage = () => {
       <header className="sticky top-0 z-40 h-16 shrink-0 flex items-center justify-between px-4 md:px-6 bg-card border-b border-border shadow-xs">
 
         {/* Left Side: Brand & Contest Header */}
-        <div className="flex items-center gap-3">
-          <Link to="/" className="flex items-center gap-2">
+        <div className="flex items-center gap-3 min-w-0">
+          <Link to="/" className="hidden md:flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-brand-gradient flex items-center justify-center shadow-md shadow-indigo-500/25 shrink-0">
               <Trophy size={16} className="text-white" />
             </div>
@@ -594,9 +594,9 @@ const OngoingContestPage = () => {
               Code Arena
             </span>
           </Link>
-          <div className="h-6 w-px bg-border hidden sm:block" />
-          <div className="flex flex-col">
-            <h1 className="text-xs md:text-sm font-bold line-clamp-1 max-w-[150px] sm:max-w-[200px] md:max-w-xs text-foreground">
+          <div className="h-6 w-px bg-border hidden md:block" />
+          <div className="flex flex-col min-w-0">
+            <h1 className="text-xs md:text-sm font-bold line-clamp-1 max-w-[80px] sm:max-w-[180px] md:max-w-xs text-foreground">
               {resolvedContestData?.contestName || 'Ongoing Contest'}
             </h1>
             <div className="flex items-center gap-1">
@@ -629,7 +629,7 @@ const OngoingContestPage = () => {
           </button>
 
           {/* Quick Problem selector Dropdown */}
-          <div className="relative group">
+          <div className="hidden lg:block relative group">
             <button className="flex items-center gap-1.5 bg-card border border-border hover:border-muted text-foreground px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all duration-200">
               <List size={13} className="text-indigo-500 dark:text-indigo-400" />
               <span>Problem {activeProblem?.label}</span>
@@ -663,7 +663,7 @@ const OngoingContestPage = () => {
           {/* Keyboard Shortcuts Trigger */}
           <button
             onClick={() => setIsShortcutsOpen(true)}
-            className="p-2 rounded-xl border border-border bg-card text-muted-foreground hover:text-foreground transition-all cursor-pointer"
+            className="hidden md:flex p-2 rounded-xl border border-border bg-card text-muted-foreground hover:text-foreground transition-all cursor-pointer"
             title="Keyboard Shortcuts Guide"
           >
             <Keyboard size={14} />

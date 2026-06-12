@@ -16,7 +16,6 @@ import {
   Moon,
 } from "lucide-react";
 import { problemInfo } from "../../data/dsaProblem";
-import { Button } from "../ui/button";
 import CodeEditor from "./CodeEditor";
 import Description from "./problemPages/Description";
 import Solution from "./problemPages/Solution";
@@ -26,6 +25,7 @@ import Submission from "./problemPages/Submission";
 import axios from "axios";
 import Loading from "../../components/others/Loading";
 import { useAppContext } from "../../context/AppContext";
+import { useTheme } from "../../context/ThemeContext";
 import ResizablePanels from "../utils/ResizablePanel";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,8 +36,10 @@ const ProblemTopBar = ({
   userDetails,
   username,
   logout,
-  isDarkMode,
-  setIsDarkMode,
+  resolvedTheme,
+  cycleTheme,
+  activeCenterTab,
+  setActiveCenterTab,
 }) => {
   const [elapsed, setElapsed] = useState(0);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -74,31 +76,31 @@ const ProblemTopBar = ({
         : "badge-danger";
 
   return (
-    <header className="h-13 border-b border-slate-200 bg-white/95 backdrop-blur-sm flex items-center justify-between px-4 shrink-0 z-30 py-2 gap-4">
+    <header className="h-13 border-b border-border bg-card/95 backdrop-blur-sm flex items-center justify-between px-4 shrink-0 z-30 py-2 gap-4 text-foreground">
       {/* LEFT: back + logo + title */}
       <div className="flex items-center gap-3 min-w-0">
         <Link
           to="/problem"
-          className="flex items-center justify-center w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors duration-200 shrink-0"
+          className="flex items-center justify-center w-7 h-7 rounded-lg bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors duration-200 shrink-0"
           title="Problem List"
         >
-          <ArrowLeft size={14} className="text-slate-600" />
+          <ArrowLeft size={14} />
         </Link>
-        <Link to="/" className="flex items-center gap-1.5 shrink-0">
-          <div className="w-6 h-6 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-md flex items-center justify-center">
+        <Link to="/" className="hidden sm:flex items-center gap-1.5 shrink-0">
+          <div className="w-6 h-6 bg-gradient-to-br from-indigo-655 to-purple-655 rounded-md flex items-center justify-center">
             <Code2 size={13} className="text-white" />
           </div>
-          <span className="font-bold text-sm bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hidden md:block">
+          <span className="font-bold text-sm bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent hidden md:block">
             Code Arena
           </span>
         </Link>
-        <span className="text-slate-300 hidden sm:block">|</span>
-        <div className="hidden sm:flex items-center gap-2 min-w-0">
-          <span className="text-sm font-semibold text-slate-800 truncate max-w-[180px] lg:max-w-xs">
+        <span className="text-border hidden sm:block">|</span>
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-xs sm:text-sm font-semibold text-foreground truncate max-w-[80px] sm:max-w-[180px] lg:max-w-xs">
             {problemData?.title || "Problem"}
           </span>
           {problemData?.difficulty && (
-            <span className={`${diffBadge} text-[11px]`}>
+            <span className={`${diffBadge} text-[11px] shrink-0`}>
               {problemData.difficulty}
             </span>
           )}
@@ -109,7 +111,7 @@ const ProblemTopBar = ({
       <div className="hidden lg:flex items-center">
         <Link
           to="/problem"
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200"
         >
           <LayoutList size={14} />
           Problem List
@@ -117,18 +119,38 @@ const ProblemTopBar = ({
       </div>
 
       {/* RIGHT: theme toggle + timer + auth */}
-      <div className="flex items-center gap-2.5 shrink-0">
+      <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        {/* Mobile View Switcher (Tabs for Description vs Editor) */}
+        <div className="flex border border-border rounded-xl p-0.5 bg-muted lg:hidden shrink-0">
+          <button
+            onClick={() => setActiveCenterTab("description")}
+            className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
+              activeCenterTab === "description" ? "bg-indigo-600 text-white" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Problem
+          </button>
+          <button
+            onClick={() => setActiveCenterTab("editor")}
+            className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
+              activeCenterTab === "editor" ? "bg-indigo-600 text-white" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Editor
+          </button>
+        </div>
+
         {/* Theme toggle */}
         <button
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all duration-200"
-          title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          onClick={cycleTheme}
+          className="p-1.5 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-all duration-200 cursor-pointer"
+          title="Toggle Theme"
         >
-          {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+          {resolvedTheme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
         </button>
 
         {/* Timer */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-code text-slate-600">
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-muted rounded-lg text-xs font-mono text-muted-foreground">
           <Timer size={13} className="text-indigo-500" />
           {fmt(elapsed)}
         </div>
@@ -137,27 +159,27 @@ const ProblemTopBar = ({
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setUserMenuOpen(!userMenuOpen)}
-              className="flex items-center gap-1.5 hover:bg-slate-100 rounded-lg px-2 py-1 transition-colors duration-200"
+              className="flex items-center gap-1.5 hover:bg-muted rounded-lg px-2 py-1 transition-colors duration-200 cursor-pointer"
             >
               <img
                 src={userDetails?.avatar || "https://i.pravatar.cc/150"}
                 alt="Avatar"
-                className="w-6 h-6 rounded-full border border-slate-200 object-cover"
+                className="w-6 h-6 rounded-full border border-border object-cover"
               />
-              <span className="text-xs font-medium text-slate-700 hidden sm:block capitalize">
+              <span className="text-xs font-medium text-foreground hidden sm:block capitalize">
                 {userDetails?.fullName || username}
               </span>
               <ChevronDown
                 size={12}
-                className={`text-slate-400 transition-transform duration-200 ${userMenuOpen ? "rotate-180" : ""}`}
+                className={`text-muted-foreground transition-transform duration-200 ${userMenuOpen ? "rotate-180" : ""}`}
               />
             </button>
             {userMenuOpen && (
-              <div className="absolute right-0 mt-1 w-44 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-200/50 z-50 py-1 overflow-hidden animate-scale-in">
+              <div className="absolute right-0 mt-1 w-44 bg-card border border-border rounded-xl shadow-xl shadow-slate-900/10 dark:shadow-black/50 z-50 py-1 overflow-hidden animate-scale-in">
                 <Link
                   to={`/profile/${username}`}
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-150"
                 >
                   <User size={14} />
                   Profile
@@ -165,15 +187,15 @@ const ProblemTopBar = ({
                 <Link
                   to="/problem"
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors duration-150"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-150"
                 >
                   <LayoutList size={14} />
                   Problem List
                 </Link>
-                <div className="border-t border-slate-100 mt-1 pt-1">
+                <div className="border-t border-border mt-1 pt-1">
                   <button
                     onClick={logout}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors duration-150 w-full text-left"
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-red-500/10 transition-colors duration-150 w-full text-left cursor-pointer"
                   >
                     <LogOut size={14} />
                     Sign Out
@@ -186,13 +208,13 @@ const ProblemTopBar = ({
           <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="px-3 py-1.5 text-xs font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
+              className="px-3 py-1.5 text-xs font-semibold text-muted-foreground border border-border rounded-lg hover:bg-muted transition-all duration-200"
             >
               Login
             </Link>
             <Link
               to="/signup"
-              className="px-3 py-1.5 text-xs font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-sm shadow-indigo-200/50"
+              className="px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-sm shadow-indigo-200/50"
             >
               Sign Up
             </Link>
@@ -206,7 +228,8 @@ const ProblemTopBar = ({
 const ProblemDetails = ({ isContest, problemId }) => {
   const { id: paramId } = useParams();
   const id = isContest ? problemId : paramId;
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { resolvedTheme, cycleTheme } = useTheme();
+  const [activeCenterTab, setActiveCenterTab] = useState("description"); // "description" | "editor" for mobile
 
   const {
     isJwtExist,
@@ -284,24 +307,22 @@ const ProblemDetails = ({ isContest, problemId }) => {
   const TabButton = ({ label, icon: Icon }) => {
     const isActive = currentTopBar === label;
     return (
-      <Button
-        variant="ghost"
+      <button
         onClick={() => setcurrentTopBar(label)}
-        className={`relative rounded-none h-10 px-4 font-medium hover:bg-transparent transition-all duration-200 gap-2 text-sm ${
-          isActive ? "text-indigo-600" : "text-slate-500 hover:text-slate-700"
+        className={`flex items-center gap-1.5 px-4 h-10 text-xs font-bold relative transition-all cursor-pointer border-b-2 ${
+          isActive
+            ? "text-indigo-600 dark:text-indigo-400 border-indigo-500"
+            : "text-muted-foreground hover:text-foreground border-transparent"
         }`}
       >
-        <Icon size={15} />
+        <Icon size={13} />
         <span>{label}</span>
-        {isActive && (
-          <div className="absolute bottom-0 left-0 w-full h-[2px] bg-indigo-600 rounded-full" />
-        )}
-      </Button>
+      </button>
     );
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#fafafa]">
+    <div className="flex flex-col h-screen overflow-hidden bg-background">
       <ToastContainer />
       <ProblemTopBar
         problemData={problemDetailsInfo}
@@ -309,67 +330,123 @@ const ProblemDetails = ({ isContest, problemId }) => {
         userDetails={userDetails}
         username={username}
         logout={handleLogout}
-        isDarkMode={isDarkMode}
-        setIsDarkMode={setIsDarkMode}
+        resolvedTheme={resolvedTheme}
+        cycleTheme={cycleTheme}
+        activeCenterTab={activeCenterTab}
+        setActiveCenterTab={setActiveCenterTab}
       />
 
-      {/* Main Content Area */}
-      <ResizablePanels
-        direction="horizontal"
-        initialSize={50}
-        minSize={20}
-        maxSize={80}
-        className="flex-1 min-h-0 w-full"
-      >
-        {/* Left Pane (Description) */}
-        <div className="flex flex-col h-full w-full border-r border-slate-200 bg-white">
-          <div className="flex items-center justify-between border-b border-slate-200 bg-white px-2 min-h-10 shrink-0">
-            {isContest ? (
-              <TabButton label="Description" icon={Lightbulb} />
-            ) : (
-              <div className="flex items-center gap-0.5 overflow-x-auto no-scrollbar">
-                {tabs.map((tab) => (
-                  <TabButton key={tab.label} label={tab.label} icon={tab.icon} />
-                ))}
-              </div>
-            )}
+      {/* Desktop Layout (Split-pane) */}
+      <div className="hidden lg:flex flex-1 min-h-0 w-full bg-background">
+        <ResizablePanels
+          direction="horizontal"
+          initialSize={50}
+          minSize={20}
+          maxSize={80}
+          className="flex-1 h-full w-full"
+        >
+          {/* Left Pane (Description Tabs) */}
+          <div className="flex flex-col h-full w-full border-r border-border bg-card overflow-hidden">
+            <div className="flex items-center justify-between border-b border-border bg-card px-2 min-h-10 shrink-0">
+              {isContest ? (
+                <TabButton label="Description" icon={Lightbulb} />
+              ) : (
+                <div className="flex items-center gap-0.5 overflow-x-auto no-scrollbar">
+                  {tabs.map((tab) => (
+                    <TabButton key={tab.label} label={tab.label} icon={tab.icon} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-5 bg-card text-muted-foreground">
+              {currentTopBar === "Description" ? (
+                <Description
+                  description={description}
+                  basicInfo={problemDetailsInfo}
+                />
+              ) : currentTopBar === "Solution" ? (
+                <Solution
+                  editorial={editorial}
+                  algorithmSteps={algorithmSteps}
+                  timeComplexity={timeComplexity}
+                  spaceComplexity={spaceComplexity}
+                  implementation={codeImplementation}
+                  setcurrentTopBar={setcurrentTopBar}
+                />
+              ) : currentTopBar === "Discussion" ? (
+                <Discussion id={id} />
+              ) : (
+                <Submission id={id} />
+              )}
+            </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-5 bg-white">
-            {currentTopBar === "Description" ? (
-              <Description
-                description={description}
-                basicInfo={problemDetailsInfo}
-              />
-            ) : currentTopBar === "Solution" ? (
-              <Solution
-                editorial={editorial}
-                algorithmSteps={algorithmSteps}
-                timeComplexity={timeComplexity}
-                spaceComplexity={spaceComplexity}
-                implementation={codeImplementation}
-                setcurrentTopBar={setcurrentTopBar}
-              />
-            ) : currentTopBar === "Discussion" ? (
-              <Discussion id={id} />
-            ) : (
-              <Submission id={id} />
-            )}
+          {/* Right Pane (Code Editor) */}
+          <div className={`flex flex-col h-full w-full ${resolvedTheme === "dark" ? "bg-[#131c31]" : "bg-white"} overflow-hidden`}>
+            <CodeEditor
+              codeTemplates={codeTemplates}
+              problemId={id}
+              problemMeta={problemDetailsInfo}
+              testcaseData={testcasesdata}
+              setcurrentTopBar={setcurrentTopBar}
+              isContest={isContest}
+            />
           </div>
-        </div>
+        </ResizablePanels>
+      </div>
 
-        {/* Right Pane (Code Editor) */}
-        <div className={`flex flex-col h-full w-full ${isDarkMode ? 'bg-[#131c31]' : 'bg-white'}`}>
-          <CodeEditor
-            codeTemplates={codeTemplates}
-            problemId={id}
-            problemMeta={problemDetailsInfo}
-            testcaseData={testcasesdata}
-            setcurrentTopBar={setcurrentTopBar}
-            isContest={isContest}
-          />
-        </div>
-      </ResizablePanels>
+      {/* Mobile Layout (Tabs Selection) */}
+      <div className="flex lg:hidden flex-1 min-h-0 w-full bg-background">
+        {activeCenterTab === "description" ? (
+          <div className="flex-1 flex flex-col h-full overflow-hidden bg-card border-b border-border">
+            <div className="flex items-center justify-between border-b border-border bg-card px-2 min-h-10 shrink-0">
+              {isContest ? (
+                <TabButton label="Description" icon={Lightbulb} />
+              ) : (
+                <div className="flex items-center gap-0.5 overflow-x-auto no-scrollbar">
+                  {tabs.map((tab) => (
+                    <TabButton key={tab.label} label={tab.label} icon={tab.icon} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4 bg-card text-muted-foreground">
+              {currentTopBar === "Description" ? (
+                <Description
+                  description={description}
+                  basicInfo={problemDetailsInfo}
+                />
+              ) : currentTopBar === "Solution" ? (
+                <Solution
+                  editorial={editorial}
+                  algorithmSteps={algorithmSteps}
+                  timeComplexity={timeComplexity}
+                  spaceComplexity={spaceComplexity}
+                  implementation={codeImplementation}
+                  setcurrentTopBar={setcurrentTopBar}
+                />
+              ) : currentTopBar === "Discussion" ? (
+                <Discussion id={id} />
+              ) : (
+                <Submission id={id} />
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className={`flex-1 flex flex-col h-full ${resolvedTheme === "dark" ? "bg-[#131c31]" : "bg-white"} overflow-hidden`}>
+            <CodeEditor
+              codeTemplates={codeTemplates}
+              problemId={id}
+              problemMeta={problemDetailsInfo}
+              testcaseData={testcasesdata}
+              setcurrentTopBar={setcurrentTopBar}
+              isContest={isContest}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
