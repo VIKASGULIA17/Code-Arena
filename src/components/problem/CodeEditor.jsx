@@ -6,8 +6,11 @@ import TestCases from "./TestCases";
 import { userCode } from "../../data/UserCodeTemplate";
 import { problemSolutions } from "../../data/solution";
 import ResizablePanels from "../utils/ResizablePanel";
+import { useTheme } from "../../context/ThemeContext";
 
 const CodeEditor = ({ problemId, codeTemplates, contestId, isContest, setcurrentTopBar, testcaseData, problemMeta }) => {
+  const themeContext = useTheme();
+  const resolvedTheme = themeContext?.resolvedTheme || "light";
 
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);   //all the language and versions
   const [Language, setLanguage] = useState(LanguageList[0]);
@@ -17,9 +20,34 @@ const CodeEditor = ({ problemId, codeTemplates, contestId, isContest, setcurrent
 
   const currentLang = Language[0];
 
-  const onMount = (editor) => { //to focus on editor on refresh
+  const onMount = (editor, monaco) => { //to focus on editor on refresh
     CodeEditorRef.current = editor;
     editor.focus();
+
+    if (monaco) {
+      // Define custom themes matching Code Arena backgrounds
+      monaco.editor.defineTheme('codearena-dark', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': '#131c31', // Exact match of --card in dark mode
+          'editorGutter.background': '#131c31',
+          'editor.lineHighlightBackground': '#1e293b',
+        }
+      });
+
+      monaco.editor.defineTheme('codearena-light', {
+        base: 'vs',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background': '#ffffff', // Exact match of --card in light mode
+          'editorGutter.background': '#ffffff',
+          'editor.lineHighlightBackground': '#f3f4f6',
+        }
+      });
+    }
   };
 
   const getInitialCode = () => {
@@ -73,7 +101,7 @@ const CodeEditor = ({ problemId, codeTemplates, contestId, isContest, setcurrent
 
             value={Code}
 
-            theme="vs-light"
+            theme={resolvedTheme === 'dark' ? 'codearena-dark' : 'codearena-light'}
             onMount={onMount}
 
             onChange={(value) => {

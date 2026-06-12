@@ -359,7 +359,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
         </div>
 
         {/* Right Pane (Code Editor) */}
-        <div className={`flex flex-col h-full w-full ${isDarkMode ? 'bg-[#1e1e1e]' : 'bg-white'}`}>
+        <div className={`flex flex-col h-full w-full ${isDarkMode ? 'bg-[#131c31]' : 'bg-white'}`}>
           <CodeEditor
             codeTemplates={codeTemplates}
             problemId={id}
