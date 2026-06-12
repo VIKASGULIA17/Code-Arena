@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { CloudUpload, Play, CheckCircle, XCircle } from "lucide-react";
 import { useTestRunner } from '../../hooks/useTestRunner';
@@ -23,8 +23,14 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,se
     hiddenTestCases
   } = useTestRunner(problemId, Language, value, setOutput, setcurrentTopBar, testcaseData, problemMeta);
 
+  useEffect(() => {
+    setIsActive(0);
+  }, [problemId]);
+
   // data variables
   const testcases = testcaseData || [];
+
+  const currentTestCase = visibleTestCases[isActive] || visibleTestCases[0] || null;
 
   const currentResult = Output && Output[isActive] ? Output[isActive] : null;
 
@@ -176,8 +182,8 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,se
                 Input
               </h1>
               <div className="bg-gray-50 dark:bg-slate-800 rounded-lg my-2 py-3 px-4 font-mono text-sm text-gray-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
-                {visibleTestCases.length > 0 ? (
-                  Object.entries(visibleTestCases[isActive].input).map(
+                {currentTestCase ? (
+                  Object.entries(currentTestCase.input).map(
                     ([key, val], i) => (
                       <div key={i} className="mb-1 font-mono">
                         <span className="text-gray-500 dark:text-slate-500">{key} = </span>
@@ -200,8 +206,8 @@ const TestCases = ({ Language, value, problemId, Output, setOutput, isContest,se
                 Expected Output
               </h1>
               <div className="bg-gray-50 dark:bg-slate-800 rounded-lg my-2 py-3 px-4 font-mono text-sm text-gray-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
-                {visibleTestCases[isActive]?.output != null || visibleTestCases[isActive]?.expected != null
-                  ? JSON.stringify(visibleTestCases[isActive].output ?? visibleTestCases[isActive].expected)
+                {currentTestCase?.output != null || currentTestCase?.expected != null
+                  ? JSON.stringify(currentTestCase.output ?? currentTestCase.expected)
                   : <span className="text-gray-400 dark:text-slate-500 italic">Not available</span>
                 }
               </div>

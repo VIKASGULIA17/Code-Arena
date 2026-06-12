@@ -8,6 +8,7 @@ import axios from "axios";
 const ContestRankings = () => {
     const { slug } = useParams();
     const [loading, setLoading] = useState(false); 
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
     
     // Mock Data for Rankings
     const mockRankings = [
@@ -26,7 +27,7 @@ const ContestRankings = () => {
     useEffect(() => {
         const fetchRankings = async () => {
              try {
-                const res = await axios.get(`http://localhost:8080/public/getContestRankings/${slug}`);
+                const res = await axios.get(`${BACKEND_URL}/public/getContestRankings/${slug}`);
                 // setRankings(res.data);
              } catch(err) { console.error(err) }
         }

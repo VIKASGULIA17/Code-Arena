@@ -7,12 +7,10 @@ import { userCode } from "../../data/UserCodeTemplate";
 import { problemSolutions } from "../../data/solution";
 import ResizablePanels from "../utils/ResizablePanel";
 
-const CodeEditor = ({ problemId, codeTemplates, isContest, setcurrentTopBar, testcaseData, problemMeta }) => {
+const CodeEditor = ({ problemId, codeTemplates, contestId, isContest, setcurrentTopBar, testcaseData, problemMeta }) => {
 
   const LanguageList = Object.entries(LANGUAGE_VERSIONS);   //all the language and versions
   const [Language, setLanguage] = useState(LanguageList[0]);
-
-  // console.log("Available code templates for this problem:", codeTemplates);
 
   const CodeEditorRef = useRef(); //refrence ot code editor
   const [Output, setOutput] = useState(null); // output (here because if i want to reset the code ,testcases get reset too)
@@ -24,39 +22,37 @@ const CodeEditor = ({ problemId, codeTemplates, isContest, setcurrentTopBar, tes
     editor.focus();
   };
 
+  const getInitialCode = () => {
+    const cleanTemplate = codeTemplates?.[currentLang] || " no template found";
+    const draftKey = `codearena_draft_${isContest ? (contestId || 'default') : 'default'}_${problemId}_${currentLang}`;
+    const draft = localStorage.getItem(draftKey);
+    return draft || cleanTemplate;
+  };
 
-  const template = codeTemplates?.[currentLang] || " no template found";
-
-
-  const [Code, setCode] = useState(template); //current code of the user 
-
-  // useEffect(() => {
-
-  //   const newLang=Language[0]
-  //   // const new_template = userCode[problemId][newLang]['boilerplate'];
-  //   // setCode(new_template)
-  //   setOutput(null)
-
-  //   if(CodeEditorRef.current){
-  //     // CodeEditorRef.current.setValue(new_template);
-  //   }
-
-  // }, [problemId,Language])
-
+  const [Code, setCode] = useState(getInitialCode); //current code of the user 
 
   useEffect(() => {
-    if (CodeEditorRef.current) {
-      CodeEditorRef.current.setValue(Code);
-    }
-  }, [Language]);
+    const cleanTemplate = codeTemplates?.[currentLang] || " no template found";
+    const draftKey = `codearena_draft_${isContest ? (contestId || 'default') : 'default'}_${problemId}_${currentLang}`;
+    const draft = localStorage.getItem(draftKey);
+    const initialCode = draft || cleanTemplate;
 
-  const handleReset = () => {
-    const freshTemplate = codeTemplates?.[currentLang] || " no template found"
-    // 2. Update state
-    setCode(freshTemplate);
+    setCode(initialCode);
     setOutput(null);
     if (CodeEditorRef.current) {
-      CodeEditorRef.current.setValue(freshTemplate);
+      CodeEditorRef.current.setValue(initialCode);
+    }
+  }, [problemId, currentLang, codeTemplates, isContest, contestId]);
+
+  const handleReset = () => {
+    const cleanTemplate = codeTemplates?.[currentLang] || " no template found";
+    const draftKey = `codearena_draft_${isContest ? (contestId || 'default') : 'default'}_${problemId}_${currentLang}`;
+    localStorage.removeItem(draftKey);
+
+    setCode(cleanTemplate);
+    setOutput(null);
+    if (CodeEditorRef.current) {
+      CodeEditorRef.current.setValue(cleanTemplate);
     }
   };
 
@@ -65,13 +61,8 @@ const CodeEditor = ({ problemId, codeTemplates, isContest, setcurrentTopBar, tes
       <LanguageSelector
         LanguageList={LanguageList}
         Language={Language}
-        codeTemplates={codeTemplates}
         setLanguage={setLanguage}
-        setCode={setCode}
         onReset={handleReset}
-        // problemId={problemId}
-        Output={Output}
-        setOutput={setOutput}
       />
       <ResizablePanels direction="vertical" initialSize={50}>
         {/* Editor Panel */}
@@ -80,7 +71,7 @@ const CodeEditor = ({ problemId, codeTemplates, isContest, setcurrentTopBar, tes
             height="100%"
             language={Language[0]}
 
-            defaultValue={template}
+            value={Code}
 
             theme="vs-light"
             onMount={onMount}

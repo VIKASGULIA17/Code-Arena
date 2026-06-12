@@ -25,18 +25,19 @@ import axios from "axios";
 
 const Contest = () => {
   const [contestData, setcontestData] = useState([]);
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
 
   const fetchContest = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/public/fetchAllContest`
+        `${BACKEND_URL}/public/fetchAllContest`
       );
       if (response.data) {
         setcontestData(response.data);
-        console.log(response.data)
+        // console.log(response.data)
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

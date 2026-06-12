@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { executeCode } from "../api/api";
 import { driverCodeTemplate } from "../data/driverCode";
 import axios from "axios";
@@ -11,6 +11,12 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
   const [firstFailedTestCase, setFirstFailedTestCase] = useState(null);
   
   const [executionStats, setExecutionStats] = useState({ time: "0", memory: "0" });
+
+  useEffect(() => {
+    setSubmissionStatus(null);
+    setFirstFailedTestCase(null);
+    setExecutionStats({ time: "0", memory: "0" });
+  }, [problemId]);
 
   // Parse backend input string "nums = [2,7,11,15], target = 9" → { nums: [...], target: 9 }
   const parseInputString = (inputStr) => {
@@ -58,7 +64,7 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
     if (typeof expected === "string") {
       try {
         expected = JSON.parse(expected);
-      } catch (e) {
+      } catch {
         // Keep as string if it's a primitive string (e.g. "fl")
       }
     }
@@ -119,7 +125,7 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
         executeCode(Language[0], fullCode),
         timeoutPromise(10000)
       ]);
-      console.log("JDoodle Response:", data);
+      // console.log("JDoodle Response:", data);
 
       // Save JDoodle stats (JDoodle uses cpuTime instead of time)
       setExecutionStats({ time: data.cpuTime || "0", memory: data.memory || "0" });
@@ -226,7 +232,7 @@ export const useTestRunner = (problemId, Language, value, setOutput, setcurrentT
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`
           }
         });
-        console.log("Submission successfully saved to database!");
+        // console.log("Submission successfully saved to database!");
       } catch (dbError) {
         console.error("Execution finished, but saving to DB failed:", dbError);
       }

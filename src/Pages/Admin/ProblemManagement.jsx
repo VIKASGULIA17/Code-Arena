@@ -78,7 +78,7 @@ const ProblemManagement = () => {
 
   const handleEditProblem = async (values, { resetForm }) => {
     try {
-      console.log("Edited Values:", values);
+      // console.log("Edited Values:", values);
       setProblems((prev) =>
         prev.map((p) =>
           p.id === editingProblem.id
@@ -343,10 +343,10 @@ const ProblemManagement = () => {
   });
 
   const handleAddProblem = async (values, { resetForm }) => {
-    console.log("here");
+    // console.log("here");
     try {
       values.sno = parseInt(values.sno);
-      console.log("Form Values:", values);
+      // console.log("Form Values:", values);
       // console.log("Jwt is : ",jwtToken);
       const result = await axios.post(`${BACKEND_URL}/problem/add`, values, {
         headers: {

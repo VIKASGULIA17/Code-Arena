@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -12,6 +12,7 @@ import ResizablePanels from '../utils/ResizablePanel';
 import { Kbd } from '../ui/kbd';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Clock, ArrowLeft, ChevronRight, ChevronLeft,
@@ -49,6 +50,7 @@ const CountdownTimer = ({ startTime, durationHours, onTimerEnd, onFifteenMinutes
     };
 
     const initialSecs = calculateTime();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTimeLeft(initialSecs);
 
     const interval = setInterval(() => {
@@ -116,41 +118,91 @@ const CountdownTimer = ({ startTime, durationHours, onTimerEnd, onFifteenMinutes
   );
 };
 
+const fallbackStartTime = Date.now() - 30 * 60 * 1000;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+
 const OngoingContestPage = () => {
-  const { contestName } = useParams();
+  const { contestName: contestId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { allProblem, allContest, userDetails, username, isJwtExist } = useAppContext();
+  const { allProblem, allContest, userDetails, username, isJwtExist, jwtToken } = useAppContext();
   const { resolvedTheme, cycleTheme } = useTheme();
+  // console.log("hello")
+  // console.log("contest id is", contestId);
 
-  // Contest Metadata Resolution
-  const contestParts = useMemo(() => (contestName ? contestName.split('||') : ['', '']), [contestName]);
-  const contestIdFromParam = contestParts[1] || contestParts[0];
+
+  // console.log(contestIdFromParam)
 
   const resolvedContestData = useMemo(() => {
     const stateContest = location.state?.contest;
+    // console.log(stateContest)
     if (stateContest) return stateContest;
     if (!allContest) return null;
     return allContest.find(c =>
-      String(c.contestId) === contestIdFromParam ||
-      c.contestName === contestParts[0] ||
-      c.contestName === contestParts[0].replace(/_/g, ' ')
+      String(c.contestId) === contestId
     ) || null;
-  }, [location.state, allContest, contestIdFromParam, contestParts]);
+  }, [location.state, allContest, contestId]);
+
+  const [fetchedProblems, setfetchedProblems] = useState(() => {
+    const cached = sessionStorage.getItem(`contest_problem_${contestId}`);
+    if (cached && cached !== "undefined") {
+      try {
+        console.log("hi");
+        console.log(JSON.parse(cached));
+        return JSON.parse(cached);
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
 
   // Problems List Setup
-  const ContestProblems = useMemo(() => {
-    const sourceData = allProblem && allProblem.length > 0 ? allProblem : dsaProblems;
-    let selectedProblems = [];
-    const currentContest = resolvedContestData;
+  useEffect(() => {
+    const fetchContestProblem = async () => {
+      const cacheKey = `contest_problem_${contestId}`;
+      const cachedData = sessionStorage.getItem(cacheKey);
 
-    if (currentContest && currentContest.problemIds && currentContest.problemIds.length > 0) {
-      selectedProblems = currentContest.problemIds
-        .map(id => sourceData.find(p => String(p.id) === String(id)))
-        .filter(Boolean);
+      if (cachedData && cachedData !== "undefined") {
+        try {
+          setfetchedProblems(JSON.parse(cachedData));
+          return;
+        } catch {
+          // Fall back to fetching if parsing fails
+        }
+      }
+
+      try {
+        const response = await axios.get(`${BACKEND_URL}/contest/fetchContestProblemForUser/${contestId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
+        console.log(response.data);
+
+        if (response.data) {
+          // saving it to session storage
+          sessionStorage.setItem(cacheKey, JSON.stringify(response.data));
+          setfetchedProblems(response.data);
+        }
+      }
+      catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (contestId && jwtToken) {
+      fetchContestProblem();
     }
+  }, [contestId, jwtToken]);
+
+
+
+  const ContestProblems = useMemo(() => {
+    let selectedProblems = fetchedProblems && fetchedProblems.length > 0 ? fetchedProblems : [];
 
     if (selectedProblems.length === 0) {
+      const sourceData = allProblem && allProblem.length > 0 ? allProblem : dsaProblems;
       // Fallback selection of 4 standard problems to represent typical contest
       const easyProb = sourceData.filter(p => p.difficulty === 'Easy');
       const medProb = sourceData.filter(p => p.difficulty === 'Medium');
@@ -166,10 +218,11 @@ const OngoingContestPage = () => {
 
     return selectedProblems.map((problem, idx) => ({
       ...problem,
+      id: problem.problemId || problem.id,
       label: String.fromCharCode(65 + idx),
       score: idx === 0 ? 100 : idx === 1 ? 250 : idx === 2 ? 500 : 1000,
     }));
-  }, [allProblem, resolvedContestData]);
+  }, [allProblem, fetchedProblems]);
 
   // Page States - Left sidebar open by default, Right sidebar collapsed by default
   const [activeIndex, setactiveIndex] = useState(0);
@@ -180,17 +233,44 @@ const OngoingContestPage = () => {
   const [currentTopBar, setcurrentTopBar] = useState('Description');
   const [activeCenterTab, setActiveCenterTab] = useState('description'); // 'description' | 'editor' for mobile
 
-  const [problemDetails, setProblemDetails] = useState(null);
-  const [testcaseData, setTestcaseData] = useState([]);
-  const [loadingDetails, setLoadingDetails] = useState(true);
-  const [problemSubmissions, setProblemSubmissions] = useState({});
+  const testcaseData = useMemo(() => {
+    if (!activeProblem) return [];
+    let list = activeProblem.listOfTestcase || 
+               activeProblem.testCases || 
+               activeProblem.testcases || 
+               activeProblem.listOfTestcases;
+               
+    if (typeof list === 'string') {
+      try {
+        list = JSON.parse(list);
+      } catch {
+        list = null;
+      }
+    }
+    if (Array.isArray(list) && list.length > 0) {
+      return list;
+    }
+    const mockInfo = problemInfo[activeProblem.id];
+    if (mockInfo?.examples) {
+      return mockInfo.examples.map((ex, i) => ({
+        id: i + 1,
+        input: ex.input,
+        output: ex.output,
+        expected: ex.output,
+        hidden: false
+      }));
+    }
+    return [];
+  }, [activeProblem]);
+
+  const loadingDetails = !activeProblem;
+
+  const [problemSubmissions] = useState({});
   const [isDirty, setIsDirty] = useState(false);
 
   // Overlay Modals
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isExitConfirmOpen, setIsExitConfirmOpen] = useState(false);
-
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
 
   // Synchronize Monaco Editor Theme with App Theme Backgrounds
   useEffect(() => {
@@ -230,130 +310,116 @@ const OngoingContestPage = () => {
     return () => clearInterval(t);
   }, [resolvedTheme]);
 
-  // Fetch submission history to calculate Solved/Attempted statuses and stats
-  const fetchSubmissions = async () => {
-    const token = localStorage.getItem('jwtToken');
-    if (!token || ContestProblems.length === 0) return;
-
-    const subMap = {};
-    for (let prob of ContestProblems) {
-      try {
-        const res = await axios.get(`${BACKEND_URL}/submission/get/${prob.id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        subMap[prob.id] = Array.isArray(res.data) ? res.data : [];
-      } catch (err) {
-        console.error('Error fetching submissions for', prob.id, err);
-        subMap[prob.id] = [];
-      }
-    }
-    setProblemSubmissions(subMap);
-  };
-
-  useEffect(() => {
-    fetchSubmissions();
-  }, [ContestProblems, BACKEND_URL]);
-
-  // Re-fetch submissions when user switches tab to Submissions (completed run/submit)
+  // Re-fetch submissions when user switches tab to Submissions
   const handleTabChange = (tab) => {
     setcurrentTopBar(tab);
-    if (tab === 'Submissions') {
-      setTimeout(fetchSubmissions, 1500); // Allow DB write buffer
-    }
   };
 
-  // Fetch specific details for active problem
-  useEffect(() => {
-    if (!activeProblem) return;
+  // Compute code templates including localStorage drafts, with fallback to mock data if details are not present
+  const resolvedProblemDetails = useMemo(() => {
+    if (!activeProblem) return null;
 
-    let isMounted = true;
-    setLoadingDetails(true);
+    const hasDetails = activeProblem.description && activeProblem.templates;
 
-    const fetchProblemData = async () => {
-      try {
-        const response = await axios.get(`${BACKEND_URL}/public/getEntireProblem/${activeProblem.id}`);
-        if (isMounted) {
-          setProblemDetails(response.data.problemDTO);
-          setTestcaseData(response.data.listOfTestcase);
-          setLoadingDetails(false);
-        }
-      } catch (error) {
-        console.error('Fall back to local mock data for problem ID:', activeProblem.id, error);
-        
-        // Lookup standard description in dsaProblem file
-        const mockInfo = problemInfo[activeProblem.id] || {
-          title: activeProblem.title,
-          description: `You are given a mock description for **${activeProblem.title}**. Write an optimized solution in your language of choice to solve the problem constraints efficiently.`,
-          difficulty: activeProblem.difficulty || 'Easy',
-          constraints: ['1 <= input.length <= 10^5', 'Time Complexity: O(N)', 'Space Complexity: O(1)'],
-          examples: [
-            { input: 'nums = [2,7,11,15], target = 9', output: '[0,1]', explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].' }
-          ]
-        };
-
-        // Gather templates from local userCode helper
-        const mockTemplates = {};
-        const problemTemplates = userCode[activeProblem.id] || {};
-        Object.keys(problemTemplates).forEach(lang => {
-          mockTemplates[lang] = problemTemplates[lang]?.boilerplate || '';
-        });
-
-        // If no templates matched, provide general boilerplates
-        const fallbackDTO = {
-          id: activeProblem.id,
-          title: mockInfo.title || activeProblem.title,
-          difficulty: mockInfo.difficulty || activeProblem.difficulty || 'Easy',
-          description: mockInfo.description,
-          constraints: mockInfo.constraints || [],
-          examples: mockInfo.examples || [],
-          templates: Object.keys(mockTemplates).length > 0 ? mockTemplates : {
-            javascript: `/**\n * @return {any}\n */\nconst solve = function() {\n    // Write your code here\n};`,
-            python: `class Solution:\n    def solve(self):\n        # Write your code here\n        pass`,
-            cpp: `class Solution {\npublic:\n    void solve() {\n        // Write your code here\n    }\n};`,
-            java: `class Solution {\n    public void solve() {\n        // Write your code here\n    }\n}`
-          },
-          inputType: activeProblem.type || 'Array',
-          fnName: activeProblem.fnName || 'solve',
-          functionName: activeProblem.fnName || 'solve'
-        };
-
-        if (isMounted) {
-          setProblemDetails(fallbackDTO);
-          const mockTestcases = (mockInfo.examples || []).map((ex, i) => ({
-            id: i + 1,
-            input: ex.input,
-            output: ex.output,
-            expected: ex.output,
-            hidden: false
-          }));
-          setTestcaseData(mockTestcases);
-          setLoadingDetails(false);
+    let details;
+    if (hasDetails) {
+      details = { ...activeProblem };
+      let templates = details.templates;
+      if (typeof templates === 'string') {
+        try {
+          templates = JSON.parse(templates);
+        } catch {
+          templates = null;
         }
       }
-    };
+      details.templates = templates;
+      details.id = activeProblem.problemId || activeProblem.id;
+      details.fnName = activeProblem.fnName || activeProblem.functionName;
+      details.functionName = activeProblem.fnName || activeProblem.functionName;
+    } else {
+      const mockInfo = problemInfo[activeProblem.id] || {
+        title: activeProblem.title,
+        description: `You are given a mock description for **${activeProblem.title}**. Write an optimized solution in your language of choice to solve the problem constraints efficiently.`,
+        difficulty: activeProblem.difficulty || 'Easy',
+        constraints: ['1 <= input.length <= 10^5', 'Time Complexity: O(N)', 'Space Complexity: O(1)'],
+        examples: [
+          { input: 'nums = [2,7,11,15], target = 9', output: '[0,1]', explanation: 'Because nums[0] + nums[1] == 9, we return [0, 1].' }
+        ]
+      };
 
-    fetchProblemData();
-    setcurrentTopBar('Description');
-    return () => { isMounted = false; };
-  }, [activeProblem, BACKEND_URL]);
-
-  // Compute code templates including localStorage drafts
-  const resolvedProblemDetails = useMemo(() => {
-    if (!problemDetails) return null;
-    const details = { ...problemDetails };
-    if (details.templates) {
-      const updatedTemplates = { ...details.templates };
-      Object.keys(updatedTemplates).forEach(lang => {
-        const draftKey = `codearena_draft_${resolvedContestData?.contestId || 'default'}_${activeProblem?.id}_${lang}`;
-        const draft = localStorage.getItem(draftKey);
-        if (draft) {
-          updatedTemplates[lang] = draft;
-        }
+      const mockTemplates = {};
+      const problemTemplates = userCode[activeProblem.id] || {};
+      Object.keys(problemTemplates).forEach(lang => {
+        mockTemplates[lang] = problemTemplates[lang]?.boilerplate || '';
       });
-      details.templates = updatedTemplates;
+
+      details = {
+        id: activeProblem.id,
+        title: mockInfo.title || activeProblem.title,
+        difficulty: mockInfo.difficulty || activeProblem.difficulty || 'Easy',
+        description: mockInfo.description,
+        constraints: mockInfo.constraints || [],
+        examples: mockInfo.examples || [],
+        templates: Object.keys(mockTemplates).length > 0 ? mockTemplates : {
+          javascript: `/**\n * @return {any}\n */\nconst solve = function() {\n    // Write your code here\n};`,
+          python: `class Solution:\n    def solve(self):\n        # Write your code here\n        pass`,
+          cpp: `class Solution {\npublic:\n    void solve() {\n        // Write your code here\n    }\n};`,
+          java: `class Solution {\n    public void solve() {\n        // Write your code here\n    }\n}`
+        },
+        inputType: activeProblem.type || 'Array',
+        fnName: activeProblem.fnName || 'solve',
+        functionName: activeProblem.fnName || 'solve'
+      };
     }
+
+    // Self-healing: Parse function name from template code if missing from metadata
+    if (details && !details.fnName && details.templates) {
+      let detectedFn = 'solve';
+      const pythonTemplate = details.templates.python;
+      const jsTemplate = details.templates.javascript;
+      if (pythonTemplate && typeof pythonTemplate === 'string') {
+        const match = pythonTemplate.match(/def\s+(\w+)\s*\(/);
+        if (match && match[1] && match[1] !== 'solve') {
+          detectedFn = match[1];
+        }
+      } else if (jsTemplate && typeof jsTemplate === 'string') {
+        const match = jsTemplate.match(/function\s+(\w+)\s*\(/);
+        if (match && match[1]) {
+          detectedFn = match[1];
+        }
+      }
+      details.fnName = detectedFn;
+      details.functionName = detectedFn;
+    }
+
     return details;
-  }, [problemDetails, activeProblem?.id, resolvedContestData]);
+  }, [activeProblem, resolvedContestData]);
+
+  const originalTemplates = useMemo(() => {
+    if (!activeProblem) return null;
+    let templates = activeProblem.templates;
+    if (typeof templates === 'string') {
+      try {
+        templates = JSON.parse(templates);
+      } catch {
+        templates = null;
+      }
+    }
+    if (!templates) {
+      const mockTemplates = {};
+      const problemTemplates = userCode[activeProblem.id] || {};
+      Object.keys(problemTemplates).forEach(lang => {
+        mockTemplates[lang] = problemTemplates[lang]?.boilerplate || '';
+      });
+      templates = Object.keys(mockTemplates).length > 0 ? mockTemplates : {
+        javascript: `/**\n * @return {any}\n */\nconst solve = function() {\n    // Write your code here\n};`,
+        python: `class Solution:\n    def solve(self):\n        # Write your code here\n        pass`,
+        cpp: `class Solution {\npublic:\n    void solve() {\n        // Write your code here\n    }\n};`,
+        java: `class Solution {\n    public void solve() {\n        // Write your code here\n    }\n}`
+      };
+    }
+    return templates;
+  }, [activeProblem]);
 
   // Code Auto-save logic (runs every 3 seconds)
   useEffect(() => {
@@ -465,24 +531,24 @@ const OngoingContestPage = () => {
   };
 
   // Helper: check problem solved or attempted status
-  const getProblemStatus = (probId) => {
+  const getProblemStatus = useCallback((probId) => {
     const subs = problemSubmissions[probId] || [];
     if (subs.some(s => s.status === 'ACCEPTED')) return 'SOLVED';
     if (subs.length > 0) return 'ATTEMPTED';
     return 'UNSTARTED';
-  };
+  }, [problemSubmissions]);
 
   // Progress stats calculation
   const solvedCount = useMemo(() => {
     return ContestProblems.filter(p => getProblemStatus(p.id) === 'SOLVED').length;
-  }, [ContestProblems, problemSubmissions]);
+  }, [ContestProblems, getProblemStatus]);
 
   const totalScore = useMemo(() => {
     return ContestProblems.reduce((sum, p) => {
       if (getProblemStatus(p.id) === 'SOLVED') return sum + p.score;
       return sum;
     }, 0);
-  }, [ContestProblems, problemSubmissions]);
+  }, [ContestProblems, getProblemStatus]);
 
   const wrongAttempts = useMemo(() => {
     let wrong = 0;
@@ -510,14 +576,14 @@ const OngoingContestPage = () => {
         statusIcon: status === 'SOLVED' ? '🟢' : status === 'ATTEMPTED' ? '🟡' : '⚪'
       };
     });
-  }, [ContestProblems, problemSubmissions]);
+  }, [ContestProblems, getProblemStatus]);
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
-      
+
       {/* 1. Sticky Contest Navbar */}
       <header className="sticky top-0 z-40 h-16 shrink-0 flex items-center justify-between px-4 md:px-6 bg-card border-b border-border shadow-xs">
-        
+
         {/* Left Side: Brand & Contest Header */}
         <div className="flex items-center gap-3">
           <Link to="/" className="flex items-center gap-2">
@@ -531,7 +597,7 @@ const OngoingContestPage = () => {
           <div className="h-6 w-px bg-border hidden sm:block" />
           <div className="flex flex-col">
             <h1 className="text-xs md:text-sm font-bold line-clamp-1 max-w-[150px] sm:max-w-[200px] md:max-w-xs text-foreground">
-              {resolvedContestData?.contestName || contestParts[0] || 'Ongoing Contest'}
+              {resolvedContestData?.contestName || 'Ongoing Contest'}
             </h1>
             <div className="flex items-center gap-1">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -543,7 +609,7 @@ const OngoingContestPage = () => {
         {/* Center: Live Timer Display */}
         <div className="flex items-center gap-2">
           <CountdownTimer
-            startTime={resolvedContestData?.startTime || (Date.now() - 30 * 60 * 1000)}
+            startTime={resolvedContestData?.startTime || fallbackStartTime}
             durationHours={resolvedContestData?.duration || 2}
             onTimerEnd={handleTimerEnd}
             onFifteenMinutesRemaining={handleFifteenMinutesAlert}
@@ -552,7 +618,7 @@ const OngoingContestPage = () => {
 
         {/* Right Side: Stats & Action Buttons */}
         <div className="flex items-center gap-2 md:gap-3">
-          
+
           {/* Theme Toggle Button */}
           <button
             onClick={cycleTheme}
@@ -691,7 +757,7 @@ const OngoingContestPage = () => {
 
       {/* 3. 3-Column Layout */}
       <div className="flex-1 flex min-h-0 relative">
-        
+
         {/* LEFT SIDEBAR (Collapsible): Progress Tracker & Details */}
         <AnimatePresence initial={false}>
           {leftSidebarOpen && (
@@ -703,7 +769,7 @@ const OngoingContestPage = () => {
               className="hidden lg:flex flex-col h-full bg-card border-r border-border overflow-y-auto shrink-0"
             >
               <div className="p-4 space-y-6">
-                
+
                 {/* Progress Tracker Card */}
                 <div className="bg-muted/40 border border-border rounded-2xl p-4 space-y-4 shadow-xs">
                   <div className="flex items-center justify-between">
@@ -739,7 +805,7 @@ const OngoingContestPage = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Linear progress bar */}
                   <div className="w-full h-1.5 rounded-full bg-border overflow-hidden">
                     <div
@@ -781,7 +847,7 @@ const OngoingContestPage = () => {
 
         {/* CENTER MAIN AREA: Resizable coding space (Problem Details & Editor) */}
         <div className="flex-1 flex flex-col min-w-0 h-full relative">
-          
+
           {/* Floating collapse handle button for Left Sidebar - Anchored at the left edge in the middle height */}
           <button
             onClick={() => setLeftSidebarOpen(!leftSidebarOpen)}
@@ -809,7 +875,7 @@ const OngoingContestPage = () => {
               maxSize={75}
               className="flex-1 h-full w-full"
             >
-              
+
               {/* Left Pane (Description Tabs) */}
               <div className="flex flex-col h-full w-full bg-card overflow-hidden">
                 {/* Header with Description / Submissions tabs only */}
@@ -832,7 +898,7 @@ const OngoingContestPage = () => {
                       );
                     })}
                   </div>
-                  
+
                   <div className="text-[10px] text-indigo-500 font-extrabold font-mono pr-6">
                     Score: {activeProblem?.score} pts
                   </div>
@@ -880,10 +946,11 @@ const OngoingContestPage = () => {
               </div>
 
               {/* Right Pane (Monaco Code Editor Panel) */}
-              <div className="flex flex-col h-full w-full bg-[#1e1e1e] overflow-hidden">
+              <div className={`flex flex-col h-full w-full ${resolvedTheme === 'dark' ? 'bg-[#131c31]' : 'bg-white'} overflow-hidden`}>
                 {resolvedProblemDetails && (
                   <CodeEditor
                     codeTemplates={resolvedProblemDetails.templates}
+                    contestId={resolvedContestData?.contestId || 'default'}
                     problemId={activeProblem.id}
                     problemMeta={resolvedProblemDetails}
                     testcaseData={testcaseData}
@@ -916,7 +983,7 @@ const OngoingContestPage = () => {
                     })}
                   </div>
                 </div>
-                
+
                 <div className="flex-1 overflow-y-auto p-4 bg-card">
                   {loadingDetails ? (
                     <div className="flex flex-col items-center justify-center h-full gap-2">
@@ -938,10 +1005,11 @@ const OngoingContestPage = () => {
                 </div>
               </div>
             ) : (
-              <div className="flex-1 flex flex-col h-full bg-[#1e1e1e] overflow-hidden">
+              <div className={`flex-1 flex flex-col h-full ${resolvedTheme === 'dark' ? 'bg-[#131c31]' : 'bg-white'} overflow-hidden`}>
                 {resolvedProblemDetails && (
                   <CodeEditor
                     codeTemplates={resolvedProblemDetails.templates}
+                    contestId={resolvedContestData?.contestId || 'default'}
                     problemId={activeProblem.id}
                     problemMeta={resolvedProblemDetails}
                     testcaseData={testcaseData}
@@ -965,14 +1033,14 @@ const OngoingContestPage = () => {
               className="hidden lg:flex flex-col h-full bg-card border-l border-border overflow-y-auto shrink-0"
             >
               <div className="p-4 space-y-6">
-                
+
                 {/* Submission History Snapshot for the Active Problem */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between px-1">
                     <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground">My Submissions</h3>
                     <span className="text-[9px] text-indigo-600 dark:text-indigo-400 font-bold">Task {activeProblem?.label}</span>
                   </div>
-                  
+
                   <div className="bg-muted/20 border border-border rounded-2xl p-3 space-y-2 max-h-40 overflow-y-auto shadow-inner">
                     {(problemSubmissions[activeProblem?.id] || []).length === 0 ? (
                       <p className="text-[11px] text-muted-foreground italic text-center py-4">No submissions made yet.</p>
@@ -1026,7 +1094,7 @@ const OngoingContestPage = () => {
                     </div>
                   </div>
                 )}
-                
+
               </div>
             </motion.aside>
           )}
@@ -1044,7 +1112,7 @@ const OngoingContestPage = () => {
               onClick={() => setIsShortcutsOpen(false)}
               className="absolute inset-0 bg-black/60 backdrop-blur-xs"
             />
-            
+
             <motion.div
               initial={{ scale: 0.95, y: 15, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
@@ -1105,7 +1173,7 @@ const OngoingContestPage = () => {
               onClick={() => setIsExitConfirmOpen(false)}
               className="absolute inset-0 bg-black/60 backdrop-blur-xs"
             />
-            
+
             <motion.div
               initial={{ scale: 0.95, y: 15, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}

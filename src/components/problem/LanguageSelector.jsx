@@ -5,19 +5,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
 import { ChevronDown, RotateCw } from "lucide-react";
 import Stopwatch from "../others/StopWatch";
-import { userCode } from "../../data/UserCodeTemplate";
-import { problemSolutions } from "../../data/solution";
 
 const LanguageSelector = ({
   Language,
   setLanguage,
   LanguageList,
-  setCode,
-  codeTemplates,
-  setOutput,
   onReset,
 }) => {
   const [codeResetFlag, setcodeResetFlag] = useState(false);
@@ -27,7 +21,6 @@ const LanguageSelector = ({
       onReset();
     }
     setcodeResetFlag(true);
-    setOutput(null);
 
     setTimeout(() => {
       setcodeResetFlag(false);
@@ -36,62 +29,88 @@ const LanguageSelector = ({
 
   const handleLanguageChange = (lang, version) => {
     setLanguage([lang, version]);
-      const newBoilerPlate=codeTemplates?.[lang]|| "NO template"
-    setCode(newBoilerPlate);
+  };
+
+  const getLanguageColor = (lang) => {
+    switch (lang.toLowerCase()) {
+      case "python":
+        return "bg-sky-500";
+      case "javascript":
+        return "bg-amber-500";
+      case "cpp":
+      case "c++":
+        return "bg-indigo-500";
+      case "java":
+        return "bg-rose-500";
+      default:
+        return "bg-slate-400";
+    }
   };
 
   return (
-    <div className="h-15 flex border-b border-slate-200 dark:border-slate-700 w-full bg-white dark:bg-slate-900">
-      <div className="pl-3 lg:px-6 py-3 ">
+    <div className="h-11 flex items-center justify-between border-b border-border bg-card px-3 w-full select-none">
+      {/* Left side: Language Dropdown and Reset Button */}
+      <div className="flex items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="flex items-center capitalize gap-2 border-2 border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700">
-              <h1>{Language[0]}</h1>
-              <p className="text-gray-500 dark:text-slate-400 text-[13px] font-normal">
+            <button
+              className="flex items-center capitalize gap-2 h-8 px-2.5 rounded-lg text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/65 transition-colors cursor-pointer focus:outline-none"
+            >
+              <span className={`w-1.5 h-1.5 rounded-full ${getLanguageColor(Language[0])} shrink-0`} />
+              <span>{Language[0]}</span>
+              <span className="text-muted-foreground/60 text-[10px] font-mono font-normal">
                 {Language[1]}
-              </p>
-              <ChevronDown className="text-slate-400" />
-            </Button>
+              </span>
+              <ChevronDown className="text-muted-foreground opacity-60 ml-0.5" size={11} />
+            </button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent className="dark:bg-slate-800 dark:border-slate-700">
+          <DropdownMenuContent className="bg-card border border-border rounded-xl min-w-[130px] p-1 shadow-lg z-50">
             {LanguageList.map(([lang, version], i) => {
               const isSelected = lang === Language[0];
 
               return (
                 !isSelected && (
-                  <div
+                  <DropdownMenuItem
                     key={i}
                     onClick={() => handleLanguageChange(lang, version)}
+                    className="cursor-pointer rounded-lg px-2 py-1.5 hover:bg-muted focus:bg-muted transition-colors flex items-center gap-2 text-xs font-semibold text-foreground"
                   >
-                    <DropdownMenuItem className="cursor-pointer dark:hover:bg-slate-700 dark:focus:bg-slate-700">
-                      <p className="capitalize dark:text-slate-200">{lang}</p>
-                      <p className="text-gray-500 dark:text-slate-400 text-[13px] font-normal">
-                        {version}
-                      </p>
-                    </DropdownMenuItem>
-                  </div>
+                    <span className={`w-1.5 h-1.5 rounded-full ${getLanguageColor(lang)} shrink-0`} />
+                    <span className="capitalize">{lang}</span>
+                    <span className="ml-auto text-muted-foreground text-[10px] font-mono font-normal">
+                      {version}
+                    </span>
+                  </DropdownMenuItem>
                 )
               );
             })}
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
-      <div className="flex w-full items-center justify-between">
-        <div className="flex items-center gap-5">
-          <RotateCw
-            size={15}
-            className="cursor-pointer text-gray-700 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:rotate-180 transition-transform duration-500"
+
+        <div className="flex items-center gap-1">
+          <button
             onClick={handleCodeReset}
-          />
-          <p
-            className={`duration-500 ${
-              codeResetFlag ? "opacity-100" : "opacity-0"
-            } bg-green-200 dark:bg-green-500/20 rounded-sm px-2 py-1 text-green-600 dark:text-green-400 border-green-400 dark:border-green-500/30 border text-xs`}
+            className="group flex items-center gap-1.5 h-8 px-2.5 rounded-lg text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/65 transition-all cursor-pointer focus:outline-none"
+            title="Reset code template"
           >
-            Code Reset Successfully!
-          </p>
+            <RotateCw
+              size={11}
+              className={`${codeResetFlag ? "animate-spin text-emerald-500" : "group-hover:rotate-180 transition-transform duration-500"}`}
+            />
+            <span>Reset</span>
+          </button>
+
+          {codeResetFlag && (
+            <span className="text-[10px] font-bold bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/10 rounded-full px-2 py-0.5 animate-fade-in whitespace-nowrap">
+              Reset successfully!
+            </span>
+          )}
         </div>
+      </div>
+
+      {/* Right side: Stopwatch */}
+      <div className="flex items-center">
         <Stopwatch />
       </div>
     </div>

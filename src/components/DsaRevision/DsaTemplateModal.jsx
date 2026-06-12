@@ -69,7 +69,7 @@ const DsaTemplateModal = ({
   const handleStorageSubmit = async (values) => {
     setIsLoading(true);
     // console.log("parent ID is : ", parentId);
-    console.log("Submitting DSA Template:", values);
+    // console.log("Submitting DSA Template:", values);
     // console.log(parentId);
     // console.log(jwtToken);
     try {
@@ -96,8 +96,8 @@ const DsaTemplateModal = ({
           },
         );
       }
-      console.log("API call successful, response received.");
-      console.log("API Response:", response);
+      // console.log("API call successful, response received.");
+      // console.log("API Response:", response);
 
       // console.log(response.data);
 

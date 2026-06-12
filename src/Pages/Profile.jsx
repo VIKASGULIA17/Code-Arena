@@ -108,7 +108,7 @@ const Profile = () => {
   const fetchUniqueSubmissions = async () => {
     const token = jwtToken;
     if (!token) {
-      console.log("No token found");
+      // console.log("No token found");
       return;
     }
     try {
@@ -118,7 +118,7 @@ const Profile = () => {
         },
       });
 
-      console.log("Submissions fetched successfully:", response.data);
+      // console.log("Submissions fetched successfully:", response.data);
       setUniqueSubmissions(response.data)
     } catch (error) {
       console.error("Failed to fetch submissions:", error);
@@ -329,7 +329,7 @@ const Profile = () => {
       console.table(sortedData)
       // console.log(response.data)
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

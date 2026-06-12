@@ -202,9 +202,9 @@ const ContestManagement = () => {
   };
 
   const handleUpdateProblem = async (values, { resetForm }) => {
-    console.log("here in update problem");
+    // console.log("here in update problem");
     try {
-      console.log("Update Form Values:", values);
+      // console.log("Update Form Values:", values);
       // Dummy update logic - e.g., toast success
       toast.success("Problem Updated Successfully (Dummy)");
       setEditingProblem(null);
@@ -287,7 +287,7 @@ const ContestManagement = () => {
           });
           setErrors(validationErrors);
         } else {
-          console.log(e);
+          // console.log(e);
           toast.error("Contest not added");
           setCurrentContest(initialValues);
         }
@@ -330,10 +330,10 @@ const ContestManagement = () => {
   // console.log(allContest);
 
   const handleAddProblem = async (values, { resetForm }) => {
-      console.log("here");
+      // console.log("here");
       try {
         values.sno = parseInt(values.sno);
-        console.log("Form Values:", values);
+        // console.log("Form Values:", values);
         // console.log("Jwt is : ",jwtToken);
         const result = await axios.post(`${BACKEND_URL}/contestProblem/${targetContestAddProblem.contestId}/problem`, values, {
           headers: {

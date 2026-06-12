@@ -26,7 +26,7 @@ const AddTopicModal = ({ isOpen, onClose, targetCategory }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("New Topic:", form);
+    // console.log("New Topic:", form);
     setLoadingState(true);
     const response = await axios.post(
       `${BACKEND_URL}/DsaTitle/addTitle/${targetCategory}`,

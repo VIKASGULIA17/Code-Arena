@@ -117,17 +117,17 @@ function arrayBasics() {
     let arr2 = Array.from({length: 5}, (_, i) => i + 1);
     
     // Access elements
-    console.log("First element:", arr1[0]);
-    console.log("Last element:", arr1[arr1.length - 1]);
+    // console.log("First element:", arr1[0]);
+    // console.log("Last element:", arr1[arr1.length - 1]);
     
     // Traverse array
-    console.log("Array elements:");
+    // console.log("Array elements:");
     for(let i = 0; i < arr1.length; i++) {
-        console.log(arr1[i]);
+        // console.log(arr1[i]);
     }
     
     // Modern iteration
-    arr1.forEach(element => console.log(element));
+    // arr1.forEach(element => console.log(element));
     
     // Array operations
     arr1.push(6);           // Add element
@@ -135,8 +135,8 @@ function arrayBasics() {
     arr1.splice(2, 0, 10);  // Insert at index 2
     arr1.splice(2, 1);      // Remove element at index 2
     
-    console.log("Array length:", arr1.length);
-    console.log("Array:", arr1);
+    // console.log("Array length:", arr1.length);
+    // console.log("Array:", arr1);
 }
 
 // Call the function
@@ -284,10 +284,10 @@ function main() {
     const result = twoSum(nums, target);
     
     if(result.length > 0) {
-        console.log("Indices:", result);
-        console.log("Values:", [nums[result[0]], nums[result[1]]]);
+        // console.log("Indices:", result);
+        // console.log("Values:", [nums[result[0]], nums[result[1]]]);
     } else {
-        console.log("No solution found");
+        // console.log("No solution found");
     }
 }
 
@@ -561,13 +561,13 @@ if __name__ == "__main__":
     // Push element onto stack
     push(value) {
         this.arr.push(value);
-        console.log(\`\${value} pushed to stack\`);
+        // console.log(\`\${value} pushed to stack\`);
     }
     
     // Pop element from stack
     pop() {
         if (this.isEmpty()) {
-            console.log("Stack underflow! Cannot pop from empty stack");
+            // console.log("Stack underflow! Cannot pop from empty stack");
             return null;
         }
         
@@ -577,7 +577,7 @@ if __name__ == "__main__":
     // Get top element without removing it
     peek() {
         if (this.isEmpty()) {
-            console.log("Stack is empty!");
+            // console.log("Stack is empty!");
             return null;
         }
         
@@ -597,7 +597,7 @@ if __name__ == "__main__":
     // Display stack contents
     display() {
         if (this.isEmpty()) {
-            console.log("Stack is empty!");
+            // console.log("Stack is empty!");
             return;
         }
         
@@ -605,7 +605,7 @@ if __name__ == "__main__":
         for (let i = this.arr.length - 1; i >= 0; i--) {
             contents.push(this.arr[i]);
         }
-        console.log("Stack contents (top to bottom):", contents.join(" "));
+        // console.log("Stack contents (top to bottom):", contents.join(" "));
     }
 }
 
@@ -619,11 +619,11 @@ function main() {
     
     stack.display();
     
-    console.log("Top element:", stack.peek());
-    console.log("Stack size:", stack.size());
+    // console.log("Top element:", stack.peek());
+    // console.log("Stack size:", stack.size());
     
-    console.log("Popped:", stack.pop());
-    console.log("Popped:", stack.pop());
+    // console.log("Popped:", stack.pop());
+    // console.log("Popped:", stack.pop());
     
     stack.display();
 }
@@ -1081,7 +1081,7 @@ class BinaryTree {
     inorderTraversal() {
         const result = [];
         this._inorderHelper(this.root, result);
-        console.log("Inorder:", result.join(" "));
+        // console.log("Inorder:", result.join(" "));
     }
     
     _inorderHelper(node, result) {
@@ -1096,7 +1096,7 @@ class BinaryTree {
     preorderTraversal() {
         const result = [];
         this._preorderHelper(this.root, result);
-        console.log("Preorder:", result.join(" "));
+        // console.log("Preorder:", result.join(" "));
     }
     
     _preorderHelper(node, result) {
@@ -1111,7 +1111,7 @@ class BinaryTree {
     postorderTraversal() {
         const result = [];
         this._postorderHelper(this.root, result);
-        console.log("Postorder:", result.join(" "));
+        // console.log("Postorder:", result.join(" "));
     }
     
     _postorderHelper(node, result) {
@@ -1137,7 +1137,7 @@ class BinaryTree {
             if (current.right) queue.push(current.right);
         }
         
-        console.log("Level order:", result.join(" "));
+        // console.log("Level order:", result.join(" "));
     }
 }
 
@@ -1576,7 +1576,7 @@ class LinkedList {
             current = current.next;
         }
         
-        console.log("List: " + elements.join(" -> ") + " -> NULL");
+        // console.log("List: " + elements.join(" -> ") + " -> NULL");
     }
     
     // Get size
@@ -1595,7 +1595,7 @@ function main() {
     list.insertAtTail(4);
     
     list.display();
-    console.log("Size:", list.getSize());
+    // console.log("Size:", list.getSize());
     
     list.deleteValue(2);
     list.display();
@@ -1806,19 +1806,19 @@ function bubbleSort(arr) {
 }
 
 function printArray(arr) {
-    console.log(arr.join(" "));
+    // console.log(arr.join(" "));
 }
 
 // Test the algorithm
 function main() {
     const arr = [64, 34, 25, 12, 22, 11, 90];
     
-    console.log("Original array:");
+    // console.log("Original array:");
     printArray(arr);
     
     bubbleSort(arr);
     
-    console.log("Sorted array:");
+    // console.log("Sorted array:");
     printArray(arr);
 }
 
@@ -2241,15 +2241,15 @@ function main() {
     const arr1 = [64, 34, 25, 12, 22, 11, 90, 88, 76, 50, 42];
     const arr2 = [...arr1]; // Copy array
     
-    console.log("Original array:", arr1);
+    // console.log("Original array:", arr1);
     
     // Test regular merge sort
     const sortedArr = mergeSort(arr1);
-    console.log("Sorted array (merge sort):", sortedArr);
+    // console.log("Sorted array (merge sort):", sortedArr);
     
     // Test in-place merge sort
     mergeSortInPlace(arr2);
-    console.log("Sorted array (in-place):", arr2);
+    // console.log("Sorted array (in-place):", arr2);
 }
 
 // Call the function
@@ -2674,36 +2674,36 @@ class FibonacciDP {
 // Main function to test all approaches
 function main() {
     let n = 10;
-    console.log(\`Computing Fibonacci for n = \${n}\`);
+    // console.log(\`Computing Fibonacci for n = \${n}\`);
     
     // Test different approaches
     let { result, time } = timeFunction(fibonacciMemo, n);
-    console.log(\`Memoization: \${result} (Time: \${time.toFixed(4)}ms)\`);
+    // console.log(\`Memoization: \${result} (Time: \${time.toFixed(4)}ms)\`);
     
     ({ result, time } = timeFunction(fibonacciTab, n));
-    console.log(\`Tabulation: \${result} (Time: \${time.toFixed(4)}ms)\`);
+    // console.log(\`Tabulation: \${result} (Time: \${time.toFixed(4)}ms)\`);
     
     ({ result, time } = timeFunction(fibonacciOptimized, n));
-    console.log(\`Optimized: \${result} (Time: \${time.toFixed(4)}ms)\`);
+    // console.log(\`Optimized: \${result} (Time: \${time.toFixed(4)}ms)\`);
     
     // Generator approach
     const fibGen = [...fibonacciGenerator(n)];
-    console.log(\`Generator: \${fibGen}\`);
+    // console.log(\`Generator: \${fibGen}\`);
     
     // Class approach
     const fibDP = new FibonacciDP();
-    console.log(\`Class approach: \${fibDP.compute(n)}\`);
-    console.log(\`Sequence: \${fibDP.getSequence(n)}\`);
+    // console.log(\`Class approach: \${fibDP.compute(n)}\`);
+    // console.log(\`Sequence: \${fibDP.getSequence(n)}\`);
     
     // Performance comparison for larger n
     n = 35;
-    console.log(\`\nFor n = \${n}:\`);
+    // console.log(\`\nFor n = \${n}:\`);
     
     ({ result, time } = timeFunction(fibonacciTab, n));
-    console.log(\`Tabulation: \${result} (Time: \${time.toFixed(4)}ms)\`);
+    // console.log(\`Tabulation: \${result} (Time: \${time.toFixed(4)}ms)\`);
     
     ({ result, time } = timeFunction(fibonacciOptimized, n));
-    console.log(\`Optimized: \${result} (Time: \${time.toFixed(4)}ms)\`);
+    // console.log(\`Optimized: \${result} (Time: \${time.toFixed(4)}ms)\`);
 }
 
 // Call the function
@@ -3173,17 +3173,17 @@ for (let [u, v] of edges) {
     dsu.unite(u, v);
 }
 
-console.log("Node -> Parent");
+// console.log("Node -> Parent");
 for (let i = 0; i < n; i++) {
-    console.log(i + " -> " + dsu.findUltimateParent(i));
+    // console.log(i + " -> " + dsu.findUltimateParent(i));
 }
 
 if (dsu.findUltimateParent(0) === dsu.findUltimateParent(2)) {
-    console.log("0 and 2 are connected");
+    // console.log("0 and 2 are connected");
 }
 
 if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
-    console.log("0 and 5 are NOT connected");
+    // console.log("0 and 5 are NOT connected");
 }`
                     },
                     "disjoint-set-union-by-size": {
@@ -3416,17 +3416,17 @@ for (let [u, v] of edges) {
     dsu.unite(u, v);
 }
 
-console.log("Node -> Parent");
+// console.log("Node -> Parent");
 for (let i = 0; i < n; i++) {
-    console.log(i + " -> " + dsu.findUltimateParent(i));
+    // console.log(i + " -> " + dsu.findUltimateParent(i));
 }
 
 if (dsu.findUltimateParent(0) === dsu.findUltimateParent(2)) {
-    console.log("0 and 2 are connected");
+    // console.log("0 and 2 are connected");
 }
 
 if (dsu.findUltimateParent(0) !== dsu.findUltimateParent(5)) {
-    console.log("0 and 5 are NOT connected");
+    // console.log("0 and 5 are NOT connected");
 }`
                     },
                     "dijkstra-algorithm": {
@@ -3699,7 +3699,7 @@ for (let i = 1; i <= n; i++) {
     }
 }
 
-console.log(ans.join(" "));`,
+// console.log(ans.join(" "));`,
                         java: `import java.util.*;
 
 public class Main {
@@ -4254,7 +4254,7 @@ for (let i = 0; i < m; i++) {
 
 let colors = input[idx++].split(" ").map(Number);
 
-console.log(zeroOneBFS(adj, colors, n).join(" "));`
+// console.log(zeroOneBFS(adj, colors, n).join(" "));`
                     },
                     "grid-BFS": {
                         title: "Grid BFS",
@@ -4855,9 +4855,9 @@ readline.on("close", () => {
     }
 
     if (isBipartiteGraph) {
-        console.log("Graph is Bipartite");
+        // console.log("Graph is Bipartite");
     } else {
-        console.log("Graph is not Bipartite");
+        // console.log("Graph is not Bipartite");
     }
 });`
                     },
@@ -5189,9 +5189,9 @@ rl.on("close", () => {
     let adj = makeAdj(edges, n);
 
     if (isBipartite(adj, n, dsu)) {
-        console.log("Graph is Bipartite");
+        // console.log("Graph is Bipartite");
     } else {
-        console.log("Graph is not Bipartite");
+        // console.log("Graph is not Bipartite");
     }
 });`
                     },
@@ -5518,7 +5518,7 @@ for (let i = 0; i <= mx; i++) {
 }
 
 for (const x of Bridges) {
-    console.log(x[0], x[1]);
+    // console.log(x[0], x[1]);
 }`
                     }
                 }
@@ -5693,7 +5693,7 @@ for (let i = 0; i < n; i++) {
     arr[i] += diff[i];
 }
 
-console.log(arr.join(" "));`
+// console.log(arr.join(" "));`
                     },
                     "difference-array-with-steps": {
                         title: "Difference Array Technique - With Jumps",
@@ -5911,7 +5911,7 @@ print(*arr)`,
     for (let i = 0; i < q; i++) {
         let [start, end, val] = sequence[i];
 
-        console.log(start, end, val);
+        // console.log(start, end, val);
 
         diff[start] += val;
         if (end + jump < n) {
@@ -5966,7 +5966,7 @@ for (let jump in map) {
     forEachJump(map[jump], arr, n, parseInt(jump));
 }
 
-console.log(arr.join(" "));`
+// console.log(arr.join(" "));`
                     }
                 }
             },
@@ -6226,7 +6226,7 @@ for (let [l, r] of queries) {
     result.push(ans);
 }
 
-console.log(result.join("\n"));`
+// console.log(result.join("\n"));`
                     }
                 }
             }
@@ -6381,14 +6381,14 @@ let count = 0;
 
 for (let i = 0; i < n; i++) {
     if (isPrime[i] == true) {
-        console.log(i + " is a Prime number");
+        // console.log(i + " is a Prime number");
         count++;
     } else {
-        console.log(i + " is not a prime number");
+        // console.log(i + " is not a prime number");
     }
 }
 
-console.log("Total Prime numbers are : " + count);`
+// console.log("Total Prime numbers are : " + count);`
                     },
                     "median-using-multiset": {
                         title: "Median using Multiset",
@@ -6698,7 +6698,7 @@ while (i < k) {
     i++;
 }
 
-console.log(left.last());
+// console.log(left.last());
 
 while (i < n) {
 
@@ -6719,7 +6719,7 @@ while (i < n) {
 
     rebalance(left, right);
 
-    console.log(left.last());
+    // console.log(left.last());
 
     i++;
 }`
@@ -6813,7 +6813,7 @@ public class Main {
 }`,
                         javascript: `function printAllDivisors(num) {
 
-    console.log("Divisors are :");
+    // console.log("Divisors are :");
 
     for (let j = 1; j * j <= num; j++) {
 
@@ -6827,7 +6827,7 @@ public class Main {
         }
     }
 
-    console.log();
+    // console.log();
 }
 
 const fs = require("fs");
@@ -7171,11 +7171,11 @@ let target = "abc";
 
 let LPS = buildLPS(target, m);
 
-console.log("LPS is :");
-console.log(LPS.join(" "));
+// console.log("LPS is :");
+// console.log(LPS.join(" "));
 
-console.log("Indices where target found are :");
-console.log(findIndices(LPS, s, target).join(" "));`
+// console.log("Indices where target found are :");
+// console.log(findIndices(LPS, s, target).join(" "));`
                     }
                 }
             }

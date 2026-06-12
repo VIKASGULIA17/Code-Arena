@@ -11,7 +11,7 @@ const BACKEND_URL=import.meta.env.VITE_BACKEND_URL;
 //   language:"",
 //   userCode:""
 // })
-console.log("BACKEND_URL:", BACKEND_URL);
+// console.log("BACKEND_URL:", BACKEND_URL);
 
 export const executeCode = async (language,userCode)=>{
   const  jwtToken  = localStorage.getItem("jwtToken") ;
@@ -19,7 +19,7 @@ export const executeCode = async (language,userCode)=>{
   // setExecuteRequest({language,userCode});
 
   try{
-    console.log("Executing code with language:", language);
+    // console.log("Executing code with language:", language);
     const response=await axios.post(`${BACKEND_URL}/CodeExecution/runCode`
       ,{language,userCode},{
           headers: {
@@ -27,7 +27,7 @@ export const executeCode = async (language,userCode)=>{
           },
         },
     );
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   }
   catch(error){

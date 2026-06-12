@@ -36,7 +36,7 @@ const Problems = () => {
   const fetchSubmissions = async () => {
     const token = jwtToken ;
     if (!token) {
-      console.log("No token found");
+      // console.log("No token found");
       return;
     }
     try {
@@ -46,7 +46,7 @@ const Problems = () => {
         },
       });
 
-      console.log("Submissions fetched successfully:", response.data);
+      // console.log("Submissions fetched successfully:", response.data);
       setUniqueSubmissions(response.data)
     } catch (error) {
       console.error("Failed to fetch submissions:", error);
