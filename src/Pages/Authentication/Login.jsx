@@ -13,7 +13,7 @@ import { Formik, Field, ErrorMessage, Form } from "formik";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAppContext } from "../../context/AppContext";
-import Image from "../../assets/authentication.gif";
+import AuthImage from "../../assets/auth-panel.png";
 
 const Login = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -73,13 +73,55 @@ const Login = () => {
 
       <div className="flex-1 flex items-center justify-center pt-24 pb-10 px-4 sm:px-6">
         <div className="bg-white dark:bg-slate-800 w-full max-w-4xl rounded-2xl shadow-xl shadow-gray-200/60 dark:shadow-black/40 overflow-hidden flex flex-col lg:flex-row border border-gray-100 dark:border-slate-700">
-          {/* Left: Image */}
-          <div className="w-full lg:w-1/2 h-48 lg:h-auto relative bg-gray-900">
+          {/* Left: Image Panel */}
+          <div className="w-full lg:w-1/2 relative overflow-hidden" style={{ minHeight: "280px" }}>
+            {/* Background image */}
             <img
-              src={Image}
-              alt="Login Visual"
-              className="w-full h-full object-cover opacity-80"
+              src={AuthImage}
+              alt="Code Arena Visual"
+              className="absolute inset-0 w-full h-full object-cover"
             />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/80 via-slate-900/70 to-purple-950/80" />
+
+            {/* Content overlay */}
+            <div className="relative z-10 h-full flex flex-col justify-between p-8 lg:p-10" style={{ minHeight: "280px" }}>
+              {/* Top: brand */}
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-900/50">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+                  </svg>
+                </div>
+                <span className="text-white font-bold text-lg tracking-tight">Code Arena</span>
+              </div>
+
+              {/* Middle: headline */}
+              <div className="hidden lg:block">
+                <h2 className="text-3xl font-extrabold text-white leading-tight mb-3">
+                  Master the Art<br />of Algorithms
+                </h2>
+                <p className="text-indigo-200/80 text-sm leading-relaxed max-w-xs">
+                  Compete, solve, and grow with thousands of curated problems across every difficulty level.
+                </p>
+
+                {/* Stats row */}
+                <div className="flex gap-6 mt-6">
+                  {[{ val: "2K+", label: "Problems" }, { val: "50K+", label: "Users" }, { val: "100+", label: "Contests" }].map(s => (
+                    <div key={s.label}>
+                      <p className="text-white font-bold text-xl">{s.val}</p>
+                      <p className="text-indigo-300/70 text-xs mt-0.5">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bottom: decorative pill */}
+              <div className="hidden lg:flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full px-4 py-2 w-fit">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-white/80 text-xs font-medium">Live contests running now</span>
+              </div>
+            </div>
           </div>
 
           {/* Right: Form */}

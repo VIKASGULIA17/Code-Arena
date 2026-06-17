@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Form, Field, Formik, ErrorMessage } from "formik";
 import * as yup from "yup";
 import axios from "axios";
-import Image from "../../assets/authentication.gif";
+import AuthImage from "../../assets/auth-panel.png";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -68,25 +68,61 @@ const Signup = () => {
 
       <div className="flex-1 flex items-center justify-center pt-24 pb-10 px-4 sm:px-6">
         <div className="bg-white dark:bg-slate-800 w-full max-w-5xl rounded-2xl shadow-xl shadow-gray-200/60 dark:shadow-black/40 overflow-hidden flex flex-col lg:flex-row border border-gray-100 dark:border-slate-700 relative">
-          {/* Left: Image */}
-          <div className="w-full lg:w-1/2 relative bg-gray-900 min-h-[200px] lg:min-h-[600px]">
+          {/* Left: Image Panel */}
+          <div className="w-full lg:w-1/2 relative overflow-hidden" style={{ minHeight: "280px" }}>
+            {/* Background image */}
             <img
-              src={Image}
-              alt="Signup Visual"
-              className="w-full h-full object-cover opacity-80 absolute inset-0"
+              src={AuthImage}
+              alt="Code Arena Visual"
+              className="absolute inset-0 w-full h-full object-cover"
             />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/80 via-slate-900/70 to-purple-950/80" />
 
-            {/* Sticky Note */}
-            <div className="hidden lg:block w-full h-full relative z-10 pointer-events-none">
-              <div className="bg-gray-800/90 backdrop-blur text-white w-60 text-center px-5 absolute top-10 left-10 rounded-xl -rotate-2 py-5 shadow-xl border border-gray-700/50">
-                <h2 className="font-bold text-lg">Hold that thought</h2>
-                <p className="font-medium text-gray-400 mt-2 text-xs leading-relaxed">
-                  You can join the game of life once you sign up or sign into your account!
-              </p>
-                <p className="text-indigo-300 text-[11px] pt-3 font-medium">
-                  This will only take a minute,{" "}
-                  <span className="text-white">so hold on to that thought.</span>
+            {/* Content overlay */}
+            <div className="relative z-10 h-full flex flex-col justify-between p-8 lg:p-10" style={{ minHeight: "280px" }}>
+              {/* Top: brand */}
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-900/50">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+                  </svg>
+                </div>
+                <span className="text-white font-bold text-lg tracking-tight">Code Arena</span>
+              </div>
+
+              {/* Middle: headline */}
+              <div className="hidden lg:block">
+                <h2 className="text-3xl font-extrabold text-white leading-tight mb-3">
+                  Join the Arena.<br />Prove Your Skills.
+                </h2>
+                <p className="text-indigo-200/80 text-sm leading-relaxed max-w-xs">
+                  Create your account in seconds and start solving problems, competing in live contests, and climbing the leaderboard.
                 </p>
+
+                {/* Feature list */}
+                <div className="flex flex-col gap-2.5 mt-6">
+                  {[
+                    "Access 2,000+ curated problems",
+                    "Compete in weekly live contests",
+                    "Track your progress & stats",
+                  ].map(f => (
+                    <div key={f} className="flex items-center gap-2.5">
+                      <span className="w-4 h-4 rounded-full bg-indigo-500/30 border border-indigo-400/40 flex items-center justify-center flex-shrink-0">
+                        <svg width="8" height="8" viewBox="0 0 12 12" fill="none">
+                          <path d="M2 6l3 3 5-5" stroke="#a5b4fc" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                      <span className="text-indigo-100/80 text-xs">{f}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bottom: decorative pill */}
+              <div className="hidden lg:flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full px-4 py-2 w-fit">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-white/80 text-xs font-medium">Free forever — no credit card needed</span>
               </div>
             </div>
           </div>

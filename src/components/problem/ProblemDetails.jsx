@@ -282,7 +282,7 @@ const ProblemDetails = ({ isContest, problemId }) => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <Loading message="Fetching problem" />;
   }
 
   if (!problemDetailsInfo) {

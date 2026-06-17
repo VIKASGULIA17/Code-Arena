@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import RobotLoader from './components/others/RobotLoader'
 import Home from './Pages/Home'
 import Problems from './Pages/Problems'
 // import About from './Pages/About'
@@ -31,6 +32,23 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
+  const [loading, setLoading] = useState(true);
+  const [fade, setFade] = useState(false);
+
+  useEffect(() => {
+    // Give the app ~2.4 s to fetch initial data, then fade out loader
+    const fadeTimer = setTimeout(() => setFade(true), 2200);
+    const doneTimer = setTimeout(() => setLoading(false), 2700);
+    return () => { clearTimeout(fadeTimer); clearTimeout(doneTimer); };
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ opacity: fade ? 0 : 1, transition: 'opacity 0.5s ease' }}>
+        <RobotLoader message="Booting Code Arena" />
+      </div>
+    );
+  }
 
   return (
     <>

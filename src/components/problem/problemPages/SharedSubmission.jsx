@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { EnhancedNavbar } from "../../Navbar";
 import TestingPage from "../../../../AIService/TestingPage";
+import RobotLoader from "../../../components/others/RobotLoader";
 
 const STATUS_CONFIG = {
   ACCEPTED: {
@@ -103,20 +104,6 @@ const StatPill = ({
   </div>
 );
 
-const LoadingSkeleton = () => (
-  <div className="min-h-screen bg-gray-50">
-    <EnhancedNavbar />
-    <div className="max-w-5xl mx-auto px-4 pt-24 pb-12 flex flex-col gap-6 animate-pulse">
-      <div className="h-40 rounded-2xl bg-gray-200" />
-      <div className="flex gap-4">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-24 flex-1 rounded-2xl bg-gray-200" />
-        ))}
-      </div>
-      <div className="h-[55vh] rounded-2xl bg-gray-200" />
-    </div>
-  </div>
-);
 
 const ErrorState = () => (
   <div className="min-h-screen bg-gray-50">
@@ -174,7 +161,8 @@ const SharedSubmission = () => {
   }, [slug]);
 
 //   console.log(submission);
-  if (loading) return <LoadingSkeleton />;
+  if (loading) return <RobotLoader message="Loading submission" />;
+
   if (error || !submission) return <ErrorState />;
 
   const cfg = STATUS_CONFIG[submission.status] || STATUS_CONFIG.WRONG_ANSWER;

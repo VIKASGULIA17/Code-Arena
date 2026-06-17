@@ -98,7 +98,7 @@ const Problems = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <Loading message="Loading problems" />;
   }
 
   const companies = [
