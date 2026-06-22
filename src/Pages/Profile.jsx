@@ -634,12 +634,12 @@ const Profile = () => {
       )}
       {/* <AnimatePresence */}
       {/* </div> */}
-      <div className="p-6 bg-linear-to-b from-violet-50/60 to-blue-50/60 dark:from-zinc-900 dark:to-zinc-950 min-h-screen">
+      <div className="p-6 bg-linear-to-b from-violet-50/60 to-blue-50/60 dark:from-[#020617] dark:to-[#020617] min-h-screen">
         <EnhancedNavbar />
         <div className="max-w-7xl mt-17 mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Sidebar */}
           <aside className="lg:col-span-3 space-y-6">
-            <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+            <div className="rounded-2xl bg-white/80 dark:bg-[#020617] border border-zinc-200 dark:border-zinc-800 p-6">
               <div className="flex items-center gap-4">
                 <img
                   src={
@@ -699,7 +699,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+            <div className="rounded-2xl bg-white/80 dark:bg-[#020617] border border-zinc-200 dark:border-zinc-800 p-6">
               <h3 className="font-semibold mb-4">Languages</h3>
               <div className="space-y-4">
                 {[
@@ -747,7 +747,7 @@ const Profile = () => {
           {/* Main Content */}
           <main className="lg:col-span-9 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+              <div className="rounded-2xl bg-white/80 dark:bg-[#020617] border border-zinc-200 dark:border-zinc-800 p-6">
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="font-semibold">Solved Problems</h3>
@@ -782,7 +782,7 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+              <div className="rounded-2xl bg-white/80 dark:bg-[#020617] border border-zinc-200 dark:border-zinc-800 p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold">Contest Rating</h3>
@@ -790,7 +790,7 @@ const Profile = () => {
                   </div>
                   <div className="text-3xl font-extrabold">1,850</div>
                 </div>
-                <div className="mt-6 h-28 w-full rounded-lg bg-linear-to-t from-indigo-50 to-white dark:from-zinc-800 dark:to-zinc-900 relative overflow-hidden">
+                <div className="mt-6 h-28 w-full rounded-lg bg-linear-to-t from-indigo-50 to-white dark:from-[#020617] dark:to-[#020617] relative overflow-hidden">
                   <div className="absolute inset-0 flex items-end gap-2 p-3">
                     {[...Array(12)].map((_, i) => (
                       <div
@@ -804,12 +804,12 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+            <div className="rounded-2xl bg-white/80 dark:bg-[#020617] border border-zinc-200 dark:border-zinc-800 p-6">
               <h3 className="font-semibold">Submission Activity</h3>
               <MonthActivityGrid submissions={submissions} />
             </div>
 
-            <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+            <div className="rounded-2xl bg-white/80 dark:bg-[#020617] border border-zinc-200 dark:border-zinc-800 p-6">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold">Badges & Achievements</h3>
                 <button className="text-xs text-indigo-600">View All</button>
@@ -838,7 +838,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="rounded-2xl bg-white/80 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 p-6">
+            <div className="rounded-2xl bg-white/80 dark:bg-[#020617] border border-zinc-200 dark:border-zinc-800 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold">Recent Submissions</h3>
                 <span className="text-xs text-zinc-400">
@@ -934,7 +934,7 @@ const Profile = () => {
                         return hasSlug ? (
                           <tr
                             key={sub.slug}
-                            className="border-t border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors"
+                            className="border-t border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-[#020617] cursor-pointer transition-colors"
                             onClick={() =>
                               (window.location.href = `/submission/${sub.slug}`)
                             }
@@ -944,7 +944,7 @@ const Profile = () => {
                         ) : (
                           <tr
                             key={idx}
-                            className="border-t border-zinc-200 dark:border-zinc-800"
+                            className="border-t border-zinc-200 dark:border-zinc-800 dark:bg-[#020617]"
                           >
                             {rowContent}
                           </tr>
@@ -964,7 +964,7 @@ const Profile = () => {
                       <button
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
-                        className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                        className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-[#020617] transition-colors"
                       >
                         Previous
                       </button>
@@ -976,7 +976,7 @@ const Profile = () => {
                       <button
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
-                        className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                        className="px-3 py-1 text-xs font-medium rounded-md border border-zinc-200 dark:border-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-[#020617] transition-colors"
                       >
                         Next
                       </button>
