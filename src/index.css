@@ -347,3 +347,155 @@ html::-webkit-scrollbar-thumb:hover, body::-webkit-scrollbar-thumb:hover, [class
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
+
+/* ─── Trick Notepad Modal ─── */
+
+/* Paper background — light mode: warm cream */
+.trick-notepad-paper {
+  background-color: #fffef7;
+}
+.dark .trick-notepad-paper {
+  background-color: #131c31;
+}
+
+/* Notepad body: horizontal ruled lines via repeating-gradient */
+.trick-notepad-body {
+  background-color: #fffef7;
+}
+.dark .trick-notepad-body {
+  background-color: #131c31;
+}
+
+/* Ruled textarea area */
+.trick-ruled-area {
+  background-image:
+    /* left red margin line */
+    linear-gradient(to right, transparent 36px, rgba(239,68,68,0.15) 36px, rgba(239,68,68,0.15) 37px, transparent 37px),
+    /* horizontal ruled lines every 28px */
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 27px,
+      rgba(156,163,175,0.18) 27px,
+      rgba(156,163,175,0.18) 28px
+    );
+  background-attachment: local;
+  line-height: 28px;
+}
+.dark .trick-ruled-area {
+  background-image:
+    linear-gradient(to right, transparent 36px, rgba(239,68,68,0.1) 36px, rgba(239,68,68,0.1) 37px, transparent 37px),
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 27px,
+      rgba(100,116,139,0.15) 27px,
+      rgba(100,116,139,0.15) 28px
+    );
+}
+
+/* Tiptap editor content area */
+.trick-editor-area {
+  min-height: 160px;
+  line-height: 28px;
+  font-size: 0.875rem;
+  color: #374151;
+}
+.dark .trick-editor-area {
+  color: #cbd5e1;
+}
+
+/* Tiptap placeholder */
+.trick-editor-area .is-editor-empty::before {
+  content: attr(data-placeholder);
+  color: #d1d5db;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+.dark .trick-editor-area .is-editor-empty::before {
+  color: #475569;
+}
+
+/* Tiptap paragraph spacing */
+.trick-editor-area p {
+  margin-bottom: 0.25rem;
+}
+
+/* Code block inside Tiptap */
+.trick-editor-area pre {
+  background: #0d1117;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  overflow-x: auto;
+  border: 1px solid #1e293b;
+}
+.trick-editor-area pre code {
+  background: transparent;
+  border: none;
+  color: #4ade80;
+  font-size: 0.8125rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  padding: 0;
+}
+
+/* Inline code */
+.trick-editor-area code:not(pre code) {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  padding: 0.1em 0.35em;
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+.dark .trick-editor-area code:not(pre code) {
+  background: rgba(245,158,11,0.1);
+  color: #fbbf24;
+  border-color: rgba(245,158,11,0.2);
+}
+
+/* Blockquote */
+.trick-editor-area blockquote {
+  border-left: 3px solid #f59e0b;
+  padding-left: 0.75rem;
+  margin: 0.5rem 0;
+  color: #6b7280;
+  font-style: italic;
+}
+.dark .trick-editor-area blockquote {
+  color: #94a3b8;
+}
+
+/* Highlight */
+.trick-editor-area mark {
+  background: #fef3c7;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+.dark .trick-editor-area mark {
+  background: rgba(245,158,11,0.25);
+  color: #fde68a;
+}
+
+/* Lists */
+.trick-editor-area ul { list-style: disc; padding-left: 1.25rem; }
+.trick-editor-area ol { list-style: decimal; padding-left: 1.25rem; }
+.trick-editor-area li { margin-bottom: 0.1rem; }
+
+/* Headings */
+.trick-editor-area h2 { font-size: 1.1rem; font-weight: 700; margin: 0.5rem 0 0.25rem; color: #111827; }
+.trick-editor-area h3 { font-size: 1rem; font-weight: 600; margin: 0.4rem 0 0.2rem; color: #1f2937; }
+.dark .trick-editor-area h2 { color: #e2e8f0; }
+.dark .trick-editor-area h3 { color: #cbd5e1; }
+
+/* Horizontal rule */
+.trick-editor-area hr { border-color: #e5e7eb; margin: 0.75rem 0; }
+.dark .trick-editor-area hr { border-color: #334155; }
+
+/* Links */
+.trick-link { color: #3b82f6; text-decoration: underline; }
+.trick-link:hover { color: #1d4ed8; }
+.dark .trick-link { color: #60a5fa; }
+.dark .trick-link:hover { color: #93c5fd; }
