@@ -1,15 +1,17 @@
 import { useState, useCallback } from 'react'
 
 const STORAGE_KEY = 'ca_notebook'
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-function loadNotebook() {
+async function loadNotebook() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return { html: '', savedAt: null }
-    const parsed = JSON.parse(raw)
+    console.log("loading notebook from backend",BACKEND_URL);
+    const result = await fetch(`${BACKEND_URL}/trick/get`)
+    const raw = await result.text();
+    console.log("raw data is : ", raw)
     return {
-      html: parsed.html || '',
-      savedAt: parsed.savedAt || null,
+      html: raw || '',
+      savedAt: null || null, 
     }
   } catch {
     return { html: '', savedAt: null }
@@ -26,6 +28,7 @@ function loadNotebook() {
  */
 export function useNotebook() {
   const [notebook, setNotebook] = useState(() => loadNotebook())
+  console.log("notebook is : ", notebook)
   const [isDirty, setIsDirty] = useState(false)
 
   /** Save a complete snapshot of the editor content */
@@ -48,6 +51,7 @@ export function useNotebook() {
   const update = useCallback((html) => {
     const entry = { html, savedAt: Date.now() }
     try {
+      console.log('updating notebook', html)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(entry))
     } catch {
       // ignore
