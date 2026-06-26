@@ -6,9 +6,8 @@ import { EnhancedNavbar } from '../Navbar'
 import ModuleSidebar from './ModuleSidebar'
 import ModuleContentArea from './ModuleContentArea'
 import DsaTemplateModal from './DsaTemplateModal'
-import TricksPage from './TricksPage'
+import TricksNotebook from './TricksNotebook'
 import { useRevisionProgress } from '../../hooks/useRevisionProgress'
-import { useTricks } from '../../hooks/useTricks'
 
 const RevisionLayout = () => {
   const { categoryId, topicId, subtopicId } = useParams()
@@ -27,7 +26,7 @@ const RevisionLayout = () => {
   const [templateModalMode, setTemplateModalMode] = useState("create")
   const [templateInitialData, setTemplateInitialData] = useState(null)
 
-  const { tricks, addTrick, updateTrick, deleteTrick } = useTricks()
+
 
   const {
     toggleComplete,
@@ -72,44 +71,35 @@ const RevisionLayout = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-[#0b1120]">
       <EnhancedNavbar />
 
-      {/* ── Mode Toggle Pill ─────────────────────────────── */}
-      <div className="fixed top-[72px] right-4 sm:right-6 z-40">
-        <div className="relative flex items-center bg-white dark:bg-slate-800/90 border border-gray-200 dark:border-slate-700/60 rounded-full p-1 shadow-lg dark:shadow-black/30 backdrop-blur-md">
-          {/* Sliding indicator */}
-          <motion.div
-            layout
-            layoutId="mode-pill"
-            transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-            className={`absolute top-1 bottom-1 rounded-full ${
-              mode === 'modules'
-                ? 'bg-gradient-to-r from-indigo-500 to-purple-600'
-                : 'bg-gradient-to-r from-amber-500 to-orange-500'
-            }`}
-            style={{
-              left: mode === 'modules' ? '4px' : '50%',
-              right: mode === 'modules' ? '50%' : '4px',
-            }}
-          />
-          <button
-            onClick={() => setMode('modules')}
-            className={`relative z-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors duration-200 cursor-pointer ${
-              mode === 'modules' ? 'text-white' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200'
-            }`}
-          >
-            <BookOpen size={13} />
-            <span className="hidden sm:inline">Modules</span>
-          </button>
-          <button
-            onClick={() => setMode('tricks')}
-            className={`relative z-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors duration-200 cursor-pointer ${
-              mode === 'tricks' ? 'text-white' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200'
-            }`}
-          >
-            <Lightbulb size={13} />
-            <span className="hidden sm:inline">Tricks</span>
-          </button>
+      {/* ── Mode Toggle Pill — only shown in modules mode ────────── */}
+      {mode === 'modules' && (
+        <div className="fixed top-[72px] right-4 sm:right-6 z-40">
+          <div className="relative flex items-center bg-white dark:bg-slate-800/90 border border-gray-200 dark:border-slate-700/60 rounded-full p-1 shadow-lg dark:shadow-black/30 backdrop-blur-md">
+            {/* Sliding indicator */}
+            <motion.div
+              layout
+              layoutId="mode-pill"
+              transition={{ type: 'spring', damping: 30, stiffness: 350 }}
+              className="absolute top-1 bottom-1 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600"
+              style={{ left: '4px', right: '50%' }}
+            />
+            <button
+              onClick={() => setMode('modules')}
+              className="relative z-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors duration-200 cursor-pointer text-white"
+            >
+              <BookOpen size={13} />
+              <span className="hidden sm:inline">Modules</span>
+            </button>
+            <button
+              onClick={() => setMode('tricks')}
+              className="relative z-10 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors duration-200 cursor-pointer text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200"
+            >
+              <Lightbulb size={13} />
+              <span className="hidden sm:inline">Tricks</span>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── Modules mode ─────────────────────────────────── */}
       {mode === 'modules' && (
@@ -180,14 +170,9 @@ const RevisionLayout = () => {
         </>
       )}
 
-      {/* ── Tricks mode ───────────────────────────────────── */}
+      {/* ── Tricks mode — fullscreen notebook ─────────────── */}
       {mode === 'tricks' && (
-        <TricksPage
-          tricks={tricks}
-          addTrick={addTrick}
-          updateTrick={updateTrick}
-          deleteTrick={deleteTrick}
-        />
+        <TricksNotebook onSwitchToModules={() => setMode('modules')} />
       )}
     </div>
   )

@@ -499,3 +499,83 @@ html::-webkit-scrollbar-thumb:hover, body::-webkit-scrollbar-thumb:hover, [class
 .trick-link:hover { color: #1d4ed8; }
 .dark .trick-link { color: #60a5fa; }
 .dark .trick-link:hover { color: #93c5fd; }
+
+/* ─── Tricks Fullscreen Notebook ─── */
+
+/* Outer shell — fills entire viewport below navbar */
+.notebook-fullscreen {
+  background-color: #fffef7;
+}
+.dark .notebook-fullscreen {
+  background-color: #0b1120;
+}
+
+/* Paper background */
+.notebook-paper {
+  background-color: #fffef7;
+}
+.dark .notebook-paper {
+  background-color: #0b1120;
+}
+
+/* Ruled lines that span the full scrollable area */
+.notebook-ruled-area {
+  background-image:
+    /* left red margin line */
+    linear-gradient(to right, transparent 56px, rgba(239,68,68,0.12) 56px, rgba(239,68,68,0.12) 57px, transparent 57px),
+    /* horizontal ruled lines every 28px */
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 27px,
+      rgba(156,163,175,0.15) 27px,
+      rgba(156,163,175,0.15) 28px
+    );
+  background-attachment: local;
+  line-height: 28px;
+}
+.dark .notebook-ruled-area {
+  background-image:
+    linear-gradient(to right, transparent 56px, rgba(239,68,68,0.08) 56px, rgba(239,68,68,0.08) 57px, transparent 57px),
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 27px,
+      rgba(100,116,139,0.12) 27px,
+      rgba(100,116,139,0.12) 28px
+    );
+}
+
+/* Editor inside the notebook — override min-height to fill */
+.notebook-editor {
+  min-height: calc(100vh - 160px);
+  line-height: 28px;
+  font-size: 0.9375rem;
+  color: #1f2937;
+  caret-color: #f59e0b;
+}
+.dark .notebook-editor {
+  color: #e2e8f0;
+  caret-color: #fbbf24;
+}
+
+/* Placeholder */
+.notebook-editor .is-editor-empty::before {
+  content: attr(data-placeholder);
+  color: #d1d5db;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+.dark .notebook-editor .is-editor-empty::before {
+  color: #334155;
+}
+
+/* Slow spin for Update icon when dirty */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 2s linear infinite;
+}
