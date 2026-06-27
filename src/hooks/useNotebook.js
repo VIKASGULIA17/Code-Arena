@@ -1,22 +1,23 @@
 import { useState, useCallback } from 'react'
+import { useTrickContext } from '../context/TrickContext';
 
 const STORAGE_KEY = 'ca_notebook'
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-async function loadNotebook() {
-  try {
-    console.log("loading notebook from backend",BACKEND_URL);
-    const result = await fetch(`${BACKEND_URL}/trick/get`)
-    const raw = await result.text();
-    console.log("raw data is : ", raw)
-    return {
-      html: raw || '',
-      savedAt: null || null, 
-    }
-  } catch {
-    return { html: '', savedAt: null }
-  }
-}
+// async function loadNotebook() {
+//   try {
+//     console.log("loading notebook from backend",BACKEND_URL);
+//     const result = await fetch(`${BACKEND_URL}/trick/get`)
+//     const raw = await result.text();
+//     console.log("raw data is : ", raw)
+//     return {
+//       html: raw || '',
+//       savedAt: null || null, 
+//     }
+//   } catch {
+//     return { html: '', savedAt: null }
+//   }
+// }
 
 /**
  * useNotebook — manages a single global rich-text notebook stored in localStorage.
@@ -27,7 +28,7 @@ async function loadNotebook() {
  *  - `markDirty()`  → called by the editor's onUpdate to flag unsaved changes
  */
 export function useNotebook() {
-  const [notebook, setNotebook] = useState(() => loadNotebook())
+  const {notebook, setNotebook} = useTrickContext();
   console.log("notebook is : ", notebook)
   const [isDirty, setIsDirty] = useState(false)
 
