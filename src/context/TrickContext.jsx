@@ -30,6 +30,7 @@ export const TrickContextProvider = ({children}) => {
         }
     }
 
+    
     useEffect(()=>{
         loadNoteBook();
         console.log("loadNoteBook() loaded...");
