@@ -86,7 +86,7 @@ const WelcomeScreen = ({ getOverallProgress }) => {
       <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-slate-100 mb-3 tracking-tight">
         Welcome to{' '}
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
-          DSA Revision
+          DSA Templates
         </span>
       </h1>
       <p className="text-gray-500 dark:text-slate-400 text-base md:text-lg max-w-lg mb-10 leading-relaxed">
