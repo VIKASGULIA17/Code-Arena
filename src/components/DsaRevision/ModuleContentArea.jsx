@@ -90,7 +90,7 @@ const WelcomeScreen = ({ getOverallProgress }) => {
         </span>
       </h1>
       <p className="text-gray-500 dark:text-slate-400 text-base md:text-lg max-w-lg mb-10 leading-relaxed">
-        Pick a module from the sidebar to start learning. Track your progress as you master each topic.
+        Choose a topic from the sidebar to explore DSA templates used in contests and competitive programming.
       </p>
 
       {/* Progress card */}
