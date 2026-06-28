@@ -52,7 +52,7 @@ export function EnhancedNavbar() {
     { name: 'Problems', link: '/problem', icon: Code },
     { name: 'Contest', link: '/Contest', icon: Trophy },
     { name: 'Visualizer', link: '/algovisualizer', icon: PlayCircle },
-    { name: 'Revision', link: '/revision', icon: BookOpen },
+    { name: 'Templates', link: '/revision', icon: BookOpen },
   ]
 
   if (isJwtExist) {
