@@ -55,7 +55,7 @@ export function useNotebook() {
       // console.log("activated");
       // console.log('updating notebook', html);
       const data = {note:html,updated_at : new Date().toISOString()};
-      console.log(data);
+      // console.log(data);
       updateNoteBook(data);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(entry))
     } catch {

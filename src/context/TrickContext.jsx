@@ -22,7 +22,7 @@ export const TrickContextProvider = ({children}) => {
                 html:data.html,
                 savedAt:data.updated_at
             });
-            console.log("htmlNotes is : ",result.data);
+            // console.log("htmlNotes is : ",result.data);
             
         }
         catch(e){
