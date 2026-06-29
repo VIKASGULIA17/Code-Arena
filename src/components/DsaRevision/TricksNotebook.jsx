@@ -143,7 +143,7 @@ const RichToolbar = ({ editor, onSave, onUpdate, isDirty, savedAt }) => {
         )}
 
         {/* Save */}
-        <button
+        {/* <button
           type="button"
           onMouseDown={e => { e.preventDefault(); onSave() }}
           title="Save (Ctrl+S)"
@@ -151,21 +151,22 @@ const RichToolbar = ({ editor, onSave, onUpdate, isDirty, savedAt }) => {
         >
           <Save size={13} />
           Save
-        </button>
+        </button> */}
 
         {/* Update */}
         <button
           type="button"
           onMouseDown={e => { e.preventDefault(); onUpdate() }}
           title="Update with latest changes"
-          className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all hover:scale-105 cursor-pointer flex-shrink-0 ${
+          disabled={!isDirty}
+          className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-semibold  flex-shrink-0 ${
             isDirty
-              ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-sm shadow-indigo-300/30 dark:shadow-indigo-900/30'
-              : 'bg-gray-100 dark:bg-slate-700/60 text-gray-400 dark:text-slate-500'
+              ? 'bg-gradient-to-r transition-all hover:scale-105 cursor-pointer from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white shadow-sm shadow-indigo-300/30 dark:shadow-indigo-900/30'
+              : 'bg-gray-100 cursor-not-allowed dark:bg-slate-700/60 text-gray-400 dark:text-slate-500'
           }`}
         >
           <RefreshCw size={13} className={isDirty ? 'animate-spin-slow' : ''} />
-          Update
+          Save
         </button>
       </div>
     </div>
@@ -276,6 +277,7 @@ const TricksNotebook = ({ onSwitchToModules }) => {
         isDirty={isDirty}
         savedAt={savedAt}
       />
+      
 
       {/* ── Editor fills remaining height ── */}
       <div className="flex-1 notebook-paper overflow-y-auto">

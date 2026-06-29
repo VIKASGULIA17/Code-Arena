@@ -28,7 +28,7 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
  *  - `markDirty()`  → called by the editor's onUpdate to flag unsaved changes
  */
 export function useNotebook() {
-  const {notebook, setNotebook} = useTrickContext();
+  const {notebook, setNotebook,updateNoteBook} = useTrickContext();
   console.log("notebook is : ", notebook)
   const [isDirty, setIsDirty] = useState(false)
 
@@ -52,7 +52,11 @@ export function useNotebook() {
   const update = useCallback((html) => {
     const entry = { html, savedAt: Date.now() }
     try {
-      console.log('updating notebook', html)
+      // console.log("activated");
+      // console.log('updating notebook', html);
+      const data = {note:html,updated_at : new Date().toISOString()};
+      console.log(data);
+      updateNoteBook(data);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(entry))
     } catch {
       // ignore

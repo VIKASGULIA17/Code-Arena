@@ -10,7 +10,8 @@ export const TrickContextProvider = ({children}) => {
 
     const value = {
         notebook,
-        setNotebook
+        setNotebook,
+        updateNoteBook
     }
 
     async function loadNoteBook(){
@@ -27,6 +28,23 @@ export const TrickContextProvider = ({children}) => {
         catch(e){
             console.log("error : "+e);
             setNotebook("");
+        }
+    }
+
+    async function updateNoteBook(updatedTrick){
+        try{
+            console.log("fdjoifjdif");
+            const response = await axios.put(`${BACKEND_URL}/trick/update`,updatedTrick);
+            const result = response.data;
+            if(result.status==1){
+                setNotebook(updatedTrick.note);
+            }
+            else{
+                setNotebook("");
+            }
+        }
+        catch(e){
+            console.log("error while updating tricks : ",e);
         }
     }
 
