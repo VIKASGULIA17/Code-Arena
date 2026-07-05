@@ -281,7 +281,7 @@ const ModuleOverview = ({ catId, topicId, topic, category, getModuleProgress, on
 /** Subtopic content view */
 const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isCompleted, toggleComplete, onSelectSubtopic, onOpenTemplateModal }) => {
   // console.log("start");
-  // console.log(catId + " " + topicId + " " + topic);
+  // console.log(subtopic?.id);
   const subtopics = buildSubtopicList(catId, topicId, topic)
   const currentIndex = subtopics.findIndex(s => s.type === subtopic.type && s.id === subtopic.id)
   const prevSub = currentIndex > 0 ? subtopics[currentIndex - 1] : null
@@ -291,6 +291,8 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
     ? `${catId}:${topicId}:theory`
     : `${catId}:${topicId}:template:${subtopic.id}`
   const completed = isCompleted(itemKey)
+
+  const onlyTemplate = `${subtopic.id}`;
 
   const handleEditTemplate = () => {
     const template = topic.codeTemplates?.[subtopic.id] || {}
@@ -340,7 +342,7 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
           {subtopic.type === 'theory' ? `${topic.title} — Theory` : topic.codeTemplates?.[subtopic.id]?.title}
         </h1>
         <button
-          onClick={() => toggleComplete(itemKey)}
+          onClick={() => toggleComplete(itemKey,onlyTemplate)}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex-shrink-0 order-2 sm:order-3 shadow-sm
             ${completed
               ? 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-200 dark:shadow-emerald-900/30'

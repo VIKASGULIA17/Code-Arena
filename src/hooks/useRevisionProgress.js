@@ -49,7 +49,10 @@ export const useRevisionProgress = () => {
   const {dsaContent} = useDsaContext();
   const allItems = useMemo(() => getAllItems(dsaContent || {}), [dsaContent])
 
-  const toggleComplete = useCallback((key) => {
+  const toggleComplete = useCallback((key,onlyTemplate) => {
+    
+    console.log("toggleComplete called with key:", key, "onlyTemplate:", onlyTemplate);
+    
     setCompleted(prev => {
       const next = { ...prev }
       if (next[key]) {
