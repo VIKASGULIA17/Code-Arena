@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { useAppContext } from "./AppContext";
 
 const DsaContext = createContext();
 
@@ -9,12 +10,19 @@ export const DsaContextProvider = (props) => {
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
     const [dsaContent,setdsaContext] = useState({});
+    const {jwtToken} = useAppContext();
 
     
     async function getDSAContent(){
         try{
-            const response = await axios.get(`${BACKEND_URL}/public/getDSAContent`);
-            // console.log("response is : ",response.data);
+            // console.log("jst token during fetching dsa content is : ",jwtToken);
+            // console.log("calling getDSAContent...");
+            const response = await axios.get(`${BACKEND_URL}/public/getDSAContent`,{
+                headers:{
+                    Authorization:`Bearer ${jwtToken}`
+                }
+            });
+            // console.log("response DSA data  is : ",response.data);
             const data = response.data;
             if(data && Object.keys(data).length > 0){
                 // console.log("DSA Content fetched successfully : ",data);

@@ -45,7 +45,8 @@ export const AppProvider = (props) => {
     });
 
     if(res.data!=null && res.data!==undefined){
-      // console.log(res.data.username);
+      console.log("here");
+      console.log(res.data);
       setUsername(res.data.username);
       setuserDetails(res.data);
     }
