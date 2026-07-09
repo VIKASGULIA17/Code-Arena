@@ -20,7 +20,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [isHighlightOpen, setisHighlightOpen] = useState(false);
   const [bannedUser, setbannedUser] = useState("");
-  const { setjwtToken, setisJwtExist, setuserDetails, setisLoggedIn, getUserData } = useAppContext();
+  const { setjwtToken, setisJwtExist,setisTokenExpired, setuserDetails, setisLoggedIn, getUserData } = useAppContext();
 
   const validateData = yup.object({
     username: yup.string().required("**Username is required"),
@@ -42,12 +42,14 @@ const Login = () => {
         localStorage.setItem("jwtToken", res.jwtToken);
         setisJwtExist(true);
         setisLoggedIn(true);
+        setisTokenExpired(false);
         setjwtToken(res.jwtToken);
         getUserData();
         toast.success(`User logged in..`);
         navigate("/");
       } else if (res.status == -1) {
         setisHighlightOpen(true);
+        setisTokenExpired(true);
         setbannedUser(values.username);
       } else {
         throw new Error();

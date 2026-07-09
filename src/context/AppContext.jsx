@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
@@ -18,6 +19,19 @@ export const AppProvider = (props) => {
   const [isLoggedIn,setisLoggedIn] = useState(()=>{
     return localStorage.getItem("jwtToken") != null;
   });
+
+  const [isTokenExpired,setisTokenExpired] = useState(()=>{
+    const token = localStorage.getItem("jwtToken") || null;
+    if(token){
+      const { exp } = jwtDecode(token);
+      const expiryTime = new Date(exp * 1000);
+      const currentTime = new Date();
+      return currentTime >= expiryTime;
+    }
+    else{
+      return true;
+    }
+  })
 
   const [jwtToken, setjwtToken] = useState(() => {
     return localStorage.getItem("jwtToken") || null;
@@ -63,6 +77,30 @@ export const AppProvider = (props) => {
       }
       else{
         setallProblems(null);
+      }
+    }
+
+    async function deleteJwtToken(){
+      // console.log("deleteJwtToken called");
+      // console.log(jwtToken);
+      if(isTokenExpired){
+        localStorage.removeItem("jwtToken");
+        setjwtToken(null);
+        setisJwtExist(false);
+        setisTokenExpired(true);
+        setisLoggedIn(false);
+        setuserDetails(null);
+        setuserProfile(null);
+        setUsername(null);
+        setAvatar(null);
+        setallProblems(null);
+        setallContest(null);
+        setUsers(null);
+        settotalActiveUsers(0);
+        // console.log("token expired");
+      }
+      else{
+        // console.log("Token is not expired yet.");
       }
     }
 
@@ -127,9 +165,10 @@ export const AppProvider = (props) => {
     showAllProblems();
     showAllContest();
     getAllUsers();
+    deleteJwtToken();
   },[isLoggedIn]);
 
-  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData,username,allProblem,allContest,showAllContest,showAllProblems,getAllUsers,users,totalActiveUsers, avatar, setAvatar};
+  const values = { jwtToken, setjwtToken, isJwtExist, setisJwtExist, isAdmin, setIsAdmin,setuserDetails,setisLoggedIn,getUserData,userDetails,userProfile, getUserProfileData,username,allProblem,allContest,showAllContest,showAllProblems,getAllUsers,users,totalActiveUsers, avatar, setAvatar,setisTokenExpired};
 
   return (
     <AppContext.Provider value={values}>{props.children}</AppContext.Provider>
