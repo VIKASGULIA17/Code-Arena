@@ -50,6 +50,11 @@ const Login = () => {
       } else if (res.status == -1) {
         setisHighlightOpen(true);
         setisTokenExpired(true);
+        localStorage.removeItem("jwtToken");
+        setjwtToken(null);
+        setisJwtExist(false);
+        setisLoggedIn(false);
+        setuserDetails(null);
         setbannedUser(values.username);
       } else {
         throw new Error();
