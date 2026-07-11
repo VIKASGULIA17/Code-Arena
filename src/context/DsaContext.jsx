@@ -9,7 +9,7 @@ export const useDsaContext = () => useContext(DsaContext);
 export const DsaContextProvider = (props) => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [dsaContent, setdsaContext] = useState({});
-  const { jwtToken } = useAppContext();
+  let { jwtToken } = useAppContext();
 
   async function getDSAContent() {
     try {
@@ -20,21 +20,29 @@ export const DsaContextProvider = (props) => {
       //     timeZone: "Asia/Kolkata",
       //   }),
       // );
-      // console.log("jwtToken in getDSAContent is : ",jwtToken);
       if (!jwtToken) {
         jwtToken = "";
       }
-      // console.log("jwt token during fetching dsa content is : ",jwtToken);
+      // console.log("jwtToken in getDSAContent is : ", jwtToken);
+
+      // console.log("jwt token during fetching dsa content is : ", jwtToken);
       // console.log("calling getDSAContent...");
-      const response = await axios.get(`${BACKEND_URL}/public/getDSAContent`, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      });
+      let response = null;
+
+      if (jwtToken && jwtToken !== "") {
+        response = await axios.get(`${BACKEND_URL}/user/getDSAContent`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
+      } else {
+        response = await axios.get(`${BACKEND_URL}/public/getDSAContent`);
+      }
+
       // console.log("response DSA data  is : ",response.data);
       const data = response.data;
       if (data && Object.keys(data).length > 0) {
-        // console.log("DSA Content fetched successfully : ",data);
+        console.log("DSA Content fetched successfully : ",data);
         setdsaContext(data);
       } else {
         // console.log("No DSA Content found.");
