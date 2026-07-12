@@ -308,8 +308,8 @@ const ModuleSidebar = ({
                       {!collapsed && (
                         <>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-1.5 mb-0.5">
-                              <span className={`text-xs font-semibold truncate leading-tight ${isActive ? 'text-indigo-700 dark:text-indigo-300' : 'text-gray-800 dark:text-slate-200'}`}>
+                            <div className="flex items-center mt-2 gap-1.5 mb-0.5">
+                              <span className={`text-xs font-semibold  truncate leading-tight ${isActive ? 'text-indigo-700  dark:text-indigo-300' : 'text-gray-800 dark:text-slate-200'}`}>
                                 {topic.title}
                               </span>
                               {done100 && <CheckCircle2 size={11} className="text-emerald-500 dark:text-emerald-400 flex-shrink-0" />}
@@ -334,7 +334,7 @@ const ModuleSidebar = ({
 
                       {/* collapsed: just ring */}
                       {collapsed && (
-                        <div className="absolute right-1 top-1/2 -translate-y-1/2" style={{ position: 'static' }}>
+                        <div className="absolute right-1 top-0 " style={{ position: 'static' }}>
                           <RingProgress percent={prog.percent} size={18} stroke={2} />
                         </div>
                       )}
