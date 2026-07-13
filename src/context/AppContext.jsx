@@ -133,8 +133,8 @@ export const AppProvider = (props) => {
         const { exp } = jwtDecode(token);
         const expiryTime = new Date(exp * 1000);
         const currentTime = new Date();
-        console.log("current time : ",currentTime);
-        console.log("expiry time : ",expiryTime);
+        // console.log("current time : ",currentTime);
+        // console.log("expiry time : ",expiryTime);
         if (currentTime >= expiryTime) {
           localStorage.removeItem("jwtToken");
           setjwtToken(null);

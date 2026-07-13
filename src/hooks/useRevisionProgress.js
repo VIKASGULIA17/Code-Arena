@@ -1,7 +1,10 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useDsaContext } from '../context/DsaContext'
+import axios from 'axios'
+import { useAppContext } from '../context/AppContext';
 
 const STORAGE_KEY = 'dsa-revision-progress'
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const loadProgress = () => {
   try {
@@ -46,23 +49,39 @@ const getAllItems = (dsaContent) => {
 
 export const useRevisionProgress = () => {
   const [completed, setCompleted] = useState(loadProgress)
-  const {dsaContent} = useDsaContext();
+  const { dsaContent } = useDsaContext();
+  const {jwtToken} =  useAppContext();
   const allItems = useMemo(() => getAllItems(dsaContent || {}), [dsaContent])
 
-  const toggleComplete = useCallback((key,onlyTemplate) => {
-    
-    console.log("toggleComplete called with key:", key, "onlyTemplate:", onlyTemplate);
-    
-    setCompleted(prev => {
-      const next = { ...prev }
-      if (next[key]) {
-        delete next[key]
-      } else {
-        next[key] = true
-      }
-      saveProgress(next)
-      return next
-    })
+  const toggleComplete = useCallback(async (key, onlyTemplate) => {
+
+    // console.log("toggleComplete called with key:", key, "onlyTemplate:", onlyTemplate);
+
+    try {
+      // console.log("toggle complete hitted",jwtToken);
+      const result = await axios.put(`${BACKEND_URL}/user/markDSAContentCompleted/${onlyTemplate}`,{
+        
+      },{
+        headers:{
+          Authorization:`Bearer ${jwtToken}`
+        }
+      });
+      setCompleted(prev => {
+        const next = { ...prev }
+        if (next[key]) {
+          delete next[key]
+        } else {
+          next[key] = true
+        }
+        saveProgress(next)
+        return next
+      })
+    }
+    catch (e) {
+      console.log("Error occured");
+    }
+
+
   }, [])
 
   const isCompleted = useCallback((key) => {

@@ -343,7 +343,7 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
         </h1>
         <button
           onClick={() => toggleComplete(itemKey,onlyTemplate)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex-shrink-0 order-2 sm:order-3 shadow-sm
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer flex-shrink-0 order-2 sm:order-3 shadow-sm
             ${completed
               ? 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-200 dark:shadow-emerald-900/30'
               : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-500/50 hover:text-blue-600 dark:hover:text-blue-400'
