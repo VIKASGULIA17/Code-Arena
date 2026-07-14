@@ -19,7 +19,7 @@ export const AppProvider = (props) => {
     return localStorage.getItem("jwtToken") != null;
   });
 
-  const [isTokenExpired, setisTokenExpired] = useState(false);
+  const [isTokenExpired, setisTokenExpired] = useState(true);
 
   const [jwtToken, setjwtToken] = useState(() => {
     return localStorage.getItem("jwtToken") || null;
@@ -46,8 +46,8 @@ export const AppProvider = (props) => {
     });
 
     if (res.data != null && res.data !== undefined) {
-      console.log("here");
-      console.log(res.data);
+      // console.log("here");
+      // console.log(res.data);
       setUsername(res.data.username);
       setuserDetails(res.data);
     } else {
@@ -129,7 +129,7 @@ export const AppProvider = (props) => {
       const token = localStorage.getItem("jwtToken") || null;
       console.log("token : ",token);
 
-      if (token) {
+      if (token!=null) {
         const { exp } = jwtDecode(token);
         const expiryTime = new Date(exp * 1000);
         const currentTime = new Date();
@@ -191,6 +191,7 @@ export const AppProvider = (props) => {
     avatar,
     setAvatar,
     setisTokenExpired,
+    isTokenExpired
   };
 
   return (

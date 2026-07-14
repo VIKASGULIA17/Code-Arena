@@ -13,6 +13,7 @@ import DsaTemplateButton from './DsaTemplateButton'
 import AddTopicModal from './AddTopicModal'
 import AddHeaderModal from './AddHeaderModal'
 import { useDsaContext } from '../../context/DsaContext'
+import { useAppContext } from '../../context/AppContext'
 
 
 const difficultyColors = {
@@ -286,6 +287,7 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
   const currentIndex = subtopics.findIndex(s => s.type === subtopic.type && s.id === subtopic.id)
   const prevSub = currentIndex > 0 ? subtopics[currentIndex - 1] : null
   const nextSub = currentIndex < subtopics.length - 1 ? subtopics[currentIndex + 1] : null
+  const {isTokenExpired} = useAppContext();
 
   const itemKey = subtopic.type === 'theory'
     ? `${catId}:${topicId}:theory`
@@ -308,6 +310,9 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
     }
     onOpenTemplateModal("edit", initialData)
   }
+
+  // console.log("In ModuleContentArea.jsx");
+  // console.log("isToken Expired : ",isTokenExpired);
 
   return (
     <motion.div
@@ -341,7 +346,7 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-100 order-1 break-words tracking-tight">
           {subtopic.type === 'theory' ? `${topic.title} — Theory` : topic.codeTemplates?.[subtopic.id]?.title}
         </h1>
-        <button
+        {isTokenExpired==false && <button
           onClick={() => toggleComplete(itemKey,onlyTemplate)}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer flex-shrink-0 order-2 sm:order-3 shadow-sm
             ${completed
@@ -354,7 +359,7 @@ const SubtopicContent = ({ catId, topicId, topic, category, subtopic, isComplete
           {completed ? <CheckCircle2 size={16} /> : <Circle size={16} />}
           <span className="hidden sm:inline">{completed ? 'Completed' : 'Mark Complete'}</span>
           <span className="sm:hidden">{completed ? 'Done' : 'Mark'}</span>
-        </button>
+        </button>}
       </div>
 
       {/* Content */}
