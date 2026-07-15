@@ -41,6 +41,7 @@ export function EnhancedNavbar() {
     setjwtToken,
     userDetails,
     setisLoggedIn,
+    setisTokenExpired,
     userProfile,
     avatar
   } = useAppContext()
@@ -101,6 +102,7 @@ export function EnhancedNavbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken")
+    setisTokenExpired(true);
     setisJwtExist(false)
     setisLoggedIn(false)
     setjwtToken(null)
